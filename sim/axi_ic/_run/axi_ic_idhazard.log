@@ -1,0 +1,171 @@
+﻿[TB] reset released at t=145 ns (tick check)
+==============================================================
+ AXI interconnect testbench -- DUT = behavioural MODEL
+ ARB_ORDER=0
+   -> s0 has highest priority (s0,s1,s2)
+ ROUTE_POLICY=1
+   -> BY_ID: response follows the ID->port table
+==============================================================
+---- TC1 single-master R/W ----
+[SLAVE] 175 ns  AW ACCEPT  awid=0x0 awaddr=0x00001000
+[IC] 175 ns  AW GRANT s0 awid=0x0 awaddr=0x00001000
+[SLAVE] 195 ns  W  COMMIT  addr=0x00001000 data=0x000000000000000000000000dead0000
+[SLAVE] 225 ns  B  DRIVE  bid=0x0
+[IC] 235 ns  B ROUTE  m_bid=0x0 policy=1 -> s0 (queued port s0)
+[BFM0] 255 ns  DONE  errcode=0x0 resp_id=0x0
+[PASS] TC1a_s0_write_ok
+[IC] 305 ns  AR GRANT s0 arid=0x0 araddr=0x00001000
+[SLAVE] 305 ns  AR ACCEPT  arid=0x0 araddr=0x00001000
+[SLAVE] 355 ns  R  DRIVE  rid=0x0 rdata=0x000000000000000000000000dead0000
+[IC] 365 ns  R ROUTE  m_rid=0x0 policy=1 -> s0 (queued port s0)
+[BFM0] 385 ns  DONE  errcode=0x0 resp_id=0x0
+[PASS] TC1b_s0_read_back
+[SLAVE] 435 ns  AW ACCEPT  awid=0x5 awaddr=0x00100000
+[IC] 435 ns  AW GRANT s1 awid=0x5 awaddr=0x00100000
+[SLAVE] 455 ns  W  COMMIT  addr=0x00100000 data=0x000000000000000000000000beef0001
+[SLAVE] 485 ns  B  DRIVE  bid=0x5
+[IC] 495 ns  B ROUTE  m_bid=0x5 policy=1 -> s1 (queued port s1)
+[BFM1] 515 ns  DONE  errcode=0x0 resp_id=0x5
+[PASS] TC1c_s1_write_ok
+[IC] 565 ns  AR GRANT s1 arid=0x5 araddr=0x00100000
+[SLAVE] 565 ns  AR ACCEPT  arid=0x5 araddr=0x00100000
+[SLAVE] 615 ns  R  DRIVE  rid=0x5 rdata=0x000000000000000000000000beef0001
+[IC] 625 ns  R ROUTE  m_rid=0x5 policy=1 -> s1 (queued port s1)
+[BFM1] 645 ns  DONE  errcode=0x0 resp_id=0x5
+[PASS] TC1d_s1_read_back
+[SLAVE] 695 ns  AW ACCEPT  awid=0xa awaddr=0x00200000
+[IC] 695 ns  AW GRANT s2 awid=0xa awaddr=0x00200000
+[SLAVE] 715 ns  W  COMMIT  addr=0x00200000 data=0x000000000000000000000000cafe0002
+[SLAVE] 745 ns  B  DRIVE  bid=0xa
+[IC] 755 ns  B ROUTE  m_bid=0xa policy=1 -> s2 (queued port s2)
+[BFM2] 775 ns  DONE  errcode=0x0 resp_id=0xa
+[PASS] TC1e_s2_write_ok
+[IC] 825 ns  AR GRANT s2 arid=0xa araddr=0x00200000
+[SLAVE] 825 ns  AR ACCEPT  arid=0xa araddr=0x00200000
+[SLAVE] 875 ns  R  DRIVE  rid=0xa rdata=0x000000000000000000000000cafe0002
+[IC] 885 ns  R ROUTE  m_rid=0xa policy=1 -> s2 (queued port s2)
+[BFM2] 905 ns  DONE  errcode=0x0 resp_id=0xa
+[PASS] TC1f_s2_read_back
+---- TC2 three masters concurrent (arbitration order) ----
+[SLAVE] 995 ns  AR ACCEPT  arid=0x0 araddr=0x00001000
+[IC] 995 ns  AR GRANT s0 arid=0x0 araddr=0x00001000
+[IC] 1005 ns  AR GRANT s1 arid=0x5 araddr=0x00100000
+[SLAVE] 1005 ns  AR ACCEPT  arid=0x5 araddr=0x00100000
+[SLAVE] 1015 ns  AR ACCEPT  arid=0xa araddr=0x00200000
+[IC] 1015 ns  AR GRANT s2 arid=0xa araddr=0x00200000
+[SLAVE] 1045 ns  R  DRIVE  rid=0x0 rdata=0x000000000000000000000000dead0000
+[IC] 1055 ns  R ROUTE  m_rid=0x0 policy=1 -> s0 (queued port s0)
+[BFM0] 1075 ns  DONE  errcode=0x0 resp_id=0x0
+[SLAVE] 1105 ns  R  DRIVE  rid=0x5 rdata=0x000000000000000000000000beef0001
+[IC] 1115 ns  R ROUTE  m_rid=0x5 policy=1 -> s1 (queued port s1)
+[BFM1] 1135 ns  DONE  errcode=0x0 resp_id=0x5
+[SLAVE] 1165 ns  R  DRIVE  rid=0xa rdata=0x000000000000000000000000cafe0002
+[IC] 1175 ns  R ROUTE  m_rid=0xa policy=1 -> s2 (queued port s2)
+[BFM2] 1195 ns  DONE  errcode=0x0 resp_id=0xa
+[ARB] TC2-read AR: s0 s1 s2   AW:
+[PASS] TC2a_concurrent_reads_complete
+[IC] 1285 ns  AW GRANT s0 awid=0x0 awaddr=0x00001000
+[SLAVE] 1285 ns  AW ACCEPT  awid=0x0 awaddr=0x00001000
+[SLAVE] 1295 ns  AW ACCEPT  awid=0x5 awaddr=0x00100000
+[IC] 1295 ns  AW GRANT s1 awid=0x5 awaddr=0x00100000
+[IC] 1305 ns  AW GRANT s2 awid=0xa awaddr=0x00200000
+[SLAVE] 1305 ns  AW ACCEPT  awid=0xa awaddr=0x00200000
+[SLAVE] 1305 ns  W  COMMIT  addr=0x00001000 data=0x000000000000000000000000dead0000
+[SLAVE] 1335 ns  B  DRIVE  bid=0x0
+[IC] 1345 ns  B ROUTE  m_bid=0x0 policy=1 -> s0 (queued port s0)
+[SLAVE] 1355 ns  W  COMMIT  addr=0x00100000 data=0x000000000000000000000000beef0001
+[BFM0] 1365 ns  DONE  errcode=0x0 resp_id=0x0
+[SLAVE] 1385 ns  B  DRIVE  bid=0x5
+[IC] 1395 ns  B ROUTE  m_bid=0x5 policy=1 -> s1 (queued port s1)
+[SLAVE] 1405 ns  W  COMMIT  addr=0x00200000 data=0x000000000000000000000000cafe0002
+[BFM1] 1415 ns  DONE  errcode=0x0 resp_id=0x5
+[SLAVE] 1435 ns  B  DRIVE  bid=0xa
+[IC] 1445 ns  B ROUTE  m_bid=0xa policy=1 -> s2 (queued port s2)
+[BFM2] 1465 ns  DONE  errcode=0x0 resp_id=0xa
+[ARB] TC2-write AR:   AW: s0 s1 s2
+[PASS] TC2b_concurrent_writes_complete
+---- TC3 ID collision: s0 and s2 both use ID 0 ----
+[SLAVE] 1515 ns  AW ACCEPT  awid=0x0 awaddr=0x00002000
+[IC] 1515 ns  AW GRANT s0 awid=0x0 awaddr=0x00002000
+[SLAVE] 1535 ns  W  COMMIT  addr=0x00002000 data=0x000000000000000000000000c0110000
+[SLAVE] 1565 ns  B  DRIVE  bid=0x0
+[IC] 1575 ns  B ROUTE  m_bid=0x0 policy=1 -> s0 (queued port s0)
+[BFM0] 1595 ns  DONE  errcode=0x0 resp_id=0x0
+[IC] 1645 ns  AW GRANT s2 awid=0xa awaddr=0x00201000
+[SLAVE] 1645 ns  AW ACCEPT  awid=0xa awaddr=0x00201000
+[SLAVE] 1665 ns  W  COMMIT  addr=0x00201000 data=0x000000000000000000000000c0220002
+[SLAVE] 1695 ns  B  DRIVE  bid=0xa
+[IC] 1705 ns  B ROUTE  m_bid=0xa policy=1 -> s2 (queued port s2)
+[BFM2] 1725 ns  DONE  errcode=0x0 resp_id=0xa
+[PASS] TC3a_collision_setup
+[SLAVE] 1815 ns  AR ACCEPT  arid=0x0 araddr=0x00002000
+[IC] 1815 ns  AR GRANT s0 arid=0x0 araddr=0x00002000
+[IC] 1825 ns  AR GRANT s2 arid=0x0 araddr=0x00201000
+[SLAVE] 1825 ns  AR ACCEPT  arid=0x0 araddr=0x00201000
+[SLAVE] 1865 ns  R  DRIVE  rid=0x0 rdata=0x000000000000000000000000c0110000
+[IC] 1875 ns  R ROUTE  m_rid=0x0 policy=1 -> s2 (queued port s0)
+[BFM2] 1895 ns  DONE  errcode=0x0 resp_id=0x0
+[SLAVE] 1925 ns  R  DRIVE  rid=0x0 rdata=0x000000000000000000000000c0220002
+[IC] 1935 ns  R ROUTE  m_rid=0x0 policy=1 -> s2 (queued port s2)
+[BFM0] 13815 ns  *** TIMEOUT in state 5 (addr=0x00002000) -- no response ***
+[ARB] TC3b AR: s0 s2   AW:
+[FAIL] TC3b_colliding_reads_returned_to_right_port
+[IC] 13905 ns  AW GRANT s0 awid=0x0 awaddr=0x00002000
+[SLAVE] 13905 ns  AW ACCEPT  awid=0x0 awaddr=0x00002000
+[SLAVE] 13915 ns  AW ACCEPT  awid=0x0 awaddr=0x00201000
+[IC] 13915 ns  AW GRANT s2 awid=0x0 awaddr=0x00201000
+[SLAVE] 13925 ns  W  COMMIT  addr=0x00002000 data=0x000000000000000000000000d00d0000
+[SLAVE] 13955 ns  B  DRIVE  bid=0x0
+[IC] 13965 ns  B ROUTE  m_bid=0x0 policy=1 -> s2 (queued port s0)
+[SLAVE] 13975 ns  W  COMMIT  addr=0x00201000 data=0x000000000000000000000000d00d0002
+[BFM2] 13995 ns  DONE  errcode=0x0 resp_id=0x0
+[SLAVE] 14005 ns  B  DRIVE  bid=0x0
+[BFM0] 25905 ns  *** TIMEOUT in state 3 (addr=0x00002000) -- no response ***
+[ARB] TC3c AR:   AW: s0 s2
+[FAIL] TC3c_colliding_writes_both_acked
+---- TC4 mixed traffic with distinct IDs ----
+[SLAVE] 25975 ns  AR ACCEPT  arid=0x5 araddr=0x00100000
+[SLAVE] 25975 ns  AW ACCEPT  awid=0x0 awaddr=0x00001000
+[IC] 25975 ns  AR GRANT s1 arid=0x5 araddr=0x00100000
+[IC] 25975 ns  AW GRANT s0 awid=0x0 awaddr=0x00001000
+[IC] 25985 ns  AR GRANT s2 arid=0xa araddr=0x00200000
+[SLAVE] 25985 ns  AR ACCEPT  arid=0xa araddr=0x00200000
+[BFM2] 25995 ns  RID MISMATCH: drove arid 0xa, got rid 0x0
+[BFM2] 25995 ns  ID TRUNCATION LOSS on R: native id 0xa -> 4-bit 0xa -> zero-ext 0x0
+[BFM2] 26005 ns  DONE  errcode=0x20 resp_id=0x0
+[SLAVE] 26025 ns  R  DRIVE  rid=0x5 rdata=0x000000000000000000000000beef0001
+[BFM1] 37975 ns  *** TIMEOUT in state 5 (addr=0x00100000) -- no response ***
+[BFM0] 37975 ns  *** TIMEOUT in state 2 (addr=0x00001000) -- no response ***
+[FAIL] TC4a_mixed_traffic_all_ok
+---- TC5 address window (m0 window = 0x0 / 2^28) ----
+[IC] 38025 ns  AR GRANT s1 arid=0x5 araddr=0x10000000
+[SLAVE] 38025 ns  AR ACCEPT  arid=0x5 araddr=0x10000000
+[BFM1] 50025 ns  *** TIMEOUT in state 5 (addr=0x10000000) -- no response ***
+[FAIL] TC5a_out_of_window_access_completes
+[NOTE] TC5b_model_flags_decode_err_ar=1 for 0x10000000 (outside 0x0/2^28)
+---- TC6 ID truncation 8->4->8 ----
+[SLAVE] 50075 ns  AR ACCEPT  arid=0x5 araddr=0x00100000
+[IC] 50075 ns  AR GRANT s1 arid=0x5 araddr=0x00100000
+[BFM1] 62075 ns  *** TIMEOUT in state 5 (addr=0x00100000) -- no response ***
+[FAIL] TC6a_id_le_0xf_round_trips
+[BFM1] 74125 ns  *** TIMEOUT in state 4 (addr=0x00100000) -- no response ***
+[FAIL] TC6b_id_gt_0xf_is_lossy_as_wired
+[NOTE] in bit[3:0] -- top level zero-extends, so a master emitting id>0xF cannot match its own response
+---- TC7 PRIORITY fairness (s0 hog) ----
+[BFM2] 86215 ns  *** TIMEOUT in state 4 (addr=0x00200000) -- no response ***
+[BFM1] 86215 ns  *** TIMEOUT in state 4 (addr=0x00100000) -- no response ***
+[BFM0] 86215 ns  *** TIMEOUT in state 4 (addr=0x00001000) -- no response ***
+[BFM0] 98265 ns  *** TIMEOUT in state 4 (addr=0x00001000) -- no response ***
+[BFM0] 110315 ns  *** TIMEOUT in state 4 (addr=0x00001000) -- no response ***
+[BFM0] 122365 ns  *** TIMEOUT in state 4 (addr=0x00001000) -- no response ***
+[BFM0] 134415 ns  *** TIMEOUT in state 4 (addr=0x00001000) -- no response ***
+[BFM0] 146465 ns  *** TIMEOUT in state 4 (addr=0x00001000) -- no response ***
+[ARB] TC7-s0hog AR:   AW:
+[FAIL] TC7a_lower_priority_ports_eventually_served
+[ARB] total AR grants=12  AW grants=11
+==============================================================
+[SUMMARY] PASS=9 FAIL=7 NOTE=2
+=== AXI_IC RESULT: 7 CHECK(S) FAILED ===
+==============================================================
+FATAL: D:\FPGA\mmt\sim\axi_ic\tb_axi_ic.v:684: axi_ic: 7 check(s) failed
+       Time: 146485000 Scope: tb_axi_ic

@@ -1,0 +1,24 @@
+﻿# 综合/布局布线产物
+out/
+outflow/
+work_syn/
+work_pnr/
+work_dbg/
+*.bit
+*.rbf
+# 仿真产物
+sim/_run/
+*.vcd
+*.wlf
+*.lxt2
+# 固件构建产物（保留源码与脚本）
+sw/build/
+sw/**/*.elf
+sw/**/*.bin
+sw/**/*.o
+sw/**/*.dump
+sw/ddr/_test_build/
+# 编辑器/系统
+.vscode/
+Thumbs.db
+desktop.ini

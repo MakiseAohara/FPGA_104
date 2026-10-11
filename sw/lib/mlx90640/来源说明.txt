@@ -1,0 +1,9 @@
+﻿MLX90640 官方库（Melexis N.V.，Apache-2.0，见 LICENSE）
+来源: mlx90640-library-master (functions/MLX90640_API.c + headers/*.h)
+纳入日期: 2026
+说明:
+  - MLX90640_API.c **一字未改**，直接参与编译（项4要求"移植官方库"，
+    而官方库本身就是平台无关的，平台相关部分只有 MLX90640_I2C_Driver.h
+    声明的 5 个 I2C 函数，由我们提供实现）。
+  - 我们的 I2C 实现见 sw/mlx90640_port.c：真板上读 FPGA 寄存器窗口，
+    仿真/主机测试时读内存数组，上层代码完全不用改。
