@@ -66,9 +66,9 @@ Synthesis（综合） → Interface Designer（引脚） → Place & Route（布
 
 | 步骤 | 预期 |
 |---|---|
-| Synthesis | 成功，约 3 分钟；占用约 **4.5 万 / 6.08 万**逻辑单元 |
-| Place & Route | 成功，约 3 分钟；占用 **222 / 256** 块 RAM、**27 / 160** 个乘法器 |
-| Bitstream | 成功，产出 `out/mmt.hex`（约 **2.8 MB 的文本文件**，实际烧录数据约 **0.92 MB**） |
+| Synthesis | 成功，约 4 分钟；占用约 **4.3 万 / 6.08 万**逻辑单元 |
+| Place & Route | 成功，约 5 分钟；占用 **235 / 256** 块 RAM、**24 / 160** 个乘法器 |
+| Bitstream | 成功，产出 `out/mmt.hex`（约 **2.8 MB 的文本文件**，实际烧录数据约 **955 KB**） |
 
 > ⚠️ **Interface Designer 有一个已知坑**：`mmt.peri.xml` 里带着厂商 Demo 遗留的 5 条 **DSI 屏**引脚（`mipi_dp_clk_RST` 等）。我们已经删掉了 DSI 屏电路，所以这 5 条必须去掉，否则 PnR 会报错：
 > `ERROR : Required pin mipi_dp_clk_RST is not found`
@@ -129,24 +129,23 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sim\run_all.ps1
 
 ### 5.3 把"程序 + AI 模型"也烧进 flash（正式演示用）
 
-固件和 AI 模型打包成一个**用户镜像**，放在 flash 的 **0x380000** 偏移处（由片内的一小段搬运程序负责搬进 DDR 运行）。我们已经准备好**合成好的单文件**，烧一次就行：
+固件和 AI 模型打包成一个**用户镜像**，放在 flash 的 **0x380000** 偏移处（由片内的一小段搬运程序负责搬进 DDR 运行）。
 
-**方案 A（推荐）**：用合成文件
-```
-D:\FPGA\mmt\sw\ddr\build\flash_combined.hex
-```
-在 Programmer 里选 **SPI Active** 模式，把这个文件烧进去即可（它已包含"位流 @0x0 + 用户镜像 @0x380000"两部分）。
+**分两次烧（推荐，厂商 readme 的原始做法）：**
 
-**方案 B**：分两次烧（厂商 readme 的原始做法）
-1. 位流 `out/mmt.hex` → 地址 **0x0**
-2. 用户镜像 `sw/ddr/ddr_image.bin` → 地址 **0x380000**
+| 顺序 | 文件 | 起始地址 | 模式 |
+|---|---|---|---|
+| 1 | `out/mmt.hex` | **0x00000000** | JTAG（先验证）或 SPI Active（正式） |
+| 2 | `sw/ddr/build/ddr_image.bin` | **0x00380000** | SPI Active |
+
+> ⚠️ **"合并成一个文件烧一次"这条路暂时别用**：Programmer 自带的合并工具 `multi_image_merger.py` 读我们的位流会报 `incorrectly formatted HEX file` —— 位流头里有 9 行是"2 字节挤在一行"（路径里中文被转义）。规范化成 1 字节 1 行后该错误消失，但工具又卡在 `invalid device information`（它需要的器件库参数命令行里给不了）。分两次烧完全绕开这个问题。
 
 **校验**：自检脚本会解码位流、检查两者有没有重叠/越界：
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_flash_layout.ps1"
 ```
-（实测：位流 0x0–0xEA59C、镜像 0x380000–0x3CA68B、不重叠不越界、8MB flash 还剩 4.3MB。）
+（实测：位流 0x0–0xE9380、镜像 0x380000–0x3CA68B、不重叠不越界、8MB flash 还剩 4.3MB；**PASS 24 / FAIL 0 / WARN 2**。）
 
 > ⚠️ **以上烧录步骤我们还没在真板上跑过**（写这份文档时板子刚到）。第一次请**先按 5.1/5.2 的 JTAG 模式试**，把现象记下来；有偏差记下报错原文。
 
@@ -173,9 +172,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_f
 
 ## 7. 已知问题（重要，先看再动手）
 
-1. **⚠️ 摄像头画面目前进不了内存**（正在排查）
-   这条通路在综合时被工具整段当成"没用"删掉了。现象：屏幕一直显示内存里的残留画面、**不随摄像头变化**。已用 5 个实验确认"改输入 / 改时钟 / 加保留标记"都无效，最可能是 **Efinity 2026.1 对这个厂商模块的误优化**。进展见 `docs/帧缓冲写通路根因*.md`。
-   → 板子到了之后，**第 6 节第 6 步大概会卡在这里**，属于已知问题，不是你接错线。
+1. **摄像头画面曾进不了内存（已用变通办法绕过，待上板验证）**
+   帧缓冲的写通路在综合时被工具整段当成"没用"删掉了（写 FIFO 的 13 块 RAM 一块都没推断）。已用 8 个实验定位：给写通道的**输出寄存器**加 `(* preserve, syn_keep = 1 *)` 可让写通路复活（`ddr_wr_buffer.v` 的 `awvalid`/`wvalid`/`state`/`wr_req`）。
+   - 代价：写 FIFO（13 块）+ CSI 摄像头接收（32 块）一起回来了，RAM 从 222 涨到 **263 > 256 装不下**，所以同时做了两处削减：`RD_FIFO_DEPTH 1024→512`（−6）、**暂时关掉 TinyML 片上缓存**（−22）→ **235/256**。
+   - 副作用：AI 推理变慢（权重每次从 DDR 读）。后续用"SoC 片内 RAM 32KB→16KB"（−16）换回来后可以把缓存重新打开。
+   - 现象与判据见 `rtl/frame_buffer/ddr_wr_buffer.v` 里的注释；上板若屏幕**不随摄像头变化**即为该问题复发。
 2. **视频复位已修但要知道**：删掉 DSI 屏电路后，一段"等屏幕初始化完成"的逻辑会永远等不到 → 视频部分永远不出复位。**已修**（见 `rtl/mmt/mmt_top.v` 里 `dly_cnt` 的注释）。不修的话 HDMI 就是黑屏。
 3. **RAM 余量只剩 13%**：256 块内存用了 222 块。再加功能可能装不下。削减方案见 `docs/BRAM资源优化方案.md`。
 4. **引脚是我们自己选的**：UART、蜂鸣器、传感器 I2C 这几路，板子上**没有现成网络**，脚位是按空闲 3.3V IO 选的（记在 `mmt.peri.xml`）。上板接线要照它接，不能随便换。
@@ -216,15 +217,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_f
 
 | 项 | 结果 |
 |---|---|
-| 综合 / 布局布线 | 都通过（约 3 + 3 分钟） |
-| 逻辑单元 | 45,541 / 60,800（74.9%） |
-| 块 RAM | 222 / 256（86.7%） |
-| 乘法器 | 27 / 160 |
+| 综合 / 布局布线 | 都通过（约 4 + 5 分钟） |
+| 逻辑单元 | 43,007 / 60,800（70.7%） |
+| 块 RAM | 235 / 256（91.8%） |
+| 乘法器 | 24 / 160 |
 | 时序 | **全部满足**（最差余量 +0.394 ns，在 DDR3 高速侧；我们自己 100MHz 侧余量 +3.3 ns） |
 | 未分配引脚 | **0** |
 | 仿真回归 | 84 项全过 |
-| 烧录文件 | 已生成，约 0.92 MB |
-| flash 占用 | 位流 + 用户镜像共约 1.2 MB（8 MB flash 余量充足） |
+| 烧录文件 | 已生成，约 955 KB |
+| flash 占用 | 位流 + 用户镜像共约 1.26 MB（8 MB flash 余量充足） |
 
 ---
 
