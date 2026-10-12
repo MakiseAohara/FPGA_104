@@ -4,18 +4,17 @@
 //  把以下三样打包成一个干净的模块，供顶层实例化：
 //    1) sapphire_soc     ：Efinix 官方 RISC-V 软核 SoC（IP，网表形式）
 //    2) mmt_soc_regs     ：APB3 寄存器桥（SoC 与 FPGA 硬件之间的窗口）
-//    3) 未用外设的信号端接：SPI0 / I2C0 / GPIO0 本方案不用，按 SoC 要求接固定电平
+//    3) 未用外设的信号端接：I2C0 / GPIO0 本方案不用，按要求接固定电平
 //
 //  对外只暴露真正需要的东西：
 //    · 时钟 / 复位
 //    · UART（软核打印调试信息用，接板载 FT4232HL 的串口）
-//    · AXI 主口（留给后续接 DDR3 帧缓存；当前悬空 —— 固件只要不访问外部存储就不会挂）
+//    · **SPI0**（路线 B：软核读板载 SPI flash，把 app+模型搬进 DDR）
+//    · DDR AXI4 主口（io_ddrA_*，128 位全双工，接顶层 AXI 互联）
 //    · 寄存器桥的两组线：只读的传感器/算法结果、可写的配置
 //
-//  ⚠️ 关于 AXI 主口悬空：
-//     SoC 从片内系统 RAM 启动（固件由 IP 的 4 个 .bin 预置），启动与运行都不需要外部存储。
-//     只有当固件主动访问 AXI 地址空间时才会等待——那时需要把 axim_* 接到 DDR3 控制器。
-//     所以第一阶段（软核跑起来、读传感器、做决策）不需要接 DDR3。
+//  ⚠️ 关于 AXI 主口：
+//     路线 B 已把 io_ddrA_* 接到顶层 AXI 互联（s1 口），与 frame_buffer(s0)、TinyML(s2) 汇到 DDR3。
 //
 //  ⚠️ 若后续要用 I2C0：注意本方案用我们自己写的 I2C 硬件（mmt_i2c_master + hub），
 //     软核侧不需要用 SoC 自带的 I2C0 控制器，所以这里把它端接了。
@@ -29,6 +28,20 @@ module mmt_soc_subsystem (
     // ---- UART（接板载串口）----
     output wire        uart_txd,
     input  wire        uart_rxd,
+
+    // ---- SPI0（路线 B 新增：RISC-V 靠它读板载 flash，把 app+模型搬进 DDR）----
+    //   这 4 根在板上同时是**上电配置脚**（active 模式下 CDI0/CDI1/CCK/SSL_N 从 flash 读位流），
+    //   配置完成后交还给用户逻辑 —— 与厂商 TinyML 参考设计 edge_vision_soc.peri.xml:236-250 同做法。
+    //   data_0/data_1 是双向（单线模式 data_0=MOSI、data_1=MISO；dual 模式下都双向），
+    //   顶层用 writeEnable 做三态，这里只把 SoC 的三根分线引出去。
+    input  wire        spi_data0_read,
+    output wire        spi_data0_write,
+    output wire        spi_data0_writeEnable,
+    input  wire        spi_data1_read,
+    output wire        spi_data1_write,
+    output wire        spi_data1_writeEnable,
+    output wire        spi_sclk,
+    output wire [0:0]  spi_ss,
 
     // ---- JTAG 调试（接芯片 JTAG，可选）----
     input  wire        jtag_enable,
@@ -189,6 +202,11 @@ module mmt_soc_subsystem (
     output wire        osd_th_we,
     output wire [9:0]  osd_th_addr,
     output wire [7:0]  osd_th_data,
+    // ---- ★ task-16：帧缓冲写通路握手（从 mmt_top 引进来给寄存器块计数）----
+    input  wire        fb_awvalid,
+    input  wire        fb_awready,
+    input  wire        fb_wvalid,
+    input  wire        fb_wready,
     output wire        ir_rd_addr_clk_unused
 );
 
@@ -205,7 +223,6 @@ module mmt_soc_subsystem (
     wire        apb_PWRITE;
 
     wire        soc_system_reset;
-    wire [0:0]  soc_spi_ss;
 
     // soc_system_reset 由 SoC 的 io_systemReset 输出驱动（它是 output，见
     //      ip/sapphire_soc/sapphire_soc.v:163），下面 L474 处消费它来消化未用信号。
@@ -373,22 +390,23 @@ module mmt_soc_subsystem (
         .jtagCtrl_tck     (jtag_tck),
         .jtagCtrl_tdo     (jtag_tdo),
 
-        // ---- 本方案不用的外设，按要求端接 ----
-        // SPI0：输入读回 0，输出悬空
-        .system_spi_0_io_data_0_read        (1'b0),
-        .system_spi_0_io_data_1_read        (1'b0),
+        // ---- 外设端接 ----
+        // SPI0：**已引到顶层引脚**（路线 B：RISC-V 读板载 flash，把 app+模型搬进 DDR）。
+        //       单线模式只用 data_0/data_1，data_2/data_3 继续端接。
+        .system_spi_0_io_data_0_read        (spi_data0_read),
+        .system_spi_0_io_data_0_write       (spi_data0_write),
+        .system_spi_0_io_data_0_writeEnable (spi_data0_writeEnable),
+        .system_spi_0_io_data_1_read        (spi_data1_read),
+        .system_spi_0_io_data_1_write       (spi_data1_write),
+        .system_spi_0_io_data_1_writeEnable (spi_data1_writeEnable),
         .system_spi_0_io_data_2_read        (1'b0),
         .system_spi_0_io_data_3_read        (1'b0),
-        .system_spi_0_io_data_0_write       (),
-        .system_spi_0_io_data_0_writeEnable (),
-        .system_spi_0_io_data_1_write       (),
-        .system_spi_0_io_data_1_writeEnable (),
         .system_spi_0_io_data_2_write       (),
         .system_spi_0_io_data_2_writeEnable (),
         .system_spi_0_io_data_3_write       (),
         .system_spi_0_io_data_3_writeEnable (),
-        .system_spi_0_io_sclk_write         (),
-        .system_spi_0_io_ss                 (soc_spi_ss),
+        .system_spi_0_io_sclk_write         (spi_sclk),
+        .system_spi_0_io_ss                 (spi_ss),
 
         // I2C0：不用（我们用自写的 I2C 硬件）。读回拉高表示总线空闲
         .system_i2c_0_io_scl_read  (1'b1),
@@ -469,10 +487,15 @@ module mmt_soc_subsystem (
         .osd_txt_data    (osd_txt_data),
         .osd_th_we       (osd_th_we),
         .osd_th_addr     (osd_th_addr),
-        .osd_th_data     (osd_th_data)
+        .osd_th_data     (osd_th_data),
+        // ---- ★ task-16：写通路握手计数输入 ----
+        .fb_awvalid      (fb_awvalid),
+        .fb_awready      (fb_awready),
+        .fb_wvalid       (fb_wvalid),
+        .fb_wready       (fb_wready)
     );
 
-    // 未用信号，避免综合告警
-    assign ir_rd_addr_clk_unused = soc_system_reset | soc_spi_ss[0];
+    // 未用信号，避免综合告警（soc_spi_ss 已改成顶层输出端口，不再需要在这里消化）
+    assign ir_rd_addr_clk_unused = soc_system_reset;
 
 endmodule

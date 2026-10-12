@@ -52,6 +52,32 @@ static void uart_put_x10(int32_t v)
     uart_putc((char)('0' + fp));
 }
 
+/* 不定长无符号十进制（计数器要打，值可能到 7 位以上）——每位一次除法，最多 10 位 */
+static void uart_put_u32(uint32_t v)
+{
+    char buf[11];
+    int i = 0;
+    if (v == 0u) { uart_putc('0'); return; }
+    while (v > 0u && i < 10) { buf[i++] = (char)('0' + (v % 10u)); v /= 10u; }
+    while (i > 0) uart_putc(buf[--i]);
+}
+
+/* 固定 8 位十六进制 */
+static void uart_put_hex32(uint32_t v)
+{
+    static const char hx[] = "0123456789ABCDEF";
+    uart_puts("0x");
+    for (int s = 28; s >= 0; s -= 4) uart_putc(hx[(v >> s) & 0xFu]);
+}
+
+static void uart_put_hex8(uint8_t v)
+{
+    static const char hx[] = "0123456789ABCDEF";
+    uart_puts("0x");
+    uart_putc(hx[(v >> 4) & 0xFu]);
+    uart_putc(hx[v & 0xFu]);
+}
+
 /*========================================================================
  * 二、OSD 文字缓冲写入
  *     先写地址、再写数据（写数据那一拍在硬件里产生写脉冲）
@@ -197,12 +223,24 @@ int main(void)
     }
     uart_puts("[MMT] multi-modal AI terminal, RISC-V firmware skeleton\r\n");
 
-    /* ---- 2. 初始化配置（写硬件寄存器）---- */
-    MMT_REG32(MMT_CFG_DIFF)     = (25u << 8);            /* 帧差阈值 25（与 Python 原型一致） */
-    MMT_REG32(MMT_CFG_MINAREA)  = 60;                    /* 最小面积 60 */
-    MMT_REG32(MMT_CFG_FUSION)   = (154u << 8) | 6u;      /* 阈值 0.60(Q8) + 授权结束 6 点 */
-    MMT_REG32(MMT_CFG_AUTH)     = 22u | (0u << 8);       /* 授权 22 点开始 + 当前 0 点 */
-    MMT_REG32(MMT_CTRL)         = 0x1;                   /* 帧差使能，不冻结、不清、不静音 */
+    /* ---- 2. 初始化配置（写硬件寄存器）----
+     * ★ 这几个值同时被下面的串口"报警判据行"回显 —— 因为 0x38/0x3C 在 RTL 里是
+     *   **只写**寄存器（读回来恒 0），固件只能自己记住写进去的是什么。
+     *   改这里的数，打印会跟着变，不会出现"打印值和实际配置不一致"。 */
+    const uint32_t cfg_diff_thr = 25u;    /* 帧差阈值（与 Python 原型一致）*/
+    const uint32_t cfg_min_area = 60u;    /* 最小面积 */
+    const uint32_t cfg_thr      = 154u;   /* 融合得分阈值 0.60×256（Q8）*/
+    const uint32_t cfg_auth_end = 6u;     /* 授权结束小时 */
+    const uint32_t cfg_auth_beg = 22u;    /* 授权开始小时 */
+    const uint32_t cfg_hour     = 0u;     /* 当前小时：板子没有 RTC，先写 0
+                                           * ⇒ in_auth_window 恒为真（0 < 6），
+                                           *   所以"报警有没有触发"只能看 hardware 的 score */
+
+    MMT_REG32(MMT_CFG_DIFF)    = (cfg_diff_thr << 8);
+    MMT_REG32(MMT_CFG_MINAREA) = cfg_min_area;
+    MMT_REG32(MMT_CFG_FUSION)  = (cfg_thr << 8) | cfg_auth_end;
+    MMT_REG32(MMT_CFG_AUTH)    = cfg_auth_beg | (cfg_hour << 8);
+    MMT_REG32(MMT_CTRL)        = 0x1;     /* 帧差使能，不冻结、不清、不静音 */
 
     osd_line_str(0, "MMT terminal booting...");
     osd_line_str(1, "waiting for sensors");
@@ -304,15 +342,29 @@ int main(void)
         uint8_t vprob = (area > 2000) ? 200 : (uint8_t)(area / 10);
         MMT_REG32(MMT_VISION) = (uint32_t)vprob | (1u << 8);
 
-        /* --- 3.5 读回融合结果（硬件算的 60/25/15 加权）--- */
-        uint32_t fs    = MMT_REG32(MMT_FUSION_SCORE);
-        uint8_t  conf_v = (uint8_t)(fs >> 24);
-        uint8_t  conf_t = (uint8_t)(fs >> 16);
-        uint8_t  conf_e = (uint8_t)(fs >> 8);
+        /* --- 3.5 读回融合结果（硬件算的 60/25/15 加权）---
+         * ⚠️ 0x28 的**实际**布局与注释不一致（RTL 拼接 46 位被截断，
+         *    见 docs\上板判据-写通路握手计数.md §3）：
+         *      实际 [31] = conf_vision[0]（**只有 1 位**，不是 8 位！）
+         *           [30:23] = conf_temp
+         *           [22:15] = conf_env
+         *           [14:9]  = 0
+         *           [8:0]   = score
+         *    下面 conf_t/conf_e 是**按注释位置**取的（保留给 OSD 用），
+         *    fs_temp/fs_env 是**按真实位置**取的（串口诊断用）。
+         *    完整的 8 位视觉字节只能从新寄存器 0x78（MMT_VISION_WORD）读。 */
+        uint32_t fs     = MMT_REG32(MMT_FUSION_SCORE);
+        uint8_t  conf_v = (uint8_t)(fs >> 24);            /* 注释位置：实际只有 bit0 有效 */
+        uint8_t  conf_t = (uint8_t)(fs >> 16);            /* 注释位置（截断后不是真温度）*/
+        uint8_t  conf_e = (uint8_t)(fs >> 8);             /* 注释位置（截断后不是真环境）*/
         uint16_t score  = (uint16_t)(fs & 0x1FF);
-        uint32_t as    = MMT_REG32(MMT_ALARM_ST);         /* alarm 读清 */
-        uint8_t  alarm = (uint8_t)(as & 0x1);
+        uint8_t  fs_vis_bit = (uint8_t)((fs >> 31) & 0x1u);   /* 0x28 里能拿到的**全部**视觉信息 */
+        uint8_t  fs_temp    = (uint8_t)((fs >> 23) & 0xFFu);  /* 真实位置 [30:23] */
+        uint8_t  fs_env     = (uint8_t)((fs >> 15) & 0xFFu);  /* 真实位置 [22:15] */
+        uint32_t as     = MMT_REG32(MMT_ALARM_ST);        /* ★ 只读这一次：bit0 是"读清"锁存位 */
+        uint8_t  alarm  = (uint8_t)(as & 0x1);
         uint8_t  in_auth = (uint8_t)((as >> 1) & 0x1);
+        uint8_t  evt    = (uint8_t)((as >> 2) & 0x7u);     /* 事件类型：锁存，报过一次警就保持 1 */
 
         /* --- 3.6 刷新 OSD 文字（三行，把该显示的都显示出来）--- */
         uint8_t c;                       /* 当前写入列号 */
@@ -358,12 +410,67 @@ int main(void)
         c = osd_line_x10(2, c, conf_e, 0);
         (void)c;
 
-        /* --- 3.7 串口打印 --- */
+        /* --- 3.7 串口打印 ---
+         * 三行：
+         *   第 1 行 = 原来的环境/红外/得分（保持不变，别破坏已有脚本的解析）
+         *   第 2 行 = ★ 报警判据行：alarm / in_auth_window / evt_type 摊开 + 完整 ALARM_ST
+         *             + 固件实际写进硬件的阈值与授权时段（0x38/0x3C 只写、读不回来）
+         *   第 3 行 = ★ 写通路握手计数 + 完整融合字 + 视觉字节
+         *   两行的判据表都见 docs\上板判据-写通路握手计数.md
+         */
         uart_puts("T=");   uart_put_x10(ambient_t / 10);
         uart_puts("C RH="); uart_put_x10(rh / 10);
         uart_puts("% IR="); uart_put_x10(body_max_t / 10);
         uart_puts("C score="); uart_put_x10((int32_t)score * 1000 / 256);   /* Q8 → 千分位 */
         uart_puts(alarm ? "  ALARM!\r\n" : "\r\n");
+
+        /* ---- 报警判据行 ----
+         * 为什么必须打：alarm = (score >= 阈值) && in_auth_window，而固件把 hour 写成 0
+         * ⇒ in_auth_window 恒真，于是"有没有报警"完全取决于 hardware 的 score。
+         * 把三个字段摊开 + 回显阈值/时段，才能定性到底是
+         *   ① 打印字段没反映真实 score，还是 ② 硬件在无图像时给了高分。
+         * ⚠️ 这里**不能**再读 0x2C：bit0 是读清锁存位，第二次读会变成 0（假"无报警"）。
+         *    所以只用上面那一次读到的 as。 */
+        uart_puts("ALM=");   uart_putc((char)('0' + (alarm  ? 1 : 0)));
+        uart_puts(" AUTH="); uart_putc((char)('0' + (in_auth ? 1 : 0)));
+        uart_puts(" EVT=");  uart_putc((char)('0' + evt));
+        uart_puts(" ST=");   uart_put_hex32(as);
+        uart_puts(" thr=");  uart_put_u32(cfg_thr);
+        uart_puts(" hr=");   uart_put_u32(cfg_hour);
+        uart_puts(" auth");  uart_put_u32(cfg_auth_beg);
+        uart_puts("-");      uart_put_u32(cfg_auth_end);
+        uart_puts("\r\n");
+
+        {
+            /* 计数器只增不减；打印"本次与上次之差"最能说明问题（绝对值可能是很久以前攒的）*/
+            static uint32_t last_aw = 0, last_w = 0;
+            uint32_t aw = MMT_REG32(MMT_FB_AW_CNT);
+            uint32_t w  = MMT_REG32(MMT_FB_W_CNT);
+            uint32_t st = MMT_REG32(MMT_FB_WR_STAT);
+            uint32_t vw = MMT_REG32(MMT_VISION_WORD);
+            uint32_t fc = MMT_REG32(MMT_FRAME_TGL_CNT);
+            static uint32_t last_fc = 0;
+
+            uart_puts("[WR] AW="); uart_put_u32(aw);
+            uart_puts("(d=");      uart_put_u32(aw - last_aw); uart_puts(")");
+            uart_puts(" W=");      uart_put_u32(w);
+            uart_puts("(d=");      uart_put_u32(w - last_w);  uart_puts(")");
+            uart_puts(" st=");     uart_put_hex8((uint8_t)(st & 0x3Fu));  /* bit0..3 电平, bit4/5 曾握手 */
+            last_aw = aw; last_w = w;
+
+            uart_puts(" FRM="); uart_put_u32(fc);
+            uart_puts("(d=");   uart_put_u32(fc - last_fc); uart_puts(")");
+            last_fc = fc;
+
+            /* [FS] 按**真实位置**打（vis_bit 是 0x28 里唯一有效的视觉位；t/e 用 [30:23]/[22:15]）*/
+            uart_puts(" [FS] raw="); uart_put_hex32(fs);
+            uart_puts(" vis_bit=");  uart_put_hex8(fs_vis_bit);
+            uart_puts(" t=");        uart_put_hex8(fs_temp);
+            uart_puts(" e=");        uart_put_hex8(fs_env);
+            uart_puts(" sc9=");      uart_put_hex32((uint32_t)score);
+            uart_puts(" [VW] vis="); uart_put_hex8((uint8_t)(vw >> 24));  /* ★ 完整 8 位视觉字节 */
+            uart_puts("\r\n");
+        }
 
         /* --- 3.8 简单节流：主循环跟着 MLX90640 的 2Hz 走 --- */
         for (volatile int i = 0; i < 2000000; i++) { }

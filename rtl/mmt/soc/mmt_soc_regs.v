@@ -38,6 +38,24 @@
 //   0x4C   R     IR_FRAME_RD       [15:0]=红外帧 RAM 在 IR_FRAME_ADDR 处的数据
 //   0x50   W     IR_FRAME_ADDR     [9:0]=要读的红外帧 RAM 地址(0..831)
 //   0x54   W     AMBIENT           [15:0]=ambient_c_x10(有符号) [16]=env_valid
+//   ─────────────── 以下为 2026-10-12 新增（上板判据，见 docs\上板判据-写通路握手计数.md）──
+//   0x6C   R     FB_AW_CNT         [31:0]=写地址通道(fb_awvalid&fb_awready)握手累计数
+//   0x70   R     FB_W_CNT          [31:0]=写数据通道(fb_wvalid &fb_wready )握手累计数
+//   0x74   R     FB_WR_STAT        [0]=awvalid [1]=awready [2]=wvalid [3]=wready
+//                                  [4]=aw_seen [5]=w_seen（曾握手过的粘滞位）
+//   0x78   R     VISION_WORD       [31:24]=conf_vision(完整 8 位) [23:16]=conf_temp
+//                                  [15:8]=conf_env [7:0]=0
+//   0x7C   R     FRAME_TGL_CNT     [31:0]=motion_frame_tgl 的跳变次数（视频帧数）
+//                                  ★ 这个**不需要额外接线**，重编位流即可用
+//  ─────────────────────────────────────────────────────────────────────
+//
+//  ⚠️ 已知问题（本轮查出，**未修改**，避免破坏既有映射）：0x28 的拼接
+//     `{7'd0, conf_vision, conf_temp, conf_env, 6'd0, score}` 是 46 位，
+//     赋给 32 位 PRDATA 时高 14 位被截断 ⇒ 实际布局与注释**不一致**：
+//       [31]   = conf_vision[0]（**只有 1 位**视觉，不是 8 位）
+//       [30:23]= conf_temp      [22:15]= conf_env      [14:9]=0      [8:0]=score
+//     所以要读完整的视觉字节请用新的 0x78（VISION_WORD）。
+//     详见 docs\上板判据-写通路握手计数.md §3。
 //  ─────────────────────────────────────────────────────────────────────
 //
 //  ⚠️ 说明：本模块只做"搬运"，不做运算。红外逐点温度计算、时间对齐、复杂决策
@@ -90,6 +108,20 @@ module mmt_soc_regs (
     input  wire [8:0]  score,
     input  wire        in_auth_window,
     input  wire        alarm,
+
+    // ---------------- 只读输入：帧缓冲写通路握手（★ 2026-10-12 新增，上板判据用）----
+    //   来源：mmt_top.v 里 frame_buffer 写通道的 4 根 wire
+    //         （fb_awvalid :347 / fb_awready :348 / fb_wvalid :352 / fb_wready :353，
+    //          它们同时接到 axi_interconnect 的 s0 口 :783/:796/:798 与 checker0 :729/:730/:747/:748）
+    //   时钟域：这 4 根线都在 **core_clk** 域（AXI 互联与 checker0 用的都是 core_clk，
+    //           见 mmt_top.v:698/.axi_clk(core_clk)、:779 .clk(core_clk)），
+    //           而本模块也在 core_clk ⇒ **不需要 CDC**，直接采样即可。
+    //   ⚠️ 这 4 个端口需要在 mmt_soc_subsystem.v 与 mmt_top.v 各补几行连接
+    //      （写权限不在本轮范围内），补丁见 docs\上板判据-写通路握手计数.md §2。
+    input  wire        fb_awvalid,
+    input  wire        fb_awready,
+    input  wire        fb_wvalid,
+    input  wire        fb_wready,
 
     // ---------------- 读写输出：配置给硬件 ----------------
     output reg  [7:0]  diff_threshold,
@@ -158,6 +190,66 @@ module mmt_soc_regs (
     end
 
     //----------------------------------------------------------------------
+    // ★ 帧缓冲写通路握手计数（2026-10-12 新增）—— 上板判据
+    //----------------------------------------------------------------------
+    // 为什么要这两个计数器：
+    //   Efinity 曾经把 frame_buffer 写通路静默折成常量（mmt_top.v:1141-1142 记了这件事），
+    //   现在靠 (* preserve, syn_keep=1 *) 绕过。但"静态报告 PASS"**不等于**
+    //   "运行时真的发生了 AXI 握手" —— 这两个计数器就是运行时的硬证据：
+    //   串口读出来只要在涨，就说明写通道真的在跑。
+    //
+    // 为什么要 preserve/syn_keep：
+    //   计数器本身被 PRDATA 读到、不会被删；但它的**输入** fb_* 若被工具视为
+    //   "只喂给可优化逻辑"，仍可能被折成常量（这正是之前踩的坑）。
+    //   加上属性后综合器必须保留这段时序逻辑以及驱动它的路径。
+    //   （本模块用的就是 Efinity；Xilinx 的等价属性是 dont_touch，不通用，别混写。）
+    (* preserve, syn_keep = 1 *) reg [31:0] fb_aw_cnt;
+    (* preserve, syn_keep = 1 *) reg [31:0] fb_w_cnt;
+    // "曾经握手过"的粘滞位：只读一次串口时，比"计数器是否非零"更抗误判
+    //（例如计数器刚好被读过、或两次读数之间没变化）
+    (* preserve, syn_keep = 1 *) reg        fb_aw_seen;
+    (* preserve, syn_keep = 1 *) reg        fb_w_seen;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            fb_aw_cnt  <= 32'd0;
+            fb_w_cnt   <= 32'd0;
+            fb_aw_seen <= 1'b0;
+            fb_w_seen  <= 1'b0;
+        end else begin
+            if (fb_awvalid && fb_awready) begin
+                fb_aw_cnt  <= fb_aw_cnt + 32'd1;
+                fb_aw_seen <= 1'b1;
+            end
+            if (fb_wvalid && fb_wready) begin
+                fb_w_cnt  <= fb_w_cnt + 32'd1;
+                fb_w_seen <= 1'b1;
+            end
+        end
+    end
+
+    //----------------------------------------------------------------------
+    // ★ 视频帧翻转计数（0x7C）—— 上板判据的"免接线"那一半
+    //----------------------------------------------------------------------
+    // motion_frame_tgl 是算法子系统在视频域每完成一帧翻转一次的标志，
+    // 而且它**本来就是本模块的输入**（见端口表）——所以这一个计数器
+    // **不需要任何顶层接线**，只要重编位流就能用。
+    // 它的意义：串口上这个数在涨 ⇒ 视频通路确实在出帧（详见判据文档 §4）。
+    (* preserve, syn_keep = 1 *) reg [31:0] frame_tgl_cnt;
+    reg frame_tgl_d;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            frame_tgl_cnt <= 32'd0;
+            frame_tgl_d   <= 1'b0;
+        end else begin
+            frame_tgl_d <= motion_frame_tgl;
+            if (motion_frame_tgl != frame_tgl_d)
+                frame_tgl_cnt <= frame_tgl_cnt + 32'd1;
+        end
+    end
+
+    //----------------------------------------------------------------------
     // 读
     //----------------------------------------------------------------------
     always @(*) begin
@@ -177,6 +269,25 @@ module mmt_soc_regs (
             16'h004C: PRDATA = {16'd0, ir_rd_data};
             16'h005C: PRDATA = {24'd0, osd_txt_addr};      // 回读 OSD 文字写地址
             16'h0064: PRDATA = {22'd0, osd_th_addr};       // 回读 OSD 热力图写地址
+            // ---- ★ 上板判据（2026-10-12 新增）----
+            // 0x6C/0x70：写通路握手累计数（只增）
+            16'h006C: PRDATA = fb_aw_cnt;
+            16'h0070: PRDATA = fb_w_cnt;
+            // 0x74：当前电平 + 粘滞标志
+            //       bit0=fb_awvalid 电平  bit1=fb_awready 电平
+            //       bit2=fb_wvalid  电平  bit3=fb_wready  电平
+            //       bit4=曾发生 AW 握手  bit5=曾发生 W 握手
+            16'h0074: PRDATA = {26'd0, fb_w_seen, fb_aw_seen,
+                                       fb_wready, fb_wvalid, fb_awready, fb_awvalid};
+            // 0x78：**完整的视觉字节**（[31:24]=conf_vision 8 位）
+            //       为什么要新开一个：0x28 的拼接是 46 位被截断，[31:24] 实际只有
+            //       conf_vision[0] 一位（详见 docs\上板判据-写通路握手计数.md §3）。
+            //       这里 8+8+8+8 = 32 位，不再截断，且**不动 0x28 的既有映射**。
+            16'h0078: PRDATA = {conf_vision, conf_temp, conf_env, 8'd0};
+            // 0x7C：视频帧翻转次数（motion_frame_tgl 的跳变次数）。
+            //       这个计数器**不需要顶层接线**（信号本来就是本模块输入），
+            //       重编位流即可用；用来回答"视频/摄像头通路在不在出帧"。
+            16'h007C: PRDATA = frame_tgl_cnt;
             default:  PRDATA = 32'h0;
         endcase
     end

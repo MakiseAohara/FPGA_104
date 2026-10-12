@@ -51,9 +51,14 @@ module tb_axi_ic;
     localparam [127:0] DW0 = 128'h000000000000000000000000D00D0000;
     localparam [127:0] DW2 = 128'h000000000000000000000000D00D0002;
 
-    localparam [5:0]  ID0 = 6'h00;     // frame_buffer: hardwired 0
+    // ID 常量按工程实际接线更新（2026-10-11，task-6 之后）：
+    //   frame_buffer 的 arid/awid 已从硬连线 0 改成 6'h0C / 6'h0D
+    //   （rtl\frame_buffer\ddr_rd_buffer.v:227 / ddr_wr_buffer.v:494，顶层取低 4 位）
+    //   TinyML 的 channels 包装没有 ID 输入源 → 实质 0（原来这里写 8'h0A 是不忠实的）
+    localparam [5:0]  ID0 = 6'h0C;     // frame_buffer 读 ID（低 4 位 = 0xC）
+    localparam [5:0]  ID0W= 6'h0D;     // frame_buffer 写 ID（低 4 位 = 0xD）
     localparam [7:0]  ID1 = 8'h05;     // SoC, fits in 4 bits
-    localparam [7:0]  ID2 = 8'h0A;     // TinyML, fits in 4 bits
+    localparam [7:0]  ID2 = 8'h00;     // TinyML, no ID source → 0
 
     // ---------------- clock / reset ----------------------------------------
     reg clk, rst_n;
@@ -510,7 +515,7 @@ module tb_axi_ic;
 
         // ================= TC1: single-master read/write ====================
         $display("---- TC1 single-master R/W ----");
-        issue_p(0, 1'b1, A0, ID0, D0); wait_p(0);
+        issue_p(0, 1'b1, A0, ID0W, D0); wait_p(0);
         chk("TC1a_s0_write_ok", (m_errcode[0*8 +: 8] == 8'h00));
         issue_p(0, 1'b0, A0, ID0, 128'h0); wait_p(0);
         chk("TC1b_s0_read_back", (m_errcode[0*8 +: 8] == 8'h00) &&
@@ -569,7 +574,7 @@ module tb_axi_ic;
         // ================= TC3: ID collision (the critical test) ============
         $display("---- TC3 ID collision: s0 and s2 both use ID 0 ----");
         // setup with non-colliding IDs so the memory is clean
-        issue_p(0, 1'b1, AC0, ID0, DC0); wait_p(0);
+        issue_p(0, 1'b1, AC0, ID0W, DC0); wait_p(0);
         issue_p(2, 1'b1, AC2, ID2, DC2); wait_p(2);
         chk("TC3a_collision_setup",
             (m_errcode[0*8 +: 8] == 8'h00) && (m_errcode[2*8 +: 8] == 8'h00));

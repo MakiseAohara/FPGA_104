@@ -22,3 +22,9 @@ sw/ddr/_test_build/
 .vscode/
 Thumbs.db
 desktop.ini
+
+# 厂商模块的改写副本（含厂商代码，不公开）
+sim/debayer/patched/
+# 仿真运行产物
+sim/**/_run/
+

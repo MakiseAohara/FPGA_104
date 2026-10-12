@@ -30,12 +30,21 @@
 #     # 只想看会不会超容量，不写文件
 #     powershell -File pack_image.ps1 -Weights .\weights\x.bin -DryRun
 #
+#  ⚠️⚠️ 本脚本是**路线甲（厂商 bootloader）**用的旧打包器，格式与当前 loader **不兼容**：
+#      · 它产出「纯拼接」文件：app 直接放镜像开头，**没有 48 字节镜像头**
+#      · 现行方案用 mkimage.ps1：开头 48B 头 + 载荷从第 64 字节开始
+#      · 两者默认输出名**曾经相同**（build\ddr_image.bin）——这是个真陷阱：
+#        先跑 mkimage.ps1 再跑本脚本，会把镜像悄悄覆盖成"没带头"的版本；
+#        上板后 loader 的 magic 检查会失败（好在它**拒绝跳转**，不会乱飞）。
+#      → 因此本脚本默认输出已改名为 LEGACY_routeA_image.bin，避免撞车。
+#      → 现在的正常流程：build_ddr.ps1 → mkimage.ps1 → verify_flash_layout.ps1
+#
 #  ⚠️ 全程**不碰** Efinity 流程，只是本地做文件拼接 + 自校验。
 # ==========================================================================
 param(
     [string]$App        = 'D:\FPGA\mmt\sw\build\mmt_fw.bin',   # 用 sw\ddr\link_ddr.ld 链出来的 .bin
     [string]$Weights    = '',                                  # 模型权重原始二进制，可空
-    [string]$Out        = 'D:\FPGA\mmt\sw\ddr\build\ddr_image.bin',
+    [string]$Out        = 'D:\FPGA\mmt\sw\ddr\build\LEGACY_routeA_image.bin',
     [int]   $AppRegion  = 0xFF000,     # app 区字节数 = 0x00100000 - 0x00001000 = 1020K
     [int]   $ImageMax   = 0x480000,    # flash 0x380000..0x800000 的可用长度 = 4.5MB
     [int]   $FlashBase  = 0x380000,    # 用户镜像在 flash 里的固定起始地址

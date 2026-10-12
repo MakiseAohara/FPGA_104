@@ -23,7 +23,7 @@ create_clock -period 7.1429 hdmi_tx_slow_clk
 create_clock -waveform {0.3571 1.0714} -period 1.4286 hdmi_tx_fast_clk
 
 set_clock_groups -exclusive  -group {i_soc_clk} -group {i_mipi_rx_pclk} -group {jtag_inst1_TCK}
-set_clock_groups -exclusive -group {core_clk} -group {axi_clk} -group {tx_cal_clk} -group {i_mipi_tx_pclk} -group {vid_clk_dvi2} -group {CLK_5M} -group {i_mipi_rx_pclk} -group {sdram_clk} -group {rx_cal_clk}
+set_clock_groups -exclusive -group {core_clk} -group {axi_clk} -group {tx_cal_clk} -group {i_mipi_tx_pclk} -group {vid_clk_dvi2 hdmi_tx_slow_clk} -group {CLK_5M} -group {i_mipi_rx_pclk} -group {sdram_clk} -group {rx_cal_clk}
 set_clock_groups -exclusive -group {i_mipi_tx_pclk}    -group {i_mipi_rx_pclk}
 
 # ---------------------------------------------------------------------------
@@ -34,7 +34,17 @@ set_clock_groups -exclusive -group {i_mipi_tx_pclk}    -group {i_mipi_rx_pclk}
 # hdmi_tx_slow_clk。不声明异步时，STA 会把两者当成有确定相位关系的同步时钟，算出
 # 0.001 ns 的约束，于是两域之间全部 CDC 通路（终点均为 mmt_sync2 的第一级触发器 s1）
 # 被报成假违规（WNS -3.589 ns）。这里补上异步声明。
-set_clock_groups -asynchronous -group {core_clk} -group {hdmi_tx_slow_clk}
+# [2026-10-11 二次修订] 这里原来写的是一条独立声明：
+#     set_clock_groups -asynchronous -group {core_clk} -group {hdmi_tx_slow_clk}
+# 实测它虽只点名两个组，却**顺带把同源 USER_PLL 的真实 2:1 同步路径
+#     vid_clk_dvi2 ↔ hdmi_tx_slow_clk
+# 也切断了**（时钟关系数 16→13；被切的是 mmt_top.v 里 48 位像素采样通路与
+# dvi_encoder 复位，分析见 docs/跨域与报警链路复审.md）。
+# 现改为把 hdmi_tx_slow_clk 并进上面第 26 行那个 exclusive 组、与 vid_clk_dvi2 **同组**：
+#   · 同组内两条时钟仍按同步关系互相计时 —— 正是我们要保留的真实 2:1 路径；
+#   · 与 core_clk 等其它组之间依然是异步 —— CDC 假违规照旧被消除（WNS -3.589ns 的修法不变）。
+# 验收：重跑后 Setup 时钟关系表应恢复出现 "vid_clk_dvi2 vs hdmi_tx_slow_clk"（+3.7ns 量级），
+#       且 core_clk ↔ hdmi_tx_slow_clk 不再被检查、负 slack 仍为 0。
 
 #set_clock_groups -exclusive -group {i_sysclk} -group {jtag_inst1_TCK}                       2.500           -0.197           (R-R)
 
@@ -144,10 +154,15 @@ set_output_delay -clock sdram_clk -reference_pin [get_ports {sdram_clk~CLKOUT~21
 # set_output_delay -clock <CLOCK> [-reference_pin <clkout_pad>] -min <MIN CALCULATION> [get_ports {ddr_reset_n}]
 set_output_delay -clock sdram_clk -reference_pin [get_ports {sdram_clk~CLKOUT~218~94}] -max 0.302 [get_ports {ddr_we_n}]
 set_output_delay -clock sdram_clk -reference_pin [get_ports {sdram_clk~CLKOUT~218~94}] -min -0.140 [get_ports {ddr_we_n}]
-set_output_delay -clock i_soc_clk -reference_pin [get_ports {i_soc_clk~CLKOUT~1~31}] -max 0.302 [get_ports {system_spi_0_io_sclk_write}]
-set_output_delay -clock i_soc_clk -reference_pin [get_ports {i_soc_clk~CLKOUT~1~31}] -min -0.140 [get_ports {system_spi_0_io_sclk_write}]
-set_output_delay -clock i_soc_clk -reference_pin [get_ports {i_soc_clk~CLKOUT~1~30}] -max 0.302 [get_ports {system_spi_0_io_ss}]
-set_output_delay -clock i_soc_clk -reference_pin [get_ports {i_soc_clk~CLKOUT~1~30}] -min -0.140 [get_ports {system_spi_0_io_ss}]
+# [2026-10-11 修订] 原来这两对约束写的是 -clock i_soc_clk / -reference_pin
+#   [get_ports {i_soc_clk~CLKOUT~1~31}] 和 {i_soc_clk~CLKOUT~1~30} —— 本工程的
+#   SoC 时钟就是 core_clk（mmt_top.v 里 assign i_soc_clk = core_clk），
+#   i_soc_clk 不是端口、也没有 CLKOUT 引脚，整条约束其实是空操作，
+#   SPI 输出路径完全没被 STA 约束。改用真实时钟 core_clk（去掉 reference_pin）。
+set_output_delay -clock core_clk -max 0.302 [get_ports {system_spi_0_io_sclk_write}]
+set_output_delay -clock core_clk -min -0.140 [get_ports {system_spi_0_io_sclk_write}]
+set_output_delay -clock core_clk -max 0.302 [get_ports {system_spi_0_io_ss}]
+set_output_delay -clock core_clk -min -0.140 [get_ports {system_spi_0_io_ss}]
 set_input_delay -clock rx_cal_clk -reference_pin [get_ports {rx_cal_clk~CLKOUT~148~1}] -max 0.476 [get_ports {ddr_dq_in_lo[0] ddr_dq_in_hi[0]}]
 set_input_delay -clock rx_cal_clk -reference_pin [get_ports {rx_cal_clk~CLKOUT~148~1}] -min 0.276 [get_ports {ddr_dq_in_lo[0] ddr_dq_in_hi[0]}]
 set_output_delay -clock tx_cal_clk_90edge -reference_pin [get_ports {tx_cal_clk_90edge~CLKOUT~150~1}] -max 0.302 [get_ports {ddr_dq_out_lo[0] ddr_dq_out_hi[0]}]

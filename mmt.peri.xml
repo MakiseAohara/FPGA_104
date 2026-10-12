@@ -271,6 +271,10 @@
         <efxpt:comp_gpio name="i_arstn" gpio_def="GPIOL_07" mode="input" bus_name="" io_standard="3.3 V LVCMOS">
             <efxpt:input_config name="i_arstn" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="weak pullup" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="i_arstn_PULL_UP_ENA" dyn_delay_en_name="i_arstn_DLY_ENA" dyn_delay_reset_name="i_arstn_DLY_RST" dyn_delay_ctrl_name="i_arstn_DLY_CTRL" clkmux_buf_name=""/>
         </efxpt:comp_gpio>
+        <!-- ===== 本次补充：RISC-V 软核 UART（板载 FT4232HL，引脚表见板卡设计说明「十、UART」）===== -->
+        <efxpt:comp_gpio name="i_uart_rxd" gpio_def="GPIOL_02" mode="input" bus_name="" io_standard="3.3 V LVCMOS">
+            <efxpt:input_config name="i_uart_rxd" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="weak pullup" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="i_uart_rxd_PULL_UP_ENA" dyn_delay_en_name="i_uart_rxd_DLY_ENA" dyn_delay_reset_name="i_uart_rxd_DLY_RST" dyn_delay_ctrl_name="i_uart_rxd_DLY_CTRL" clkmux_buf_name=""/>
+        </efxpt:comp_gpio>
         <efxpt:comp_gpio name="io_cam_scl" gpio_def="GPIOR_20" mode="inout" bus_name="" io_standard="3.3 V LVCMOS">
             <efxpt:input_config name="io_cam_scl_IN" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="weak pullup" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="io_cam_scl_PULL_UP_ENA" dyn_delay_en_name="io_cam_scl_DLY_ENA" dyn_delay_reset_name="io_cam_scl_DLY_RST" dyn_delay_ctrl_name="io_cam_scl_DLY_CTRL" clkmux_buf_name=""/>
             <efxpt:output_config name="io_cam_scl_OUT" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="2" fastclk_name=""/>
@@ -281,20 +285,65 @@
             <efxpt:output_config name="io_cam_sda_OUT" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="2" fastclk_name=""/>
             <efxpt:output_enable_config name="io_cam_sda_OE" is_register="false" clock_name="" is_clock_inverted="false" name_oen="io_cam_sda_OEN"/>
         </efxpt:comp_gpio>
-        <efxpt:comp_gpio name="led[0]" gpio_def="GPIOR_21" mode="output" bus_name="led" io_standard="3.3 V LVCMOS">
+        <!-- ===== 本次补充：多模态传感器 I2C（MLX90640 0x33 + SHT30 0x44 共用一条总线）=====
+             走 J7 扩展座的两个空闲 3.3V IO（J7 脚32 = GPIOL_11 / C5，J7 脚34 = GPIOL_09 / A4），
+             开漏 + 外部 4.7k 上拉；pad 名沿用工程既有的 io_cam_* 命名风格，
+             实际绑定靠下面三段 RTL 信号名（i_sensor_scl / o_sensor_scl / o_sensor_scl_oe）。 -->
+        <efxpt:comp_gpio name="io_sensor_scl" gpio_def="GPIOL_11" mode="inout" bus_name="" io_standard="3.3 V LVCMOS">
+            <efxpt:input_config name="i_sensor_scl" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="weak pullup" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="i_sensor_scl_PULL_UP_ENA" dyn_delay_en_name="i_sensor_scl_DLY_ENA" dyn_delay_reset_name="i_sensor_scl_DLY_RST" dyn_delay_ctrl_name="i_sensor_scl_DLY_CTRL" clkmux_buf_name=""/>
+            <efxpt:output_config name="o_sensor_scl" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+            <efxpt:output_enable_config name="o_sensor_scl_oe" is_register="false" clock_name="" is_clock_inverted="false" name_oen=""/>
+        </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="io_sensor_sda" gpio_def="GPIOL_09" mode="inout" bus_name="" io_standard="3.3 V LVCMOS">
+            <efxpt:input_config name="i_sensor_sda" name_ddio_lo="" conn_type="normal" is_register="false" clock_name="" is_clock_inverted="false" pull_option="weak pullup" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="i_sensor_sda_PULL_UP_ENA" dyn_delay_en_name="i_sensor_sda_DLY_ENA" dyn_delay_reset_name="i_sensor_sda_DLY_RST" dyn_delay_ctrl_name="i_sensor_sda_DLY_CTRL" clkmux_buf_name=""/>
+            <efxpt:output_config name="o_sensor_sda" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+            <efxpt:output_enable_config name="o_sensor_sda_oe" is_register="false" clock_name="" is_clock_inverted="false" name_oen=""/>
+        </efxpt:comp_gpio>
+        <!-- ===== 本次修正：LED 改到板上真正的 3.3V LED 脚（板卡设计说明「八、用户 IO」）=====
+             LED0 = GPIOR_27 (P13, BR 3.3V)、LED1 = GPIOR_24 (N13, BR 3.3V)。
+             原来的 GPIOR_21/GPIOR_22 是 KEY2/KEY1（按键），GPIOR_28 是 FT4232 的 UART_TX
+             —— 三者都不是 LED 脚，已删除。RTL 侧需同步把 led 缩成 led[1:0]。 -->
+        <efxpt:comp_gpio name="led[0]" gpio_def="GPIOR_27" mode="output" bus_name="led" io_standard="3.3 V LVCMOS">
             <efxpt:output_config name="led[0]" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
         </efxpt:comp_gpio>
-        <efxpt:comp_gpio name="led[1]" gpio_def="GPIOR_22" mode="output" bus_name="led" io_standard="3.3 V LVCMOS">
+        <efxpt:comp_gpio name="led[1]" gpio_def="GPIOR_24" mode="output" bus_name="led" io_standard="3.3 V LVCMOS">
             <efxpt:output_config name="led[1]" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
         </efxpt:comp_gpio>
-        <efxpt:comp_gpio name="led[2]" gpio_def="GPIOR_28" mode="output" bus_name="led" io_standard="3.3 V LVCMOS">
-            <efxpt:output_config name="led[2]" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
-        </efxpt:comp_gpio>
-        <efxpt:comp_gpio name="led[3]" gpio_def="GPIOR_25" mode="output" bus_name="led" io_standard="3.3 V LVCMOS">
-            <efxpt:output_config name="led[3]" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+        <!-- ===== 本次补充：有源蜂鸣器（板卡上没有蜂鸣器，需外接）=====
+             接 J7 脚40 = GPIOR_13 (A12, TR 3.3V)，是 J7 上 6 个通用 3.3V IO 之一。
+             ⚠️ 这条是**我们的接线选择**，板卡本身没有蜂鸣器网络。 -->
+        <efxpt:comp_gpio name="o_buzzer" gpio_def="GPIOR_13" mode="output" bus_name="" io_standard="3.3 V LVCMOS">
+            <efxpt:output_config name="o_buzzer" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
         </efxpt:comp_gpio>
         <efxpt:comp_gpio name="o_cam_rst_p" gpio_def="GPIOR_16" mode="output" bus_name="" io_standard="3.3 V LVCMOS">
             <efxpt:output_config name="o_cam_rst_p" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="2" fastclk_name=""/>
+        </efxpt:comp_gpio>
+        <!-- ===== 本次补充：RISC-V 软核 UART 的 TX（板载 FT4232HL，R14）===== -->
+        <efxpt:comp_gpio name="o_uart_txd" gpio_def="GPIOR_28" mode="output" bus_name="" io_standard="3.3 V LVCMOS">
+            <efxpt:output_config name="o_uart_txd" name_ddio_lo="" register_option="none" clock_name="" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+        </efxpt:comp_gpio>
+        <!-- ===== 本次补充：SoC SPI0 接板载 SPI flash 的 4 根脚（路线 B 的关键通道）=====
+             结构逐字照抄厂商参考设计 edge_vision_soc.peri.xml:236-251（同一颗 Sapphire SoC +
+             同样的 flash 脚），只改一处：clock_name 由 i_mipi_rx_pclk 改成我们的 core_clk。
+             引脚来自本板引脚表 ddr_demo_ti60.pinout.csv:164/179/194/209
+             （M1/GPIOL_P_03_CDI0、L1/GPIOL_N_03_CDI1、N1/GPIOL_N_01_CCK、P1/GPIOL_P_01_SSL_N），
+             这 4 根同时是 active 模式的上电配置脚，1A bank = 1.8V。
+             绑定靠 RTL 里的 system_spi_0_io_data_0_read/_write/_writeEnable 等信号名。 -->
+        <efxpt:comp_gpio name="system_spi_0_io_data_0" gpio_def="GPIOL_P_03" mode="inout" bus_name="" io_standard="1.8 V LVCMOS">
+            <efxpt:input_config name="system_spi_0_io_data_0_read" name_ddio_lo="" conn_type="normal" is_register="true" clock_name="core_clk" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="system_spi_0_io_data_0_PULL_UP_ENA" dyn_delay_en_name="system_spi_0_io_data_0_DLY_ENA" dyn_delay_reset_name="system_spi_0_io_data_0_DLY_RST" dyn_delay_ctrl_name="system_spi_0_io_data_0_DLY_CTRL" clkmux_buf_name=""/>
+            <efxpt:output_config name="system_spi_0_io_data_0_write" name_ddio_lo="" register_option="register" clock_name="core_clk" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+            <efxpt:output_enable_config name="system_spi_0_io_data_0_writeEnable" is_register="true" clock_name="core_clk" is_clock_inverted="false" name_oen=""/>
+        </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="system_spi_0_io_data_1" gpio_def="GPIOL_N_03" mode="inout" bus_name="" io_standard="1.8 V LVCMOS">
+            <efxpt:input_config name="system_spi_0_io_data_1_read" name_ddio_lo="" conn_type="normal" is_register="true" clock_name="core_clk" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="system_spi_0_io_data_1_PULL_UP_ENA" dyn_delay_en_name="system_spi_0_io_data_1_DLY_ENA" dyn_delay_reset_name="system_spi_0_io_data_1_DLY_RST" dyn_delay_ctrl_name="system_spi_0_io_data_1_DLY_CTRL" clkmux_buf_name=""/>
+            <efxpt:output_config name="system_spi_0_io_data_1_write" name_ddio_lo="" register_option="register" clock_name="core_clk" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+            <efxpt:output_enable_config name="system_spi_0_io_data_1_writeEnable" is_register="true" clock_name="core_clk" is_clock_inverted="false" name_oen=""/>
+        </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="system_spi_0_io_sclk_write" gpio_def="GPIOL_N_01" mode="output" bus_name="" io_standard="1.8 V LVCMOS">
+            <efxpt:output_config name="system_spi_0_io_sclk_write" name_ddio_lo="" register_option="register" clock_name="core_clk" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
+        </efxpt:comp_gpio>
+        <efxpt:comp_gpio name="system_spi_0_io_ss" gpio_def="GPIOL_P_01" mode="output" bus_name="" io_standard="1.8 V LVCMOS">
+            <efxpt:output_config name="system_spi_0_io_ss" name_ddio_lo="" register_option="register" clock_name="core_clk" is_clock_inverted="false" is_slew_rate="false" tied_option="none" ddio_type="none" delay="0" is_serial="false" drive_strength="4" fastclk_name=""/>
         </efxpt:comp_gpio>
         <efxpt:comp_gpio name="verf0" gpio_def="GPIOB_P_09" mode="input" bus_name="" io_standard="1.5 V SSTL">
             <efxpt:input_config name="verf0" name_ddio_lo="" conn_type="vref" is_register="false" clock_name="" is_clock_inverted="false" pull_option="none" is_schmitt_trigger="false" ddio_type="none" is_bus_hold="false" delay="0" is_serial="false" is_dyn_delay="false" fastclk_name="" pullup_ena_name="verf0_PULL_UP_ENA" dyn_delay_en_name="verf0_DLY_ENA" dyn_delay_reset_name="verf0_DLY_RST" dyn_delay_ctrl_name="verf0_DLY_CTRL" clkmux_buf_name=""/>
@@ -311,7 +360,7 @@
         <efxpt:bus name="ddr_dq" mode="inout" msb="15" lsb="0"/>
         <efxpt:bus name="ddr_dqs" mode="inout" msb="1" lsb="0"/>
         <efxpt:bus name="ddr_odt" mode="output" msb="0" lsb="0"/>
-        <efxpt:bus name="led" mode="output" msb="3" lsb="0"/>
+        <efxpt:bus name="led" mode="output" msb="1" lsb="0"/>
     </efxpt:gpio_info>
     <efxpt:pll_info>
         <efxpt:pll name="DDR3_PLL" pll_def="PLL_TR0" ref_clock_name="CLK_25M" ref_clock_freq="25.0000" multiplier="4" pre_divider="1" post_divider="1" reset_name="DDR3_PLL_RSTN" locked_name="pll_locked" is_ipfrz="false" is_bypass_lock="true">

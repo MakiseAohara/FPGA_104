@@ -75,8 +75,6 @@ module mmt_top #(
 	output  wire    pll_inst1_RSTN,
 	input	wire	i_pll_locked,
 	input 	wire  	pll_locked,
-	output  wire    pll_inst4_RSTN,
-	input   wire    pll_inst4_LOCKED,
 	output  wire  	USER_PLL_RSTN,
     output 	wire 	DDR3_PLL_RSTN,
 	input 	wire  	user_pll_locked,
@@ -173,7 +171,7 @@ module mmt_top #(
 	output [ODT_WIDTH-1:0]             ddr_odt,
 
        //LED
-       output [3:0] led,
+       output [1:0] led,
 
        //==== 本次新增：多模态传感器 / 报警 / 软核串口 ====
        // 传感器 I2C 总线（开漏，需外部上拉电阻；MLX90640 与 SHT30 共用）
@@ -190,6 +188,22 @@ module mmt_top #(
        // ⚠️ 引脚同样待定
        input  wire                        i_uart_rxd,
        output wire                        o_uart_txd,
+       //================================================================
+       // SPI0（路线 B 新增）：RISC-V 靠它读板载 SPI flash，把 app+模型搬进 DDR。
+       // 这 4 根脚在板上**同时是上电配置脚**（active 模式：CDI0/CDI1/CCK/SSL_N），
+       // 配置完成后交还用户逻辑。
+       // ★ 照厂商做法（edge_vision_soc.v:176-185）暴露 **8 个单向端口**，
+       //   **不要在顶层手工做三态** —— peri 的 GPIO pad 是按信号名绑定的，
+       //   它会自己用 *_writeEnable 生成三态缓冲；顶层再插一个 inout 反而会
+       //   让这两个脚随机落到别的空闲引脚、并和 pad 抢 MOSI/MISO。
+       input  wire                        system_spi_0_io_data_0_read,
+       output wire                        system_spi_0_io_data_0_write,
+       output wire                        system_spi_0_io_data_0_writeEnable,
+       input  wire                        system_spi_0_io_data_1_read,
+       output wire                        system_spi_0_io_data_1_write,
+       output wire                        system_spi_0_io_data_1_writeEnable,
+       output wire                        system_spi_0_io_sclk_write,
+       output wire                        system_spi_0_io_ss,
        //================================================================
 
        output	wire	                     LCD_RST_P			,
@@ -444,6 +458,10 @@ wire [AXI_DATA_WIDTH-1:0]         tml_rdata;
 wire                              tml_rlast;
 wire [1:0]                        tml_rresp;
 wire                              tml_rready;
+// channels 包装只输出 1 位 lock（[0:0]），互联每口要 2 位 —— 高位显式补 0，
+// 否则 tml_awlock[1]/tml_arlock[1] 悬空(z) 还会被拼进互联输入
+assign tml_awlock[1] = 1'b0;
+assign tml_arlock[1] = 1'b0;
 
 
 
@@ -562,8 +580,15 @@ assign i_soc_clk  = core_clk;
               .u_dly_enable_D		(),
               .u_dly_inc_D		       (),
               
-              .axi_clk			(1'b0),
-              .axi_reset_n		       (1'b0),
+              // ★ 2026-10-11 修复（根因见 docs\帧缓冲写通路根因.md）：
+              //   原来 axi_clk/axi_reset_n 都绑 0 ⇒ 综合器可证明 IP 内**所有 AXI 域寄存器
+              //   恒等于复位值**。CSI RX IP 5.15 新增的"像素输出使能"寄存器若复位值为 0，
+              //   就会被证明 pixel_data_valid 恒 0 → 像素侧 FIFO 整段被删
+              //   （实测：我们 CSI RX 只 4 块 BRAM、厂商同 IP 36 块；i_mipi_rx_pclk 的
+              //    Memory Ports 45 → 0）→ frame_stable/frame_start 恒 0 → 帧缓冲写通路被折叠。
+              //   修法 E1：给 AXI 一个真实时钟并释放复位，但**不发起任何事务**（其余 AXI 仍绑 0）。
+              .axi_clk			(core_clk),
+              .axi_reset_n		       (w_arstn),
               .axi_awaddr			(6'b0),
               .axi_awvalid		       (1'b0),
               .axi_awready		       (),
@@ -662,7 +687,7 @@ wire ch0_de;
 .AXI_DATA_WIDTH      ( AXI_DATA_WIDTH	),
 .AXI_ADDR_WIDTH      ( AXI_ADDR_WIDTH	),
 .WR_FIFO_DEPTH	      ( 1024		),    
-.RD_FIFO_DEPTH 	      ( 1024 	),
+.RD_FIFO_DEPTH 	      ( 512 	),   // ★ 2026-10-12 削减：1024→512（省 6 块 RAM，见 docs\BRAM资源优化方案.md R1）
 .BURST_LEN  	       (127),
 .FB_NUM	            (3),
 .MAX_VID_WIDTH	    (960) ,
@@ -760,7 +785,9 @@ axi_interconnect u_ddr_axi_ic (
     .s_axi_awlen    ({tml_awlen,    soc_ddr_awlen,    fb_awlen    }),
     .s_axi_awsize   ({tml_awsize,   soc_ddr_awsize,   fb_awsize   }),
     .s_axi_awburst  ({tml_awburst,  soc_ddr_awburst,  fb_awburst  }),
-    .s_axi_awlock   ({tml_awlock,   soc_ddr_awlock,   fb_awlock   }),
+    // ★ lock 每口必须正好 2 位：fb_awlock 只有 [0:0]，原来直接拼会让整个向量错位
+    //   （2+2+1=5 位拼进 6 位端口 → Verilog 在高位补 0，SoC 的 lock 位会被当成 TinyML 口的位）
+    .s_axi_awlock   ({tml_awlock[1:0], soc_ddr_awlock[1:0], {1'b0, fb_awlock}}),
     .s_axi_awcache  ({tml_awcache,  soc_ddr_awcache,  fb_awcache  }),
     .s_axi_awprot   ({tml_awprot,   soc_ddr_awprot,   fb_awprot   }),
     .s_axi_awqos    ({4'h0,         soc_ddr_awqos,    4'h0        }),
@@ -787,7 +814,8 @@ axi_interconnect u_ddr_axi_ic (
     .s_axi_arlen    ({tml_arlen,    soc_ddr_arlen,    fb_arlen    }),
     .s_axi_arsize   ({tml_arsize,   soc_ddr_arsize,   fb_arsize   }),
     .s_axi_arburst  ({tml_arburst,  soc_ddr_arburst,  fb_arburst  }),
-    .s_axi_arlock   ({tml_arlock,   soc_ddr_arlock,   fb_arlock   }),
+    // ★ 同上：arlock 每口补齐成 2 位
+    .s_axi_arlock   ({tml_arlock[1:0], soc_ddr_arlock[1:0], {1'b0, fb_arlock}}),
     .s_axi_arcache  ({tml_arcache,  soc_ddr_arcache,  fb_arcache  }),
     .s_axi_arprot   ({tml_arprot,   soc_ddr_arprot,   fb_arprot   }),
     .s_axi_arqos    ({4'h0,         soc_ddr_arqos,    4'h0        }),
@@ -850,15 +878,6 @@ axi_interconnect u_ddr_axi_ic (
     .m_axi_rready   (s_axi_rready  )
 );
 
-//***************************************************************************
-// TinyML 加速器（路线 B）
-//   · 命令/响应口 ←→ SoC 的 cpu0_customInstruction_*
-//   · AXI 主口 → 互联 s2，用来读模型权重/张量（地址空间就是整片 DDR3）
-//   · 参数取官方 Ti60F225 mobilenetv1 person-detect 那套 define：
-//     conv/depthwise STANDARD + TINYML_CACHE ENABLE，FC/ADD/MUL/MIN_MAX 关
-//     （见 ip/tinyml/tinyml_core0_define.v，由 tinyml_top 内部 `include）
-//   · reset 是高有效；AXI 侧 m_axi_rstn 低有效
-//***************************************************************************
 //***************************************************************************
 // TinyML 加速器（路线 B）
 //   用官方那个 **channels 包装**，不要直接例化 tinyml_top。
@@ -1113,14 +1132,23 @@ wire axi_rst_n = r_rst_cnt[25];
 
 reg [26:0] dly_cnt = 'd0;
 
+// ★ 2026-10-11 修复（根因见 docs\帧缓冲写通路根因-3.md 与本次实验 X1/X3/Y1/Y2）：
+//   原为 `else if( w_confdone )`。但 w_confdone 是 panel_config 的 AXI 配置握手结果，
+//   而我们**删掉了 DSI TX（面板）**之后，panel_config 的 AXI 主口（w_axi_*，L1101-1115）
+//   没有任何从设备：awready/wready/bvalid 永远不响应 ⇒ o_confdone 永不置位
+//   ⇒ w_confdone 恒 0 ⇒ dly_cnt 不计数 ⇒ **vid_rst_n 恒 0**
+//   ⇒ 整条视频链（frame_buffer / debayer / …）被永久按在复位态
+//   ⇒ 综合器据此把帧缓冲**写通路折成常量**（实测 map.rpt 里 fb_awvalid/fb_wvalid/
+//     fb_wlast/state[1:0] 全是 (optimized to 0)、ddr_wr_buffer_inst 的 RAM = 0）。
+//   我们没有面板要等，所以去掉这个门控：释放 w_arstn 后由 vid_clk_dvi2（70MHz）自己数，
+//   约 2^26/70MHz ≈ 0.96 s 后释放 vid_rst_n。像素域的复位仍由 CSI RX 自己的
+//   reset_pixel_n（i_mipi_rx_pclk 域同步复位）负责，不受影响。
 always @( posedge vid_clk_dvi2 or negedge w_arstn )
 begin
   if( !w_arstn )
     dly_cnt <= 'd0;
-  else if( w_confdone )
+  else
     dly_cnt <= dly_cnt[26] ? dly_cnt :(dly_cnt + 1'b1);
-  else 
-    dly_cnt <= 'd0;
 end 
 
 assign vid_rst_n = dly_cnt[26];
@@ -1307,9 +1335,12 @@ mmt_video_downscale #(
 ) u_downscale (
     .clk       (hdmi_tx_slow_clk),
     .rst_n     (w_arstn),
-    .in_r      (hdmi_tx_bdata),     // ★ 注意：demo 的命名里 r/b 是反的
-    .in_g      (hdmi_tx_gdata),     //   （rgb_datax2 注释写着 "b,g,r"，
-    .in_b      (hdmi_tx_rdata),     //     dvi_encoder 也是 i_rdata←hdmi_tx_bdata）
+    // ★ 2026-10-13 修复（task-18 仿真实证）：原接法是 .in_r(hdmi_tx_bdata)/.in_b(hdmi_tx_rdata)，
+    //   把蓝接到红通道 ⇒ 画面全紫。厂商原设计留下的注释 "b,g,r" 才是错的源头；
+    //   仿真实测：正接 11/22/33 → 输出 11/22/33；原接法 → 输出 33/22/11（R/B 颠倒）。
+    .in_r      (hdmi_tx_rdata),
+    .in_g      (hdmi_tx_gdata),
+    .in_b      (hdmi_tx_bdata),
     .in_de     (hdmi_tx_de),
     .in_vs     (hdmi_tx_vs),
     .out_gray  (gray_pix),
@@ -1357,9 +1388,10 @@ mmt_osd_overlay #(
 ) u_osd (
     .vclk       (hdmi_tx_slow_clk),
     .vrst_n     (w_arstn),
-    .i_r        (hdmi_tx_bdata),    // 同上：命名里 r/b 是反的
+    // ★ 2026-10-13 修复：同上（此处是"显示主通路"的 R/B 交叉，就是"全紫"的直接原因）
+    .i_r        (hdmi_tx_rdata),
     .i_g        (hdmi_tx_gdata),
-    .i_b        (hdmi_tx_rdata),
+    .i_b        (hdmi_tx_bdata),
     .i_de       (hdmi_tx_de),
     .i_hs       (hdmi_tx_hs),
     .i_vs       (hdmi_tx_vs),
@@ -1421,12 +1453,30 @@ wire [7:0]  alg_conf_v, alg_conf_t, alg_conf_e;
 wire [8:0]  alg_score;
 wire        alg_in_auth, alg_alarm;
 
+//--------------------------------------------------------------------------
+// SPI0：**不在这里做三态** —— 见端口处的说明。
+//   这 8 个信号是顶层端口，直接接到子系统；peri 的 GPIO pad 负责三态与回读。
+//--------------------------------------------------------------------------
+
 mmt_soc_subsystem u_soc (
     .clk        (core_clk),
     .rst_n      (w_arstn),
 
     .uart_txd   (o_uart_txd),
     .uart_rxd   (i_uart_rxd),
+
+    // ---- SPI0（路线 B：读板载 flash → 搬 app/模型进 DDR）----
+    //   顶层做成三态：SoC 只给 read/write/writeEnable 三根分线，
+    //   这里按 writeEnable 决定驱动还是高阻，回读信号直接来自双向脚。
+    //   peri 的 GPIO 块（inout 模式）按 *_read/_write/_writeEnable 的名字找它们。
+    .spi_data0_read        (system_spi_0_io_data_0_read),
+    .spi_data0_write       (system_spi_0_io_data_0_write),
+    .spi_data0_writeEnable (system_spi_0_io_data_0_writeEnable),
+    .spi_data1_read        (system_spi_0_io_data_1_read),
+    .spi_data1_write       (system_spi_0_io_data_1_write),
+    .spi_data1_writeEnable (system_spi_0_io_data_1_writeEnable),
+    .spi_sclk              (system_spi_0_io_sclk_write),
+    .spi_ss                (system_spi_0_io_ss),
 
     // SoC 的 JTAG 调试口★
     //   —— 端口名必须与 Interface Designer 的 JTAG_USER1 硬块一致：
@@ -1570,6 +1620,13 @@ mmt_soc_subsystem u_soc (
     .osd_th_we      (osd_th_we),
     .osd_th_addr    (osd_th_addr),
     .osd_th_data    (osd_th_data),
+    // ---- ★ task-16：帧缓冲写通路握手 → SoC 寄存器（只加一路观察者，不影响原功能）----
+    //      fb_awvalid/fb_awready/fb_wvalid/fb_wready 都是现成的 wire
+    //      （它们已同时接到 axi_interconnect 的 s0 口与 checker0）
+    .fb_awvalid (fb_awvalid),
+    .fb_awready (fb_awready),
+    .fb_wvalid  (fb_wvalid),
+    .fb_wready  (fb_wready),
     .ir_rd_addr_clk_unused ()
 );
 
@@ -1767,9 +1824,14 @@ mmt_alarm_ctrl #(
     .alarm_active()
 );
 
-// LED 合并：报警时 4 灯齐闪；平时保留原来的心跳灯
-assign led = (alg_alarm_s) ? alarm_led
-                           : {3'b000, (cal_done ? cnt[24] : 1'b0)};
+// LED 合并：报警时板载 LED 齐闪；平时保留原来的心跳灯
+//   ★ 2026-10-11：板子只有 2 个真正引到 LED 的 3.3V 脚（GPIOR_27/GPIOR_24，
+//     见 mmt.peri.xml），所以顶层 led 收成 [1:0]，只取报警模块输出的低两位。
+//   ★ 2026-10-13 上板实测：原用 cnt[24]（core_clk 100MHz/2^24 ≈ 3Hz）偏快、
+//     且与报警的 2Hz 不易区分；改用 cnt[25]（≈1.5Hz）作为"心跳"更直观：
+//       正常 = 只有一个灯 ~1.5Hz 闪；报警 = 两个灯同相 2Hz 闪。
+assign led = (alg_alarm_s) ? alarm_led[1:0]
+                           : {1'b0, (cal_done ? cnt[25] : 1'b0)};
 
 
 

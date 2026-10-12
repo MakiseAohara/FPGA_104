@@ -70,6 +70,23 @@
 #define MMT_OSD_TH_ADDR     (MMT_BASE + 0x64)   /* OSD 热力图缓冲写地址 0..767 */
 #define MMT_OSD_TH_DATA     (MMT_BASE + 0x68)   /* 写这个地址即把色阶写入缓冲 */
 
+/* ---- 只读：上板判据（2026-10-12 新增，见 docs\上板判据-写通路握手计数.md）----
+ * 为什么加这四个：原来只能靠"屏幕上画面动不动"猜帧缓冲写通路活没活；
+ * 现在串口直接读计数与视觉字节，三个场景一眼可辨。
+ * ⚠️ 这四个寄存器要**重新编译位流**才会有数（旧位流读回全 0，不是错）。 */
+#define MMT_FB_AW_CNT       (MMT_BASE + 0x6C)   /* [31:0]=写地址通道(fb_awvalid&fb_awready)握手累计数 */
+#define MMT_FB_W_CNT        (MMT_BASE + 0x70)   /* [31:0]=写数据通道(fb_wvalid &fb_wready )握手累计数 */
+#define MMT_FB_WR_STAT      (MMT_BASE + 0x74)   /* bit0=awvalid bit1=awready bit2=wvalid bit3=wready
+                                                 * bit4=aw_seen  bit5=w_seen（"曾经握手过"的粘滞位）*/
+#define MMT_VISION_WORD     (MMT_BASE + 0x78)   /* [31:24]=conf_vision(完整 8 位) [23:16]=conf_temp
+                                                 * [15:8]=conf_env  [7:0]=0
+                                                 * ★ 0x28 的 [31:24] **不能**用来读视觉：
+                                                 *   RTL 里的拼接是 46 位被截断，只有 bit31 是
+                                                 *   conf_vision[0]。详见判据文档 §3。*/
+#define MMT_FRAME_TGL_CNT   (MMT_BASE + 0x7C)   /* [31:0]=视频帧翻转次数（motion_frame_tgl 跳变数）
+                                                 * ★ 这个寄存器**不需要额外接线**，重编位流即可用；
+                                                 *   串口上它在涨 ⇒ 视频通路在出帧。*/
+
 #define MMT_REG32(a)        (*(volatile uint32_t *)(a))
 #define MMT_REG16(a)        (*(volatile uint16_t *)(a))
 #define MMT_REG8(a)         (*(volatile uint8_t  *)(a))
