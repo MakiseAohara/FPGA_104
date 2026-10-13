@@ -23,6 +23,7 @@ module tb_mmt_soc_regs;
     wire        PREADY, PSLVERROR;
 
     reg         fb_awvalid = 0, fb_awready = 0, fb_wvalid = 0, fb_wready = 0;
+    reg  [31:0] fb_awaddr = 0;                 // ★ task-22：最大写地址判据要采样的地址
     reg         motion_frame_tgl = 0;
 
     // TB-side reference counters: identical condition, independent implementation.
@@ -66,6 +67,7 @@ module tb_mmt_soc_regs;
         .in_auth_window(1'b0), .alarm(1'b0),
         .fb_awvalid(fb_awvalid), .fb_awready(fb_awready),
         .fb_wvalid(fb_wvalid),   .fb_wready(fb_wready),
+        .fb_awaddr(fb_awaddr),
         .diff_threshold(), .diff_min_area(), .score_thresh(),
         .auth_start_h(), .auth_end_h(), .hour(),
         .vision_prob(), .vision_valid(),
@@ -92,7 +94,16 @@ module tb_mmt_soc_regs;
         end
     endtask
 
+    // ★ task-22：一次完整 AW 握手（#1 纪律，避免与采样竞争）
+    task aw_hs;
+        begin
+            @(posedge clk); #1; fb_awvalid = 1; fb_awready = 1;
+            @(posedge clk); #1; fb_awvalid = 0; fb_awready = 0;
+        end
+    endtask
+
     reg [31:0] v;
+    reg [31:0] aw_before;
     integer i;
 
     initial begin
@@ -105,6 +116,13 @@ module tb_mmt_soc_regs;
 
         apb_read(16'h006C, v); chk("0x6C AW_CNT after reset", v, 32'd0);
         apb_read(16'h0070, v); chk("0x70 W_CNT  after reset", v, 32'd0);
+
+        // ---- ★ task-22：复位后的"没出图"签名（amax=0 且 采样=0）----
+        //   这正是 Claude 警告的那一点：光看 amax=0 说明不了任何事，
+        //   必须同时看采样数/有效标志。
+        apb_read(16'h00A8, v); chk("0xA8 AMAX == 0 at reset", v, 32'd0);
+        apb_read(16'h00AC, v); chk("0xAC samples == 0 at reset", v & 32'hFFFF, 32'd0);
+        apb_read(16'h00AC, v); chk("0xAC seen(bit16) == 0 => NO IMAGE", (v >> 16) & 1, 32'd0);
 
         // exactly 7 clean AW handshakes
         for (i = 0; i < 7; i = i + 1) begin
@@ -180,7 +198,61 @@ module tb_mmt_soc_regs;
         @(posedge clk); #1;
         apb_read(16'h007C, v); chk("0x7C FRM_CNT stable when idle", v, 32'd4);
 
-        // other registers untouched (spot check)
+        // ================================================================
+        // ★★ task-22：最大写地址 FB_AWADDR_MAX（0xA8）+ 采样信息（0xAC）
+        // ================================================================
+        // 注意：前面的用例已经做过 **21** 次 AW 握手（见上面 "AW_CNT ... = 0x15"），
+        // 而那时 fb_awaddr 一直是 0，所以现在应该正好是"**写过、但地址全 0**"这个中间态
+        // —— 正是要证明的地方（amax=0 但 samples≠0）。
+        apb_read(16'h006C, v); aw_before = v;
+        apb_read(16'h00A8, v); chk("T1 AMAX still 0 (addr was always 0)", v, 32'd0);
+        apb_read(16'h00AC, v);
+        chk("T2 samples == 21 (we DID write)", v & 32'hFFFF, 32'd21);
+        chk("T3 seen=1 while AMAX=0  <-- key distinction", (v >> 16) & 1, 32'd1);
+        chk("T4 nz=0 (never a nonzero addr)", (v >> 17) & 1, 32'd0);
+
+        // --- 一次握手 @0x02000000（正确帧缓存基址）---
+        fb_awaddr = 32'h0200_0000;
+        aw_hs();
+        apb_read(16'h00A8, v); chk("T5 AMAX == 0x02000000", v, 32'h02000000);
+        apb_read(16'h00AC, v);
+        chk("T6 samples == 22", v & 32'hFFFF, 32'd22);
+        chk("T7 nz=1 now", (v >> 17) & 1, 32'd1);
+
+        // --- 更小的地址（0x01FF_FF00 < 0x0200_0000）：最大值必须保持不变 ---
+        fb_awaddr = 32'h01FF_FF00;
+        aw_hs();
+        apb_read(16'h00A8, v); chk("T8 AMAX holds on smaller addr", v, 32'h02000000);
+        apb_read(16'h00AC, v); chk("T9 samples == 23", v & 32'hFFFF, 32'd23);
+
+        // --- 960 版 bank1 基址 ---
+        fb_awaddr = 32'h023F_4A00;
+        aw_hs();
+        apb_read(16'h00A8, v); chk("T10 AMAX == 0x023F4A00 (960 bank1)", v, 32'h023F4A00);
+
+        // --- 1920 版 bank2 基址（坏位流会写到这里 → 覆盖张量区）---
+        fb_awaddr = 32'h02FD_2400;
+        aw_hs();
+        apb_read(16'h00A8, v); chk("T11 AMAX == 0x02FD2400 (1920 bank2!)", v, 32'h02FD2400);
+
+        // --- 地址 0 的握手：采样继续涨，但 amax / nz 都不能变 ---
+        fb_awaddr = 32'd0;
+        aw_hs();
+        apb_read(16'h00A8, v); chk("T12 AMAX unchanged by addr=0", v, 32'h02FD2400);
+        apb_read(16'h00AC, v);
+        chk("T13 samples == 26", v & 32'hFFFF, 32'd26);
+        chk("T14 nz stays 1", (v >> 17) & 1, 32'd1);
+
+        // --- 只有 valid 没有 ready：不许采样 ---
+        fb_awaddr = 32'h0FFF_FFFF;
+        @(posedge clk); #1; fb_awvalid = 1; fb_awready = 0;
+        @(posedge clk); #1; fb_awvalid = 0;
+        apb_read(16'h00A8, v); chk("T15 AMAX ignores valid-without-ready", v, 32'h02FD2400);
+        apb_read(16'h00AC, v); chk("T16 samples still 26", v & 32'hFFFF, 32'd26);
+
+        // --- 既有寄存器不受影响 + 与握手计数一致 ---
+        apb_read(16'h006C, v); chk("T17 0x6C AW_CNT grew by exactly 5", v, aw_before + 32'd5);
+        apb_read(16'h0074, v); chk("T18 0x74 aw_seen(bit4) == 1", (v >> 4) & 1, 32'd1);
         apb_read(16'h002C, v); chk("0x2C evt_type still 0", (v >> 2) & 7, 32'd0);
         apb_read(16'h0000, v); chk("0x00 ID again (no side effect)", v, 32'h4D4D5401);
 

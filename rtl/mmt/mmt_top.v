@@ -477,6 +477,15 @@ wire	w_mipi_rx_pclk_arst;
 wire		       w_mipi_rx_vs;
 wire		       w_mipi_rx_hs;
 wire	       w_mipi_rx_de;
+// ---- ★ task-19：CSI RX 明文状态（原来这些端口都是 () 悬空的）----
+wire [15:0] csi_word_count;
+wire [5:0]  csi_datatype;
+wire [1:0]  csi_vc;
+wire [3:0]  csi_pixel_per_clk;
+wire [3:0]  cam_fifo_rd_empty;
+wire        csi_irq;
+assign cam_fifo_rd_empty = {cam_d3_FIFO_EMPTY, cam_d2_FIFO_EMPTY,
+                            cam_d1_FIFO_EMPTY, cam_d0_FIFO_EMPTY};
 wire	[63:0]			w_mipi_rx_data	;
 
 wire					io_systemReset;
@@ -574,7 +583,7 @@ assign i_soc_clk  = core_clk;
               .Rx_HS_enable_D		({cam_d3_HS_ENA    ,cam_d2_HS_ENA    ,cam_d1_HS_ENA    ,cam_d0_HS_ENA    }),//( w_cam_d_HS_ENA),
               .LVDS_termen_D		({cam_d3_HS_TERM   ,cam_d2_HS_TERM   ,cam_d1_HS_TERM   ,cam_d0_HS_TERM   }),
               .fifo_rd_enable		({cam_d3_FIFO_RD   ,cam_d2_FIFO_RD   ,cam_d1_FIFO_RD   ,cam_d0_FIFO_RD   }),
-              .fifo_rd_empty		({cam_d3_FIFO_EMPTY,cam_d2_FIFO_EMPTY,cam_d1_FIFO_EMPTY,cam_d0_FIFO_EMPTY}),
+              .fifo_rd_empty (cam_fifo_rd_empty),
               .DLY_enable_D		       (),
               .DLY_inc_D			(),
               .u_dly_enable_D		(),
@@ -613,14 +622,14 @@ assign i_soc_clk  = core_clk;
               .vsync_vc1			(),
               .vsync_vc2			(),
               .vsync_vc3			(),
-              .vc				(),
-              .word_count			(),
+              .vc (csi_vc),
+              .word_count (csi_word_count),
               .shortpkt_data_field        (),
-              .datatype			(),
-              .pixel_per_clk		(),
+              .datatype (csi_datatype),
+              .pixel_per_clk (csi_pixel_per_clk),
               .pixel_data			(w_mipi_rx_data),
               .pixel_data_valid	       (w_mipi_rx_de),
-              .irq				()
+              .irq (csi_irq)
 		);
 
 //========================================================================================================
@@ -680,6 +689,35 @@ wire ch0_vs;
 wire ch0_hs;
 wire ch0_de;
 // IMX219
+// ================= ★ task-23 / M0：测试图案注入（方案 A：同域，无时钟 mux）=================
+wire        tp_en;                       // 来自 mmt_soc_regs 0xC8[0]（复位默认 0 = 摄像头）
+wire [1:0]  tp_mode;                     // 来自 mmt_soc_regs 0xC8[2:1]
+wire        tp_vs, tp_hs, tp_de;
+wire [31:0] tp_vin;
+wire [15:0] vid_lines_per_frame, vid_pixels_per_line, vid_frame_cnt;
+
+wire        mipi_vs_sel  = tp_en ? tp_vs : w_mipi_rx_vs;
+wire        mipi_hs_sel  = tp_en ? tp_hs : w_mipi_rx_hs;
+wire        mipi_de_sel  = tp_en ? tp_de : w_mipi_rx_de;
+wire [31:0] mipi_vin_sel = tp_en ? tp_vin
+                                 : {w_mipi_rx_data[39:32], w_mipi_rx_data[29:22],
+                                    w_mipi_rx_data[19:12], w_mipi_rx_data[9:2]};
+
+mmt_test_pattern #(
+    .H_ACTIVE(1920), .V_ACTIVE(1080),
+    .H_FRONT(120), .H_SYNC(2), .H_BACK(88),
+    .V_FRONT(20),  .V_SYNC(2), .V_BACK(20),
+    .PPC(4)
+) u_test_pattern (
+    .i_clk(i_mipi_rx_pclk), .i_rstn(vid_rst_n), .i_en(tp_en), .i_mode(tp_mode),
+    .o_vs(tp_vs), .o_hs(tp_hs), .o_de(tp_de), .o_vin(tp_vin),
+    .o_frame_cnt(), .o_line_cnt(), .o_pix_cnt(),
+    .i_vid_de(mipi_de_sel & mipi_hs_sel), .i_vid_hs(mipi_hs_sel), .i_vid_vs(mipi_vs_sel),
+    .o_lines_per_frame(vid_lines_per_frame),
+    .o_pixels_per_line(vid_pixels_per_line),
+    .o_vid_frame_cnt  (vid_frame_cnt)
+);
+// =====================================================================================
   frame_buffer #(
 .I_VID_WIDTH         (32),
 .O_VID_WIDTH         (16),
@@ -699,9 +737,9 @@ wire ch0_de;
        .rst_n			(vid_rst_n   ),
 
 /*i*/.i_clk			(i_mipi_rx_pclk      ),
-/*i*/.i_vs			(w_mipi_rx_vs	),
-/*i*/.i_de			(w_mipi_rx_de & w_mipi_rx_hs	),
-/*i*/.vin 			({w_mipi_rx_data[39:32],w_mipi_rx_data[29:22],w_mipi_rx_data[19:12],w_mipi_rx_data[9:2]}	),
+/*i*/.i_vs			(mipi_vs_sel	),
+/*i*/.i_de			(mipi_de_sel & mipi_hs_sel	),
+/*i*/.vin 			(mipi_vin_sel	),
                      
 /*i*/.o_clk			(vid_clk_dvi2),//(i_mipi_rx_pclk	),
 /*i*/.o_hs    		(ch0_hs		),			
@@ -1457,6 +1495,45 @@ wire        alg_in_auth, alg_alarm;
 // SPI0：**不在这里做三态** —— 见端口处的说明。
 //   这 8 个信号是顶层端口，直接接到子系统；peri 的 GPIO pad 负责三态与回读。
 //--------------------------------------------------------------------------
+//==========================================================================
+// ★ task-19：摄像头上游探针 —— 把 4 个时钟域的信号变成 SoC 可读的计数器
+//==========================================================================
+wire [3:0]  cam_probe_raddr;
+wire [31:0] cam_probe_rdata;
+
+mmt_cam_probe u_cam_probe (
+    .clk      (core_clk        ),
+    .rst_n    (w_arstn         ),
+    .clk_5m   (CLK_5M          ),
+    .clk_byte (i_cam_ck_CLKOUT ),
+    .clk_pixel(i_mipi_rx_pclk  ),
+    // ★ 2026-10-13 修复（Claude 审查发现）：原接 io_cam_scl_OUT 是恒 0 的！
+    //   OpenCores I2C 开漏写法：i2c_master_ctrl_top.v:13 注释写明 "always 1'b0"，
+    //   最底层 scl_o = 1'b0；真正翻转的是输出使能 scl_padoen_o
+    //   （mmt_top.v:679 assign io_cam_scl_OE = ~scl_padoen_o）。
+    //   原接法会让 SCL 探针恒 0（I2C 跑没跑看不出来），还可能被综合器折成常量。
+    .cam_scl  (io_cam_scl_OE   ),
+    .cam_sda  (io_cam_sda_IN   ),
+    .csi_de   (w_mipi_rx_de    ),
+    .csi_hs   (w_mipi_rx_hs    ),
+    .csi_vs   (w_mipi_rx_vs    ),
+    .csi_pixel_data (w_mipi_rx_data),
+    .pix_rstn (w_mipi_rx_pclk_arstn),
+    .hs_ck_ena(o_cam_ck_HS_ENA ),
+    .hs_d0_ena(cam_d0_HS_ENA   ),
+    .hs_d1_ena(cam_d1_HS_ENA   ),
+    .hs_d2_ena(cam_d2_HS_ENA   ),
+    .hs_d3_ena(cam_d3_HS_ENA   ),
+    .csi_word_count    (csi_word_count   ),
+    .csi_datatype      (csi_datatype     ),
+    .csi_vc            (csi_vc           ),
+    .csi_pixel_per_clk (csi_pixel_per_clk),
+    .csi_fifo_rd_empty (cam_fifo_rd_empty),
+    .csi_irq           (csi_irq          ),
+    .raddr    (cam_probe_raddr ),
+    .rdata    (cam_probe_rdata )
+);
+
 
 mmt_soc_subsystem u_soc (
     .clk        (core_clk),
@@ -1627,6 +1704,17 @@ mmt_soc_subsystem u_soc (
     .fb_awready (fb_awready),
     .fb_wvalid  (fb_wvalid),
     .fb_wready  (fb_wready),
+    // ---- ★ task-22：最大写地址 → 0xA8/0xAC ----
+    .fb_awaddr  (fb_awaddr),
+    // ---- ★ task-23：测试图案控制与视频测量 ----
+    .test_pattern_en   (tp_en),
+    .test_pattern_mode (tp_mode),
+    .vid_lines_per_frame (vid_lines_per_frame),
+    .vid_pixels_per_line (vid_pixels_per_line),
+    .vid_frame_cnt       (vid_frame_cnt),
+    // ---- ★ task-19：摄像头上游探针读口（0x80..0xA4）----
+    .cam_probe_raddr (cam_probe_raddr),
+    .cam_probe_rdata (cam_probe_rdata),
     .ir_rd_addr_clk_unused ()
 );
 

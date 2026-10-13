@@ -28,3 +28,9 @@ sim/debayer/patched/
 # 仿真运行产物
 sim/**/_run/
 
+
+# 仿真日志与本地备份
+**/_logs/
+*.task19bak
+*.bak*
+

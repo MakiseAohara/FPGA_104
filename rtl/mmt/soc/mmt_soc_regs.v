@@ -47,6 +47,13 @@
 //                                  [15:8]=conf_env [7:0]=0
 //   0x7C   R     FRAME_TGL_CNT     [31:0]=motion_frame_tgl 的跳变次数（视频帧数）
 //                                  ★ 这个**不需要额外接线**，重编位流即可用
+//  ─────────────── 以下为 task-19/22 新增（摄像头上游探针 + 最大写地址）───────────
+//   0x80..0xA4  R  （摄像头上游探针）见 rtl\mmt\mmt_cam_probe.v 的寄存器表
+//   0xA8   R     FB_AWADDR_MAX     [31:0]=历史最大 fb_awaddr（只在 AW 握手那拍取样）
+//   0xAC   R     FB_AW_STAT        [15:0]=采样次数(饱和) [16]=至少采样过一次
+//                                  [17]=曾采到非 0 地址
+//                                  ⚠️ 0xA8 必须与 0xAC 联合读："amax=0 且采样=0"=没出图，
+//                                     不能当成"没越界"（见 docs\上板判据-最大写地址.md）
 //  ─────────────────────────────────────────────────────────────────────
 //
 //  ⚠️ 已知问题（本轮查出，**未修改**，避免破坏既有映射）：0x28 的拼接
@@ -122,6 +129,24 @@ module mmt_soc_regs (
     input  wire        fb_awready,
     input  wire        fb_wvalid,
     input  wire        fb_wready,
+    // fb_awaddr 用于"最大写地址"判据（task-22）：必须与 awvalid/awready 同域同时刻有效。
+    //   来源 mmt_top.v:340 `wire [AXI_ADDR_WIDTH-1:0] fb_awaddr;`（AXI_ADDR_WIDTH=32，
+    //   见 rtl\ddr3_controller\ddr3_parameter.vh:22），它同时接到互联 s0 口与 checker0，
+    //   但**没有**引进 mmt_soc_subsystem —— 需要 Lead 补 1 个端口 + 2 处连接，
+    //   补丁见 docs\上板判据-最大写地址.md §2。
+    input  wire [31:0] fb_awaddr,
+
+    // ---------------- ★ 视频时序计数（task-23 / M0）：只读输入 ----------------
+    //   来源：mmt_test_pattern 自带的测量输出（该模块例化在 mmt_top，
+    //         用它自己的像素域时钟计数，因此**不需要在本模块再数一遍**）。
+    //   为什么不在这里数：像素时钟 i_mipi_rx_pclk 是 PLL 输出、可能快于
+    //   core_clk(100MHz)，在 core_clk 域采 de 电平会漏窄脉冲 ⇒ 计数偏小。
+    //   ⚠️ 这三个值每帧才更新一次（准静态），跨到 core_clk 直接采样即可，
+    //      但需要在 mmt_soc_subsystem.v / mmt_top.v 各补几行连接，
+    //      补丁见 docs\测试图案注入.md §5。
+    input  wire [15:0] vid_lines_per_frame,   // 一帧内 hs 上升沿个数
+    input  wire [15:0] vid_pixels_per_line,   // 一行内 de 拍数
+    input  wire [15:0] vid_frame_cnt,         // 上电以来 vs 个数
 
     // ---------------- 读写输出：配置给硬件 ----------------
     output reg  [7:0]  diff_threshold,
@@ -150,7 +175,24 @@ module mmt_soc_regs (
     output reg  [7:0]  osd_txt_data,
     output reg         osd_th_we,
     output reg  [9:0]  osd_th_addr,
-    output reg  [7:0]  osd_th_data
+    output reg  [7:0]  osd_th_data,
+
+    // ---------------- ★ 摄像头上游探针的读口（task-19）----------------
+    //   探针模块 mmt_cam_probe 实例化在 mmt_top（那些域的信号/时钟都在那边），
+    //   这里只负责：把 APB 地址 0x80..0xA4 翻译成探针的 raddr，并把它的
+    //   rdata 混进读数据。两者都在 core_clk 域，是**纯组合**通路，不需要 CDC。
+    //   ⚠️ 需要 mmt_soc_subsystem.v / mmt_top.v 各补几行连接，
+    //      补丁见 docs\上板判据-摄像头上游探针.md §2。
+    output wire [3:0]  cam_probe_raddr,      // 0..9 ⇒ 0x80..0xA4
+    input  wire [31:0] cam_probe_rdata,
+
+    // ---------------- ★ 测试图案注入配置（task-23 / M0）----------------
+    //   复位默认 **en=0 / mode=0 = 摄像头**，保证不改变现有行为。
+    //   en=1 后 mmt_top 上的多路选择器把 checker0 的 i_clk/i_vs/i_de/vin
+    //   一起切到 mmt_test_pattern（**连时钟一起切**）。
+    //   写 0xC8: bit0 = en, bits[2:1] = mode (0=彩条+方块 1=红场 2=绿场 3=蓝场)
+    output reg         test_pattern_en,
+    output reg  [1:0]  test_pattern_mode
 );
 
     // 0 等待周期
@@ -229,6 +271,38 @@ module mmt_soc_regs (
     end
 
     //----------------------------------------------------------------------
+    // ★ 最大写地址 FB_AWADDR_MAX（task-22）—— 验证"帧步长修复"是否真的进了位流
+    //----------------------------------------------------------------------
+    // 为什么需要它：握手计数只说明"写通道在跑"，**不说明写到哪里**。
+    //   帧步长参数漏转发的 bug（见 docs\帧步长修复-DDR分区对齐.md）会让三个 bank 的
+    //   基址差一倍：坏版本 = 0x02000000 / 0x027E9200 / 0x02FD2400（bank2 写进
+    //   TinyML 张量区），修好后 = 0x02000000 / 0x023F4A00 / 0x027E9400。
+    //   两者的**最大写地址**差得很远，所以"取历史最大 awaddr"就是最直接的硬件判据。
+    //
+    // ⚠️ Claude 审查特别提醒过的那一点，这里用**两个**信息一起解决：
+    //   "最大地址读到 0" **不等于** "没越界" —— 没出图时它本来就是 0。
+    //   所以另配一个**采样次数**（饱和）与两个粘滞位：
+    //     fb_aw_smp  : 采样到多少次 AW 握手（饱和在 0xFFFF，不绕回）
+    //     fb_aw_seen : 至少采样过一次     → 区分"没出图"与"出了图但地址是 0"
+    //     fb_aw_nz  : 曾采到非 0 地址     → 进一步确认地址真在动
+    (* preserve, syn_keep = 1 *) reg [31:0] fb_awaddr_max;
+    (* preserve, syn_keep = 1 *) reg [15:0] fb_aw_smp;
+    (* preserve, syn_keep = 1 *) reg        fb_aw_nz;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            fb_awaddr_max <= 32'd0;
+            fb_aw_smp     <= 16'd0;
+            fb_aw_nz      <= 1'b0;
+        end else if (fb_awvalid && fb_awready) begin
+            // 只在**握手那一拍**取样：AXI 规定此时 awaddr 必然有效
+            if (fb_awaddr > fb_awaddr_max) fb_awaddr_max <= fb_awaddr;   // 只保留历史最大
+            if (fb_aw_smp != 16'hFFFF)     fb_aw_smp     <= fb_aw_smp + 16'd1;  // 饱和，不绕回
+            if (fb_awaddr != 32'd0)        fb_aw_nz      <= 1'b1;
+        end
+    end
+
+    //----------------------------------------------------------------------
     // ★ 视频帧翻转计数（0x7C）—— 上板判据的"免接线"那一半
     //----------------------------------------------------------------------
     // motion_frame_tgl 是算法子系统在视频域每完成一帧翻转一次的标志，
@@ -248,6 +322,19 @@ module mmt_soc_regs (
                 frame_tgl_cnt <= frame_tgl_cnt + 32'd1;
         end
     end
+
+    //----------------------------------------------------------------------
+    // ★ 摄像头上游探针的地址译码（task-19）：0x80..0xA4（步长 4）
+    //----------------------------------------------------------------------
+    //   探针 mmt_cam_probe 在 mmt_top 里实例化，它的寄存器表用 raddr(0..15) 索引；
+    //   这里把 APB 地址线性映射过去，区间外照旧返回 0。
+    //   ⚠️ 必须用 PADDR[7:2]（0x80>>2 = 32），**不是** PADDR[5:2]（那是 0x80 的 bit7 抹掉后的 0）。
+    //   task-24 起探针加到 idx 15（0xC4），所以上界从 41 扩到 49。
+    wire [5:0] probe_word  = PADDR[7:2];       // 0x80→32, 0x84→33, … 0xC4→49
+    wire       probe_sel   = (PADDR[15:8] == 8'd0) &&
+                             (probe_word >= 6'd32) && (probe_word <= 6'd49) &&
+                             (PADDR[1:0] == 2'b00);
+    assign cam_probe_raddr = probe_word - 6'd32;   // 32-32=0 … 49-32=15（截成 4 位）
 
     //----------------------------------------------------------------------
     // 读
@@ -288,7 +375,30 @@ module mmt_soc_regs (
             //       这个计数器**不需要顶层接线**（信号本来就是本模块输入），
             //       重编位流即可用；用来回答"视频/摄像头通路在不在出帧"。
             16'h007C: PRDATA = frame_tgl_cnt;
-            default:  PRDATA = 32'h0;
+            // ---- ★ 最大写地址判据（task-22）----
+            // 0xA8：历史最大 fb_awaddr（只在 AW 握手那拍取样，单调不减）
+            16'h00A8: PRDATA = fb_awaddr_max;
+            // 0xAC：采样信息 —— 判据必须与 0xA8 **联合**读，否则"没出图"会被误当成"没越界"
+            //       [15:0]=采样次数（饱和 0xFFFF） [16]=至少采样过一次 [17]=曾采到非 0 地址
+            16'h00AC: PRDATA = {14'd0, fb_aw_nz, (fb_aw_smp != 16'd0), fb_aw_smp};
+            // ---- ★ 测试图案 + 视频时序计数（task-23 / M0）----
+            // 0xC8：测试图案配置回读 —— [0]=en  [2:1]=mode
+            //       复位后读到 0 ⇒ 默认是摄像头，可据此确认"没被误切"
+            16'h00C8: PRDATA = {29'd0, test_pattern_mode, test_pattern_en};
+            // 0xCC：LINES_PER_FRAME —— 一帧内 hs 上升沿个数
+            //       摄像头 1080p 正常应 ≈1080；明显偏小/为 0 ⇒ vs 之间没有行
+            16'h00CC: PRDATA = {16'd0, vid_lines_per_frame};
+            // 0xD0：PIXELS_PER_LINE —— 一行内 de 拍数
+            //       4 像素/拍时 1920 宽应 ≈480；为 0 ⇒ 该行没有 de
+            16'h00D0: PRDATA = {16'd0, vid_pixels_per_line};
+            // 0xD4：上电以来 vs 个数 —— **判断"到底有没有在出帧"的第一手依据**
+            //       不增长 ⇒ 根本没有 vs（摄像头没出图 / 图案没在跑）
+            16'h00D4: PRDATA = {16'd0, vid_frame_cnt};
+            // ---- ★ 摄像头上游探针（task-19）：0x80..0xA4 → 探针 raddr 0..9 ----
+            //   这里不逐个写 case，而是把这个区间整体交给探针自己的读口，
+            //   这样"探针寄存器表"只在一个文件里维护（mmt_cam_probe.v）。
+            //   0x80⇒0, 0x84⇒1, … 0xA4⇒9；区间外仍返回 0（既有行为不变）。
+            default:  PRDATA = probe_sel ? cam_probe_rdata : 32'h0;
         endcase
     end
 
@@ -369,6 +479,21 @@ module mmt_soc_regs (
                     default: ;
                 endcase
             end
+        end
+    end
+
+    //------------------------------------------------------------------
+    //  ★ 测试图案配置寄存器（task-23 / M0）
+    //    单独一个 always 块，**不去动既有的写译码 case**（降低回归风险）。
+    //    复位默认 0 = 摄像头 ⇒ 增量行为为零。
+    //------------------------------------------------------------------
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            test_pattern_en   <= 1'b0;
+            test_pattern_mode <= 2'd0;
+        end else if (wr && (PADDR == 16'h00C8)) begin
+            test_pattern_en   <= PWDATA[0];
+            test_pattern_mode <= PWDATA[2:1];
         end
     end
 

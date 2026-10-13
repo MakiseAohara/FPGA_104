@@ -87,6 +87,8 @@
         <efx:design_file name="rtl/mmt/soc/mmt_soc_subsystem.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/video/mmt_video_downscale.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/common/mmt_sync2.v" version="default" library="default"/>
+        <efx:design_file name="rtl/mmt/mmt_cam_probe.v" version="default" library="default"/>  <!-- ★ task-19 上游探针（漏加会报 Unknown module type）-->
+        <efx:design_file name="rtl/mmt/mmt_test_pattern.v" version="default" library="default"/>  <!-- ★ task-23 测试图案 -->
         <efx:design_file name="rtl/mmt/common/mmt_dpram_2clk.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/osd/mmt_osd_overlay.v" version="default" library="default"/>
         <!-- ===== 路线 B：TinyML 加速器 + DDR AXI 互联 ===== -->

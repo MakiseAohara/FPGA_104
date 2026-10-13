@@ -321,3 +321,21 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_f
 - 本仓库只包含**我们自己写的**代码与文档。
 - 未包含 Efinix 的 IP、厂商 Demo RTL 与加密文件（属授权材料，见第 0 节）。
 - 对外引用/提交时请遵守竞赛与厂商的授权约定。
+
+---
+
+## 10. 我们改过的厂商 RTL（本仓库不含厂商源码，这里是补丁清单）
+
+> 仓库只放**我们自研**的代码（`rtl/mmt/`、`sw/`、`sim/`、`constr/`、`tools/`），
+> 厂商 IP 与厂商 demo RTL **不入库**。所以下面这些**对厂商源码的改动**请在本机维护，
+> 换机器/重取厂商源码后必须照此重新打上，否则会出现"编译看着正常、行为却不对"的问题。
+
+| # | 文件 | 改动 | 为什么（实测依据） |
+|---|---|---|---|
+| 1 | `rtl/frame_buffer/frame_buffer.v` | 例化 `ddr_buffer` 时补 `.FB_NUM(FB_NUM) .MAX_VID_WIDTH(MAX_VID_WIDTH) .MAX_VID_HIGHT(MAX_VID_HIGHT)` | 原样漏转发 ⇒ 用 1920×1080 默认值算帧步长（`0x7E9200`，应为 960 版 `0x3F4A00`）⇒ 三个 bank 基址错成 `0x02000000/0x027E9200/0x02FD2400`，**bank2 会覆盖 TinyML 张量区前 1.8MB**。详见 `docs/帧步长修复-DDR分区对齐.md` |
+| 2 | `rtl/frame_buffer/ddr_wr_buffer.v` | 给 `awvalid`、`wvalid`、`state`、`wr_req` 加 `(* preserve, syn_keep = 1 *)` | Efinity 2026.1.132 会把写 FSM 整条**静默折成常量**（`optimized to 0`、写 FIFO 的 13 块 BRAM 消失）。9 个绕法实验全部无效，只有这个属性有效。最小复现件见 `工作区\08_Efinix复现件\`（`run_map.ps1 -Variant S2` 复现 / `-Variant S2C` 修复） |
+| 3 | `rtl/frame_buffer/DC_FIFO.v:787` | （**建议，尚未改**）`always @(GrayIn)` → `always @(*)` | 敏感表不全：iverilog 下计数器停 X ⇒ **仿真里一个 AW 都不会有**（综合忽略敏感表，硬件无影响）。改了可消除仿真/综合不一致 |
+| 4 | `rtl/frame_buffer/frame_info_det.v:93` | （**建议，尚未改**）把 1 位的 `frame_end_r0` 赋给 24 位的 `frame_len_d0`，疑为 `frame_cnt` 笔误 | 使"连续 3 帧等长"判据**恒真**（负对照实测：帧长不一致也照样写）。**先别改**：改严后若相机帧长有抖动，可能反而永不触发写通路 |
+
+> 自研部分的关键修复（在库内可见）：显示通路 R/B 交叉（`rtl/mmt/mmt_top.v`，全屏紫的根因）、
+> 视频复位去掉 `w_confdone` 门控、`RD_FIFO_DEPTH` 512、心跳 1.5Hz、摄像头 I2C SCL 探针改接 `io_cam_scl_OE`。

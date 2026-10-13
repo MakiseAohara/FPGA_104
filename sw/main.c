@@ -458,6 +458,35 @@ int main(void)
             uart_puts(" st=");     uart_put_hex8((uint8_t)(st & 0x3Fu));  /* bit0..3 电平, bit4/5 曾握手 */
             last_aw = aw; last_w = w;
 
+            /* ---- ★ 最大写地址判据（task-22）----
+             * amax = 历史最大 fb_awaddr；必须与 asmp/ast 联合读：
+             *   asmp = 采样次数（AW 握手次数，饱和）  ast bit0 = 至少采样过一次
+             *   ast bit1 = 曾采到非 0 地址
+             * 判据（阈值见 docs\上板判据-最大写地址.md）：
+             *   [0x02000000, 0x02BDDE00) 且推进 ⇒ 帧步长修复生效
+             *   ≥ 0x02FD2400 或落在 [0x02BDDE00,…) ⇒ 仍是 1920 版步长（会写进张量区）
+             *   amax=0 且 asmp=0 ⇒ 没出图，**不是**没越界 */
+            {
+                static uint32_t last_amax = 0;
+                uint32_t amax = MMT_REG32(MMT_FB_AWADDR_MAX);
+                uint32_t ast  = MMT_REG32(MMT_FB_AW_STAT);
+                uint8_t  seen = (uint8_t)((ast >> 16) & 0x1);
+                uint8_t  nz   = (uint8_t)((ast >> 17) & 0x1);
+
+                uart_puts(" amax="); uart_put_hex32(amax);
+                uart_puts("(d=");    uart_put_hex32(amax - last_amax); uart_puts(")");
+                uart_puts(" asmp="); uart_put_u32(ast & 0xFFFFu);
+                uart_puts(" ast=");  uart_put_hex8((uint8_t)((seen) | (nz << 1)));
+                /* 一眼可辨的结论（省得每次拿计算器比阈值）*/
+                uart_puts(" az=");
+                if (!seen)                            uart_puts("NOIMG");    /* 没出图 */
+                else if (amax >= 0x02FD2400u)         uart_puts("OVER1920"); /* 步长仍是 1920 版 */
+                else if (amax >= 0x02BDDE00u)         uart_puts("SUSPECT");  /* 越过约定区间 */
+                else if (amax >= 0x02000000u)         uart_puts("OK");
+                else                                  uart_puts("LOW");      /* 低于帧缓存基址 */
+                last_amax = amax;
+            }
+
             uart_puts(" FRM="); uart_put_u32(fc);
             uart_puts("(d=");   uart_put_u32(fc - last_fc); uart_puts(")");
             last_fc = fc;
@@ -470,6 +499,67 @@ int main(void)
             uart_puts(" sc9=");      uart_put_hex32((uint32_t)score);
             uart_puts(" [VW] vis="); uart_put_hex8((uint8_t)(vw >> 24));  /* ★ 完整 8 位视觉字节 */
             uart_puts("\r\n");
+        }
+
+        /* ---- ★ 摄像头上游探针行（task-19，第 4 行；task-24 追加若干字段）----
+         * 判据（详见 docs\上板判据-摄像头上游探针.md §3）：
+         *   SCL 在涨        ⇒ 摄像头 I2C 配置真的在跑（**d=0 是配置完的正常状态**）
+         *   CK / PCLK 在涨  ⇒ MIPI 字节/像素时钟在（1 次 = 1024 个源时钟周期）
+         *                     ⚠️ PCLK 是 PLL 输出，本来就永远在涨 ⇒ 看 **CK_d/PCLK_d 比值**
+         *   DE/HS/VS 在涨   ⇒ ★ CSI RX 真的在吐像素
+         *   pd 在涨         ⇒ 像素数据**非全 0**（DE 在跳 ≠ 数据有效）
+         *   ack 在涨        ⇒ 从器件**真的应答了**（只看 SCL 分不出这个）
+         *   pid 必须是 0x4D4D5450 ⇒ 这版位流里有探针（否则全是 0 也分不清）
+         * 全 0 且 st 的 seen 位也为 0 ⇒ 该信号从头到尾没动过。 */
+        {
+            static uint32_t l_scl = 0, l_ck = 0, l_pk = 0, l_de = 0, l_hs = 0, l_vs = 0, l_wc = 0;
+            static uint32_t l_pd = 0, l_ack = 0, l_nk = 0;
+            uint32_t s_scl = MMT_REG32(MMT_CAM_SCL_CNT);
+            uint32_t s_ck  = MMT_REG32(MMT_CAM_CK_CNT);
+            uint32_t s_pk  = MMT_REG32(MMT_CAM_PCLK_CNT);
+            uint32_t s_de  = MMT_REG32(MMT_CSI_DE_CNT);
+            uint32_t s_hs  = MMT_REG32(MMT_CSI_HS_CNT);
+            uint32_t s_vs  = MMT_REG32(MMT_CSI_VS_CNT);
+            uint32_t s_st  = MMT_REG32(MMT_CAM_PROBE_ST);
+            uint32_t s_wc  = MMT_REG32(MMT_CSI_WC_CNT);
+            uint32_t s_lk  = MMT_REG32(MMT_CSI_LINK_ST);
+            uint32_t s_pid = MMT_REG32(MMT_PROBE_ID);
+            uint32_t s_pd  = MMT_REG32(MMT_CSI_PD_CNT);
+            uint32_t s_ack = MMT_REG32(MMT_I2C_ACK_CNT);
+            uint32_t s_nk  = MMT_REG32(MMT_I2C_NACK_CNT);
+            uint32_t s_wmx = MMT_REG32(MMT_CSI_WC_MAX);
+            uint32_t s_rh  = MMT_REG32(MMT_RST_HS_STAT);
+
+            uart_puts("[CAM] SCL="); uart_put_u32(s_scl);
+            uart_puts("(d=");        uart_put_u32(s_scl - l_scl); uart_puts(")");
+            uart_puts(" CK=");       uart_put_u32(s_ck);
+            uart_puts("(d=");        uart_put_u32(s_ck - l_ck);   uart_puts(")");
+            uart_puts(" PCLK=");     uart_put_u32(s_pk);
+            uart_puts("(d=");        uart_put_u32(s_pk - l_pk);   uart_puts(")");
+            uart_puts(" DE=");       uart_put_u32(s_de);
+            uart_puts("(d=");        uart_put_u32(s_de - l_de);   uart_puts(")");
+            uart_puts(" HS=");       uart_put_u32(s_hs);
+            uart_puts("(d=");        uart_put_u32(s_hs - l_hs);   uart_puts(")");
+            uart_puts(" VS=");       uart_put_u32(s_vs);
+            uart_puts("(d=");        uart_put_u32(s_vs - l_vs);   uart_puts(")");
+            uart_puts(" pd=");       uart_put_u32(s_pd);
+            uart_puts("(d=");        uart_put_u32(s_pd - l_pd);   uart_puts(")");
+            uart_puts(" ack=");      uart_put_u32(s_ack);
+            uart_puts("(d=");        uart_put_u32(s_ack - l_ack); uart_puts(")");
+            uart_puts(" nk=");       uart_put_u32(s_nk);
+            uart_puts("(d=");        uart_put_u32(s_nk - l_nk);   uart_puts(")");
+            uart_puts(" st=");       uart_put_hex32(s_st);
+            uart_puts(" wc=");       uart_put_u32(s_wc);
+            uart_puts("(d=");        uart_put_u32(s_wc - l_wc);   uart_puts(")");
+            uart_puts(" wmx=");      uart_put_u32(s_wmx);
+            uart_puts(" link=");     uart_put_hex32(s_lk);
+            uart_puts(" pid=");      uart_put_hex32(s_pid);
+            uart_puts(" rh=");       uart_put_hex32(s_rh);
+            uart_puts("\r\n");
+
+            l_scl = s_scl; l_ck = s_ck; l_pk = s_pk;
+            l_de = s_de;   l_hs = s_hs; l_vs = s_vs; l_wc = s_wc;
+            l_pd = s_pd;   l_ack = s_ack; l_nk = s_nk;
         }
 
         /* --- 3.8 简单节流：主循环跟着 MLX90640 的 2Hz 走 --- */

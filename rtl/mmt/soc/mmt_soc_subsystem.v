@@ -207,6 +207,17 @@ module mmt_soc_subsystem (
     input  wire        fb_awready,
     input  wire        fb_wvalid,
     input  wire        fb_wready,
+    // ---- ★ task-22：最大写地址观察（fb_awaddr 已在顶层接互联与 checker0）----
+    input  wire [31:0] fb_awaddr,
+    // ---- ★ task-19：摄像头上游探针读口（→ mmt_soc_regs 的 0x80..0xA4）----
+    output wire [3:0]  cam_probe_raddr,
+    input  wire [31:0] cam_probe_rdata,
+    // ---- ★ task-23：测试图案控制（出）/ 视频测量（入）----
+    output wire        test_pattern_en,
+    output wire [1:0]  test_pattern_mode,
+    input  wire [15:0] vid_lines_per_frame,
+    input  wire [15:0] vid_pixels_per_line,
+    input  wire [15:0] vid_frame_cnt,
     output wire        ir_rd_addr_clk_unused
 );
 
@@ -492,7 +503,18 @@ module mmt_soc_subsystem (
         .fb_awvalid      (fb_awvalid),
         .fb_awready      (fb_awready),
         .fb_wvalid       (fb_wvalid),
-        .fb_wready       (fb_wready)
+        .fb_wready       (fb_wready),
+        // ---- ★ task-22：最大写地址 ----
+        .fb_awaddr       (fb_awaddr),
+        // ---- ★ task-19：探针读口 ----
+        .cam_probe_raddr (cam_probe_raddr),
+        .cam_probe_rdata (cam_probe_rdata),
+        // ---- ★ task-23 ----
+        .test_pattern_en     (test_pattern_en),
+        .test_pattern_mode   (test_pattern_mode),
+        .vid_lines_per_frame (vid_lines_per_frame),
+        .vid_pixels_per_line (vid_pixels_per_line),
+        .vid_frame_cnt       (vid_frame_cnt)
     );
 
     // 未用信号，避免综合告警（soc_spi_ss 已改成顶层输出端口，不再需要在这里消化）
