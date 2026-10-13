@@ -29,33 +29,46 @@ if ($LASTEXITCODE -ne 0) { Write-Output "!! 编译失败"; exit 1 }
 Write-Output "编译 OK"
 
 Write-Output ""
-Write-Output "=== 2. 反汇编（列出每条 custom-0 及其前面一条 li）==="
+Write-Output "=== 2. 反汇编（列出每条 custom-0 及其所在函数的相关 li）==="
 $raw = & $objd -d $elf 2>$null
 
-# 收集：函数名 → 该函数内所有指令
+# xN → ABI 名（objdump 用 ABI 名打印 li）
+$abi = @{5='t0';6='t1';7='t2';8='s0';9='s1';10='a0';11='a1';12='a2';13='a3';14='a4';15='a5'}
+
 $curFunc = ""
-$byFunc = @{}
-$prevLi = ""      # 紧邻当前指令之前的一条 li a1, N
+$byFunc = @{}     # 函数名 → 该函数内所有指令文本
 $rows = @()
 foreach ($line in $raw) {
-    if ($line -match "^([0-9a-f]{8}) <(.+)>:\s*$") { $curFunc = $Matches[2]; $prevLi = ""; continue }
+    if ($line -match "^([0-9a-f]{8}) <(.+)>:\s*$") {
+        $curFunc = $Matches[2]
+        if (-not $byFunc.ContainsKey($curFunc)) { $byFunc[$curFunc] = @() }
+        continue
+    }
     if ($line -match "^\s+[0-9a-f]+:\s+([0-9a-f]{8})\s+(.*)$") {
         $hex = $Matches[1]; $txt = $Matches[2].Trim()
+        if ($curFunc) { $byFunc[$curFunc] += $txt }
         $v = [Convert]::ToUInt32($hex,16)
         if (($v -band 0x7F) -eq 0x0B) {
             $rows += [pscustomobject]@{
                 func=$curFunc; word=$hex
                 op=($v -band 0x7F); f3=(($v -shr 12) -band 7); f7=(($v -shr 25) -band 0x7F)
                 rd=(($v -shr 7) -band 0x1F); rs1=(($v -shr 15) -band 0x1F); rs2=(($v -shr 20) -band 0x1F)
-                prevLi=$prevLi
             }
         }
-        # 记下紧邻的 li（给下一条指令用）
-        if ($txt -match "^li\s+([a-z0-9]+),\s*(-?[0-9]+)") { $prevLi = "$($Matches[1])=$($Matches[2])" } else { $prevLi = "" }
     }
 }
 if ($rows.Count -eq 0) { Write-Output "!! 没找到 custom-0 指令"; exit 2 }
-$rows | ForEach-Object { "  {0,-16} 0x{1} f3={2} f7={3} rs1=x{4}({5}) rd=x{6}" -f $_.func,$_.word,$_.f3,$_.f7,$_.rs1,$_.prevLi,$_.rd }
+$rows | ForEach-Object { "  {0,-16} 0x{1} op=0x{2:X2} f3={3} f7={4} rd=x{5} rs1=x{6} rs2=x{7}" -f $_.func,$_.word,$_.op,$_.f3,$_.f7,$_.rd,$_.rs1,$_.rs2 }
+
+# 该函数里把 <预期值> 装进 rs1 寄存器的 li（用 ABI 名匹配）
+function Rs1LoadedWith($fn, $rs1num, $want) {
+    $name = $abi[[int]$rs1num]
+    if (-not $name) { return $false }
+    foreach ($t in $byFunc[$fn]) {
+        if ($t -match ("^li\s+" + $name + ",\s*(-?[0-9]+)$")) { if ([int]$Matches[1] -eq [int]$want) { return $true } }
+    }
+    return $false
+}
 
 Write-Output ""
 Write-Output "=== 3. 逐项核对 ==="
@@ -74,16 +87,24 @@ Chk "cfg0 存在"            ([bool]$c0) $true
 Chk "cfg0 opcode"          $c0.op 0x0B
 Chk "cfg0 func3=1 (读配置)" $c0.f3 1
 Chk "cfg0 func7=0"         $c0.f7 0
-Chk "cfg0 rs1 运行值=0"     ($c0.prevLi -replace '.*=','') 0
+Chk "cfg0 rs1 运行值=0"     (Rs1LoadedWith "ci_case_cfg0" $c0.rs1 0) $true
 
 Chk "cfg1 存在"            ([bool]$c1) $true
 Chk "cfg1 func3=1"         $c1.f3 1
 Chk "cfg1 func7=0"         $c1.f7 0
-Chk "cfg1 rs1 运行值=1"     ($c1.prevLi -replace '.*=','') 1
+Chk "cfg1 rs1 运行值=1"     (Rs1LoadedWith "ci_case_cfg1" $c1.rs1 1) $true
 
 Chk "param 存在"           ([bool]$cp) $true
 Chk "param func3=3"        $cp.f3 3
 Chk "param func7=2 (参数bank)" $cp.f7 2
+
+# 生产宏 MMT_CI_R（自由分配）也要能编出来，且字段一致
+$pr = Row "ci_case_prod"
+Chk "生产宏 MMT_CI_R 存在"  ([bool]$pr) $true
+Chk "生产宏 opcode"         $pr.op 0x0B
+Chk "生产宏 func3=1"        $pr.f3 1
+Chk "生产宏 func7=0"        $pr.f7 0
+Write-Output "  （参考：厂商 tinyml_accel_get_uuid 的 .insn = 0x00a5150b，上面生产宏编出的是 0x$($pr.word)）"
 
 Write-Output ""
 if ($fail -eq 0) { Write-Output "=== 编码自测: PASS $pass / FAIL 0 ==="; exit 0 }

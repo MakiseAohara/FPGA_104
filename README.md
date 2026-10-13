@@ -339,3 +339,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_f
 
 > 自研部分的关键修复（在库内可见）：显示通路 R/B 交叉（`rtl/mmt/mmt_top.v`，全屏紫的根因）、
 > 视频复位去掉 `w_confdone` 门控、`RD_FIFO_DEPTH` 512、心跳 1.5Hz、摄像头 I2C SCL 探针改接 `io_cam_scl_OE`。
+
+---
+
+## 文档
+
+| 文档 | 内容 |
+|---|---|
+| [docs/如何运行.md](docs/如何运行.md) | **从零到板子跑起来**：编译两步、仿真、烧录四前提与判据、串口判读、寄存器表、上板顺序、9 条判读避坑 |
+| [docs/代码学习地图.md](docs/代码学习地图.md) | **从大到小读懂整个设计**：三条数据通路、顶层阅读法、各子系统、软件层、寄存器表、阅读顺序与常见坑 |
