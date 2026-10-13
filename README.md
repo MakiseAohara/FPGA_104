@@ -118,36 +118,123 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sim\run_all.ps1
 | **JTAG** | 烧到芯片内部 SRAM，**掉电就没了** | **第一次 bring-up 用这个**：快、不写 flash，改一版试一版 |
 | **SPI Active** | 烧到板上 flash，**掉电保留**，上电自动加载 | 稳定之后、给评委演示时用 |
 
-### 5.2 用 Efinity Programmer 烧（图形界面）
+### 5.2 ⚠️ 前置条件（四条缺一不可 —— 2026-10-12 实测踩全了）
 
-1. 开始菜单打开 **Efinity Programmer**（或在 Efinity 里 Tools → Programmer）。
-2. 选择器件：**Ti60F225**。
-3. 选择模式：第一次用 **JTAG**。
-4. 选择文件：`D:\FPGA\mmt\out\mmt.hex`。
-5. 点 **Start**，等进度条走完。
-6. **预期**：板子上电后 LED 有心跳闪烁；串口（115200）能看到 RISC-V 打印。
+#### 5.2.1 FTDI 驱动版本必须**统一**（否则蓝屏 `0x000000FC`）
+板载 FT4232H 有"总线"和"串口"两条通道。若 Windows 给它们装了**不同年代**的驱动（本例：`ftdibus` 2024 版 vs `ftdiport` 只有 2017 版），一访问 FTDI 就 **BSOD 0x000000FC**（我们实测撞了两次）。
+**修法**：删掉全部旧包，只装 FTDI 官网 CDM 包（它同时含 `ftdibus.inf` + `ftdiport.inf`，同版本）：
+```
+pnputil /delete-driver oem114.inf /uninstall
+pnputil /delete-driver oem118.inf /uninstall
+pnputil /delete-driver oem119.inf /uninstall
+pnputil /add-driver D:\FTDI\ftdibus.inf  /install      # CDM-v2.12.36.4-WHQL-Certified
+pnputil /add-driver D:\FTDI\ftdiport.inf /install
+```
+判据：`USB Serial Converter A/B/C/D` 与 `USB Serial Port COMxx` 的驱动版本**都是 2.12.36.4**。
+> 同类问题参考：<https://bigpig.ongridea.com/gha5jb>
 
-### 5.3 把"程序 + AI 模型"也烧进 flash（正式演示用）
+#### 5.2.2 必须打开 `EFX_HIFTDI_ENABLE=1`
+Efinity 默认只用 pyftdi(libusb) 后端，而板载 FT4232H 挂在 FTDI 驱动上 ⇒ 报 `No backend available` / `No Board Profile Selected`。
+**D2XX 后端藏在开关后面**（源码依据 `pgm\bin\efx_pgm\usb_resolver.py:712`）：
+```powershell
+$env:EFX_HIFTDI_ENABLE = "1"
+```
+打开后能枚举到 `Usb Target: Quad RS232-HS, ID: 0403:6011` + `hiftdi://0x0403:0x6011/0..3`（**index 1 = JTAG**）。
 
-固件和 AI 模型打包成一个**用户镜像**，放在 flash 的 **0x380000** 偏移处（由片内的一小段搬运程序负责搬进 DDR 运行）。
+#### 5.2.3 必须给 `efx_dbg\jcf.py` 打补丁（Efinity 自身 bug）
+症状：D2XX 后端下**任何**模式（连只读 `read_flash`）都在 TAP 检测处抛
+`TypeError: JtagEngine.configure() takes 2 positional arguments but 3 were given`（`efx_dbg\jcf.py:795`）。
+原因：hiftdi 的底层 JTAG 引擎 `configure()` 只收 `(url)`，调用方无条件多传了 `init`。
+**补丁**（两处 `else:` 分支；原文件先备份）：
+```python
+        else:
+            try:
+                _np = len(__import__('inspect').signature(
+                    self._engine_provider.configure).parameters)
+            except Exception:
+                _np = 2
+            if _np >= 2:
+                self._engine_provider.configure(url, init)
+            else:
+                self._engine_provider.configure(url)
+```
+补完自检：`python -m py_compile jcf.py` → 退出码 0。
 
-**分两次烧（推荐，厂商 readme 的原始做法）：**
+#### 5.2.4 必须指定板级 profile
+`-b "Generic Board Profile Using FT4232H"`（对应 `pgm\bin\efx_pgm\efx_hw_common\boards\generic_ft4232h.json`；VID 0x0403 / PID 0x6011）。该 profile 定义 **通道 A = SPI、通道 B = JTAG（TCK/TDI/TDO/TMS）**。
 
-| 顺序 | 文件 | 起始地址 | 模式 |
-|---|---|---|---|
-| 1 | `out/mmt.hex` | **0x00000000** | JTAG（先验证）或 SPI Active（正式） |
-| 2 | `sw/ddr/build/ddr_image.bin` | **0x00380000** | SPI Active |
+---
 
-> ⚠️ **"合并成一个文件烧一次"这条路暂时别用**：Programmer 自带的合并工具 `multi_image_merger.py` 读我们的位流会报 `incorrectly formatted HEX file` —— 位流头里有 9 行是"2 字节挤在一行"（路径里中文被转义）。规范化成 1 字节 1 行后该错误消失，但工具又卡在 `invalid device information`（它需要的器件库参数命令行里给不了）。分两次烧完全绕开这个问题。
+### 5.3 实测可用的烧录命令（命令行，推荐）
 
-**校验**：自检脚本会解码位流、检查两者有没有重叠/越界：
+```powershell
+$efi = "D:\Efinity\2026.1"
+$env:EFINITY_HOME = ($efi -replace '\\','/')
+$env:EFINITY_USER_DIR = "C:/Users/<你>/.efinity"
+$env:EFINITY_USER_DIR_INI = "$env:LOCALAPPDATA\efinity\user_dir.ini"
+$env:EFXPGM_HOME="$efi\pgm"; $env:EFXDBG_HOME="$efi\debugger"; $env:EFXSVF_HOME="$efi\debugger\svf_player"
+$env:PYTHONHOME="$efi\python311"; $env:PYTHONNOUSERSITE="1"
+$env:PYTHONPATH="$efi\pgm\bin;$efi\debugger\bin"
+$env:PATH="$efi\bin;$efi\python311\bin;$efi\scripts;"+$env:PATH
+$env:EFX_HIFTDI_ENABLE = "1"
 
+# JTAG 烧 SRAM（掉电即失）—— 注意必须是 .bit，传 .hex 会报格式错
+& "$efi\bin\python3.bat" "$efi\pgm\bin\efx_pgm\ftdi_program.py" `
+  "D:\FPGA\mmt\out\mmt.bit" -m jtag -b "Generic Board Profile Using FT4232H"
+```
+
+**成功判据（实测输出）**：
+```
+Connecting to JTAG_TAP: efx_ti
+jtag programming started!
+Programming 'D:\FPGA\mmt\out\mmt.bit' via JTAG at freq 6.0 MHz
+Device ID read from JTAG: 0x10660A79          ← Ti60F225
+... finished with JTAG programming
+```
+
+### 5.4 图形界面烧录
+Efinity Programmer 与命令行**用同一套后端**，所以 5.2 的四条前置条件同样必须满足（否则只会看到 `No Board Profile Selected`）。GUI 里同样是 器件 Ti60F225 → 模式 JTAG → 文件 `.bit`。
+
+### 5.5 串口与判据（不带屏幕也能判断设计活着）
+
+- **端口：`COM19`**（115200 8N1；实测 COM17/18/20 无数据）
+- **预期输出**（当前版本遥测）：
+```
+T=0.0C RH=0.0% IR=0.0C score=0.0
+ALM=0 AUTH=0 EVT=0 ST=0x00000000 thr=154 hr=0 auth22-6
+[WR] AW=0(d=0) W=0(d=0) st=0x00 FRM=367(d=11) [FS] raw=0x00000000 vis_bit=0x00 ... [VW] vis=0x00
+[CAM] SCL=..(d=..) CK=..(d=..) PCLK=..(d=..) DE=..(d=..) HS=..(d=..) VS=..(d=..) st=0x.... wc=..(d=..) link=0x........
+```
+- **怎么读**：`[WR]` 的 `AW/W` 是**写通路握手累计数**（必须持续增长）；`[CAM]` 每个 `d=` 分别是 I2C / 字节时钟 / 像素时钟 / `de/hs/vs` 的**增量**（哪个恒 0 就是哪一段没动）；`link` 低 4 位非 0 = 探针确实进了这版位流。
+- LED：不报警时 `led[0]` 闪（≈1.5Hz）= **DDR3 校准完成**；报警时两灯同相 2Hz。靠近 USB 口那个不规则闪的是 FT4232 串口活动灯，**忽略**。
+
+### 5.6 ⚠️ 改了固件必须重新"装进 SoC"，否则烧的还是旧固件
+
+固件不是靠 flash 里的文件生效，而是**烧进 SoC 的片内 RAM 初始化**（4 个 `$readmemb` symbol 文件）。改了 `sw\` 之后**必须**：
+```powershell
+powershell -File D:\FPGA\mmt\sw\build_sw.ps1            # 编译固件
+powershell -File D:\FPGA\mmt\sw\hex2soc.ps1 -Install    # 转 4 个 RAM init 文件并装进 IP
+```
+再重编位流。`hex2soc.ps1` 会打印 `round-trip verify : OK`。**不跑这一步，板上跑的还是上一版固件**（这个坑我们踩过）。
+
+### 5.7 flash 持久化烧录：暂未打通（现状与原因）
+
+| 方式 | 结果 | 原因 |
+|---|---|---|
+| `-m jtag`（SRAM） | ✅ **通** | JTAG 直配 |
+| `-m active`（直连 SPI 通道 A） | ❌ `Unknown error trying to read flash device` | 板子的 flash 不直连 FT4232 通道 A（该 profile 的 SPI 引脚映射对不上）|
+| `-m jtag_bridge`（厂商默认的 flash 编程） | ❌ `NotImplementedError`（`efx_hw_common\manager.py:269`）| **hiftdi(D2XX) 后端未实现** JTAG Bridge |
+
+**下一步方案**：用 Zadig 把 FT4232H 的 **JTAG 通道（通道 B / interface 1）绑成 libusbK/WinUSB**，改用 Efinity 默认的 pyftdi(libusb) 后端（此时**不要**设 `EFX_HIFTDI_ENABLE`），再试 `-m active` / `-m jtag_bridge`。这是厂商文档《炫览下载器说明及驱动安装》方法一描述的官方路径；属换驱动操作，动手前先建系统还原点。
+**在此之前**：上板验证走 5.3 的 SRAM 烧录（每次上电后烧一次，约 20 秒）。
+
+### 5.8 用户镜像（程序 + AI 模型）放着不动
+用户镜像仍按原约定放 flash **0x380000**，布局自检：
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_flash_layout.ps1"
 ```
-（实测：位流 0x0–0xE9380、镜像 0x380000–0x3CA68B、不重叠不越界、8MB flash 还剩 4.3MB；**PASS 24 / FAIL 0 / WARN 2**。）
-
-> ⚠️ **以上烧录步骤我们还没在真板上跑过**（写这份文档时板子刚到）。第一次请**先按 5.1/5.2 的 JTAG 模式试**，把现象记下来；有偏差记下报错原文。
+（实测：位流 0x0–0xE9380、镜像 0x380000–0x3CA68B、不重叠不越界、8MB flash 余 4.3MB；PASS 24 / FAIL 0 / WARN 2。）
+> 合并单文件的工具 `multi_image_merger.py` 读我们的位流会报 `incorrectly formatted HEX file`（位流头有 9 行是"2 字节挤一行"，路径中文被转义），所以走**分两次烧**，或等 5.7 打通后再说。
 
 ---
 
