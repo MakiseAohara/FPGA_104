@@ -26,6 +26,7 @@
 #include <stdint.h>
 #include "mmt_regs.h"
 #include "uart.h"
+#include "mmt_tinyml.h"     /* ★ task-27：AI 推理接入（张量布局 + 地址自检 + 加速器探测）*/
 
 /*========================================================================
  * 一、最小串口打印（不依赖标准库的 printf，省 flash 也省栈）
@@ -241,6 +242,16 @@ int main(void)
     MMT_REG32(MMT_CFG_FUSION)  = (cfg_thr << 8) | cfg_auth_end;
     MMT_REG32(MMT_CFG_AUTH)    = cfg_auth_beg | (cfg_hour << 8);
     MMT_REG32(MMT_CTRL)        = 0x1;     /* 帧差使能，不冻结、不清、不静音 */
+
+    /* ---- 2b. ★ AI 推理接入自检（task-27）----
+     *  做两件事，都**不发**"参数写/触发"命令（安全档）：
+     *   ① 张量布局：权重/输入/输出/arena 全落 R7，128B 对齐；
+     *   ② 地址自检 fail-closed：任一项越界/重叠/对齐不足 ⇒ 打印 err 掩码，
+     *      后续任何发命令的路径都会被拒绝（见 mmt_tinyml.h 的安全约定）。
+     *  `probe=off` 表示没发自定义指令（默认）；把 mmt_tinyml.c 里的
+     *  MMT_TINYML_PROBE_EN 改成 1 才会去读加速器 UUID/数量
+     *  （⚠️ 必须先确认加速器已接线，否则那条指令会阻塞）。*/
+    mmt_tinyml_selftest();
 
     osd_line_str(0, "MMT terminal booting...");
     osd_line_str(1, "waiting for sensors");
@@ -510,7 +521,13 @@ int main(void)
          *   pd 在涨         ⇒ 像素数据**非全 0**（DE 在跳 ≠ 数据有效）
          *   ack 在涨        ⇒ 从器件**真的应答了**（只看 SCL 分不出这个）
          *   pid 必须是 0x4D4D5450 ⇒ 这版位流里有探针（否则全是 0 也分不清）
-         * 全 0 且 st 的 seen 位也为 0 ⇒ 该信号从头到尾没动过。 */
+         * 全 0 且 st 的 seen 位也为 0 ⇒ 该信号从头到尾没动过。
+         * ★ 2026-10-13（task-24 复查后修正）：本块用到的探针宏地址已在
+         *   sw\mmt_regs.h 里**全部改正** —— 原先 pid/pd/ack/nk/wmx/rh 这 6 个宏
+         *   地址是错的（实际会读成 WC_MAX / ACK_CNT / RST_HS_STAT / 别名的 SCL_CNT
+         *   与 CK_CNT）。本文件**不硬编码地址**，全部走宏 ⇒ 宏改对后这里每个值
+         *   都来自正确的寄存器，字段名与值一致。修复前后对照见
+         *   docs\上板判据-摄像头上游探针.md §7。 */
         {
             static uint32_t l_scl = 0, l_ck = 0, l_pk = 0, l_de = 0, l_hs = 0, l_vs = 0, l_wc = 0;
             static uint32_t l_pd = 0, l_ack = 0, l_nk = 0;

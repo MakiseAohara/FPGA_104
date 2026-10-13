@@ -54,7 +54,7 @@ Write-Output "=== 编译汇编启动代码 startup.S ==="
 if ($LASTEXITCODE -ne 0) { Write-Output "!! startup.S 编译失败"; exit 1 }
 
 # ---- 2. 编译 C ----
-$CSRC = @("main.c", "uart.c")
+$CSRC = @("main.c", "uart.c", "mmt_tinyml.c")
 Write-Output "=== 编译 C: $($CSRC -join ', ') ==="
 foreach ($src in $CSRC) {
     & $gcc @CFLAGS -c (Join-Path $sw $src) -o (Join-Path $out ($src -replace '\.c$', '.o'))

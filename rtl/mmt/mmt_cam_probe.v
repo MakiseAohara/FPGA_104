@@ -62,16 +62,22 @@
 //                                 ★ [31:17] = 15'h2A5C **位流魔数**（见下）
 //     8   0xA0   CSI_WC_CNT      word_count **值变化次数**（★ 不是包数，见下）
 //     9   0xA4   CSI_WC_NOW      [15:0] word_count 当前快照
-//    10   0xB0   PROBE_ID        = 32'h4D4D5450 ("MMTP") ★ **位流魔数**（全 32 位）
-//    11   0xB4   CSI_PD_CNT      [31:0] "de && pixel_data!=0" 拍数（÷1024，数据有效性）
-//    12   0xB8   CSI_WC_MAX      [15:0] 历史最大 word_count（这个包最大多少词）
-//    13   0xBC   I2C_ACK_CNT     [31:0] I2C **ACK 次数**（从器件把 SDA 拉低）
-//    14   0xC0   I2C_NACK_CNT    [31:0] I2C NACK 次数（没人应答）
-//    15   0xC4   RST_HS_STAT     [0]=core 域 rstn(1=三个 PLL 都锁定) [1]=像素域 rstn(1=已释放)
+//    10   0xA8   PROBE_ID        = 32'h4D4D5450 ("MMTP") ★ **位流魔数**（全 32 位）
+//    11   0xAC   CSI_PD_CNT      [31:0] "de && pixel_data!=0" 拍数（÷1024，数据有效性）
+//    12   0xB0   CSI_WC_MAX      [15:0] 历史最大 word_count（这个包最大多少词）
+//    13   0xB4   I2C_ACK_CNT     [31:0] I2C **ACK 次数**（从器件把 SDA 拉低）
+//    14   0xB8   I2C_NACK_CNT    [31:0] I2C NACK 次数（没人应答）
+//    15   0xBC   RST_HS_STAT     [0]=core 域 rstn(1=三个 PLL 都锁定) [1]=像素域 rstn(1=已释放)
 //                                 [2]=ck_HS_ENA 电平 [6:3]=d0..d3_HS_ENA 电平
 //                                 [7]=ck 曾拉起 [11:8]=d0..d3 曾拉起
 //                                 ★ 自检：core=1 而 像素=0 逻辑上不可能 ⇒ 读到就说明
 //                                    `i_mipi_rx_pclk` 没在跑
+//
+//  ⚠️ 地址映射是**线性**的：addr = 0x80 + 4×idx ⇒ 本探针占满 0x80..0xBC（raddr 0..15）。
+//     （2026-10-13 task-24 复查发现：原先按"跳着排地址"写文档（idx10→0xB0…）会留下
+//      0xA8/0xAC 两个空挡，而别人正好要用那两个地址。现已改为线性、上界 0xBC；
+//      0xC0/0xC4 **不映射**（probe_sel=false ⇒ 读到 0，安全）。）
+//     0xC8..0xD4 = task-23 测试图案/视频时序；0xD8/0xDC = MMT_FB_AWADDR_MAX / AW_STAT。
 //
 //  ---------------------------------------------------------------------------
 //  ★ 位流魔数为什么必须有（Claude 审查提出，task-24）
@@ -87,7 +93,7 @@
 //  它数的是 **`word_count` 这个值变化的次数**，不是"解出的包数"：
 //  同一帧内各行包的 `word_count` 往往相同 ⇒ 稳态下**每帧只变几次，`wc(d=0)` 是正常的**，
 //  不能当故障。要看"包/行在不在动"用 `CSI_HS_CNT`(0x90)/`CSI_VS_CNT`(0x94)；
-//  要看"这个包多大"用 `CSI_WC_MAX`(0xB8) 与 `CSI_WC_NOW`(0xA4)。
+//  要看"这个包多大"用 `CSI_WC_MAX`(0xB0) 与 `CSI_WC_NOW`(0xA4)。
 //
 //  ★ I2C ACK 计数为什么必须有（task-24）
 //  ---------------------------------------------------------------------------
@@ -157,7 +163,7 @@ module mmt_cam_probe #(
     input  wire        csi_irq,           //                      :92
 
     // ---------------- 寄存器读口（由 mmt_soc_regs 驱动）----------------
-    input  wire [3:0]  raddr,             // 0..14 ⇒ 0x80..0xC0
+    input  wire [3:0]  raddr,             // 0..15 ⇒ 0x80..0xBC（线性：addr=0x80+4×raddr）
     output reg  [31:0] rdata
 );
 

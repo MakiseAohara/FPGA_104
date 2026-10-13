@@ -5,8 +5,29 @@
 //    A) mmt_cam_probe 单元：4 个时钟域的跳变计数 / 时钟探针 / 粘滞位 / CSI 状态字
 //       · 源域信号精确跳变 N 次 ⇒ core_clk 侧读到的计数必须正好是 N
 //       · 时钟探针：时钟停掉后计数必须不再增长
-//    B) mmt_soc_regs 的探针读口：0x80..0xA4 必须把 raddr 映射到 0..9，
-//       并返回 cam_probe_rdata；区间外仍返回 0（既有行为不变）
+//    B) mmt_soc_regs 的探针读口：**窗口 0x80..0xBC** 必须把 raddr 映射到 0..15，
+//       并返回 cam_probe_rdata；窗口外（0xC0/0xC4、0x100…）返回 0；
+//       0xD8/0xDC 必须落回 fb 寄存器（**不是**探针）
+//
+//  ==========================================================================
+//  ★ task-24 修正记录（地址错位缺陷，已修）：
+//     现象：探针窗口的 APB 地址与 raddr 错位 —— 0xA8/0xAC 被 FB_AWADDR_MAX/
+//           FB_AW_STAT 的显式 case 占住（显式 case 优先于 default）⇒ 探针
+//           raddr 10/11（PROBE_ID/CSI_PD_CNT）读不到；而窗口上界原为 49(0xC4)，
+//           0xC0/0xC4 算出 raddr 16/17 被 4 位宽**截成 0/1** ⇒ 别名回
+//           CAM_SCL_CNT/CAM_CK_CNT。
+//     根因：raddr = PADDR[7:2] - 32 是**线性连续**译码，而 0xA8/0xAC 被插进了窗口。
+//     修法（**RTL/SW 已改，本 TB 同步**）：
+//       · mmt_soc_regs.v：FB_AWADDR_MAX/FB_AW_STAT 由 0xA8/0xAC 移到空闲的
+//         **0xD8/0xDC**；probe_sel 上界由 49 **收到 47(0xBC)**
+//         ⇒ 探针窗口变成连续无洞的 0x80..0xBC（raddr 0..15）。
+//       · sw\mmt_regs.h + sw\main.c：6 个探针宏地址改正
+//         （PROBE_ID=0xA8、CSI_PD_CNT=0xAC、WC_MAX=0xB0、ACK=0xB4、
+//           NACK=0xB8、RST_HS=0xBC），fb 两个宏改 0xD8/0xDC。
+//     本 TB 的 C 组是**直接驱动 probe_raddr**（测探针模块语义），标签里的
+//     APB 地址已按修正后的映射改写；B 组新增窗口两端与 0xD8/0xDC 的边界用例。
+//     对照表见 docs\上板判据-摄像头上游探针.md §7。
+//  ==========================================================================
 //
 //  Run（PATH 需要两个 iverilog 目录）:
 //    set PATH=D:\iverilog\Library\bin;D:\iverilog\Library\mingw-w64\bin;%PATH%
@@ -270,16 +291,20 @@ module tb_mmt_cam_probe;
 
         // ==========================================================
         //  C) task-24 加固项：位流魔数 / I2C ACK / 数据有效 / HS_ENA
+        //     ★ 本组**直接驱动 probe_raddr**（测 mmt_cam_probe 模块语义），
+        //       标签里的 APB 地址已按 task-24 修正后的映射写：
+        //       raddr 10=0xA8 11=0xAC 12=0xB0 13=0xB4 14=0xB8 15=0xBC
+        //       （APB 地址 ↔ raddr 的**译码**由 B 组覆盖）
         // ==========================================================
         $display("  --- task-24 加固项 ---");
 
         // C1/C2 位流魔数（读到才证明探针进了位流）
-        probe_raddr = 4'd10; #1; chk("C1 0xB0 PROBE_ID == 0x4D4D5450", probe_rdata, 32'h4D4D5450);
+        probe_raddr = 4'd10; #1; chk("C1 0xA8 PROBE_ID == 0x4D4D5450", probe_rdata, 32'h4D4D5450);
         probe_raddr = 4'd7;  #1;
         chk("C2 0x9C [31:17] 魔数 == 15'h2A5C", (probe_rdata >> 17) & 15'h7FFF, 32'h2A5C);
 
         // C3 word_count 最大值快照（0x1234 之后又 bump 了 5 次 ⇒ 最大是 0x1239）
-        probe_raddr = 4'd12; #1; chk("C3 0xB8 WC_MAX == 0x1239", probe_rdata & 32'hFFFF, 32'h1239);
+        probe_raddr = 4'd12; #1; chk("C3 0xB0 WC_MAX == 0x1239", probe_rdata & 32'hFFFF, 32'h1239);
 
         // C4 I2C ACK 计数：先发 START，再发 3 个"有应答"+2 个"无应答"的字节
         //    期望 ack=3、nack=2（只看 SCL 是分不出这个的）
@@ -290,15 +315,15 @@ module tb_mmt_cam_probe;
         i2c_byte(1'b0); i2c_byte(1'b0);                   // NACK
         i2c_scl_low();                                    // 收尾（不动 SDA）
         repeat (200) @(posedge clk);
-        probe_raddr = 4'd13; #1; chk("C4 0xBC I2C_ACK_CNT == 3", probe_rdata, 32'd3);
-        probe_raddr = 4'd14; #1; chk("C5 0xC0 I2C_NACK_CNT == 2", probe_rdata, 32'd2);
+        probe_raddr = 4'd13; #1; chk("C4 0xB4 I2C_ACK_CNT == 3", probe_rdata, 32'd3);
+        probe_raddr = 4'd14; #1; chk("C5 0xB8 I2C_NACK_CNT == 2", probe_rdata, 32'd2);
 
         // C7 数据有效性：DE 在跳但数据全 0 ⇒ pd 不该涨；给非 0 数据后 pd 才涨
         csi_de = 1'b1; csi_pixel_data = 64'd0;
         repeat (3000) @(posedge clk_pixel);              // 远超 1024 拍
         repeat (50) @(posedge clk);
         probe_raddr = 4'd11; #1; v = probe_rdata;
-        chk("C7 0xB4 pd == 0 when data all-zero", v, 32'd0);
+        chk("C7 0xAC pd == 0 when data all-zero", v, 32'd0);
         probe_raddr = 4'd6;  #1; chk("C8 0x98 [14] pd_any == 0", (probe_rdata >> 14) & 1, 32'd0);
 
         csi_pixel_data = 64'h0000_0000_0000_00FF;
@@ -310,23 +335,23 @@ module tb_mmt_cam_probe;
 
         // C11/C12 HS_ENA 电平 + 粘滞位（IP 输出："曾经拉起过"= 摄像头真进过 HS）
         probe_raddr = 4'd15; #1; v = probe_rdata;
-        chk("C11 0xC4 HS_ENA 全 0（还没拉起）", (v >> 2) & 5'h1F, 32'd0);
+        chk("C11 0xBC HS_ENA 全 0（还没拉起）", (v >> 2) & 5'h1F, 32'd0);
         hs_ck_ena = 1'b1; hs_d0_ena = 1'b1;
         repeat (10) @(posedge clk);
         hs_ck_ena = 1'b0;                                // 只拉起一小会儿
         repeat (10) @(posedge clk);
         probe_raddr = 4'd15; #1; v = probe_rdata;
-        chk("C12 0xC4 ck 粘滞位=1（曾拉起）", (v >> 7) & 1, 32'd1);
-        chk("C13 0xC4 d0 粘滞位=1",          (v >> 8) & 1, 32'd1);
-        chk("C14 0xC4 d1 粘滞位=0（没拉过）", (v >> 9) & 1, 32'd0);
-        chk("C15 0xC4 ck 当前电平=0（已落下）", (v >> 2) & 1, 32'd0);
+        chk("C12 0xBC ck 粘滞位=1（曾拉起）", (v >> 7) & 1, 32'd1);
+        chk("C13 0xBC d0 粘滞位=1",          (v >> 8) & 1, 32'd1);
+        chk("C14 0xBC d1 粘滞位=0（没拉过）", (v >> 9) & 1, 32'd0);
+        chk("C15 0xBC ck 当前电平=0（已落下）", (v >> 2) & 1, 32'd0);
 
         // C16 复位状态：core rstn 应为 1；像素域 rstn 由 TB 控制
-        chk("C16 0xC4 [0] core rstn == 1", v & 1, 32'd1);
-        chk("C17 0xC4 [1] 像素域 rstn == 0（TB 还没释放）", (v >> 1) & 1, 32'd0);
+        chk("C16 0xBC [0] core rstn == 1", v & 1, 32'd1);
+        chk("C17 0xBC [1] 像素域 rstn == 0（TB 还没释放）", (v >> 1) & 1, 32'd0);
         pix_rstn = 1'b1;
         repeat (10) @(posedge clk);
-        probe_raddr = 4'd15; #1; chk("C18 0xC4 [1] 释放后 == 1", (probe_rdata >> 1) & 1, 32'd1);
+        probe_raddr = 4'd15; #1; chk("C18 0xBC [1] 释放后 == 1", (probe_rdata >> 1) & 1, 32'd1);
 
         $display("");
         $display("=== RESULT A+C: PASS %0d / FAIL %0d ===", pass, fail);
@@ -343,6 +368,10 @@ module tb_mmt_cam_probe;
     wire [31:0] b_PRDATA;
     wire [3:0]  b_raddr;
     reg  [31:0] b_stub = 32'hDEADBEEF;
+    // ★ task-24：fb 采样口改成寄存器驱动，好让 0xD8/0xDC 的边界用例**真的**取到非 0 值
+    //   （原来接 1'b0/32'd0 ⇒ fb_awaddr_max 恒 0，就分不清"映射对了但值是 0"与"没映射"）
+    reg         b_fb_awvalid = 0, b_fb_awready = 0;
+    reg  [31:0] b_fb_awaddr  = 0;
 
     mmt_soc_regs dut_regs (
         .clk(b_clk), .rst_n(b_rst_n),
@@ -357,8 +386,9 @@ module tb_mmt_cam_probe;
         .motion_flag(1'b0),
         .conf_vision(8'h00), .conf_temp(8'h00), .conf_env(8'h00), .score(9'd0),
         .in_auth_window(1'b0), .alarm(1'b0),
-        .fb_awvalid(1'b0), .fb_awready(1'b0), .fb_wvalid(1'b0), .fb_wready(1'b0),
-        .fb_awaddr(32'd0),
+        .fb_awvalid(b_fb_awvalid), .fb_awready(b_fb_awready),
+        .fb_wvalid(1'b0), .fb_wready(1'b0),
+        .fb_awaddr(b_fb_awaddr),
         .diff_threshold(), .diff_min_area(), .score_thresh(),
         .auth_start_h(), .auth_end_h(), .hour(),
         .vision_prob(), .vision_valid(),
@@ -391,6 +421,7 @@ module tb_mmt_cam_probe;
             b_rst_n = 1;
             repeat (4) @(posedge b_clk);
 
+            // ---- 窗口内：地址 → raddr 线性映射（窗口 0x80..0xBC ⇒ raddr 0..15）----
             breg_read(16'h0080, bv); chk("B1 0x80 -> probe rdata", bv, 32'hDEADBEEF);
             chk("B2 raddr for 0x80 == 0", b_raddr, 32'd0);
             breg_read(16'h0084, bv); chk("B3 0x84 -> probe rdata", bv, 32'hDEADBEEF);
@@ -398,11 +429,48 @@ module tb_mmt_cam_probe;
             breg_read(16'h00A4, bv); chk("B5 0xA4 -> probe rdata", bv, 32'hDEADBEEF);
             chk("B6 raddr for 0xA4 == 9", b_raddr, 32'd9);
 
-            // 区间外：既有寄存器不受影响、未映射地址仍为 0
+            // ★ task-24 修正后的关键边界：0xA8/0xAC 现在**回到探针**（raddr 10/11）
+            //   （修复前这里返回 fb_awaddr_max/fb_aw_stat，探针 raddr 10/11 读不到）
+            breg_read(16'h00A8, bv); chk("B11 0xA8 -> probe rdata (was fb)", bv, 32'hDEADBEEF);
+            chk("B12 raddr for 0xA8 == 10", b_raddr, 32'd10);
+            breg_read(16'h00AC, bv); chk("B13 0xAC -> probe rdata (was fb)", bv, 32'hDEADBEEF);
+            chk("B14 raddr for 0xAC == 11", b_raddr, 32'd11);
+
+            // ★ 窗口上端：0xB0..0xBC ⇒ raddr 12..15（0xBC 是最后一个，RST_HS_STAT）
+            breg_read(16'h00B0, bv); chk("B15 0xB0 -> probe rdata", bv, 32'hDEADBEEF);
+            chk("B16 raddr for 0xB0 == 12", b_raddr, 32'd12);
+            breg_read(16'h00B8, bv); chk("B17 0xB8 -> probe rdata", bv, 32'hDEADBEEF);
+            chk("B18 raddr for 0xB8 == 14", b_raddr, 32'd14);
+            breg_read(16'h00BC, bv); chk("B19 0xBC (window end) -> probe rdata", bv, 32'hDEADBEEF);
+            chk("B20 raddr for 0xBC == 15", b_raddr, 32'd15);
+
+            // ---- 窗口外：必须返回 0 ----
+            //    （旧上界 49 时 0xC0/0xC4 会被截成 raddr 0/1 ⇒ 返回 SCL_CNT/CK_CNT 的 stub）
+            //    注意：cam_probe_raddr 本身是组合直算的（probe_word-32），窗口外它的值
+            //    仍是被截断的别名值 —— 但 probe_sel=0 ⇒ PRDATA=0，**数据通路不再别名**，
+            //    所以判据只能落在 PRDATA 上（不能拿 b_raddr 当"没别名"的证据）。
+            breg_read(16'h00C0, bv); chk("B21 0xC0 (out of window) -> 0", bv, 32'd0);
+            breg_read(16'h00C4, bv); chk("B22 0xC4 (out of window) -> 0", bv, 32'd0);
+
+            // ---- fb 采样口搬去 0xD8/0xDC：制造一个**非 0** 采样值再读，才能证明映射正确 ----
+            b_fb_awaddr  = 32'h1234_5678;
+            b_fb_awvalid = 1'b1; b_fb_awready = 1'b1;
+            @(posedge b_clk); #1;
+            b_fb_awvalid = 1'b0; b_fb_awready = 1'b0;
+            @(posedge b_clk); #1;
+
+            breg_read(16'h00D8, bv);
+            chk("B23 0xD8 fb_awaddr_max == 0x12345678", bv, 32'h12345678);
+            breg_read(16'h00DC, bv);
+            chk("B24 0xDC fb_aw_stat == 0x00030001", bv, 32'h0003_0001);
+            // 同一时刻探针窗口仍必须是 stub（证明 0xD8/0xDC 没被探针吃掉）
+            breg_read(16'h00A8, bv); chk("B25 0xA8 仍是 probe stub", bv, 32'hDEADBEEF);
+
+            // ---- 既有寄存器不受影响 ----
             breg_read(16'h0000, bv); chk("B7 0x00 ID 仍是 0x4D4D5401", bv, 32'h4D4D5401);
             breg_read(16'h007C, bv); chk("B8 0x7C FRM (not the stub)", bv, 32'd0);
             breg_read(16'h0100, bv); chk("B9 0x100 (unmapped) -> 0", bv, 32'd0);
-            breg_read(16'h00A8, bv); chk("B10 0xA8 (out of probe range) -> 0", bv, 32'd0);
+            breg_read(16'h00C8, bv); chk("B26 0xC8 测试图案回读仍可读", bv, 32'd0);
 
             $display("");
             $display("=== RESULT total: PASS %0d / FAIL %0d ===", pass, fail);

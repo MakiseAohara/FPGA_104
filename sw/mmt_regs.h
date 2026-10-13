@@ -92,15 +92,21 @@
  *       不说明"写到哪里"。
  * ⚠️ 两个寄存器**必须联合读**：amax=0 且采样=0 是"没出图"，**不是**"没越界"。
  *    需要重新编译位流（并且要 Lead 把 fb_awaddr 引进 SoC）才有数。 */
-#define MMT_FB_AWADDR_MAX   (MMT_BASE + 0xA8)   /* [31:0]=历史最大 fb_awaddr（AW 握手那拍取样，单调不减）*/
-#define MMT_FB_AW_STAT      (MMT_BASE + 0xAC)   /* [15:0]=采样次数(饱和) [16]=至少采样过一次
+/* ★ 2026-10-13 地址修正（task-24 复查查出）：原 0xA8/0xAC 正好插在探针的线性窗口
+ *   （0x80..0xBC）里，会把探针 raddr 10/11 挡死。现移到空闲的 **0xD8/0xDC**
+ *   （RTL 侧 mmt_soc_regs.v 已同步修改）。 */
+#define MMT_FB_AWADDR_MAX   (MMT_BASE + 0xD8)   /* [31:0]=历史最大 fb_awaddr（AW 握手那拍取样，单调不减）*/
+#define MMT_FB_AW_STAT      (MMT_BASE + 0xDC)   /* [15:0]=采样次数(饱和) [16]=至少采样过一次
                                                  * [17]=曾采到非 0 地址 */
 
 /* ---- 只读：摄像头上游探针（2026-10-13 新增，task-19；判据见 docs\上板判据-摄像头上游探针.md）----
  * 用途：定位"像素卡在哪一段" —— I2C 没跑 / MIPI 时钟没来 / CSI RX 没解出像素。
  * ⚠️ 这批寄存器要**重新编译位流**（并且要 Lead 应用接线补丁）才有数；
  *    旧位流下读回 0，不是错。 */
-#define MMT_CAM_SCL_CNT     (MMT_BASE + 0x80)   /* cam_scl(io_cam_scl_OUT) 跳变数 —— I2C 配置活动 */
+#define MMT_CAM_SCL_CNT     (MMT_BASE + 0x80)   /* cam_scl 跳变数 —— I2C 配置活动。
+                                                 * ★ 探针接的是 **io_cam_scl_OE**（= ~scl_padoen_o），
+                                                 *   不是 scl_o（OpenCores 里 scl_o 恒 0）；
+                                                 *   每个 SCL 周期算 2 次跳变。 */
 #define MMT_CAM_CK_CNT      (MMT_BASE + 0x84)   /* MIPI 字节时钟探针计数（×1024 = 周期数）*/
 #define MMT_CAM_PCLK_CNT    (MMT_BASE + 0x88)   /* MIPI 像素时钟探针计数（×1024 = 周期数）*/
 #define MMT_CSI_DE_CNT      (MMT_BASE + 0x8C)   /* ★ w_mipi_rx_de 跳变数 = CSI RX 在吐像素 */
@@ -115,24 +121,32 @@
                                                  * 同帧内各行包 word_count 相同 ⇒ 稳态 wc(d=0) 正常。
                                                  * 要看包/行动没动用 0x90/0x94）*/
 #define MMT_CSI_WC_NOW      (MMT_BASE + 0xA4)   /* [15:0]=word_count 当前快照 */
-/* ---- task-24 加固（判读坑见 docs\上板判据-摄像头上游探针.md）---- */
-#define MMT_PROBE_ID        (MMT_BASE + 0xB0)   /* ★ 位流魔数 = 0x4D4D5450（"MMTP"）
+/* ---- task-24 加固（判读坑见 docs\上板判据-摄像头上游探针.md）----
+ * ★ 2026-10-13 地址修正（task-24 复查查出）：下面 6 个宏原先写成 0xB0..0xC4，
+ *   那是**错的** —— RTL 译码是线性连续的（raddr = PADDR[7:2] − 32），
+ *   且 FB_AWADDR_MAX/FB_AW_STAT 曾插在 0xA8/0xAC 把 raddr 10/11 挡死。
+ *   现已把 fb 两个寄存器移到 0xD8/0xDC、探针上界收到 0xBC（raddr 0..15）
+ *   ⇒ 下面这 6 个宏就是**真实地址**，字段名与寄存器一一对应。
+ *   （修复前的错误对应关系见 docs\上板判据-摄像头上游探针.md §7） */
+#define MMT_PROBE_ID        (MMT_BASE + 0xA8)   /* ★ 位流魔数 = 0x4D4D5450（"MMTP"）
                                                  *   读到它才证明这版位流里有探针；
                                                  *   读不到 ⇒ 位流没重编（与"计数全 0"区分开）*/
-#define MMT_CSI_PD_CNT      (MMT_BASE + 0xB4)   /* [31:0]="de && pixel_data!=0" 拍数（÷1024）
+#define MMT_CSI_PD_CNT      (MMT_BASE + 0xAC)   /* [31:0]="de && pixel_data!=0" 拍数（÷1024）
                                                  *   数据有效性：DE 在跳 ≠ 数据有效 */
-#define MMT_CSI_WC_MAX      (MMT_BASE + 0xB8)   /* [15:0] 历史最大 word_count（包最大词数）*/
-#define MMT_I2C_ACK_CNT     (MMT_BASE + 0xBC)   /* [31:0] I2C **ACK 次数**（从器件拉低 SDA）
+#define MMT_CSI_WC_MAX      (MMT_BASE + 0xB0)   /* [15:0] 历史最大 word_count（包最大词数）*/
+#define MMT_I2C_ACK_CNT     (MMT_BASE + 0xB4)   /* [31:0] I2C **ACK 次数**（从器件拉低 SDA）
                                                  *   ★ 只看 SCL 数分不出"传感器响应了没有" */
-#define MMT_I2C_NACK_CNT    (MMT_BASE + 0xC0)   /* [31:0] I2C NACK 次数（没人应答）*/
-#define MMT_RST_HS_STAT     (MMT_BASE + 0xC4)   /* [0]=core rstn(1=三个 PLL 都锁定) [1]=像素域 rstn
+#define MMT_I2C_NACK_CNT    (MMT_BASE + 0xB8)   /* [31:0] I2C NACK 次数（没人应答）*/
+#define MMT_RST_HS_STAT     (MMT_BASE + 0xBC)   /* [0]=core rstn(1=三个 PLL 都锁定) [1]=像素域 rstn
                                                  * [2]=ck_HS_ENA 电平 [6:3]=d0..d3_HS_ENA 电平
                                                  * [7]=ck 曾拉起 [11:8]=d0..d3 曾拉起
                                                  * ★ 自检：core=1 且 像素=0 逻辑上不可能 ⇒ 像素时钟没跑 */
 
 /* ---- ★ task-23 / M0：测试图案注入 + 视频时序计数（0xC8..0xD4）----
- *   ⚠️ 0x80..0xC4 是摄像头上游探针 mmt_cam_probe 的区间（见 mmt_soc_regs.v 的
- *      probe_sel: probe_word 32..49），**绝对不能占用**；本组寄存器从 0xC8 起。
+ *   ⚠️ 0x80..0xBC 是摄像头上游探针 mmt_cam_probe 的窗口（连续 16 个，raddr 0..15；
+ *      见 mmt_soc_regs.v 的 probe_sel: probe_word 32..47），**绝对不能占用**；
+ *      0xC0/0xC4 也不映射（越界保护，读到 0）。本组寄存器从 0xC8 起。
+ *      0xD8/0xDC 是 MMT_FB_AWADDR_MAX / MMT_FB_AW_STAT（见上）。
  *   复位默认全 0 ⇒ 默认走摄像头，现有行为不变。
  */
 #define MMT_TEST_PATTERN    (MMT_BASE + 0xC8)   /* W/R [0]=en  [2:1]=mode
