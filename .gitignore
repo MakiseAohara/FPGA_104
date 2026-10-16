@@ -13,6 +13,7 @@ sim/_run/
 *.lxt2
 # 固件构建产物（保留源码与脚本）
 sw/build/
+sw/ddr/build/
 sw/**/*.elf
 sw/**/*.bin
 sw/**/*.o
@@ -33,4 +34,5 @@ sim/**/_run/
 **/_logs/
 *.task19bak
 *.bak*
+
 

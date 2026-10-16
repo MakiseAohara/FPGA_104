@@ -14,13 +14,20 @@ create_clock -waveform {0.7500 1.7500} -period 2.0000 i_mipi_txc_sclk
 create_clock -waveform {0.2500 1.2500} -period 2.0000 i_mipi_txd_sclk
 create_clock -period 8.0000 i_mipi_tx_pclk
 
-create_clock -period 14.2857 vid_clk_dvi2
+# 2026-10-15 退回已上板实测通过的 150MHz 方案：USER_PLL VCO = 25×2×60 = 3000MHz
+#   vid_clk_dvi2 = 3000/40 = 75.0MHz ⇒ 1000/75 = 13.3333ns
+#   ⚠ 已知代价：vid_clk_dvi2→hdmi_tx_slow_clk 有 10 条 setup 负 slack（最差 -1.319ns），但上板实测 HDMI 通，暂接受。
+create_clock -period 13.3333 vid_clk_dvi2
 create_clock -period 200.0000 CLK_5M
 create_clock -period 20.0000 fb
 create_clock -period 10.0000 pll_inst4_CLKOUT0
 create_clock -period 20.0000 i_mipi_rx_pclk
-create_clock -period 7.1429 hdmi_tx_slow_clk
-create_clock -waveform {0.3571 1.0714} -period 1.4286 hdmi_tx_fast_clk
+# hdmi_tx_slow_clk = 3000/20 = 150.0MHz ⇒ 6.6667ns；i_mipi_rx_pclk = 3000/60 = 50MHz 不变（20.0ns）
+create_clock -period 6.6667 hdmi_tx_slow_clk
+# hdmi_tx_fast_clk = VCO 3000 / 4 = 750MHz ⇒ 1.3333ns
+#   waveform = {T/4, 3T/4} = {0.3333 1.0000}（对应 phase_setting=2 的 90° 相移）。
+#   约束必须与 PLL 实际输出一致，否则 STA 会按错误频率检查串化器。
+create_clock -waveform {0.3333 1.0000} -period 1.3333 hdmi_tx_fast_clk
 
 set_clock_groups -exclusive  -group {i_soc_clk} -group {i_mipi_rx_pclk} -group {jtag_inst1_TCK}
 set_clock_groups -exclusive -group {core_clk} -group {axi_clk} -group {tx_cal_clk} -group {i_mipi_tx_pclk} -group {vid_clk_dvi2 hdmi_tx_slow_clk} -group {CLK_5M} -group {i_mipi_rx_pclk} -group {sdram_clk} -group {rx_cal_clk} -group {i_cam_ck_CLKOUT} -group {jtag_inst1_TCK}

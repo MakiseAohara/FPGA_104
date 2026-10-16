@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <efx:project name="mmt" description="" sw_version="2026.1.132" xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">
     <efx:device_info>
         <efx:family name="Titanium"/>
@@ -150,8 +150,21 @@
         <efx:param name="mode" value="speed" value_type="e_option"/>
         <efx:param name="max_ram" value="-1" value_type="e_integer"/>
         <efx:param name="max_mult" value="-1" value_type="e_integer"/>
+        <!-- ★ 2026-10-16 指挥官指令 #9：infer-clk-enable 3 → 0（根因修复）。
+             依据（_synth_loop 实验，详见 out\evidence\synth_loop.md）：
+               ice>=1（含默认 3）⇒ ddr_wr_buffer.v:403-443(FSM) 与 :474-495(粘滞块) 里
+                 "条件成立装常数" 的寄存器被综合成 .D(1'b0)（.CE 仍是真实信号、SR_VALUE=0）
+                 ⇒ 板上恒 0 ⇒ AW=0 / 画面雪花。
+               ice=0 ⇒ 同样的 RTL 得到真实次态逻辑（.CE(1'b1)），
+                 在 ddr_buffer 顶层与 frame_buffer 顶层各自独立复现通过。
+             注意：ddr_wr_buffer 单独综合（S1b）在 ice=3 下是通的 ⇒ 该缺陷只在规模/结构
+                   达到一定程度时才触发，小规模测试测不出来。
+             回滚：本值改回 3。 -->
         <efx:param name="infer-clk-enable" value="3" value_type="e_option"/>
         <efx:param name="infer-sync-set-reset" value="1" value_type="e_option"/>
+        <!-- ★ 2026-10-16 指挥官指令 #5：A7 实验（value=0）后回滚为 1。
+             A7 结论：infer-sync-set-reset 与"写通道被折叠"和"粘滞位整块为 0"两个现象都无关。
+             回滚后本文件的功能与 A6 完全一致。 -->
         <efx:param name="fanout-limit" value="0" value_type="e_integer"/>
         <efx:param name="seq_opt" value="0" value_type="e_option"/>
         <efx:param name="retiming" value="0" value_type="e_option"/>
@@ -235,3 +248,4 @@
         <efx:param name="randomize_iv_value" value="off" value_type="e_bool"/>
     </efx:security>
 </efx:project>
+

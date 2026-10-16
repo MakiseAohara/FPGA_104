@@ -159,6 +159,8 @@ module mmt_soc_regs (
     input  wire [15:0] vid_lines_per_frame,   // 一帧内 hs 上升沿个数
     input  wire [15:0] vid_pixels_per_line,   // 一行内 de 拍数
     input  wire [15:0] vid_frame_cnt,         // 上电以来 vs 个数
+    input  wire [31:0] dbg_fb_sb,             // 调试：frame_buffer 写侧粘滞位（i_clk 域，直接采样）
+    input  wire [31:0] dbg_fb_sb2,            // 调试：ddr_wr_buffer 写 FSM 粘滞位（axi_clk 域，直接采样）
 
     // ---------------- 读写输出：配置给硬件 ----------------
     output reg  [7:0]  diff_threshold,
@@ -414,6 +416,15 @@ module mmt_soc_regs (
             // 0xD4：上电以来 vs 个数 —— **判断"到底有没有在出帧"的第一手依据**
             //       不增长 ⇒ 根本没有 vs（摄像头没出图 / 图案没在跑）
             16'h00D4: PRDATA = {16'd0, vid_frame_cnt};
+            // 0xE0：★ 调试观测寄存器（非产品功能）—— frame_buffer 写侧粘滞"曾经发生过"位
+            //       [0]=wr_fifo_wren [1]=frame_start [2]=frame_stable
+            //       [3]=frame_start&frame_stable(wr_start) [4]=wr_fifo_wrfull
+            //       i_clk 域直接被 core_clk 采样；复位后清零
+            16'h00E0: PRDATA = dbg_fb_sb;
+            // 0xE4：★ 调试观测 —— ddr_wr_buffer 写 FSM 粘滞位
+            //       [0]=pos_sync [1]=state1 [2]=wr_req [3]=state2 [4]=awready [5]=rdusedw!=0
+            //       [6]=wr_fifo_rden [7]=state3；[23:16]=wr_fifo_rdusedw[7:0] 当前值（非粘滞）
+            16'h00E4: PRDATA = dbg_fb_sb2;
             // ---- ★ 摄像头上游探针（task-19）：探针窗口 0x80..0xBC → raddr 0..15 ----
             //   这里不逐个写 case，而是把这个区间整体交给探针自己的读口，
             //   这样"探针寄存器表"只在一个文件里维护（mmt_cam_probe.v）。

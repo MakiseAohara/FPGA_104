@@ -99,6 +99,18 @@
 #define MMT_FB_AW_STAT      (MMT_BASE + 0xDC)   /* [15:0]=采样次数(饱和) [16]=至少采样过一次
                                                  * [17]=曾采到非 0 地址 */
 
+/* ---- 只读：★ 调试观测寄存器 0xE0（frame_buffer 写侧粘滞"曾经发生过"位，复位清零）----
+ * bit0=wr_fifo_wren  bit1=frame_start  bit2=frame_stable
+ * bit3=wr_start(frame_start&frame_stable)  bit4=wr_fifo_wrfull
+ * ⚠️ 需重新编译位流；旧位流读回 0。 */
+#define MMT_DBG_FB_SB       (MMT_BASE + 0xE0)
+
+/* 0xE4：调试 —— ddr_wr_buffer 写 FSM 粘滞位（axi_clk 域）
+ * bit0=pos_sync bit1=state1 bit2=wr_req bit3=state2 bit4=awready bit5=rdusedw!=0
+ * bit6=wr_fifo_rden bit7=state3；bit23:16=wr_fifo_rdusedw[7:0]（当前值，非粘滞）
+ * ⚠️ 需重新编译位流；旧位流读回 0。 */
+#define MMT_DBG_FSM_SB      (MMT_BASE + 0xE4)
+
 /* ---- 只读：摄像头上游探针（2026-10-13 新增，task-19；判据见 docs\上板判据-摄像头上游探针.md）----
  * 用途：定位"像素卡在哪一段" —— I2C 没跑 / MIPI 时钟没来 / CSI RX 没解出像素。
  * ⚠️ 这批寄存器要**重新编译位流**（并且要 Lead 应用接线补丁）才有数；

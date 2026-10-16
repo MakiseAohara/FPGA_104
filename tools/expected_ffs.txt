@@ -1,0 +1,56 @@
+# expected_ffs.txt —— 应有清单（指挥官指令 #13 第五项 / #14 第五条）
+#
+# 语义：整机网表里【必须存在】且 .D 端【非常量】的关键 FF 全名。
+#   ① 缺任何一条 = 该触发器被整体删除
+#   ② 存在但 .D 是常量 = 被常量传播
+#   两者都算门禁不过（见 tools\check_expected.ps1）。
+#
+# 来源（两处交叉确认）：
+#   A. out\mmt.map.ice0.postsyn.v —— 整机 ice=0，写通道完好
+#   B. 厂商 2025.2 旧网表
+#      D:\FPGA\易灵思\工作区\07_官方demo工程\Ti60f225_sc431hai2hdmi_v1\outflow\ti60f225_oob.map.v
+#      Version: 2025.2.288.3.8。同族信号存在且 D 非常量：
+#        write_cnt[0..8] L24113+ (D=n1333[*])、burst_end_r L24219 (D=burst_add_en)、
+#        sync_r3 L23985 (D=sync_r2)、state[0]/[1] L24004/L27053 (D=n1256[*])、
+#        s_axi_awvalid L24181、s_axi_wvalid L24200、s_axi_wlast L24228
+#
+# 只收"写通道 + 握手 + 关键观测"。按指挥官要求收敛到 30 条以内。
+
+# ---- 顶层写通道握手 ----
+fb_awvalid~FF
+fb_wvalid~FF
+fb_wlast~FF
+
+# ---- frame_buffer 粘滞位与状态（0xE0 遥测 [8:0]）----
+dbg_fb_sb[0]~FF
+dbg_fb_sb[1]~FF
+dbg_fb_sb[2]~FF
+dbg_fb_sb[3]~FF
+dbg_fb_sb[4]~FF
+dbg_fb_sb[5]~FF
+dbg_fb_sb[6]~FF
+dbg_fb_sb[7]~FF
+dbg_fb_sb[8]~FF
+
+# ---- ddr_wr_buffer 写 FSM / 突发计数 / 同步链 ----
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[0]~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[4]~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[8]~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/burst_end_r~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/addr_add_en~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r0~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r1~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r2~FF
+checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r3~FF
+
+# ---- 写通路上游 ----
+checker0/frame_start~FF
+checker0/frame_stable~FF
+checker0/fifo_rst~FF
+checker0/u_vid_rx_align/u_frame_info_det/frame_end_r0~FF
+checker0/u_vid_rx_align/u_frame_info_det/vs_r0~FF
+
+# ---- 粘滞位遥测（0xE4）----
+dbg_fb_sb2[19]~FF
+dbg_fb_sb2[22]~FF
+dbg_fb_sb2[23]~FF

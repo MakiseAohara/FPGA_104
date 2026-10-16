@@ -248,12 +248,31 @@ localparam RD_FIFO_DEPTH  = 1024;
 
 localparam	MAX_HRES		= 12'd1920;
 localparam	MAX_VRES		= 12'd1080;
-localparam	HSP			= 8'd2;
-localparam	HBP			= 8'd88;
-localparam	HFP			= 8'd120;
-localparam	VSP			= 8'd2;
-localparam	VBP			= 8'd20;
-localparam	VFP			= 8'd20;
+// ★ 2026-10-15 退回已上板实测通过（显示器锁住、OSD 可见）的 150MHz 方案，标准 CEA-861 1080p60 时序。
+//   时钟：VCO = 25×2×60 = 3000MHz；vid_clk_dvi2 = 3000/40 = 75.0MHz（每拍 2 像素 ⇒ 像素时钟 150MHz）；
+//         hdmi_tx_slow_clk = 3000/20 = 150.0MHz；i_mipi_rx_pclk = 3000/60 = 50.0MHz；
+//         hdmi_tx_fast_clk = 3000/4 = 750MHz；TMDS 码率 = 150×10 = 1.500Gbps。
+//   水平：HFP/2 + HSP + 960 + HBP/2 = 44 + 22 + 960 + 74 = 1100 拍，×2 = 2200 像素（标准）
+//   垂直：VFP + VSP + 1080 + VBP = 4 + 5 + 1080 + 36 = 1125 行（标准）
+//   帧率：150e6 / (2200×1125) = 60.606 Hz
+//   ⚠ 已知代价：vid_clk_dvi2 → hdmi_tx_slow_clk（2px→1px 展开，约 L1188-1199）有 10 条 setup 负 slack，
+//     最差 -1.319ns（out\mmt.timing.rpt）；但上板实测 HDMI 通，暂时接受。
+//   （曾试过 140MHz 折中方案 HBP=72/HFP=44/VBP=33，已退回。）
+//   更早旧值：HSP=2/HBP=88/HFP=120/VSP=2/VBP=20/VFP=20 ⇒ 行 2132、帧 1122、58.53Hz、HS 仅 4 像素。
+//   frame_buffer 例化处（约 L754-761）的接法已回读核对：
+//     .H_FRONT_PORCH(HFP/2) .H_SYNC(HSP) .H_VALID(MAX_HRES/2) .H_BACK_PORCH(HBP/2)  —— 单位全是"拍"(=2 像素)
+//     .V_FRONT_PORCH(VFP) .V_SYNC(VSP) .V_VALID(MAX_VRES) .V_BACK_PORCH(VBP)        —— 单位是"行"
+//   旧值反验：2×(120/2 + 2 + 960 + 88/2)=2×1066=2132 ✓（与实测 2132 一致，故 HSP 单位=拍，HS=2×HSP 像素）。
+//   ⚠ 与任务描述不同：HSP 不除 2，但它本身就是"拍"数，HS 像素数 = 2×HSP；
+//     标准 HS=44 像素 ⇒ HSP=22（不是 44，写 44 会得到 88 像素 HS、行 2288 拍错）。
+//     同理 HFP 写像素数（/2 在接线处做）：前肩 88 像素 ⇒ HFP=88；后肩 148 像素 ⇒ HBP=148。
+//   HS 宽度 = 2×HSP = 44 像素（标准 44）✓；VS 宽度 = VSP = 5 行（标准 5）✓
+localparam	HSP			= 8'd22;	// 同步 44 像素 = 22 拍（不除 2 直接接 .H_SYNC）
+localparam	HBP			= 8'd148;	// 后肩 148 像素（接线处 /2 = 74 拍）
+localparam	HFP			= 8'd88;	// 前肩 88 像素（接线处 /2 = 44 拍）
+localparam	VSP			= 8'd5;		// 场同步 5 行（CEA-861 VIC16）
+localparam	VBP			= 8'd36;	// 场后肩 36 行（1125 行总数：4+5+1080+36）
+localparam	VFP			= 8'd4;		// 场前肩 4 行
 //===============================================================================
 //signal
 //===============================================================================
@@ -422,7 +441,7 @@ wire                              ci_rsp_ready;
 wire                              ci_cmd_ready;
 wire                              ci_rsp_valid;
 wire [31:0]                       ci_outputs_0;
-wire                              tml_cmd_int;      // 加速器中断（暂未接进 SoC userInterruptA）
+wire                              tml_cmd_int;      // 加速器完成中断 → u_soc.ci_cmd_int → userInterruptA → PLIC
 
 // ---- s2：TinyML 加速器 AXI 主口（32 位地址 / 128 位数据 / 8 位 ID）----
 wire                              tml_awvalid;
@@ -695,6 +714,8 @@ wire [1:0]  tp_mode;                     // 来自 mmt_soc_regs 0xC8[2:1]
 wire        tp_vs, tp_hs, tp_de;
 wire [31:0] tp_vin;
 wire [15:0] vid_lines_per_frame, vid_pixels_per_line, vid_frame_cnt;
+wire [31:0] dbg_fb_sb;   // 调试：frame_buffer 写侧粘滞位（checker0.test_wdata → 0xE0）
+wire [31:0] dbg_fb_sb2;  // 调试：ddr_wr_buffer 写 FSM 粘滞位（checker0.test_rdata → 0xE4）
 
 wire        mipi_vs_sel  = tp_en ? tp_vs : w_mipi_rx_vs;
 wire        mipi_hs_sel  = tp_en ? tp_hs : w_mipi_rx_hs;
@@ -735,6 +756,8 @@ mmt_test_pattern #(
 )checker0(
        .axi_clk		(core_clk 	        ),
        .rst_n			(vid_rst_n   ),
+       .test_wdata (dbg_fb_sb),
+       .test_rdata (dbg_fb_sb2),
 
 /*i*/.i_clk			(i_mipi_rx_pclk      ),
 /*i*/.i_vs			(mipi_vs_sel	),
@@ -1178,8 +1201,8 @@ reg [26:0] dly_cnt = 'd0;
 //   ⇒ 整条视频链（frame_buffer / debayer / …）被永久按在复位态
 //   ⇒ 综合器据此把帧缓冲**写通路折成常量**（实测 map.rpt 里 fb_awvalid/fb_wvalid/
 //     fb_wlast/state[1:0] 全是 (optimized to 0)、ddr_wr_buffer_inst 的 RAM = 0）。
-//   我们没有面板要等，所以去掉这个门控：释放 w_arstn 后由 vid_clk_dvi2（70MHz）自己数，
-//   约 2^26/70MHz ≈ 0.96 s 后释放 vid_rst_n。像素域的复位仍由 CSI RX 自己的
+//   我们没有面板要等，所以去掉这个门控：释放 w_arstn 后由 vid_clk_dvi2（75MHz，150MHz 方案）自己数，
+//   约 2^26/75MHz = 67108864/75e6 ≈ 0.895 s 后释放 vid_rst_n。像素域的复位仍由 CSI RX 自己的
 //   reset_pixel_n（i_mipi_rx_pclk 域同步复位）负责，不受影响。
 always @( posedge vid_clk_dvi2 or negedge w_arstn )
 begin
@@ -1307,6 +1330,31 @@ wire [9:0] tmds_data1;
 wire [9:0] tmds_data2;
 wire [9:0] tmds_clk ;
 
+//==========================================================================
+// ★ 2026-10-15 修复：dvi_encoder 的这几个输入在顶层**从来没有被驱动**
+//------------------------------------------------------------------------
+// 证据（Efinity 自己的日志，不是推断）：
+//   out\mmt.warn.log:2426-2431 六条 VDB-1002「does not have a driver」：
+//     video_format / audio_L / audio_R / audio_valid / audio_samp_freq / audio_samp_word_len
+//   out\mmt.warn.log:2359 VERI-1330：`video_format` 实际位宽 1，端口要 2 位
+//     ⇒ 说明它是**隐式 1 位线**，在网表里没有驱动源。
+//
+// 为什么这会导致"显示器无信号"：
+//   `i_video_format` 决定编码器按 RGB(00) / YCbCr 4:2:2(01) / YCbCr 4:4:4(10) 编码。
+//   悬空 ⇒ 取值不确定 ⇒ 编码器可能根本不按 RGB 输出 ⇒ 显示器解不出有效 TMDS ⇒ 锁不住。
+//
+// 这里显式驱动成"RGB + 无音频"。位宽按端口要求给，避免再出 VERI-1330。
+// 顺带说明：厂商参考顶层 ti60f225_oob_top.v:969-977 这几个信号**同样是悬空的**，
+//   属于厂商遗留缺陷（它的 demo 位流也许因此也出不了图）；我们把它修掉。
+//==========================================================================
+wire [1:0]  video_format          = 2'b00;   // 00 = RGB
+wire [23:0] audio_L               = 24'd0;
+wire [23:0] audio_R               = 24'd0;
+wire        audio_valid           = 1'b0;    // 无音频输入
+wire [3:0]  audio_samp_freq       = 4'd0;
+wire [1:0]  audio_samp_word_len   = 2'd0;    // 与 audio_max_word_length 拼成 4 位给端口
+wire [1:0]  audio_max_word_length = 2'd0;
+
 
 dvi_encoder dvi_encoder_m0
 (
@@ -1315,8 +1363,18 @@ dvi_encoder dvi_encoder_m0
 	.i_bdata      		(osd_b ),   // ★ 改成接 OSD 叠加后的像素（命名 r/b 反，
 	.i_gdata     		(osd_g ),   //    所以 bdata 接 osd_b）
 	.i_rdata       		(osd_r ),
-	.i_hs         		(osd_hs ),  // OSD 把 hs/vs/de 打拍对齐后一起输出
-	.i_vs         		(osd_vs ),
+	.i_hs         		(osd_hs ),  // ★ 2026-10-15：**不交叉**——已用明文 dvi_encoder 证实这是对的
+	.i_vs         		(osd_vs ),  //   证据（板卡资料包 02_Ti60F225_hdmi_demo 里有一份**明文**的
+	                                //   source/hdmi_src/dvi_tx/dvi_encoder.v）：
+	                                //     :324  encode encb (              // 蓝通道编码器
+	                                //     :329    .c0 (ram_hs_r[...]),    // i_hs → c0
+	                                //     :330    .c1 (ram_vs_r[...])     // i_vs → c1
+	                                //   而 TMDS/DVI 里蓝通道控制位 {c1,c0} = {VSYNC,HSYNC}
+	                                //   ⇒ 端口名就是字面意思：i_hs 要接 HSYNC、i_vs 要接 VSYNC。
+	                                //   厂商 10_sc431hai2hdmi_v1 顶层 :966-967 的交叉是 bug：
+	                                //   同一 demo 的 v4/v5/v6 已经改回直连；02 号 hdmi_demo、
+	                                //   03_hdmi_tx_demo、09_hdmi2dsi 也都是直连。
+	                                //   2026-10-15 夜间曾一度照抄厂商改成交叉，属于引入回归，已撤回。
 	.i_de            	(osd_de ),
   .video_format     (video_format), //// 00 = RGB, 01 = YCbCr 4:2:2, 10 = YCbCr 4:4:4
   .video_VIC        (0),
@@ -1324,7 +1382,7 @@ dvi_encoder dvi_encoder_m0
   .audio_R			    (audio_R),
   .audio_valid		  (audio_valid),
   .audio_N                (6144),     //(20'h01880),//     
-  .audio_CTS              (148500),      //(20'h28488),//      
+  .audio_CTS              (150000),      // 像素时钟实为 150MHz（USER_PLL VCO 3000MHz ÷20）；CTS=f_pix/1000（N=6144 对应 48kHz: 128·fs=N·f_pix/CTS ⇒ 与 f_pix 成正比）；原 148500 对应 148.5MHz
   .audio_sample_frequency (audio_samp_freq),    //(3'b000),// 
   .audio_word_length      ({audio_samp_word_len,audio_max_word_length}),//(4'b1011),//
 
@@ -1641,6 +1699,13 @@ mmt_soc_subsystem u_soc (
     .ci_inputs_1    (ci_inputs_1   ),
     .ci_rsp_ready   (ci_rsp_ready  ),
     .ci_cmd_ready   (ci_cmd_ready  ),
+    // ★ 2026-10-15 修复：加速器完成中断必须接进 SoC，否则推理调用死等。
+    //   证据（官方 tinyml_lib.a / conv.o 反汇编）：
+    //     conv_drv  67c: lw x27,0(x18) ; 680: beqz x27,67c   ← 自旋等 .LANCHOR0[hart]
+    //     conv_intr  44: sw x31,0(x30)                        ← 唯一置位处（ISR 内）
+    //   官方 tinyml_soc.v:473 同样是 assign userInterruptA = cpu_customInstruction_cmd_int;
+    //   同域：加速器 cmd_int 与 SoC clk 都是 core_clk，无需 CDC。
+    .ci_cmd_int     (tml_cmd_int   ),
     .ci_rsp_valid   (ci_rsp_valid  ),
     .ci_outputs_0   (ci_outputs_0  ),
 
@@ -1711,6 +1776,8 @@ mmt_soc_subsystem u_soc (
     .test_pattern_mode (tp_mode),
     .vid_lines_per_frame (vid_lines_per_frame),
     .vid_pixels_per_line (vid_pixels_per_line),
+    .dbg_fb_sb           (dbg_fb_sb),
+    .dbg_fb_sb2          (dbg_fb_sb2),
     .vid_frame_cnt       (vid_frame_cnt),
     // ---- ★ task-19：摄像头上游探针读口（0x80..0xA4）----
     .cam_probe_raddr (cam_probe_raddr),

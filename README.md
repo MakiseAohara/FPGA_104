@@ -1,350 +1,434 @@
-# FPGA_104 —— 2026 全国大学生嵌入式芯片与系统设计竞赛
+# 赛题三「多模态AI智能终端」—— 工程骨架
 
-**FPGA 创新设计赛道 · 易灵思（Efinix）企业赛道 · 赛题三「多模态 AI 智能终端」**
-
-> 这份 README 是给**没用过 Efinity 的人**写的：从打开工程到烧进板子，照着做即可。
-> 每一步都写了"你应该看到什么"，看到的不一样就停下来查第 9 节。
+> 建立时间：2026-09-20　|　工具：Efinity 2026.1.132（`D:\Efinity\2026.1`）
+> 器件：Titanium **Ti60F225**（225-ball FBGA），定时模型 I3，总容量 **60,800 XLR / 256 BRAM / 160 DSP**
 
 ---
 
-## 0. 先读这一条：这个仓库**不能直接编译**
+## 〇、从这里开始（给接手的人）
 
-| | 内容 |
-|---|---|
-| **仓库里有的** | 我们自己写的代码：`rtl/mmt/`（顶层与各子系统）、`sw/`（RISC-V 固件）、`sim/`（仿真）、`constr/`（时序约束）、`tools/`、工程描述文件 `mmt.xml` / `mmt.peri.xml` |
-| **仓库里没有的** | **厂商 IP**（`ip/` 目录：SoC、AXI 互联、CSI 摄像头接收、TinyML 加速器）与**厂商 Demo 的 RTL**（DDR3 控制器、HDMI 编码、摄像头 I2C、debayer、帧缓冲等） |
+### 这是什么
 
-原因：这些是 Efinix 的授权材料，不适合放公开仓库（详见第 11 节）。
+2026 全国大学生嵌入式芯片与系统设计竞赛 · FPGA 创新设计赛道 · 易灵思企业赛道，**赛题三「多模态 AI 智能终端」**。
+硬件是 **Ti60F225** 开发板（Elitestek/易灵思 Ti60F225I3-V4），外挂一个 SC431HAI 摄像头（MIPI CSI-2）
+和 SHT30 温湿度、MLX90640 红外阵列两个 I2C 传感器，输出到 HDMI。
 
-**所以：想真正编译，请用队友手里的完整工程目录**（就是 `D:\FPGA\mmt` 整个目录），或者按第 2 节把厂商文件补回来。
+**当前形态**：一条完整的「摄像头 → MIPI CSI-2 → 去马赛克 → DDR3 帧缓存 → 缩放 → 叠加 OSD → HDMI」图像链路，
+加上自己写的 I2C 分时复用控制器（带 SHT30 / MLX90640 驱动）、帧差法运动检测、
+60/25/15 加权融合决策、报警（LED + 蜂鸣器），以及一颗 **Sapphire RISC-V 软核**跑决策固件。
 
----
+### 需要装什么
 
-## 1. 你需要准备什么
-
-| 需要 | 版本 / 说明 | 从哪拿 |
+| 工具 | 位置（本机现状） | 用途 |
 |---|---|---|
-| **Efinity** | **2026.1**（我们实际用的是 2026.1.132） | elitestek 官网，免费下载 |
-| Efinity License | 免费申请，装完按向导导入 | 同上 |
-| **开发板** | Efinix **Ti60F225I3-V4** DemoBoard | 淘宝「娅妮电子」（竞赛官方渠道） |
-| 下载器 | **不需要**！板载 FT4232HL，"客户无需外接下载器" | — |
-| 电源 | **不需要**！一根 **Type-C** 线同时供电 + 下载 + 串口 | — |
-| RISC-V 工具链 | Efinity 自带（`riscv-none-elf-gcc 15.2.0`），不用另装 | Efinity 安装目录下 |
-| 显示器 | 带 **HDMI 输入**（我们走 HDMI 输出，不用 MIPI 屏） | 自备 |
-| 串口终端 | 任意（PuTTY / MobaXterm / VSCode 串口插件），**115200 8N1** | — |
+| Efinity 2026.1 | `D:\Efinity\2026.1` | 综合 / 布局布线 / IDE |
+| iverilog 11.0 | `D:\iverilog`（micromamba 装的） | RTL 仿真 |
+| xpack riscv-none-elf-gcc 15.2 | `D:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1` | 编 RISC-V 固件 |
+| Python 3.11+ | 系统自带 | 跑校验脚本 |
 
-传感器（温湿度 SHT30、红外 MLX90640）、蜂鸣器、QSE 转 2.54 排针子卡、杜邦线：**按需再买**。
+iverilog 的 PATH 要同时有 `D:\iverilog\Library\bin` 和 `D:\iverilog\Library\mingw-w64\bin`，少一条会报含糊的 DLL 错误。
+
+### 三条命令
+
+```powershell
+# 1) RTL 仿真回归（4 个 testbench，84 项检查）
+cd D:\FPGA\mmt ; powershell -File sim\run_all.ps1
+
+# 2) 综合 + 布局布线（含引脚约束）
+powershell -File 工作区\06_Efinity验证\run_full_flow.ps1     # 注意路径在 D:\FPGA\易灵思\ 下
+
+# 3) 编 RISC-V 固件，并装进 SoC 的片内 RAM
+cd sw ; powershell -File build_sw.ps1 ; powershell -File hex2soc.ps1 -Install
+```
+
+另有裸机固件的**指令级仿真**（没有板子也能真正跑固件）：
+```powershell
+cd sw ; powershell -File run_rv32_tests.ps1
+```
+
+### 目录
+
+```
+mmt\
+├── mmt.xml            主工程（Efinity 用；顶层 mmt_top）
+├── mmt.peri.xml       引脚约束（Interface Designer 的状态文件）
+├── open_project.cmd   双击这个用 IDE 打开工程
+├── constr\            .sdc 时序约束 + 厂商原始的 peri/interface
+├── rtl\               RTL。厂商复用的在子目录里，我们新写的全在 rtl\mmt\
+│   └── mmt\           sensors\ algo\ osd\ alarm\ soc\ video\ common\
+├── ip\                csi_rx_controller（MIPI CSI-2 RX）+ sapphire_soc（RISC-V）
+├── sw\                RISC-V 固件 + 裸机测试 + 外部库（Melexis MLX90640）
+├── sim\               iverilog 测试平台 + 一键回归
+├── _hist\             开发过程中建过的几个子工程 XML（留档，不参与构建）
+└── README.md          本文件
+```
+
+### 现在做到哪了 / 还差什么
+
+**已验证**（不是"能编译"，是有实测数据）：
+- RTL 仿真 **84 项检查全绿**（I2C 主机 39 / hub 9 / SHT30 15 / MLX90640 21）
+- 综合 + 布局布线通过：**20,833 XLR / 60,800（34.26%）**、140 / 256 BRAM、12 / 160 DSP
+- 固件编译通过并已装进 SoC 片内 RAM；软硬件地址全部按生成网表核实过
+- 厂商 Melexis MLX90640 库**在 RISC-V 上真跑通**，27 项参数与独立 Python 重算逐位一致
+- 引脚约束打通，只剩 8 个新增引脚待定（板子上 J7 扩展口的 3.3V 脚）
+
+**还没做**：
+- **没上过板子**（板子未到），所有结论都止于仿真/综合层面
+- TinyML 加速器：已取得官方平台并确认资源装得下，但 RTL 还没接进设计
+- 逐点温度换算还没进固件（库已验证可跑）
+
+细节和踩过的坑都写在 `D:\FPGA\易灵思\协作日志.md`（约 1900 行），以及本文件下半部分。
 
 ---
 
-## 2. 把工程凑齐（含厂商 IP）
+## 一、这个工程从哪来
 
-任选一条：
+底子取**板卡包 10 号 demo**（`10_Ti60f225_sc431hai2hdmi_demo`）——它是厂商已实测跑通的
+「SC431HAI 摄像头 → MIPI CSI-2 → DDR3 帧缓存 → HDMI 输出」链路，**干净构建实测 16,830 XLR / 138 BRAM**（2026.1 复现，见 `协作日志.md`）。
 
-1. **最省事**：从队友那里拷**整个 `mmt` 目录**（含 `ip/` 和厂商 RTL），跳过本节。
-2. **从官方资料包补**：用 Ti60F225 DemoBoard 资料包 + MIPI CSI/DSI IP 包，把缺失文件放回 `ip/` 与 `rtl/` 对应位置（缺哪些见 `docs/` 里的说明）。
-3. **自己用 Efinity 重新生成 IP**：Sapphire SoC / AXI Interconnect / CSI RX Controller 都有图形化生成器，参数记录在 `docs/` 里。
-
-> ⚠️ **别乱换 IP 版本**：我们用的是 **CSI RX IP 5.15**（Efinity 2026.1 生成）。厂商 Demo 里那份是 5.6，两者行为不同（我们正在排查的一个问题与此有关）。换版本前先看 `docs/帧缓冲写通路根因-3.md`。
+我们不重造这条链路，只做两件事：
+1. **嫁接** Sapphire RISC-V 软核 + TinyML 加速器（从 08 号 soc demo / 官方 TinyML 平台来）
+2. **新增** 多传感器、算法、OSD、报警这些赛题要求的模块
 
 ---
 
-## 3. 在 Efinity 里打开工程（图形界面）
-
-1. 启动 **Efinity**。
-2. 菜单 **File → Open Project**，选 **`mmt.xml`**。
-   - ⚠️ 选 **`mmt.xml`**，**不是** `mmt.peri.xml`（后者只是引脚配置）。
-3. 左侧出现 design files 列表，说明打开成功。
-   - 如果弹出 "missing file / IP out of date" 之类的警告 → 说明厂商 IP 没放齐，回第 2 节。
-4. 上方是**流程按钮**，我们的顺序是：
+## 二、目录结构
 
 ```
-Synthesis（综合） → Interface Designer（引脚） → Place & Route（布局布线） → Bitstream（生成烧录文件）
+mmt\
+├── rtl\                       复用的 66 个源文件（来自 10 号 demo，路径与内容原样未改）
+│   ├── ti60f225_oob_top.v     ★ 原顶层（34 KB 单体），最终会被 mmt\mmt_top.v 取代
+│   ├── ddr3_controller\       DDR3 控制器（AXI4 接口）
+│   ├── frame_buffer\          三缓冲帧缓存 + DDR 读写缓冲
+│   ├── debayer\               RAW → RGB
+│   ├── cam_i2c_ctrl\          摄像头 I2C 寄存器配置（含 i2c_master）
+│   ├── dvi_tx\                HDMI TMDS 编码（dvi_encoder）
+│   ├── mipi_config\           MIPI 屏参数
+│   └── mmt\                   ★★ 【我们新写】
+│       ├── sensors\           MLX90640 / SHT30 驱动 + I2C 分时复用控制器
+│       ├── algo\              帧差法运动检测、60/25/15 融合决策
+│       ├── osd\               显示叠加（热力图小窗 + 环境参数文字 + 报警红框）
+│       └── alarm\             LED 闪烁 + 蜂鸣器
+├── ip\
+│   ├── csi_rx_controller\     MIPI CSI-2 RX IP（复用）
+│   └── sapphire_soc\          Sapphire RISC-V 软核（efx_soc 3.4.0，已开 CustomInstruction、片内 RAM 32KB）
+├── constr\                    ti60f225_oob.sdc（时序）+ 厂商原始 peri/interface
+├── sw\                        RISC-V 固件（融合决策 + 外设驱动）+ 裸机测试 + Melexis 库
+├── sim\                       iverilog 测试平台 + 一键回归 run_all.ps1
+├── _hist\                     开发中建过的几个子工程 XML（留档，不参与构建）
+└── out\ work_syn\ work_pnr\   构建产物（可再生，已从交付包里清掉）
 ```
 
-**每一步的预期结果**（我们实测的数字，供你对照）：
+**源文件清单的来源**：`rtl\` 下 66 个厂商文件是从原工程 XML 的 `<efx:design_file>` 列表精确提取的，**不是整目录拷贝**——原 `rtl\` 目录 193 MB 里有 36 个属于其他 demo 的死代码 + 大量仿真波形垃圾（`wlf*`/`vcd`），实际有效源码只有 1.4 MB。
 
-| 步骤 | 预期 |
+> `ip\dsi_tx\`（26 MB）已删除：本设计不用 MIPI 屏，输出走 HDMI，DSI TX 已从顶层摘掉。
+
+---
+
+## 三、当前实测资源基线（Efinity 2026.1.132，干净构建）
+
+| 指标 | 占用 |
 |---|---|
-| Synthesis | 成功，约 4 分钟；占用约 **4.3 万 / 6.08 万**逻辑单元 |
-| Place & Route | 成功，约 5 分钟；占用 **235 / 256** 块 RAM、**24 / 160** 个乘法器 |
-| Bitstream | 成功，产出 `out/mmt.hex`（约 **2.8 MB 的文本文件**，实际烧录数据约 **955 KB**） |
+| XLR | **16,830 / 60,800 (27.68%)** |
+| BRAM（内存块） | **138 / 256 (53.91%)** |
+| DSP | 0 / 160 |
+| 全局时钟 | 15 / 32 |
 
-> ⚠️ **Interface Designer 有一个已知坑**：`mmt.peri.xml` 里带着厂商 Demo 遗留的 5 条 **DSI 屏**引脚（`mipi_dp_clk_RST` 等）。我们已经删掉了 DSI 屏电路，所以这 5 条必须去掉，否则 PnR 会报错：
-> `ERROR : Required pin mipi_dp_clk_RST is not found`
-> **命令行流程会自动帮你去掉**（见下节）；用图形界面的话，在 Interface Designer 里手动删掉这 5 条。
+> 注：厂商随包那份报告写的 22,762 XLR / 213 BRAM 是**带自动调试插桩**的构建（PnR 用的是 `ti60f225_oob.dbg.vdb`），不是发布基线。
+
+### ★ 已识别的最大可砍项：DSI TX
+`inst_efx_dsi_tx` 与 HDMI 通路（`dvi_encoder_m0`）是**两路并列且互不依赖**的显示输出 ——
+`dvi_encoder_m0` 的输入是 `hdmi_tx_rdata/gdata/bdata/hs/vs/de`，**完全不经过 dsi_tx**。
+赛题只要求 "HDMI/LCD 显示"（二选一即可），所以：
+
+```
+砍掉 inst_efx_dsi_tx  →  省 5,089 XLR + 76 BRAM
+预计：XLR 16,830 → ≈11,741　　BRAM 138 → 62
+```
+
+BRAM 从 138 降到 62 尤其关键 —— **BRAM 才是这个设计里最紧的资源**（已用 54%，而 TinyML 的权重和激活缓冲全吃 BRAM）。
 
 ---
 
-## 4. 命令行编译（推荐，我们一直用这条）
+## 四、赛题要求对照（任务1 / 任务2 / 任务3）
 
-比点按钮更省事、结果可复现。**一条命令走完四步**（综合 → Interface Designer → 自动清理陈旧引脚 → 带引脚约束的布局布线）：
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\易灵思\工作区\06_Efinity验证\run_full_flow.ps1"
-```
-
-跑完会打印占用情况，以及**未分配引脚列表 —— 正常情况下应该是 `none`**（应为 0 个）。
-
-**额外生成烧录文件**（`out/mmt.hex`）：
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\易灵思\工作区\06_Efinity验证\build.ps1" `
-  -Xml "D:\FPGA\mmt\mmt.xml" -Top "mmt_top" -Name "mmt" -Bitstream
-```
-
-**只跑仿真回归**（84 项检查，不需要板子）：
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sim\run_all.ps1"
-```
-
-三条脚本的作用：
-
-| 脚本 | 作用 |
-|---|---|
-| `run_full_flow.ps1` | 完整编译：综合 → 引脚 → 清理 → 布局布线 |
-| `build.ps1` | 综合 + 布局布线（可选 `-Bitstream` 出烧录文件、`-SkipSyn` 跳过综合） |
-| `filter_interface.ps1` | 被上面两个自动调用：删掉 peri 里陈旧/冲突的引脚 |
-
----
-
-## 5. 烧到板子上
-
-### 5.1 两种模式（先搞清楚区别）
-
-| 模式 | 效果 | 什么时候用 |
-|---|---|---|
-| **JTAG** | 烧到芯片内部 SRAM，**掉电就没了** | **第一次 bring-up 用这个**：快、不写 flash，改一版试一版 |
-| **SPI Active** | 烧到板上 flash，**掉电保留**，上电自动加载 | 稳定之后、给评委演示时用 |
-
-### 5.2 ⚠️ 前置条件（四条缺一不可 —— 2026-10-12 实测踩全了）
-
-#### 5.2.1 FTDI 驱动版本必须**统一**（否则蓝屏 `0x000000FC`）
-板载 FT4232H 有"总线"和"串口"两条通道。若 Windows 给它们装了**不同年代**的驱动（本例：`ftdibus` 2024 版 vs `ftdiport` 只有 2017 版），一访问 FTDI 就 **BSOD 0x000000FC**（我们实测撞了两次）。
-**修法**：删掉全部旧包，只装 FTDI 官网 CDM 包（它同时含 `ftdibus.inf` + `ftdiport.inf`，同版本）：
-```
-pnputil /delete-driver oem114.inf /uninstall
-pnputil /delete-driver oem118.inf /uninstall
-pnputil /delete-driver oem119.inf /uninstall
-pnputil /add-driver D:\FTDI\ftdibus.inf  /install      # CDM-v2.12.36.4-WHQL-Certified
-pnputil /add-driver D:\FTDI\ftdiport.inf /install
-```
-判据：`USB Serial Converter A/B/C/D` 与 `USB Serial Port COMxx` 的驱动版本**都是 2.12.36.4**。
-> 同类问题参考：<https://bigpig.ongridea.com/gha5jb>
-
-#### 5.2.2 必须打开 `EFX_HIFTDI_ENABLE=1`
-Efinity 默认只用 pyftdi(libusb) 后端，而板载 FT4232H 挂在 FTDI 驱动上 ⇒ 报 `No backend available` / `No Board Profile Selected`。
-**D2XX 后端藏在开关后面**（源码依据 `pgm\bin\efx_pgm\usb_resolver.py:712`）：
-```powershell
-$env:EFX_HIFTDI_ENABLE = "1"
-```
-打开后能枚举到 `Usb Target: Quad RS232-HS, ID: 0403:6011` + `hiftdi://0x0403:0x6011/0..3`（**index 1 = JTAG**）。
-
-#### 5.2.3 必须给 `efx_dbg\jcf.py` 打补丁（Efinity 自身 bug）
-症状：D2XX 后端下**任何**模式（连只读 `read_flash`）都在 TAP 检测处抛
-`TypeError: JtagEngine.configure() takes 2 positional arguments but 3 were given`（`efx_dbg\jcf.py:795`）。
-原因：hiftdi 的底层 JTAG 引擎 `configure()` 只收 `(url)`，调用方无条件多传了 `init`。
-**补丁**（两处 `else:` 分支；原文件先备份）：
-```python
-        else:
-            try:
-                _np = len(__import__('inspect').signature(
-                    self._engine_provider.configure).parameters)
-            except Exception:
-                _np = 2
-            if _np >= 2:
-                self._engine_provider.configure(url, init)
-            else:
-                self._engine_provider.configure(url)
-```
-补完自检：`python -m py_compile jcf.py` → 退出码 0。
-
-#### 5.2.4 必须指定板级 profile
-`-b "Generic Board Profile Using FT4232H"`（对应 `pgm\bin\efx_pgm\efx_hw_common\boards\generic_ft4232h.json`；VID 0x0403 / PID 0x6011）。该 profile 定义 **通道 A = SPI、通道 B = JTAG（TCK/TDI/TDO/TMS）**。
-
----
-
-### 5.3 实测可用的烧录命令（命令行，推荐）
-
-```powershell
-$efi = "D:\Efinity\2026.1"
-$env:EFINITY_HOME = ($efi -replace '\\','/')
-$env:EFINITY_USER_DIR = "C:/Users/<你>/.efinity"
-$env:EFINITY_USER_DIR_INI = "$env:LOCALAPPDATA\efinity\user_dir.ini"
-$env:EFXPGM_HOME="$efi\pgm"; $env:EFXDBG_HOME="$efi\debugger"; $env:EFXSVF_HOME="$efi\debugger\svf_player"
-$env:PYTHONHOME="$efi\python311"; $env:PYTHONNOUSERSITE="1"
-$env:PYTHONPATH="$efi\pgm\bin;$efi\debugger\bin"
-$env:PATH="$efi\bin;$efi\python311\bin;$efi\scripts;"+$env:PATH
-$env:EFX_HIFTDI_ENABLE = "1"
-
-# JTAG 烧 SRAM（掉电即失）—— 注意必须是 .bit，传 .hex 会报格式错
-& "$efi\bin\python3.bat" "$efi\pgm\bin\efx_pgm\ftdi_program.py" `
-  "D:\FPGA\mmt\out\mmt.bit" -m jtag -b "Generic Board Profile Using FT4232H"
-```
-
-**成功判据（实测输出）**：
-```
-Connecting to JTAG_TAP: efx_ti
-jtag programming started!
-Programming 'D:\FPGA\mmt\out\mmt.bit' via JTAG at freq 6.0 MHz
-Device ID read from JTAG: 0x10660A79          ← Ti60F225
-... finished with JTAG programming
-```
-
-### 5.4 图形界面烧录
-Efinity Programmer 与命令行**用同一套后端**，所以 5.2 的四条前置条件同样必须满足（否则只会看到 `No Board Profile Selected`）。GUI 里同样是 器件 Ti60F225 → 模式 JTAG → 文件 `.bit`。
-
-### 5.5 串口与判据（不带屏幕也能判断设计活着）
-
-- **端口：`COM19`**（115200 8N1；实测 COM17/18/20 无数据）
-- **预期输出**（当前版本遥测）：
-```
-T=0.0C RH=0.0% IR=0.0C score=0.0
-ALM=0 AUTH=0 EVT=0 ST=0x00000000 thr=154 hr=0 auth22-6
-[WR] AW=0(d=0) W=0(d=0) st=0x00 FRM=367(d=11) [FS] raw=0x00000000 vis_bit=0x00 ... [VW] vis=0x00
-[CAM] SCL=..(d=..) CK=..(d=..) PCLK=..(d=..) DE=..(d=..) HS=..(d=..) VS=..(d=..) st=0x.... wc=..(d=..) link=0x........
-```
-- **怎么读**：`[WR]` 的 `AW/W` 是**写通路握手累计数**（必须持续增长）；`[CAM]` 每个 `d=` 分别是 I2C / 字节时钟 / 像素时钟 / `de/hs/vs` 的**增量**（哪个恒 0 就是哪一段没动）；`link` 低 4 位非 0 = 探针确实进了这版位流。
-- LED：不报警时 `led[0]` 闪（≈1.5Hz）= **DDR3 校准完成**；报警时两灯同相 2Hz。靠近 USB 口那个不规则闪的是 FT4232 串口活动灯，**忽略**。
-
-### 5.6 ⚠️ 改了固件必须重新"装进 SoC"，否则烧的还是旧固件
-
-固件不是靠 flash 里的文件生效，而是**烧进 SoC 的片内 RAM 初始化**（4 个 `$readmemb` symbol 文件）。改了 `sw\` 之后**必须**：
-```powershell
-powershell -File D:\FPGA\mmt\sw\build_sw.ps1            # 编译固件
-powershell -File D:\FPGA\mmt\sw\hex2soc.ps1 -Install    # 转 4 个 RAM init 文件并装进 IP
-```
-再重编位流。`hex2soc.ps1` 会打印 `round-trip verify : OK`。**不跑这一步，板上跑的还是上一版固件**（这个坑我们踩过）。
-
-### 5.7 flash 持久化烧录：暂未打通（现状与原因）
-
-| 方式 | 结果 | 原因 |
-|---|---|---|
-| `-m jtag`（SRAM） | ✅ **通** | JTAG 直配 |
-| `-m active`（直连 SPI 通道 A） | ❌ `Unknown error trying to read flash device` | 板子的 flash 不直连 FT4232 通道 A（该 profile 的 SPI 引脚映射对不上）|
-| `-m jtag_bridge`（厂商默认的 flash 编程） | ❌ `NotImplementedError`（`efx_hw_common\manager.py:269`）| **hiftdi(D2XX) 后端未实现** JTAG Bridge |
-
-**下一步方案**：用 Zadig 把 FT4232H 的 **JTAG 通道（通道 B / interface 1）绑成 libusbK/WinUSB**，改用 Efinity 默认的 pyftdi(libusb) 后端（此时**不要**设 `EFX_HIFTDI_ENABLE`），再试 `-m active` / `-m jtag_bridge`。这是厂商文档《炫览下载器说明及驱动安装》方法一描述的官方路径；属换驱动操作，动手前先建系统还原点。
-**在此之前**：上板验证走 5.3 的 SRAM 烧录（每次上电后烧一次，约 20 秒）。
-
-### 5.8 用户镜像（程序 + AI 模型）放着不动
-用户镜像仍按原约定放 flash **0x380000**，布局自检：
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "D:\FPGA\mmt\sw\ddr\verify_flash_layout.ps1"
-```
-（实测：位流 0x0–0xE9380、镜像 0x380000–0x3CA68B、不重叠不越界、8MB flash 余 4.3MB；PASS 24 / FAIL 0 / WARN 2。）
-> 合并单文件的工具 `multi_image_merger.py` 读我们的位流会报 `incorrectly formatted HEX file`（位流头有 9 行是"2 字节挤一行"，路径中文被转义），所以走**分两次烧**，或等 5.7 打通后再说。
-
----
-
-## 6. 上板 bring-up 检查清单（按顺序做，出问题好定位）
-
-**每一步先看"预期现象"，不对就停在那一步排查，不要往下走。**
-
-| # | 做什么 | 预期现象 | 不对时先查 |
+| 任务 | 要求 | 本工程对应 | 状态 |
 |---|---|---|---|
-| 1 | 插 Type-C 线 | 板子上电、电脑识别出串口 | 换根线 / 换 USB 口 |
-| 2 | 用 **JTAG** 模式烧位流 | Programmer 进度 100% | 器件型号是否选 Ti60F225 |
-| 3 | 看 LED | 一个灯在闪（心跳） | 时钟没起来 / 复位没释放 |
-| 4 | 打开串口 115200 | 看到 RISC-V 打印信息 | 串口脚分配（第 7 节第 4 条） |
-| 5 | 接 HDMI 显示器 | 屏幕出画面（带 OSD 叠加） | HDMI 线 / 显示器输入源 |
-| 6 | 接摄像头（22-pin FPC，插 **sensor** 那个座） | 屏幕出现摄像头画面 | 见第 7 节第 1 条（**已知问题**） |
-| 7 | 接温湿度 / 红外传感器（I2C） | 串口打印温湿度、热成像数据 | 引脚是我们自选的，照 `mmt.peri.xml` 接 |
-| 8 | 触发报警条件 | 蜂鸣器响 + LED 闪 | 蜂鸣器要**有源 3.3V** |
-
-**目前没买的**（不影响第 1–6 步）：温湿度、红外、蜂鸣器、QSE 转接子卡、杜邦线。
-
----
-
-## 7. 已知问题（重要，先看再动手）
-
-1. **摄像头画面曾进不了内存（已用变通办法绕过，待上板验证）**
-   帧缓冲的写通路在综合时被工具整段当成"没用"删掉了（写 FIFO 的 13 块 RAM 一块都没推断）。已用 8 个实验定位：给写通道的**输出寄存器**加 `(* preserve, syn_keep = 1 *)` 可让写通路复活（`ddr_wr_buffer.v` 的 `awvalid`/`wvalid`/`state`/`wr_req`）。
-   - 代价：写 FIFO（13 块）+ CSI 摄像头接收（32 块）一起回来了，RAM 从 222 涨到 **263 > 256 装不下**，所以同时做了两处削减：`RD_FIFO_DEPTH 1024→512`（−6）、**暂时关掉 TinyML 片上缓存**（−22）→ **235/256**。
-   - 副作用：AI 推理变慢（权重每次从 DDR 读）。后续用"SoC 片内 RAM 32KB→16KB"（−16）换回来后可以把缓存重新打开。
-   - 现象与判据见 `rtl/frame_buffer/ddr_wr_buffer.v` 里的注释；上板若屏幕**不随摄像头变化**即为该问题复发。
-2. **视频复位已修但要知道**：删掉 DSI 屏电路后，一段"等屏幕初始化完成"的逻辑会永远等不到 → 视频部分永远不出复位。**已修**（见 `rtl/mmt/mmt_top.v` 里 `dly_cnt` 的注释）。不修的话 HDMI 就是黑屏。
-3. **RAM 余量只剩 13%**：256 块内存用了 222 块。再加功能可能装不下。削减方案见 `docs/BRAM资源优化方案.md`。
-4. **引脚是我们自己选的**：UART、蜂鸣器、传感器 I2C 这几路，板子上**没有现成网络**，脚位是按空闲 3.3V IO 选的（记在 `mmt.peri.xml`）。上板接线要照它接，不能随便换。
-   - SPI flash 那 4 根（M1/L1/N1/P1）是**板子固定的配置脚**，不用动。
-5. **摄像头 FPC 排线**：板子上有两个 22-pin FPC 座（一个屏、一个摄像头），**别插错**。
+| **1** | MIPI 摄像头 ≥720p@30fps | CSI2 RX + frame_buffer（实测链路 1920×1080） | 复用 ✅ |
+| **1** | I2C 接 MLX90640 红外测温 | `rtl\mmt\sensors\mmt_mlx90640_ctrl.v` | RTL ✅ 仿真已验证（21 项检查） |
+| **1** | I2C 接 SHT30 温湿度 | `rtl\mmt\sensors\mmt_sht30_ctrl.v` | RTL ✅ 仿真已验证（15 项检查） |
+| **1** | I2C 多设备分时复用 | `rtl\mmt\sensors\mmt_i2c_hub.v` | ✅ 仿真已验证（9 项检查） |
+| **1** | FPGA 内滑动平均/异常值剔除/时间戳对齐 | `rtl\mmt\algo\`（帧差背景 1/32 更新、面积/质心） | 部分（滑动平均未做） |
+| **1** | HDMI 叠加显示（视频+热力图小窗+环境参数） | `rtl\mmt\osd\mmt_osd_overlay.v` | RTL ✅ 未上板 |
+| **2** | RISC-V 跑 TinyML 人体检测 | `ip\sapphire_soc\`（CustomInstruction 已开）+ TinyML 加速器 | **加速器已取得、资源已核算，RTL 未接** |
+| **2** | 帧差法运动分析 | `rtl\mmt\algo\mmt_frame_diff.v` | ✅ |
+| **2** | 60/25/15 加权融合决策 | `rtl\mmt\algo\mmt_fusion_vote.v` | ✅ 与浮点原型偏差 <0.61% |
+| **2** | 场景三选一（暂定**入侵检测**） | RISC-V 固件 `sw\main.c` | ✅ 固件已编译、已装进 SoC |
+| **2** | LED + 蜂鸣器 + HDMI 红框 + 事件置信度 | `rtl\mmt\alarm\` + OSD | ✅ RTL 完成 |
+| **3** | 至少实现 2 项（7 选 2） | 已选 **② RISC-V 软核决策控制** + **⑤ 低功耗场景管理** | 进行中 |
 
 ---
 
-## 8. 目录说明
+## 五、注意事项 / 已踩过的坑
 
-| 路径 | 里面是什么 |
-|---|---|
-| `rtl/mmt/` | **我们写的 RTL**：顶层 `mmt_top.v`、SoC 封装、跨时钟同步器、I2C 主机、OSD 叠加、报警控制等 |
-| `sw/` | RISC-V 固件（C + 汇编 + 链接脚本 + 编译/装载脚本） |
-| `sw/ddr/` | "程序 + AI 模型放进 DDR 运行"的搬运程序、打包脚本、flash 布局校验脚本 |
-| `sim/` | 仿真：传感器回归 84 项 + 三主口内存访问仿真（`sim/axi_ic/`） |
-| `constr/` | 时序约束（SDC） |
-| `tools/` | 辅助脚本（IP 重生成、固件打包等） |
-| `mmt.xml` | **Efinity 工程文件（打开这个）** |
-| `mmt.peri.xml` | 引脚配置文件（由 Interface Designer 使用） |
-
----
-
-## 9. 编译报错怎么办（按报错原文查）
-
-| 报错关键词 | 原因 | 处理 |
-|---|---|---|
-| `Required pin mipi_dp_clk_RST is not found` | peri 里 5 条 DSI 屏遗留引脚 | 用 `run_full_flow.ps1`（自动清理），或手动删 |
-| `cannot open Verilog file 'ip/...'` | 厂商 IP 没放齐 | 回第 2 节 |
-| `instantiating unknown module` | 缺文件（我们踩过：TinyML 需要厂商 `axi_interconnect_beta` 那 11 个文件） | 看 `docs/路线B-TinyML接入进度与已知问题.md` |
-| `Unassigned Core Pins` 不为 0 | 引脚没分配 | 看 `docs/引脚分配补齐.md` |
-| `Slack` 出现负值 | 时序没过 | 看 `docs/时序与CDC问题分析.md` |
-| `unrecognised option '--work_dir'` | 位流命令参数写法不对 | 用 `build.ps1 -Bitstream`（已修正） |
-
----
-
-## 10. 已经实测过的数据（Efinity 2026.1.132 / Ti60F225I3）
-
-| 项 | 结果 |
-|---|---|
-| 综合 / 布局布线 | 都通过（约 4 + 5 分钟） |
-| 逻辑单元 | 43,007 / 60,800（70.7%） |
-| 块 RAM | 235 / 256（91.8%） |
-| 乘法器 | 24 / 160 |
-| 时序 | **全部满足**（最差余量 +0.394 ns，在 DDR3 高速侧；我们自己 100MHz 侧余量 +3.3 ns） |
-| 未分配引脚 | **0** |
-| 仿真回归 | 84 项全过 |
-| 烧录文件 | 已生成，约 955 KB |
-| flash 占用 | 位流 + 用户镜像共约 1.26 MB（8 MB flash 余量充足） |
+1. **`EFINITY_HOME` 必须是正斜杠**（`D:/Efinity/2026.1`）。反斜杠路径里的 `\2026` 会被 Tcl 当八进制转义吃掉，PnR 直接崩。
+2. **`.cmd`/`.bat` 里不要写中文注释** —— cmd 用 OEM 代码页解析，UTF-8 中文会把后面的行拆坏。批处理一律纯 ASCII。
+3. **构建脚本**：`工作区\06_Efinity验证\build.ps1`（含完整环境变量设置与 efx_map/efx_pnr 调用），
+   用法 `.\build.ps1 -Xml <工程.xml> -Top <顶层> -Name <工程名>`。
+4. Efinity 的 GUI 启动器是 `D:\Efinity\2026.1\bin\start_efinity.cmd`（官方 tar 包没安装器，必须靠 `setup.bat` 设环境变量）。
+5. **工程的源文件清单不只是 XML 里的 `design_file`**（建骨架时踩了三次）：
+   - 还有 `\`include` 的头部文件（如 `timescale.v` / `i2c_master_defines.v`）
+   - 还有内存初始化文件（如根目录的 `Panel_1080p_reg.mem`）
+   - 工具：`工作区\_工具\check_includes.js`（自动扫并补）
+6. **XML 的 `last_run_state` / `*_ood` 不能改成非枚举值** —— 会让 efx_map 报
+   `The file format is unexpected` 拒绝解析整个工程。
+7. **★ 只把文件列进工程 XML 不等于检查过** —— 没有实例化，综合器会整块优化掉，
+   表现是"exit=0 且资源数字一个字节没变"。**必须真正实例化再综合**，这条已经抓出 4 个真 bug。
+8. **★ RTL 仿真的环境配方**（iverilog 是用 micromamba 装的，免安装免管理员）：
+   ```
+   安装: micromamba create -y -p D:\iverilog -c conda-forge iverilog bzip2
+   运行: 用封装好的 工作区\06_Efinity验证\sim.ps1
+         .\sim.ps1 -Tb sim\tb_xxx.v -Src rtl\... -IncDir @('rtl')
+   ```
+   三个必须处理的坑（少一个都跑不起来，且报错信息**不说**缺哪个 DLL）：
+   - PATH 须同时含 `D:\iverilog\Library\bin` 与 `D:\iverilog\Library\mingw-w64\bin`
+   - conda 包只带 `zlib.dll` / `libbz2.dll`，但 `system.vpi` 认的是
+     `zlib1.dll` / `libbz2-1.dll` → 各建一个同名副本
+   - 官方 Inno 安装器（bleyer.org）**静默安装会卡死在 UAC**，别走那条路
 
 ---
 
-## 11. 许可证与引用
+## 六、已完成模块与实测资源
 
-- 本仓库只包含**我们自己写的**代码与文档。
-- 未包含 Efinix 的 IP、厂商 Demo RTL 与加密文件（属授权材料，见第 0 节）。
-- 对外引用/提交时请遵守竞赛与厂商的授权约定。
+### 汇总（全部为 Efinity 2026.1.132 实测，非估算）
 
----
+| 子系统 | XLR | BRAM | DSP | 对应工程 |
+|---|---|---|---|---|
+| 视频链路（**已剥 DSI TX**） | **11,737**（19.30%） | 62 | 0 | `mmt_nodsi.xml` |
+| 传感器采集侧 | **479**（0.79%） | 2 | 0 | `sensor_subsystem.xml` |
+| 算法与决策 | **756**（1.24%） | 20 | 3 | `algo_subsystem.xml` |
+| **合计** | **≈12,972（21.3%）** | **84** | **3** |
+| **剩余给 TinyML 加速器 + RISC-V** | **47,828** | **172** | **157** |
 
-## 10. 我们改过的厂商 RTL（本仓库不含厂商源码，这里是补丁清单）
+> 对照：原始 10 号 demo 干净构建是 16,830 XLR / 138 BRAM；
+> 砍掉 DSI TX 后降到 11,737 / 62（实测节省 **−5,093 XLR / −76 BRAM**，
+> 与预测的 −5,089 / −76 几乎精确吻合）。
 
-> 仓库只放**我们自研**的代码（`rtl/mmt/`、`sw/`、`sim/`、`constr/`、`tools/`），
-> 厂商 IP 与厂商 demo RTL **不入库**。所以下面这些**对厂商源码的改动**请在本机维护，
-> 换机器/重取厂商源码后必须照此重新打上，否则会出现"编译看着正常、行为却不对"的问题。
+### 模块清单
+```
+rtl\mmt\sensors\
+  mmt_i2c_master.v        通用 I2C 字节级主机（START/重复START/连续读/开漏三态/4 字节寄存器写）
+  mmt_i2c_hub.v           ★ I2C 分时复用控制器（赛题任务1 明确要求）
+  mmt_sht30_ctrl.v        SHT30 温湿度（1Hz，CRC-8 校验）
+  mmt_mlx90640_ctrl.v     MLX90640 红外原始帧 → BRAM（温度计算留给 RISC-V 跑 Melexis 官方库）
+  mmt_dpram.v             ★ 双口 RAM 模板（能正确推断 BRAM 的写法，见下方坑）
+  mmt_sensor_subsystem.v  传感器子系统封装（可独立综合/验证）
+rtl\mmt\algo\
+  mmt_frame_diff.v        帧差法运动检测（背景 BRAM + 阈值 + 面积/质心 + 背景 1/32 更新）
+  mmt_fusion_vote.v       60/25/15 加权投票 + 非授权时段 → 报警（Q8 定点）
+  mmt_algo_subsystem.v    算法子系统封装
+rtl\mmt\alarm\
+  mmt_alarm_ctrl.v        LED 闪烁 + 蜂鸣器（2kHz 方波 + 500ms 断续）+ 事件类型/置信度
+rtl\mmt\mmt_top.v         ★ 新顶层（= 10 号 demo 顶层剥掉 DSI TX）
+```
 
-| # | 文件 | 改动 | 为什么（实测依据） |
+### 已验证的正确性（不只是"编译过了"）
+- **融合模块定点实现 vs 浮点原型**：60 帧逐帧得分最大偏差 **0.00613**（0.61%），
+  报警结论**零处不一致**，10 个关键场景（含 30.0/38.0°C 边界）全部一致。
+  脚本 `工作区\_工具\verify_fusion_q8.py`。
+- **SHT30 的 CRC-8**：`CRC(0xBEEF)=0x92`，与数据手册测试向量一致。
+- **I2C 子系统四个 testbench 全绿，84 项检查**：一条命令回归
+  `powershell -File sim\run_all.ps1`
+
+  | testbench | 检查数 | 覆盖 |
+  |---|---|---|
+  | `tb_i2c_master` | 39 | 写 2/4 字节、纯读 6 字节、写地址+重复起始+读、NACK 错误路径、req/done 竞争、done 单周期脉冲、**请求相位遍历** |
+  | `tb_i2c_hub` | 9 | 单客户端、两客户端轮询、grant/done 同拍、三客户端无饿死、NACK 只通知被授权者 |
+  | `tb_sht30_ctrl` | 15 | 正常测量（20.62°C / 50.00%RH）、CRC 失败保留旧值、NACK 报错不卡死、恢复 |
+  | `tb_mlx90640_ctrl` | 21 | 初始化读-改-写、每帧只清一次标志、整帧 832 字的顺序与内容、`ta_raw`=RAM 字 800、NACK 后恢复 |
+
+  其中 `tb_i2c_master` 的 T8 和 `tb_mlx90640_ctrl` 的数据校验都做过**反向验证**
+  （把修复撤掉 / 把字节序颠倒，确认测试真的会报 FAIL），不是空测试。
+
+### 接口契约要点（改动需同步）
+- `mmt_i2c_master` 的 tx 接口：`tx_data[31:0]`（**右对齐**字节串）+ `tx_len[2:0]`（0..4 字节）
+  - `tx_len=2` → 先 `tx_data[15:8]` 后 `tx_data[7:0]`
+  - 写寄存器（4 字节）→ `tx_data=32'h800D_0000, tx_len=4`
+- **客户端必须"看到 done 之后才撤销 req"**，master/hub 用**边沿重新武装**保证不会误判重发
+- `mmt_i2c_master` 的 `ST_IDLE` **只在分相时钟位边界（`ph==0 && div_cnt==0`）接受请求**，
+  这条不能改 —— 去掉它 START 条件有 50% 概率被丢掉（见下方 bug 表第 9 条）
+
+### 已修的真 bug（全部靠"实例化后综合"或仿真抓出，没有一个是读代码看出来的）
+| # | 位置 | 问题 | 抓法 |
 |---|---|---|---|
-| 1 | `rtl/frame_buffer/frame_buffer.v` | 例化 `ddr_buffer` 时补 `.FB_NUM(FB_NUM) .MAX_VID_WIDTH(MAX_VID_WIDTH) .MAX_VID_HIGHT(MAX_VID_HIGHT)` | 原样漏转发 ⇒ 用 1920×1080 默认值算帧步长（`0x7E9200`，应为 960 版 `0x3F4A00`）⇒ 三个 bank 基址错成 `0x02000000/0x027E9200/0x02FD2400`，**bank2 会覆盖 TinyML 张量区前 1.8MB**。详见 `docs/帧步长修复-DDR分区对齐.md` |
-| 2 | `rtl/frame_buffer/ddr_wr_buffer.v` | 给 `awvalid`、`wvalid`、`state`、`wr_req` 加 `(* preserve, syn_keep = 1 *)` | Efinity 2026.1.132 会把写 FSM 整条**静默折成常量**（`optimized to 0`、写 FIFO 的 13 块 BRAM 消失）。9 个绕法实验全部无效，只有这个属性有效。最小复现件见 `工作区\08_Efinix复现件\`（`run_map.ps1 -Variant S2` 复现 / `-Variant S2C` 修复） |
-| 3 | `rtl/frame_buffer/DC_FIFO.v:787` | （**建议，尚未改**）`always @(GrayIn)` → `always @(*)` | 敏感表不全：iverilog 下计数器停 X ⇒ **仿真里一个 AW 都不会有**（综合忽略敏感表，硬件无影响）。改了可消除仿真/综合不一致 |
-| 4 | `rtl/frame_buffer/frame_info_det.v:93` | （**建议，尚未改**）把 1 位的 `frame_end_r0` 赋给 24 位的 `frame_len_d0`，疑为 `frame_cnt` 笔误 | 使"连续 3 帧等长"判据**恒真**（负对照实测：帧长不一致也照样写）。**先别改**：改严后若相机帧长有抖动，可能反而永不触发写通路 |
+| 1 | `mmt_i2c_master.v` | `scl_o` 被两个 always 块**多驱动**（VDB-1000） | 实例化后综合 |
+| 2 | `mmt_i2c_hub.v` | `c_done` 比 `c_grant` 晚一拍 → 客户端**永远等不到结束**（死锁） | 实例化后综合 |
+| 3 | `mmt_sensor_subsystem.v` | 3 个客户端却按 `2*` 声明扁平向量 | 实例化后综合 |
+| 4 | `mmt_i2c_master.v` + hub | **`req`/`done` 竞争** → 用残留参数多发一次事务 | Claude 逐拍推演复审 |
+| 5 | `mmt_i2c_master.v` | **`bit_cnt` 只有 3 位**，`3'd8` 被截断成 0 → ACK 判断从根上错 | iverilog 编译 warning |
+| 6 | `mmt_i2c_master.v` | **START 后多一个 SCL 上升沿** → 从机错一位 → NACK | testbench 波形 |
+| 7 | `mmt_frame_diff.v` | **`for` 循环给 RAM 赋初值** → 背景 RAM 推断成 **153,909 个触发器**，综合一步跑 475 秒不结束 | 实例化后综合（`Clock Network 'clk' with 153909 loads`） |
+| 8 | `mmt_frame_diff.v` | **读写挤在同一 always 块** → Efinity 报 `EFX-0657`，RAM 又被映射成逻辑单元 | 实例化后综合 |
+| 9 | `mmt_i2c_master.v` | **`ST_IDLE` 在任意相位接受请求 → START 条件丢失**。表现为"复位后第一笔事务成功、之后每一笔都 NACK"：`ST_START1` 靠 `act_sda(ph==1)` 拉低 SDA 产生 START、靠 `act_next(ph==3)` 推进状态；若进入时 `ph` 已越过 1（坏窗口占整个位周期的一半），这个位周期内 `act_sda` 不再出现而 `act_next` 照样推进 → SDA 从未拉低，从机不激活 | 新写的 SHT30 testbench（T8 请求相位遍历） |
 
-> 自研部分的关键修复（在库内可见）：显示通路 R/B 交叉（`rtl/mmt/mmt_top.v`，全屏紫的根因）、
-> 视频复位去掉 `w_confdone` 门控、`RD_FIFO_DEPTH` 512、心跳 1.5Hz、摄像头 I2C SCL 探针改接 `io_cam_scl_OE`。
+**第 7、8 条的教训**：RAM 必须写成 `mmt_dpram.v` 那种形式 —— **读写分两个独立 always 块、
+读口无条件寄存读、绝不用 for 循环赋初值**，否则 BRAM 会退化成触发器，综合直接爆炸。
+
+**第 9 条的教训**：分相时钟驱动的状态机，**任何"可能在任意相位进入"的状态都必须先对齐到位边界**。
+这个 bug 在老测试下 100% 不可见（固定时刻发请求 = 固定相位 = 恰好落在安全区），
+必须专门扫相位才抓得到；而且**加了测试不等于测到了**，必须把修复撤掉反向验证一次。
 
 ---
 
-## 文档
+## 七、软硬件接口地址（★ 三处曾经全错，已按生成的网表纠正）
 
-| 文档 | 内容 |
+固件要访问的地址**不能信 `ip\sapphire_soc\settings.json`** —— 那份文件自相矛盾
+（它把 UART 写在 4096，而 `source\soc_config` 和厂商 demo 固件都用 0x10000，差 16 倍）。
+以 `soc_config` + 生成的网表 + 反汇编 demo 固件三条独立证据为准：
+
+| 名字 | 正确值 | 依据 |
+|---|---|---|
+| 片内 RAM 基址 / 大小 | **0xF9000000 / 32 KB (0x8000)** | 网表复位向量 + `~0x1FFF`→`~0x7FFF` 窗口掩码；大小由 SoC 参数 `OCRSize=32768` 决定 |
+| CPU 复位向量 | 0xF9000000 | 网表 `IBusCachedPlugin_fetchPc_pcReg <= 32'hf9000000` |
+| 自定义寄存器基址 | **0xF8100000** | APB 解码 `==0x100000`；APB 桥在 `0xF8000000` |
+| UART | **0xF8010000** | APB 解码 `==0x010000`；demo 固件里也出现 `0xF8010000` |
+| I2C | 0xF8016000 | APB 解码 `==0x016000`；demo 固件里也出现 `0xF8016000` |
+| UART 波特率 | **115200 8N1（复位默认，无需配置）** | 分频器 `tick=clk/(div+1)` + 复位值 107 + 每 8 tick 一位 → 100MHz/108/8 ≈ 115.7k |
+
+`sw\mmt_regs.h`、`sw\uart.c`、`sw\link.ld` 已按上表修正，并在文件头写清了每条依据。
+
+### ★ SoC 参数与实际内存大小的对应关系（曾经在这里栽过跟头）
+
+| 参数 | 含义 | 备注 |
+|---|---|---|
+| **`OCRSize`** | **片内 RAM 字节数** | 4096→4 KB、8192→8 KB、32768→32 KB。**这才是 RAM 大小** |
+| `LDSize` | 应用区大小（链接脚本的 memory region） | **只在 `DDR=1` 时才存在/可编辑**（`isPresentGUI/enable: ${DDR}==1`） |
+
+⚠️ 原来的 `link.ld` 写了 `LENGTH = 124K`，根源是**读了一个 `DDR=0` 时根本不生效的 `LDSize=124`**，
+而真实片内 RAM 只有 8 KB —— 链接能过、一跑就飞出 RAM。
+**教训：读 IP 参数之前先确认它在你当前的配置下是否生效。**
+
+### SoC 从命令行重新生成（不必开 GUI）
+
+```powershell
+# 环境必须先设（等价于 bin\setup.bat；PYTHONHOME 必须在解释器启动前设好）
+$env:PYTHONHOME = 'D:/Efinity/2026.1/python311'
+$env:EFINITY_HOME = 'D:/Efinity/2026.1'
+python 工作区\_工具\regen_soc.py --out <临时工程目录> `
+       --param CustomInstruction=1 --param DDR=0 --param OCRSize=32768
+```
+目标目录里**必须存在一个工程 XML**（生成器要读工程名），否则会 `AssertionError`。
+生成完先**比对端口列表**再替换 `ip\sapphire_soc`，工具的备份放在 `_backup\sapphire_soc_2.2.9\`。
+
+---
+
+## 七之二、TinyML（赛题"多模态 AI"的核心）
+
+**平台是公开的**：[Efinix-Inc/tinyml](https://github.com/Efinix-Inc/tinyml)；
+国内 GitHub 不通，用 Gitee 镜像 `https://gitee.com/uesoft/tinyml`（已克隆到 `D:\FPGA\tinyml`）。
+仓库里含 **Ti60F225 的完整参考工程**（hello_world + mobilenetv1/yolo 人体检测 + 人脸关键点）。
+
+**资源估算（用官方估算库 `resource_lib.py` 无头跑出来的，不是手算）**：
+```
+TINYML_ACCELERATOR   14106 LUTs  9143 FFs  2472 ADDs  59 RAM Blocks  12 DSP
+设计当前             20372 XLR / 140 BRAM / 12 DSP
+接入后预计           ≈43.6k XLR(71.7%) / 199 BRAM(77.7%) / 24 DSP   → FITS（BRAM 余量只剩 57 块）
+```
+估算工具：`工作区\_工具\tinyml_res_estimate.py`
+
+**接入方式**（读参考工程得到）：
+- 命令/响应口直连 SoC 的 `cpu0_customInstruction_*`（所以 SoC 必须 `CustomInstruction=1` ✅ 已做）
+- 数据口是 **AXI4 主口**（Ti60 默认 128 位），经 AXI 互联读模型权重与张量
+
+**还差**：AXI 互联（把 frame_buffer / SoC / TinyML 三个主口汇到 DDR3）、实例化 `tinyml_top.v`、
+以及**模型放哪的路线选择**（真实模型编进固件需要 SoC 开 DDR；不开 DDR 只能跑很小的模型）。
+
+---
+
+## 八、固件构建与装载
+
+```
+cd sw
+powershell -File build_sw.ps1              # 编译链接 -> build\mmt_fw.{elf,hex,bin,map}
+powershell -File hex2soc.ps1               # 转成 SoC RAM 初值文件 + 往返校验
+powershell -File hex2soc.ps1 -Install      # 装进 IP（覆盖原厂 demo 固件，已备份）
+# 然后重跑 Efinity 全流程，BRAM 初值才会更新
+```
+
+**装载格式不需要官方 `EFX_HEX` 工具**：SoC 网表用 `$readmemb` 直接吃 4 个文本文件
+`EfxSapphireSoc.v_toplevel_system_ramA_logic_ram_symbol{0..3}.bin`，
+每个 **RAM字节数/4** 行、每行 8 个 `'0'`/`'1'` 字符（LF 换行，无 CR），
+**地址 `4*i+N` 处的字节 → `symbolN[i]`**。`hex2soc.ps1` 生成后会解回来逐字节比对，
+不通过就非零退出。
+
+⚠️ 装的时候**两处副本都要覆盖**（`ip\sapphire_soc\` 和
+`ip\sapphire_soc\source\hardware\netlist\`），脚本已经处理 —— 只换一处会出现
+"明明换了固件但烧进去还是旧的"这种极难查的问题。原厂镜像备份在
+`ip\sapphire_soc\_vendor_ram_init_backup\`。
+
+---
+
+## 九、下一步
+
+- [x] 用 iverilog 给 I2C 主机 / hub / 两个传感器控制器写自检测试平台 ✅（84 项检查全绿）
+- [x] 砍掉 DSI TX，验证资源节省 ✅（−5,093 XLR / −76 BRAM）
+- [x] 引入 Sapphire RISC-V ✅
+- [x] 写算法层 `rtl\mmt\algo\` + OSD + 报警 ✅
+- [x] 写新顶层 `rtl\mmt\mmt_top.v` 取代 `ti60f225_oob_top.v` ✅
+- [x] RISC-V 固件骨架 `sw\` ✅（编译通过、已装进 IP、地址全部核实）
+- [x] **获取 Efinix TinyML 加速器** ✅（公开仓库 + Ti60F225 参考工程；资源实测装得下）
+- [x] **SoC 打开 `CustomInstruction`** ✅（TinyML 命令口的前提；SoC 2.2.9→3.4.0，只多 9 个 XLR）
+- [x] **片内 RAM 8 KB → 32 KB** ✅（解封 Melexis 逐点温度）
+- [x] **引脚约束打通** ✅（原来完全没生效；现在只剩 8 个新增引脚待定，见第十节）
+- [ ] **TinyML 接入**：AXI 互联（frame_buffer / SoC / TinyML → DDR3）+ 实例化 `tinyml_top.v`
+      + 定"模型放哪"的路线（真实模型需 SoC 开 DDR；否则只能跑小模型）
+- [ ] **移植 Melexis 官方库做逐点温度**（32 KB 已够；需定点化 + Python 黄金模型交叉验证）
+- [ ] AXI 主口接 DDR3（目前悬空）
+- [ ] **上板验收**（板子未购）：串口 115200 看启动打印、`MMT_ID==0x4D4D5401`、寄存器读写、图像链路
+
+---
+
+## 十、引脚约束与 Interface Designer（★ 曾经完全没生效）
+
+**症状**：`out\mmt.place.rpt` 里整个设计一百多个 I/O 全是 `Unassigned Core Pins` ——
+`mmt.peri.xml` 虽然在工程根目录，但 `mmt.xml` 里没有任何东西引用它。
+
+**约束链**（`efx_map`/`efx_pnr` 都不直接读 peri 文件）：
+```
+<project>.peri.xml          ← 由工程 XML 的 <efx:interface_info><efx:peri_file .../> 指定
+   ↓  efx_run -f interface
+outflow\<design>.interface.csv
+   ↓  filter_interface.ps1（剪掉设计上已不存在的引脚，见下）
+out\<design>.interface.csv
+   ↓  efx_pnr --sync_file
+```
+**一条命令跑完全部**：
+```powershell
+powershell -File 工作区\06_Efinity验证\run_full_flow.ps1
+```
+
+### 现在的引脚状态
+
+已正确分配：DDR3 全套、CSI-2 摄像头全套、HDMI TMDS ×4、`LED[3:0]`、`CLK_25M`、
+**JTAG_USER1**、各 PLL 复位。
+
+**剩下 8 个未分配，全部是本设计新增的信号**（板子到手后填进 `mmt.peri.xml` 即可）：
+
+| 未分配 | 说明 |
 |---|---|
-| [docs/如何运行.md](docs/如何运行.md) | **从零到板子跑起来**：编译两步、仿真、烧录四前提与判据、串口判读、寄存器表、上板顺序、9 条判读避坑 |
-| [docs/代码学习地图.md](docs/代码学习地图.md) | **从大到小读懂整个设计**：三条数据通路、顶层阅读法、各子系统、软件层、寄存器表、阅读顺序与常见坑 |
+| `i_uart_rxd` / `o_uart_txd` | 串口。**优先走板上 FT4232HL 的 USB 串口**，就不用外接 |
+| `o_sensor_scl` `_oe` / `o_sensor_sda` `_oe` | 传感器 I2C（输出 + 输出使能） |
+| `o_buzzer` | 蜂鸣器 |
+| `pll_inst4_RSTN` | peri 里缺条目（原有 PLL 复位，无害） |
+
+### 两个必须知道的坑
+
+1. **不能删 peri 里的 MIPI DPHY 块**：我们删了 DSI TX，但 peri 里那块还在，会生成
+   `required ... mipi_dp_*_RST` 这些设计上不存在的必需引脚，PnR 直接失败。
+   而**把整块删掉会让 Interface Designer 自己崩**（`pt/bin/design/service.py:2537`
+   缺 None 判断）。所以方案是保留 peri、**过滤生成的 CSV**——
+   `filter_interface.ps1` 会从顶层 HDL 解析真实端口表，只删设计上不存在的 `required` 行，
+   并逐行打印删了什么（实测恰好 5 行）。
+2. **JTAG 端口名不能自己起**：peri 声明了 Interface Designer 的 `JTAG_USER1` 硬块，
+   要求顶层有 `jtag_inst1_TDI/TDO`（标 required）。原来 `mmt_top` 把这 8 个信号
+   全端接成常量，等于**主动放弃软核调试**，而且 PnR 会失败。现已按官方 demo 的命名引出。

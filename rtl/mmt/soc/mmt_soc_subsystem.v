@@ -147,6 +147,14 @@ module mmt_soc_subsystem (
     output wire [31:0] ci_inputs_1,
     output wire        ci_rsp_ready,
     input  wire        ci_cmd_ready,
+    // ★ 加速器完成中断（来自 tinyml_accelerator_channels 的 cmd_int）。
+    //   2026-10-15 修复：原先这里没有这个端口，userInterruptA 被硬接 1'b0。
+    //   反汇编证据（官方 tinyml_lib.a 的 conv.o）：
+    //     conv_drv  : 67c: lw x27,0(x18) / 680: beqz x27,67c   ← 自旋等 .LANCHOR0[hart]
+    //     conv_intr : 44: sw x31,0(x30)                        ← 唯一把该标志置 1 的地方
+    //   即 ISR 是唯一唤醒源；userInterruptA 恒 0 ⇒ ISR 永不进 ⇒ 推理调用永久卡死。
+    //   官方 tinyml_soc.v:473 就是 assign userInterruptA = cpu_customInstruction_cmd_int;
+    input  wire        ci_cmd_int,
     input  wire        ci_rsp_valid,
     input  wire [31:0] ci_outputs_0,
 
@@ -218,6 +226,9 @@ module mmt_soc_subsystem (
     input  wire [15:0] vid_lines_per_frame,
     input  wire [15:0] vid_pixels_per_line,
     input  wire [15:0] vid_frame_cnt,
+    // ---- 调试：frame_buffer 写侧粘滞位（→ mmt_soc_regs 0xE0）----
+    input  wire [31:0] dbg_fb_sb,
+    input  wire [31:0] dbg_fb_sb2,   // 调试：ddr_wr_buffer 写 FSM 粘滞位（→ 0xE4）
     output wire        ir_rd_addr_clk_unused
 );
 
@@ -430,7 +441,9 @@ module mmt_soc_subsystem (
         .system_gpio_0_io_write       (),
         .system_gpio_0_io_writeEnable (),
 
-        .userInterruptA (1'b0)
+        // ★ 2026-10-15 修复：原先硬接 1'b0，导致加速器完成中断永远进不了 CPU。
+        //   见端口表 ci_cmd_int 处的反汇编证据。
+        .userInterruptA (ci_cmd_int)
     );
 
     //----------------------------------------------------------------------
@@ -514,7 +527,9 @@ module mmt_soc_subsystem (
         .test_pattern_mode   (test_pattern_mode),
         .vid_lines_per_frame (vid_lines_per_frame),
         .vid_pixels_per_line (vid_pixels_per_line),
-        .vid_frame_cnt       (vid_frame_cnt)
+        .vid_frame_cnt       (vid_frame_cnt),
+        .dbg_fb_sb           (dbg_fb_sb),
+        .dbg_fb_sb2          (dbg_fb_sb2)
     );
 
     // 未用信号，避免综合告警（soc_spi_ss 已改成顶层输出端口，不再需要在这里消化）

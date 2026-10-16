@@ -1,0 +1,13 @@
+# victim_whitelist.txt —— 全局受害者扫描的白名单（指挥官指令 #12/#13）
+#
+# 格式：实例名 | RTL 文件:行号 | 理由
+# 规则：
+#   - 按【实例名】逐条登记，禁止通配符（指挥官 #12 明确要求）
+#   - 每条必须有 RTL 依据；无依据的"疑似合法"不准入白名单
+#   - 换 SoC IP / 换综合器版本后必须重审
+#
+# 研判来源：out\evidence\soc_victims_triage.md（Claude 子代理读 ip\sapphire_soc\sapphire_soc.v 得出）
+
+u_soc/u_sapphire_soc/u_EfxSapphireSoc/system_cores_0_logic_cpu/IBusCachedPlugin_cache/lineLoader_address[1]~FF | ip/sapphire_soc/sapphire_soc.v:26159 | 合法常量：D 端是 io_cpu_fill_payload；取指 PC 低两位在 :17946-17947 被硬置 0，装入值恒为 0
+u_soc/u_sapphire_soc/u_EfxSapphireSoc/system_cores_0_logic_cpu/IBusCachedPlugin_cache/lineLoader_address[0]~FF | ip/sapphire_soc/sapphire_soc.v:26159 | 同上一行（同一来源，PC 低两位硬置 0）
+u_soc/u_sapphire_soc/u_EfxSapphireSoc/system_hardJtag_debug_logic_jtagBridge/system_rsp_payload_error~FF | ip/sapphire_soc/sapphire_soc.v:14774 | 合法常量：:14774 装的是 io_remote_rsp_payload_error，而该信号在 debugger 模块里被固定为 1'b0（:14558）
