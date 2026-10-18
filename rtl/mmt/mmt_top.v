@@ -522,6 +522,13 @@ assign tml_arlock  = 2'd0;
 assign tml_arcache = 4'd0;
 assign tml_arid    = 8'd0;
 assign tml_rready  = 1'b0;
+// SoC 自定义指令口的 4 个输入也必须有人驱动。
+//   ★ Efinity 不允许在模块例化的端口连接处直接写常量（VERI-1180），
+//     所以这里先声明成 wire，端口那儿连 wire 名。
+wire        ci_cmd_ready_tie   = 1'b0;
+wire        ci_rsp_valid_tie   = 1'b0;
+wire [31:0] ci_outputs_0_tie   = 32'd0;
+wire        ci_cmd_int_tie     = 1'b0;
 `endif
 
 
@@ -1756,18 +1763,19 @@ mmt_soc_subsystem u_soc (
     .ci_rsp_valid   (ci_rsp_valid  ),
     .ci_outputs_0   (ci_outputs_0  ),
 `else
-    // ---- TinyML 剪除态：加速器不在，ci_* 这九个端口必须全部有人驱动 ----
-    //   ci_cmd_ready=0：CPU 若真发 CI 指令会一直等，这是刻意的 fail-closed；
-    //   固件 MMT_TINYML_ISSUE_EN 本来就是 0，不会走到这条路。
-    .ci_cmd_valid   (1'b0          ),
-    .ci_function_id (10'd0         ),
-    .ci_inputs_0    (32'd0         ),
-    .ci_inputs_1    (32'd0         ),
-    .ci_rsp_ready   (1'b0          ),
-    .ci_cmd_ready   (1'b0          ),
-    .ci_cmd_int     (1'b0          ),
-    .ci_rsp_valid   (1'b0          ),
-    .ci_outputs_0   (32'd0         ),
+    // ---- TinyML 剪除态 ----
+    //   SoC 的输出口（cmd_valid/function_id/inputs/rsp_ready）保持原连接即可，
+    //   它们只是没人消费；SoC 的 4 个【输入】口必须有人驱动，接 _tie 线。
+    //   ★ 端口连接处不能写常量（VERI-1180），故走 wire。
+    .ci_cmd_valid   (ci_cmd_valid  ),
+    .ci_function_id (ci_function_id),
+    .ci_inputs_0    (ci_inputs_0   ),
+    .ci_inputs_1    (ci_inputs_1   ),
+    .ci_rsp_ready   (ci_rsp_ready  ),
+    .ci_cmd_ready   (ci_cmd_ready_tie ),
+    .ci_cmd_int     (ci_cmd_int_tie   ),
+    .ci_rsp_valid   (ci_rsp_valid_tie ),
+    .ci_outputs_0   (ci_outputs_0_tie ),
 `endif
 
     // ---- 只读输入：传感器子系统 ----

@@ -24,7 +24,7 @@
  // Copyright (C) 2013-2021 Efinix Inc. All rights reserved.
  //
  // Description:
-@@ -476,14 +487,45 @@
+@@ -476,14 +487,52 @@
  wire [AXI_DATA_WIDTH-1:0]         tml_rdata;
  wire                              tml_rlast;
  wire [1:0]                        tml_rresp;
@@ -63,6 +63,13 @@
 +assign tml_arcache = 4'd0;
 +assign tml_arid    = 8'd0;
 +assign tml_rready  = 1'b0;
++// SoC 自定义指令口的 4 个输入也必须有人驱动。
++//   ★ Efinity 不允许在模块例化的端口连接处直接写常量（VERI-1180），
++//     所以这里先声明成 wire，端口那儿连 wire 名。
++wire        ci_cmd_ready_tie   = 1'b0;
++wire        ci_rsp_valid_tie   = 1'b0;
++wire [31:0] ci_outputs_0_tie   = 32'd0;
++wire        ci_cmd_int_tie     = 1'b0;
 +`endif
  
  
@@ -70,7 +77,7 @@
  
  ////////////////////////////////////////////////////////////////
  // System & Debugger
-@@ -945,13 +987,16 @@
+@@ -945,13 +994,16 @@
  //   理由（实测）：直接用 tinyml_top 时 Efinity 会报
  //     tinyml_accelerator.v(5093): instantiating unknown module '**'  → 综合失败
  //   换成 tinyml_accelerator_channels（官方 edge_vision_soc.v / tinyml_soc.v 例化的就是它）
@@ -87,7 +94,7 @@
      .clk            (core_clk   ),
      .reset          (~w_arstn   ),
      // 命令口（单通道，均 1 位宽）
-@@ -999,12 +1044,13 @@
+@@ -999,12 +1051,13 @@
      .m_axi_rvalid   (tml_rvalid ),
      .m_axi_rdata    (tml_rdata  ),
      .m_axi_rlast    (tml_rlast  ),
@@ -101,7 +108,7 @@
  
  .axi_clk                (core_clk            ),
  .core_clk               (core_clk            ),
-@@ -1689,12 +1735,13 @@
+@@ -1689,12 +1742,13 @@
      .ddrm_rresp   (soc_ddr_rresp   ),
      .ddrm_rid     (soc_ddr_rid     ),
      .ddrm_rlast   (soc_ddr_rlast   ),
@@ -115,7 +122,7 @@
      .ci_inputs_0    (ci_inputs_0   ),
      .ci_inputs_1    (ci_inputs_1   ),
      .ci_rsp_ready   (ci_rsp_ready  ),
-@@ -1705,12 +1752,26 @@
+@@ -1705,12 +1759,27 @@
      //     conv_intr  44: sw x31,0(x30)                        ← 唯一置位处（ISR 内）
      //   官方 tinyml_soc.v:473 同样是 assign userInterruptA = cpu_customInstruction_cmd_int;
      //   同域：加速器 cmd_int 与 SoC clk 都是 core_clk，无需 CDC。
@@ -123,18 +130,19 @@
      .ci_rsp_valid   (ci_rsp_valid  ),
      .ci_outputs_0   (ci_outputs_0  ),
 +`else
-+    // ---- TinyML 剪除态：加速器不在，ci_* 这九个端口必须全部有人驱动 ----
-+    //   ci_cmd_ready=0：CPU 若真发 CI 指令会一直等，这是刻意的 fail-closed；
-+    //   固件 MMT_TINYML_ISSUE_EN 本来就是 0，不会走到这条路。
-+    .ci_cmd_valid   (1'b0          ),
-+    .ci_function_id (10'd0         ),
-+    .ci_inputs_0    (32'd0         ),
-+    .ci_inputs_1    (32'd0         ),
-+    .ci_rsp_ready   (1'b0          ),
-+    .ci_cmd_ready   (1'b0          ),
-+    .ci_cmd_int     (1'b0          ),
-+    .ci_rsp_valid   (1'b0          ),
-+    .ci_outputs_0   (32'd0         ),
++    // ---- TinyML 剪除态 ----
++    //   SoC 的输出口（cmd_valid/function_id/inputs/rsp_ready）保持原连接即可，
++    //   它们只是没人消费；SoC 的 4 个【输入】口必须有人驱动，接 _tie 线。
++    //   ★ 端口连接处不能写常量（VERI-1180），故走 wire。
++    .ci_cmd_valid   (ci_cmd_valid  ),
++    .ci_function_id (ci_function_id),
++    .ci_inputs_0    (ci_inputs_0   ),
++    .ci_inputs_1    (ci_inputs_1   ),
++    .ci_rsp_ready   (ci_rsp_ready  ),
++    .ci_cmd_ready   (ci_cmd_ready_tie ),
++    .ci_cmd_int     (ci_cmd_int_tie   ),
++    .ci_rsp_valid   (ci_rsp_valid_tie ),
++    .ci_outputs_0   (ci_outputs_0_tie ),
 +`endif
  
      // ---- 只读输入：传感器子系统 ----
