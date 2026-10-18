@@ -8,7 +8,7 @@
 #  Builds A "NOGRAY" (concat shim only) and B "GRAY" (both shims).
 # ==========================================================================
 $ErrorActionPreference = 'Continue'
-$ivBin = 'D:\iverilog\Library\bin'
+$ivBin = 'D:\iverilog\bin'
 $ivMg  = 'D:\iverilog\Library\mingw-w64\bin'
 $env:PATH = "$ivBin;$ivMg;" + $env:PATH
 
@@ -26,7 +26,7 @@ function Build-Src($name, $gray) {
         $t = [System.IO.File]::ReadAllText((Join-Path $RTLD $f))
         $t = $t -replace '\(ddr_awlen\+1\)', "(ddr_awlen+9'd1)"
         if ($gray) {
-            $g = "  wire [DW_C-1:0] sh1 = GrayIn ^ (GrayIn >> 1);`r`n  wire [DW_C-1:0] sh2 = sh1 ^ (sh1 >> 2);`r`n  wire [DW_C-1:0] sh4 = sh2 ^ (sh2 >> 4);`r`n  wire [DW_C-1:0] sh8 = sh4 ^ (sh4 >> 8);`r`n  assign HexOut = sh8;"
+            $g = "`r`n  wire [DW_C-1:0] sh1 = GrayIn ^ (GrayIn >> 1);`r`n  wire [DW_C-1:0] sh2 = sh1 ^ (sh1 >> 2);`r`n  wire [DW_C-1:0] sh4 = sh2 ^ (sh2 >> 4);`r`n  wire [DW_C-1:0] sh8 = sh4 ^ (sh4 >> 8);`r`n  assign HexOut = sh8;"
             $t = [regex]::Replace($t, '(?s)\s*reg \[DW_C-1:0\] Hex;.*?assign HexOut = Hex;', $g)
         }
         [System.IO.File]::WriteAllText((Join-Path $d $f), $t, (New-Object System.Text.UTF8Encoding($false)))
@@ -46,7 +46,7 @@ foreach ($variant in @(@{V='NOGRAY'; G=$false}, @{V='GRAY'; G=$true})) {
         $tag = $variant.V + "_" + $s.N
         $vvp = Join-Path $out ($tag + ".vvp")
         $log = Join-Path $out ($tag + ".log")
-        & "$ivBin\iverilog.exe" -g2012 -s tb_ddr_wr_buf -o $vvp "-DHOLD=$($s.H)" "-DPRE_FILL=$($s.P)" "-DTAG=`"$tag`"" `
+        & "$ivBin\iverilog.exe" -g2012 -s tb_ddr_wr_buf -o $vvp "-DHOLD=$($s.H)" "-DPRE_FILL=$($s.P)" "-DTAG=\`"$tag\`"" `
             (Join-Path $d 'ddr_wr_buffer.v') (Join-Path $d 'DC_FIFO.v') (Join-Path $sim 'tb_ddr_wr_buf.v') 2>&1 | Select-String 'error'
         & "$ivBin\vvp.exe" $vvp 2>&1 | Set-Content -Path $log -Encoding UTF8
         Write-Output ("##### " + $tag + "  (log: " + $log + ")")

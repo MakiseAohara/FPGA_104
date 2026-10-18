@@ -228,7 +228,8 @@ module mmt_soc_subsystem (
     input  wire [15:0] vid_frame_cnt,
     // ---- 调试：frame_buffer 写侧粘滞位（→ mmt_soc_regs 0xE0）----
     input  wire [31:0] dbg_fb_sb,
-    input  wire [31:0] dbg_fb_sb2,   // 调试：ddr_wr_buffer 写 FSM 粘滞位（→ 0xE4）
+    input  wire [31:0] dbg_fb_sb2,
+    input  wire [31:0] dbg_live,   // 调试：ddr_wr_buffer 写 FSM 粘滞位（→ 0xE4）
     output wire        ir_rd_addr_clk_unused
 );
 
@@ -529,7 +530,8 @@ module mmt_soc_subsystem (
         .vid_pixels_per_line (vid_pixels_per_line),
         .vid_frame_cnt       (vid_frame_cnt),
         .dbg_fb_sb           (dbg_fb_sb),
-        .dbg_fb_sb2          (dbg_fb_sb2)
+        .dbg_fb_sb2          (dbg_fb_sb2),
+        .dbg_live            (dbg_live)
     );
 
     // 未用信号，避免综合告警（soc_spi_ss 已改成顶层输出端口，不再需要在这里消化）

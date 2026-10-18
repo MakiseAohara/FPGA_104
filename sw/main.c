@@ -1000,7 +1000,8 @@ int main(void)
             uart_puts(" [VW] vis="); uart_put_hex8((uint8_t)(vw >> 24));  /* ★ 完整 8 位视觉字节 */
             uart_puts(" st8=");      uart_put_hex8((uint8_t)(st & 0xFFu)); /* ★ st 完整 8 位（追加在行尾，不动原字段）*/
             uart_puts(" dbg=");      uart_put_hex32(MMT_REG32(MMT_DBG_FB_SB)); /* 0xE0/test_wdata（可信，以此为准）: [31:24]=A5路标 [23]=rst_n [22:20]=free_cnt[25:23] [19:16]=pos_sync计数 [15:13]=wr_fifo_rdusedw[10:8](4=满1024,0=空) [12]=wr_req [11:10]=state [9]=awvalid [8]=awready [7]=sb_st3 [6]=sb_rden [5]=sb_pos_sync [4:0]=sb_wrfull/wrstart/fstable/fstart/wren */
-            uart_puts(" fsm=");      uart_put_hex32(MMT_REG32(MMT_DBG_FSM_SB)); /* ddr_wr_buffer dbg_sb（紧凑19位，[18]=rst_n [17:15]=free_cnt [14:11]=pos_sync计数 [10:8]=rdusedw[10:8] [7]=wr_req [6:5]=state [4]=awvalid [3]=awready [2]=sb_st3 [1]=sb_rden [0]=sb_pos_sync）。本通道（0xE4/test_rdata）实测不可信，仅作对照；以 dbg=（0xE0/test_wdata）为准。 */
+            uart_puts(" fsm=");      uart_put_hex32(MMT_REG32(MMT_DBG_FSM_SB));
+            uart_puts(" [LV] raw=");  uart_put_hex32(MMT_REG32(MMT_BASE + 0xE8)); /* ddr_wr_buffer dbg_sb（紧凑19位，[18]=rst_n [17:15]=free_cnt [14:11]=pos_sync计数 [10:8]=rdusedw[10:8] [7]=wr_req [6:5]=state [4]=awvalid [3]=awready [2]=sb_st3 [1]=sb_rden [0]=sb_pos_sync）。本通道（0xE4/test_rdata）实测不可信，仅作对照；以 dbg=（0xE0/test_wdata）为准。 */
             uart_puts("\r\n");
         }
 

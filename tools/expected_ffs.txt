@@ -1,56 +1,61 @@
-# expected_ffs.txt —— 应有清单（指挥官指令 #13 第五项 / #14 第五条）
+# expected_ffs.txt —— 应有清单（指挥官 #13 第五项 / #14 / #15 / #16）
 #
-# 语义：整机网表里【必须存在】且 .D 端【非常量】的关键 FF 全名。
-#   ① 缺任何一条 = 该触发器被整体删除
-#   ② 存在但 .D 是常量 = 被常量传播
-#   两者都算门禁不过（见 tools\check_expected.ps1）。
+# 语义：整机网表里【必须存在】的关键 FF 全名。存在之后的 D 端判据按【类型】分两套：
 #
-# 来源（两处交叉确认）：
-#   A. out\mmt.map.ice0.postsyn.v —— 整机 ice=0，写通道完好
-#   B. 厂商 2025.2 旧网表
-#      D:\FPGA\易灵思\工作区\07_官方demo工程\Ti60f225_sc431hai2hdmi_v1\outflow\ti60f225_oob.map.v
-#      Version: 2025.2.288.3.8。同族信号存在且 D 非常量：
-#        write_cnt[0..8] L24113+ (D=n1333[*])、burst_end_r L24219 (D=burst_add_en)、
-#        sync_r3 L23985 (D=sync_r2)、state[0]/[1] L24004/L27053 (D=n1256[*])、
-#        s_axi_awvalid L24181、s_axi_wvalid L24200、s_axi_wlast L24228
+#   类型 A（只置位粘滞位）：RTL 里只有 if (事件) x <= 1'b1;，除异步复位外【没有清零条件】
+#     ⇒ 正确网表形态 = D=1'b1 且 CE 是事件条件（非常量）
+#     ⇒ 【故障】= D=1'b0（等于复位值，永远置不起来） 或 D 为非常量（说明多/少条件）
+#        判据：D 必须 == 1'b1
 #
-# 只收"写通道 + 握手 + 关键观测"。按指挥官要求收敛到 30 条以内。
+#   类型 B（有清零条件 / 状态 / 计数）：
+#     ⇒ 正确网表形态 = D 非常量
+#        判据：D 必须 != 1'b0 且 != 1'b1
+#
+# 来源：
+#   A. 整机 ice=0 网表（已知写通道完好）—— 冻结于 tools\baseline\mmt.map.ice0.frozen.postsyn.v
+#      SHA256 8DF265985C206B7768B96E1CE17D459634965F8BECBA86F25305EE54743FE6B4
+#   B. 厂商 2025.2.288 旧网表
+#      ...\07_官方demo工程\Ti60f225_sc431hai2hdmi_v1\outflow\ti60f225_oob.map.v
+#      （write_cnt[0..8] L24113+ D=n1333[*]；burst_end_r L24219 D=burst_add_en；
+#        sync_r3 L23985 D=sync_r2；state[0]/[1] L24004/L27053 D=n1256[*]；
+#        s_axi_awvalid L24181 / s_axi_wvalid L24200 / s_axi_wlast L24228）
+#
+# 格式： [A] 或 [B]  空格  FF 全名   ###RTL 依据
+# 由 tools\check_expected.py 解析；# 开头整行为注释。
 
-# ---- 顶层写通道握手 ----
-fb_awvalid~FF
-fb_wvalid~FF
-fb_wlast~FF
+# ===== 类型 B：状态 / 计数 / 有清零条件（判据：D 非常量）=====
 
-# ---- frame_buffer 粘滞位与状态（0xE0 遥测 [8:0]）----
-dbg_fb_sb[0]~FF
-dbg_fb_sb[1]~FF
-dbg_fb_sb[2]~FF
-dbg_fb_sb[3]~FF
-dbg_fb_sb[4]~FF
-dbg_fb_sb[5]~FF
-dbg_fb_sb[6]~FF
-dbg_fb_sb[7]~FF
-dbg_fb_sb[8]~FF
+[B] fb_awvalid~FF                                             ### ddr_wr_buffer.v:36 output reg awvalid（state 2 置 1、0/1/3 清 0，有清零）
+[B] fb_wvalid~FF                                              ### ddr_wr_buffer.v:49 output reg wvalid（state 2 置 1、3 与 sync_r0 清 0）
+[B] fb_wlast~FF                                               ### ddr_wr_buffer.v:544-556 wlast（有置 1 也有清 0 分支）
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[0]~FF  ### ddr_wr_buffer.v:536/557-562 write_cnt（计数，有清零）
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[4]~FF  同上
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[8]~FF  同上
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/burst_end_r~FF   ### ddr_wr_buffer.v:537-542 burst_end_r <= burst_add_en（数据装载）
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/addr_add_en~FF   ### ddr_wr_buffer.v:252 起 addr_add_en（有置位/清零）
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r0~FF       ### ddr_wr_buffer.v:~120 sync_r0 <= pos_sync（移位链）
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r1~FF       同上
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r2~FF       同上
+[B] checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r3~FF       同上
+[B] checker0/frame_start~FF                                   ### vid_rx_align_v1.v:60-66 frame_start（fifo_rst 置 1、fifo_wr_en 清 0）
+[B] checker0/frame_stable~FF                                  ### frame_info_det.v:~100 frame_stable（条件成立置 1，否则清 0）
+[B] checker0/fifo_rst~FF                                      ### frame_buffer.v 帧复位脉冲（另有清 0）
+[B] checker0/u_vid_rx_align/u_frame_info_det/frame_end_r0~FF  ### frame_info_det.v frame_end_r0（脉冲，有清零）
+[B] checker0/u_vid_rx_align/vs_r0~FF         ### frame_info_det.v:46 vs_r0 <= i_vs（vs 打拍）。★2026-10-18 改登记名：原为 checker0/u_vid_rx_align/u_frame_info_det/vs_r0~FF；ice=0 构建后 u_frame_info_det 只剩这 1 个寄存器，整层被综合器内联，名字上移一层。网表实测 EFX_FF \checker0/u_vid_rx_align/vs_r0~FF (.D(mipi_vs_sel),.CE(1'b1),.CLK(i_mipi_rx_pclk)) —— 寄存器存在、接线正确，仅层级名变化
+[B] dbg_fb_sb[7]~FF                                           ### = dbg_sb[2] = state[0]（ddr_wr_buffer.v:533），FSM 状态，类型 B
+[B] dbg_fb_sb[8]~FF                                           ### = dbg_sb[3] = state[1]，同上
 
-# ---- ddr_wr_buffer 写 FSM / 突发计数 / 同步链 ----
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[0]~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[4]~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/write_cnt[8]~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/burst_end_r~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/addr_add_en~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r0~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r1~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r2~FF
-checker0/u_ddr_buffer/ddr_wr_buffer_inst/sync_r3~FF
+# ===== 类型 A：只置位粘滞位（判据：D 必须 == 1'b1）=====
+#  RTL 依据：ddr_wr_buffer.v:474-495 的 sticky 块（if(事件) sb_x <= 1'b1;，除复位无清零）
+#            frame_buffer.v:277-291 的同型粘滞块
 
-# ---- 写通路上游 ----
-checker0/frame_start~FF
-checker0/frame_stable~FF
-checker0/fifo_rst~FF
-checker0/u_vid_rx_align/u_frame_info_det/frame_end_r0~FF
-checker0/u_vid_rx_align/u_frame_info_det/vs_r0~FF
-
-# ---- 粘滞位遥测（0xE4）----
-dbg_fb_sb2[19]~FF
-dbg_fb_sb2[22]~FF
-dbg_fb_sb2[23]~FF
+[A] dbg_fb_sb[0]~FF    ### = test_wdata[0] = sb_wren      (frame_buffer.v:300 / :273-291)
+[A] dbg_fb_sb[1]~FF    ### = test_wdata[1] = sb_fstart    (同上)
+[A] dbg_fb_sb[2]~FF    ### = test_wdata[2] = sb_fstable   (同上)
+[A] dbg_fb_sb[3]~FF    ### = test_wdata[3] = sb_wrstart   (同上)
+[A] dbg_fb_sb[4]~FF    ### = test_wdata[4] = sb_wrfull    (同上)
+[A] dbg_fb_sb[5]~FF    ### = dbg_sb[0] = sb_pos_sync      (ddr_wr_buffer.v:459 / :486)
+[A] dbg_fb_sb[6]~FF    ### = dbg_sb[1] = sb_st1           (ddr_wr_buffer.v:460 / :487)
+[A] dbg_fb_sb2[19]~FF  ### = dbg_sb[19] = sb_preempt      (ddr_wr_buffer.v:497 / :511)
+[A] dbg_fb_sb2[22]~FF  ### = dbg_sb[22] = sb_rdusedw_nz   (ddr_wr_buffer.v:463 / :490)
+[A] dbg_fb_sb2[23]~FF  ### = dbg_sb[23] = sb_wrreq        (ddr_wr_buffer.v:461 / :488)

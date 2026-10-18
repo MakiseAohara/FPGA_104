@@ -15,6 +15,17 @@
 //
 //  ⚠️ 若要恢复 MIPI 屏输出：把 ip/dsi_tx 加回工程 XML，并从原顶层把这四段贴回来。
 //==========================================================================
+//
+// =======================================================================
+// ★ 2026-10-16 资源腾挪开关：MMT_TINYML_ENABLE
+//   未定义（默认）=> **不综合 TinyML 加速器**，把它占的约 15.6k XLR / 33 BRAM 全部
+//                     让给写通路修复（infer-clk-enable=0 需要 60833 XLR，器件只有
+//                     60800，差 33 个）。s2 口与 ci_* 全部钉 0，AXI 互联拓扑不变。
+//   定义       => 恢复原来行为（TinyML 重新入网表）。
+//   改法：取消下面那行的注释即可回滚；也可在综合参数里加 macro 定义。
+//   依据：docs/驾驶舱-摄像头出图作战-2026-10-16.md
+// =======================================================================
+// `define MMT_TINYML_ENABLE 1
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -479,8 +490,39 @@ wire [1:0]                        tml_rresp;
 wire                              tml_rready;
 // channels 包装只输出 1 位 lock（[0:0]），互联每口要 2 位 —— 高位显式补 0，
 // 否则 tml_awlock[1]/tml_arlock[1] 悬空(z) 还会被拼进互联输入
+`ifdef MMT_TINYML_ENABLE
 assign tml_awlock[1] = 1'b0;
 assign tml_arlock[1] = 1'b0;
+`else
+// ---------------------------------------------------------------------------
+// TinyML 剪除态：s2 主口全部钉成合法空闲值（valid=0 / ready=0）。
+//   互联侧看到的是一个「永远不发请求」的主口，无需改动互联 IP 或拓扑。
+// ---------------------------------------------------------------------------
+assign tml_awvalid = 1'b0;
+assign tml_awaddr  = 32'd0;
+assign tml_awlen   = 8'd0;
+assign tml_awsize  = 3'd0;
+assign tml_awburst = 2'd0;
+assign tml_awprot  = 3'd0;
+assign tml_awlock  = 2'd0;
+assign tml_awcache = 4'd0;
+assign tml_awid    = 8'd0;
+assign tml_wdata   = {AXI_DATA_WIDTH{1'b0}};
+assign tml_wstrb   = {(AXI_DATA_WIDTH/8){1'b0}};
+assign tml_wlast   = 1'b0;
+assign tml_wvalid  = 1'b0;
+assign tml_bready  = 1'b0;
+assign tml_arvalid = 1'b0;
+assign tml_araddr  = 32'd0;
+assign tml_arlen   = 8'd0;
+assign tml_arsize  = 3'd0;
+assign tml_arburst = 2'd0;
+assign tml_arprot  = 3'd0;
+assign tml_arlock  = 2'd0;
+assign tml_arcache = 4'd0;
+assign tml_arid    = 8'd0;
+assign tml_rready  = 1'b0;
+`endif
 
 
 
@@ -715,7 +757,12 @@ wire        tp_vs, tp_hs, tp_de;
 wire [31:0] tp_vin;
 wire [15:0] vid_lines_per_frame, vid_pixels_per_line, vid_frame_cnt;
 wire [31:0] dbg_fb_sb;   // 调试：frame_buffer 写侧粘滞位（checker0.test_wdata → 0xE0）
-wire [31:0] dbg_fb_sb2;  // 调试：ddr_wr_buffer 写 FSM 粘滞位（checker0.test_rdata → 0xE4）
+wire [31:0] dbg_fb_sb2;
+wire [31:0] dbg_live_fb;  // frame_buffer live 输出（= ddr_wr_buffer.dbg_sb）
+reg  pll_shift_seen = 1'b0;
+always @(posedge core_clk) begin if (pll_shift_ena) pll_shift_seen <= 1'b1; end
+// 0xE8: [25]=pll_shift_ena曾高 [24]=pll_shift_ena live [23]=ddr_reset_n [22:0]=dbg_sb[22:0]
+wire [31:0] dbg_live = {6'd0, pll_shift_seen, pll_shift_ena, ddr_reset_n, 1'b0, dbg_live_fb[22:0]};
 
 wire        mipi_vs_sel  = tp_en ? tp_vs : w_mipi_rx_vs;
 wire        mipi_hs_sel  = tp_en ? tp_hs : w_mipi_rx_hs;
@@ -758,6 +805,7 @@ mmt_test_pattern #(
        .rst_n			(vid_rst_n   ),
        .test_wdata (dbg_fb_sb),
        .test_rdata (dbg_fb_sb2),
+       .dbg_live   (dbg_live_fb),
 
 /*i*/.i_clk			(i_mipi_rx_pclk      ),
 /*i*/.i_vs			(mipi_vs_sel	),
@@ -948,7 +996,10 @@ axi_interconnect u_ddr_axi_ic (
 //   后同样的文件集综合一次通过。channels 会 `define NUMBER_OF_CHANNELS /
 //   ENABLED_ACCELERATOR_CHANNEL 并把配置参数透传给内部的 tinyml_top。
 //   单通道时它的命令/响应口就是 1 位宽（[0:0]），AXI 口多出 8 位 awid/arid。
+//   ★ 2026-10-16：整块由 MMT_TINYML_ENABLE 包住。未定义时本加速器不入网表，
+//     省约 15.6k XLR + 33 BRAM，让 infer-clk-enable=0 的写通路修复能装下。
 //***************************************************************************
+`ifdef MMT_TINYML_ENABLE
 tinyml_accelerator_channels #(
     .AXI_DW_M (128)
 ) u_tinyml_accel (
@@ -1002,6 +1053,7 @@ tinyml_accelerator_channels #(
     .m_axi_rresp    (tml_rresp  ),
     .m_axi_rready   (tml_rready )
 );
+`endif  // MMT_TINYML_ENABLE
 
 ddr3_top                 u_ddr3_top
 (
@@ -1692,6 +1744,7 @@ mmt_soc_subsystem u_soc (
     .ddrm_rvalid  (soc_ddr_rvalid  ),
     .ddrm_rready  (soc_ddr_rready  ),
 
+`ifdef MMT_TINYML_ENABLE
     // ---- ★ 自定义指令口 ←→ TinyML 加速器 ----
     .ci_cmd_valid   (ci_cmd_valid  ),
     .ci_function_id (ci_function_id),
@@ -1708,6 +1761,26 @@ mmt_soc_subsystem u_soc (
     .ci_cmd_int     (tml_cmd_int   ),
     .ci_rsp_valid   (ci_rsp_valid  ),
     .ci_outputs_0   (ci_outputs_0  ),
+`else
+    // ---- TinyML 剪除态：加速器不在，ci_* 这九个端口必须全部有人驱动 ----
+    //   ci_cmd_ready=0：CPU 若真发 CI 指令会一直等，这是刻意的 fail-closed；
+    //   固件 MMT_TINYML_ISSUE_EN 本来就是 0，不会走到这条路。
+    //
+    //   ★ 2026-10-18 修正（首次真机综合报 VERI-1180 constant is not allowed here）：
+    //     前 5 个（cmd_valid/function_id/inputs_0/inputs_1/rsp_ready）是 u_soc 的 **output**
+    //     （见 rtl/mmt/soc/mmt_soc_subsystem.v:144-148），Verilog 不允许 output 口接常量。
+    //     这 5 个改接回同名 wire（447-451 行本就无条件声明），悬空无害；
+    //     后 4 个是 u_soc 的 **input**，接常量合法，保持 fail-closed。
+    .ci_cmd_valid   (ci_cmd_valid  ),
+    .ci_function_id (ci_function_id),
+    .ci_inputs_0    (ci_inputs_0   ),
+    .ci_inputs_1    (ci_inputs_1   ),
+    .ci_rsp_ready   (ci_rsp_ready  ),
+    .ci_cmd_ready   (1'b0          ),
+    .ci_cmd_int     (1'b0          ),
+    .ci_rsp_valid   (1'b0          ),
+    .ci_outputs_0   (32'd0         ),
+`endif
 
     // ---- 只读输入：传感器子系统 ----
     .sht_data_valid (sensor_sht_valid),
@@ -1778,6 +1851,7 @@ mmt_soc_subsystem u_soc (
     .vid_pixels_per_line (vid_pixels_per_line),
     .dbg_fb_sb           (dbg_fb_sb),
     .dbg_fb_sb2          (dbg_fb_sb2),
+    .dbg_live            (dbg_live),
     .vid_frame_cnt       (vid_frame_cnt),
     // ---- ★ task-19：摄像头上游探针读口（0x80..0xA4）----
     .cam_probe_raddr (cam_probe_raddr),

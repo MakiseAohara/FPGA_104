@@ -19,7 +19,7 @@
 
 $ErrorActionPreference = 'Continue'
 
-$ivBin = 'D:\iverilog\Library\bin'
+$ivBin = 'D:\iverilog\bin'
 $ivMg  = 'D:\iverilog\Library\mingw-w64\bin'
 $env:PATH = "$ivBin;$ivMg;" + $env:PATH
 

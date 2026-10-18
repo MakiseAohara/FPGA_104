@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <efx:project name="mmt" description="" sw_version="2026.1.132" xmlns:efx="http://www.efinixinc.com/enf_proj" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efinixinc.com/enf_proj enf_proj.xsd">
     <efx:device_info>
         <efx:family name="Titanium"/>
@@ -87,29 +87,20 @@
         <efx:design_file name="rtl/mmt/soc/mmt_soc_subsystem.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/video/mmt_video_downscale.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/common/mmt_sync2.v" version="default" library="default"/>
-        <efx:design_file name="rtl/mmt/mmt_cam_probe.v" version="default" library="default"/>  <!-- ★ task-19 上游探针（漏加会报 Unknown module type）-->
-        <efx:design_file name="rtl/mmt/mmt_test_pattern.v" version="default" library="default"/>  <!-- ★ task-23 测试图案 -->
+        <efx:design_file name="rtl/mmt/mmt_cam_probe.v" version="default" library="default"/>
+        <efx:design_file name="rtl/mmt/mmt_test_pattern.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/common/mmt_dpram_2clk.v" version="default" library="default"/>
         <efx:design_file name="rtl/mmt/osd/mmt_osd_overlay.v" version="default" library="default"/>
-        <!-- ===== 路线 B：TinyML 加速器 + DDR AXI 互联 ===== -->
-        <!-- 顶层用官方那个 channels 包装（它内部 generate tinyml_top）。
-             教训：直接例化 tinyml_top 会让加密核报 "instantiating unknown module" -->
         <efx:design_file name="ip/tinyml/axi_full_to_half_duplex.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/axi_rdata_sfifo.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/axi_wdata_sfifo.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/axi_interconnect_beta.sv" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/tinyml_accelerator_channels.v" version="default" library="default"/>
-        <!-- channels 内部 `include "tinyml_defines.v" + "tinyml_core0_define.v" -->
         <efx:design_file name="ip/tinyml/tinyml_top.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/tinyml_accelerator.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/tinyml_core0_define.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/tinyml_defines.v" version="default" library="default"/>
-        <!-- 加密核 tinyml_accelerator.v 内部实例化的 efx_fifo_top_<uuid> 等模块由它提供
-             （官方工程通过 source/source.f 的 common/common_efx_fifo_wrapper.v 带入） -->
         <efx:design_file name="ip/tinyml/common_efx_fifo_wrapper.v" version="default" library="default"/>
-        <!-- 官方 TinyML 工程 source/common/ 的基础模块：加密核内部用的就是这套名字
-             （我们工程里对应的是 simple_dual_port_ram / true_dual_port_ram / shift_reg 等，
-              模块名不同，所以必须把这套 common_* 也带进来） -->
         <efx:design_file name="ip/tinyml/common_simple_dual_port_ram.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/common_true_dual_port_ram.v" version="default" library="default"/>
         <efx:design_file name="ip/tinyml/common_shift_reg.v" version="default" library="default"/>
@@ -139,7 +130,6 @@
         <efx:ip instance_name="sapphire_soc" path="ip/sapphire_soc/settings.json" ooc="false">
             <efx:ip_src_file name="sapphire_soc.v"/>
         </efx:ip>
-        <!-- 路线 B：三主口 AXI4 互联（S_PORTS=3 / M_PORTS=1 / 128bit / ID 4bit） -->
         <efx:ip instance_name="axi_interconnect" path="ip/axi_interconnect/settings.json" ooc="false">
             <efx:ip_src_file name="axi_interconnect.v"/>
         </efx:ip>
@@ -150,21 +140,8 @@
         <efx:param name="mode" value="speed" value_type="e_option"/>
         <efx:param name="max_ram" value="-1" value_type="e_integer"/>
         <efx:param name="max_mult" value="-1" value_type="e_integer"/>
-        <!-- ★ 2026-10-16 指挥官指令 #9：infer-clk-enable 3 → 0（根因修复）。
-             依据（_synth_loop 实验，详见 out\evidence\synth_loop.md）：
-               ice>=1（含默认 3）⇒ ddr_wr_buffer.v:403-443(FSM) 与 :474-495(粘滞块) 里
-                 "条件成立装常数" 的寄存器被综合成 .D(1'b0)（.CE 仍是真实信号、SR_VALUE=0）
-                 ⇒ 板上恒 0 ⇒ AW=0 / 画面雪花。
-               ice=0 ⇒ 同样的 RTL 得到真实次态逻辑（.CE(1'b1)），
-                 在 ddr_buffer 顶层与 frame_buffer 顶层各自独立复现通过。
-             注意：ddr_wr_buffer 单独综合（S1b）在 ice=3 下是通的 ⇒ 该缺陷只在规模/结构
-                   达到一定程度时才触发，小规模测试测不出来。
-             回滚：本值改回 3。 -->
-        <efx:param name="infer-clk-enable" value="3" value_type="e_option"/>
+        <efx:param name="infer-clk-enable" value="0" value_type="e_option"/>
         <efx:param name="infer-sync-set-reset" value="1" value_type="e_option"/>
-        <!-- ★ 2026-10-16 指挥官指令 #5：A7 实验（value=0）后回滚为 1。
-             A7 结论：infer-sync-set-reset 与"写通道被折叠"和"粘滞位整块为 0"两个现象都无关。
-             回滚后本文件的功能与 A6 完全一致。 -->
         <efx:param name="fanout-limit" value="0" value_type="e_integer"/>
         <efx:param name="seq_opt" value="0" value_type="e_option"/>
         <efx:param name="retiming" value="0" value_type="e_option"/>
@@ -248,4 +225,3 @@
         <efx:param name="randomize_iv_value" value="off" value_type="e_bool"/>
     </efx:security>
 </efx:project>
-
