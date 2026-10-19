@@ -1,0 +1,13 @@
+# scope_exempt.txt —— 检查 ③（写通路 scope 内 FF 丢失）的豁免清单
+# 语义：这些 FF 即使出现在"scope 内丢失"列表里，也不算构建失败。
+# 规则：每行一个 FF 全名，必须写理由注释。本文件变更要有批示记录。
+#
+# 2026-10-18 指挥官放行（用户明确"放行"）：
+#   checker0/u_vid_rx_align/u_frame_info_det/vs_r0~FF
+#     依据 out\mmt.map.rpt:2398
+#       'checker0/u_vid_rx_align/u_frame_info_det/vs_r0' (rtl\frame_buffer\frame_info_det.v:22)
+#       (merged to equivalence)
+#     判定：被综合器与等价寄存器合并（非删除）；网表里 vs_r0 仍有 12 处命中。
+#           属合法优化，不是"条件装载被折成常量"那类故障。
+
+checker0/u_vid_rx_align/u_frame_info_det/vs_r0~FF

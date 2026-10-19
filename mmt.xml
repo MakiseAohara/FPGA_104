@@ -160,7 +160,13 @@
              注意：ddr_wr_buffer 单独综合（S1b）在 ice=3 下是通的 ⇒ 该缺陷只在规模/结构
                    达到一定程度时才触发，小规模测试测不出来。
              回滚：本值改回 3。 -->
-        <efx:param name="infer-clk-enable" value="3" value_type="e_option"/>
+        <!-- 2026-10-16 晚：上面这段注释一直写着 3 -> 0，但 value 实际仍是 3，
+             导致 v2 位流里这个修复根本没生效。本行已真正改为 0。
+             已知代价：ice=0 后 XLR 需 60833 > 器件 60800（差 33），
+                => 必须同时让 rtl/mmt/mmt_top.v 的 MMT_TINYML_ENABLE 保持未定义
+                   （不综合 TinyML，省约 15.6k XLR）。两处必须同进同退。
+             回滚：本值改回 3，并把 mmt_top.v 顶部 MMT_TINYML_ENABLE 那行的注释取消。 -->
+        <efx:param name="infer-clk-enable" value="0" value_type="e_option"/>
         <efx:param name="infer-sync-set-reset" value="1" value_type="e_option"/>
         <!-- ★ 2026-10-16 指挥官指令 #5：A7 实验（value=0）后回滚为 1。
              A7 结论：infer-sync-set-reset 与"写通道被折叠"和"粘滞位整块为 0"两个现象都无关。

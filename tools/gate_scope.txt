@@ -1,0 +1,24 @@
+# gate_scope.txt —— 检查 ③（与 baseline 比 FF 数量）的失败判定范围
+# 指挥官 #16 G-fix1：
+#   正确的 ice=3 网表本身就会比 ice=0 少约 1200 个可见 FF（SRL 被拆成 FF 等），
+#   所以 ③ 不能全局判失败 —— 只对【写通路层次前缀】判失败，其它层次只报为"信息"。
+#
+# 实测 ice3 相对 ice0 少的 2982 个 FF 按前缀分布（out\mmt.map.ice3.postsyn.lost_ffs.txt）：
+#   851  u_soc/u_sapphire_soc/u_EfxSapphireSoc      ← 非写通路，只报告
+#  1592  *tinyml_accel*                              ← 非写通路，只报告
+#    91  checker0/u_ddr_buffer/                       ← 写通路，判失败
+#    74  checker0/u_vid_rx_align/                     ← 写通路上游，判失败
+#   其余零散 nNNNN~FF                                 ← 只报告
+#
+# 格式：每行一个路径前缀；# 开头为注释。#/ 结尾表示"目录前缀"。
+# 命中任一前缀 ⇒ 该 FF 的丢失计入失败；否则只计入信息。
+
+# 写通路核心
+checker0/u_ddr_buffer/
+# 写通路上游（frame_start / frame_stable / ddr_frame_len 的来源）
+checker0/u_vid_rx_align/
+# checker0 顶层信号（fb_awvalid / fb_wvalid / fb_wlast / frame_start / frame_stable / fifo_rst）
+checker0/fb_
+checker0/frame_
+checker0/fifo_
+checker0/ddr_frame_len
