@@ -36,3 +36,6 @@ sim/**/_run/
 *.bak*
 
 
+
+# 大网表不进 Git（只留 sha256 与 README）
+tools/baseline/*.postsyn.v
