@@ -1,0 +1,7 @@
+=== rtl\debayer\debayer_top_2to1.v : 厂商原版 -> 最终版 (WBH6) ===
+最终  	.gain_b (r_gain		),
+最终  	.gain_r (b_gain		),
+最终  			.i_p		({w_gain_data[7:0],w_gain_data[15:8]}),	//(raw_datax4_i	),//
+厂商  	.gain_b (b_gain		),
+厂商  	.gain_r (r_gain		),
+厂商  			.i_p		(w_gain_data),	//(raw_datax4_i	),//
