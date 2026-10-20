@@ -1,3 +1,4 @@
-=== rtl\debayer\rgb_gain_v1.v : 厂商原版 -> 最终版 (WBH6) ===
-最终  	if(!r_line_cnt) begin
-厂商  	if(r_line_cnt) begin
+=== rtl\debayer\rgb_gain_v1.v ===
+WBH7   	if(!r_line_cnt) begin
+厂商     	if(r_line_cnt) begin
+

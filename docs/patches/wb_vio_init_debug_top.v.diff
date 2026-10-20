@@ -1,7 +1,8 @@
-=== debug_top.v : 厂商原版 -> 最终版 (WBH6) ===
-最终          .PROBE_OUT0_INIT_VAL    ( 'h158 ),
-最终          .PROBE_OUT1_INIT_VAL    ( 'h118 ),
-最终          .PROBE_OUT2_INIT_VAL    ( 'h1A0 ),
-厂商          .PROBE_OUT0_INIT_VAL    ( 'h118 ),
-厂商          .PROBE_OUT1_INIT_VAL    ( 'hff ),
-厂商          .PROBE_OUT2_INIT_VAL    ( 'h15e ),
+=== debug_top.v ===
+WBH7           .PROBE_OUT0_INIT_VAL    ( 'h158 ),
+WBH7           .PROBE_OUT1_INIT_VAL    ( 'h118 ),
+WBH7           .PROBE_OUT2_INIT_VAL    ( 'h170 ),
+厂商             .PROBE_OUT0_INIT_VAL    ( 'h118 ),
+厂商             .PROBE_OUT1_INIT_VAL    ( 'hff ),
+厂商             .PROBE_OUT2_INIT_VAL    ( 'h15e ),
+
