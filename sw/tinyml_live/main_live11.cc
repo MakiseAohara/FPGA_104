@@ -65,6 +65,16 @@ namespace {
 
    constexpr int kTensorArenaSize = 136 * 1024;
    uint8_t tensor_arena[kTensorArenaSize];
+
+   /* Snapshot of the model input taken BEFORE Invoke().
+    *
+    * TFLite Micro reuses the tensor arena once a tensor has been consumed, so
+    * model_input->data.int8 is NOT valid after interpreter->Invoke(): the bytes
+    * still sitting there belong to intermediate tensors, not to the input.
+    * (Caught by cross-checking b0m against the dump: b0m=173 while the same
+    * frame's dump averaged 157.)  Everything printed must come from this copy.
+    */
+   int8_t input_snapshot[96 * 96];
 }
 
 static const char HEXD[] = "0123456789abcdef";
@@ -186,10 +196,13 @@ extern "C" int main()
    while (1) {
       const uint32_t chk = sample_frame_box(model_input->data.int8);
 
+      /* copy the input out before Invoke() recycles the arena */
+      for (int i = 0; i < IMG_N; ++i) input_snapshot[i] = model_input->data.int8[i];
+
       /* mean of the 9216 input bytes, taken as unsigned */
       uint32_t bsum = 0;
       for (int i = 0; i < IMG_N; ++i) {
-         bsum += (uint8_t)model_input->data.int8[i];
+         bsum += (uint8_t)input_snapshot[i];
       }
       const uint32_t b0m = bsum / IMG_N;
 
@@ -220,7 +233,7 @@ extern "C" int main()
                  (int)b0m, raw);
 
       if ((frame % IMG_DUMP_EVERY) == 0) {
-         dump_image(model_input->data.int8, frame, p);
+         dump_image(input_snapshot, frame, p);
       }
 
       ++frame;
