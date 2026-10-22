@@ -6,7 +6,7 @@
 
 | 文件 | 说明 |
 |---|---|
-| `tinyml_pdti8.bin` | **已验证的固件镜像**（v9），467,754 字节，CRC32 `D281242E` |
+| `tinyml_pdti8.bin` | **已验证的固件镜像**（v9），467,794 字节，CRC32 `1F5B3FC7`，SHA256 `5B73F5F3…8CCE1AF7` |
 | `load_and_run.py` | 通过片上 UART loader 把镜像灌进 DDR 并跑起来 |
 | `build_tinyml_firmware.py` | 从 TinyML 官方工程 + `main_live9.cc` 重新构建固件 |
 | `main_live9.cc` | 固件源码（区块平均采样 + 硬件推理 + OSD 输出） |
@@ -66,6 +66,9 @@ python build_tinyml_firmware.py ^
 4. **输入写入方式**：`(int8_t)byte`，纯位重解释 —— 与 TinyML 官方静态示例一致，
    **不要减 128**。
 5. **OSD**：每帧把判决写到 APB `0xF8100024` bit0，驱动红框。
+6. **得分寄存器**：每帧写 APB `0xF8100028`（寄存器 10），
+   值 = `0x100 | (uint8_t)p` —— bit8 为有效标记，低字节是原始 int8 得分。
+   例：`p=-42` → `0x1D6`；`p=60` → `0x13C`。
 
 ## 相关文档
 
