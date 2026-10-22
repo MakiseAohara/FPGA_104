@@ -41,6 +41,7 @@
 
 #define APB_BASE     0xF8100000u
 #define APB_OSD      (*(volatile uint32_t*)(APB_BASE + 4u * 9u))
+#define APB_SCORE    (*(volatile uint32_t*)(APB_BASE + 4u * 10u))
 
 namespace {
    tflite::ErrorReporter* error_reporter = nullptr;
@@ -143,8 +144,12 @@ extern "C" int main()
       const int alarm = (p > 0) ? 1 : 0;
       APB_OSD = (uint32_t)alarm;
 
-      MicroPrintf("MMT_OSD f=%d chk=%x p=%d a=%d v=%d osd=%d ci=%d ms=%d\n\r",
-                  (int)frame, chk, p, a, alarm, alarm,
+      /* APB reg 10: bit8 = valid marker, low byte = raw int8 score p */
+      const uint32_t score = 0x100u | (uint32_t)(uint8_t)p;
+      APB_SCORE = score;
+
+      MicroPrintf("MMT_OSD f=%d chk=%x p=%d a=%d v=%d osd=%d score=%x ci=%d ms=%d\n\r",
+                  (int)frame, chk, p, a, alarm, alarm, score,
                   (int)(diag[6] - ci0),
                   (int)((t1 - t0) / (SYSTEM_CLINT_HZ / 1000)));
       ++frame;
