@@ -6,10 +6,11 @@
 
 | 文件 | 说明 |
 |---|---|
-| `tinyml_pdti8.bin` | **已验证的固件镜像**（v9），467,794 字节，CRC32 `1F5B3FC7`，SHA256 `5B73F5F3…8CCE1AF7` |
+| `tinyml_pdti8.bin` | **当前固件镜像**（v11 调试版），471,674 字节，CRC32 `D4DB4189`，SHA256 `BE6F3BC5…1FCF48A2` |
 | `load_and_run.py` | 通过片上 UART loader 把镜像灌进 DDR 并跑起来 |
-| `build_tinyml_firmware.py` | 从 TinyML 官方工程 + `main_live9.cc` 重新构建固件 |
-| `main_live9.cc` | 固件源码（区块平均采样 + 硬件推理 + OSD 输出） |
+| `build_tinyml_firmware.py` | 从 TinyML 官方工程 + 源码重新构建固件 |
+| `main_live11.cc` | **当前源码**：v9 + 模型输入调试打印（MMT_IMGSTAT / MMT_IMG / b0m / raw） |
+| `main_live9.cc` | 上一版源码（无调试打印），保留作对照 |
 
 ## 快速使用
 
@@ -74,3 +75,36 @@ python build_tinyml_firmware.py ^
 
 - `docs/交接-实时TinyML推理-2026-10-20.md` —— 完整交接（帧格式、坑、寄存器表）
 - `project/README.md` —— 完整工程与重建步骤
+
+---
+
+## 调试输出（v11 起）
+
+每帧一行 `MMT_OSD`，末尾两个新字段：
+
+```
+MMT_OSD f=<帧号> chk=<hex> p=<int8得分> a=<另一类得分> v=<p>0?1:0> osd=<同v> ci=<CI指令数> ms=<本次推理毫秒> b0m=<输入9216字节的均值,整数> raw=<p的两位十六进制>
+```
+
+每 40 帧额外输出一组模型输入快照：
+
+```
+MMT_IMGSTAT f=<帧号> min=<> max=<> mean=<> p=<>
+MMT_IMG 00 <192个十六进制字符>      ← 第 0 行，96 像素 × 2 位
+MMT_IMG 01 <192个十六进制字符>
+...
+MMT_IMG 95 <192个十六进制字符>
+```
+
+**取值口径（容易误读，务必对齐）：**
+
+| 字段 | 口径 |
+|---|---|
+| `MMT_IMGSTAT` 的 min/max/mean | **有符号 int8**，即模型真正消费的值 |
+| `MMT_IMG` 的每像素 | `(uint8_t)value`，两位十六进制 |
+| `b0m` | 同样 9216 个值的**无符号字节**均值 |
+
+所以 `mean`（有符号）与 `b0m`（无符号）不相等是正常的，差 128 左右。
+
+> 一次快照约 19.5 KB，115200 波特率下打印约 1.7 秒，期间采样暂停。
+> 每 40 帧（≈17 秒）一次，20 秒的采集段里通常只出现 1 组。
