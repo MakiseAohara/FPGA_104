@@ -1,0 +1,6 @@
+﻿date: 2026-10-23 20:55:33
+gcc : D:\tools\class\mingw64\bin\gcc.exe
+test_preprocess  PASS  compile=0 run=0
+test_autoexp     PASS  compile=0 run=0
+test_camctrl     PASS  compile=0 run=0
+TOTAL: 3 tests, 0 failed

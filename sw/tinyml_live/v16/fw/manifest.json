@@ -1,0 +1,68 @@
+[
+  {
+    "variant": "base",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_base.bin",
+    "size": 472594,
+    "crc32": "901478D6",
+    "sha256": "f186fc90443abfb0ef2c0fead7b7c3d674622965ebd852d24b93091a27aab9ae",
+    "crop_mode": 0,
+    "norm_on": 0,
+    "stretch_on": 0
+  },
+  {
+    "variant": "crop1",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_crop1.bin",
+    "size": 472762,
+    "crc32": "9D169EFD",
+    "sha256": "f2432af0b5e20ef4b2ad64b48e648b57005dcb52d19d110d2f35d5fe86e81ad8",
+    "crop_mode": 1,
+    "norm_on": 0,
+    "stretch_on": 0
+  },
+  {
+    "variant": "crop2",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_crop2.bin",
+    "size": 472762,
+    "crc32": "83C21873",
+    "sha256": "5d3c554bd0941161d7551f105b85606512d8e3d6e28144a072c347031701beb5",
+    "crop_mode": 2,
+    "norm_on": 0,
+    "stretch_on": 0
+  },
+  {
+    "variant": "norm",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_norm.bin",
+    "size": 472762,
+    "crc32": "875E4EC3",
+    "sha256": "40cf5ab20424a7383e723eeb0029d3d973044b99b3aa843a05e4b5303d24894c",
+    "crop_mode": 0,
+    "norm_on": 1,
+    "stretch_on": 0
+  },
+  {
+    "variant": "crop1_norm",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_crop1_norm.bin",
+    "size": 472762,
+    "crc32": "1B1BD50E",
+    "sha256": "be05a864d2a84e34c02f304613c5cbaafca5314f244287b4df86d5629c55c2fc",
+    "crop_mode": 1,
+    "norm_on": 1,
+    "stretch_on": 0
+  },
+  {
+    "variant": "crop1_stretch",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_crop1_stretch.bin",
+    "size": 472762,
+    "crc32": "071B8537",
+    "sha256": "e1b530ca79ce17e7506a0934f21bd79ebf3f3bc3e5333e15981ce0582a68b42f",
+    "crop_mode": 1,
+    "norm_on": 0,
+    "stretch_on": 1
+  }
+]
