@@ -1,0 +1,14 @@
+[
+  {
+    "file": "tinyml_pdti8_v19.bin",
+    "size": 477722,
+    "crc32": "E0EE7BE1",
+    "sha256": "83F13D587F1EBB2EB0CE14AB29F8AC6BD999BC5F7AB0BD30D2FE1E9DEB69ECBD"
+  },
+  {
+    "file": "tinyml_pdti8_v19_dump.bin",
+    "size": 477722,
+    "crc32": "9410DBEF",
+    "sha256": "8C0AE09D06851257D5412EC834C5BF143D91BFE2F30D111AC298BC571F0D2AD3"
+  }
+]
