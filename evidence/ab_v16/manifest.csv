@@ -1,0 +1,7 @@
+variant,status,file,size,crc32,sha256,crop_mode,norm_on,stretch_on
+base,OK,tinyml_pdti8_v16_base.bin,472594,901478D6,f186fc90443abfb0ef2c0fead7b7c3d674622965ebd852d24b93091a27aab9ae,0,0,0
+crop1,OK,tinyml_pdti8_v16_crop1.bin,472762,9D169EFD,f2432af0b5e20ef4b2ad64b48e648b57005dcb52d19d110d2f35d5fe86e81ad8,1,0,0
+crop2,OK,tinyml_pdti8_v16_crop2.bin,472762,83C21873,5d3c554bd0941161d7551f105b85606512d8e3d6e28144a072c347031701beb5,2,0,0
+norm,OK,tinyml_pdti8_v16_norm.bin,472762,875E4EC3,40cf5ab20424a7383e723eeb0029d3d973044b99b3aa843a05e4b5303d24894c,0,1,0
+crop1_norm,OK,tinyml_pdti8_v16_crop1_norm.bin,472762,1B1BD50E,be05a864d2a84e34c02f304613c5cbaafca5314f244287b4df86d5629c55c2fc,1,1,0
+crop1_stretch,OK,tinyml_pdti8_v16_crop1_stretch.bin,472762,071B8537,e1b530ca79ce17e7506a0934f21bd79ebf3f3bc3e5333e15981ce0582a68b42f,1,0,1
