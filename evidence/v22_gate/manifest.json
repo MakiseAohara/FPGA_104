@@ -1,0 +1,78 @@
+{
+  "attempts.json": {
+    "bytes": 903,
+    "sha256": "a427f969c80677caceaf9a59bb976295ee0fd3cf26837f5ad997c89d8026d131"
+  },
+  "build_gate.py": {
+    "bytes": 19735,
+    "sha256": "44bd4fc3fb59fba0a2c156645226ae2303e6e8851a3112d9e3fea6c49f35bece"
+  },
+  "capture_boot_observation.py": {
+    "bytes": 18946,
+    "sha256": "2967d5a8ee7057400af50cab71f9486febf5724fd178a6296a884924f7e733b8"
+  },
+  "capture_initial.py": {
+    "bytes": 15956,
+    "sha256": "b9526570dc463ff834447b1d3cb228d595e35d613e40d4a134979d4025c9ed56"
+  },
+  "capture_v22.py": {
+    "bytes": 19102,
+    "sha256": "24cb1b750c497c5f1bb0a75e51e7c15edb8fd6c1abdacc010bda949077c9ab28"
+  },
+  "contact_sheet_p1.png": {
+    "bytes": 28729,
+    "sha256": "296e6ae23dc94b459c421bd59c43be9645e429900442f2814ee8fc76ef103aab"
+  },
+  "FAILED.md": {
+    "bytes": 1817,
+    "sha256": "50dbcb6a10dac24253654b690163d4cf72633e23975ca77fd32aec72d376d1b7"
+  },
+  "flash_attempt_1.log": {
+    "bytes": 725,
+    "sha256": "89ab6e12cb629321e92d8c483c434bb7973d3caa21f30e3db1dad16f6af30098"
+  },
+  "flash_attempt_2.log": {
+    "bytes": 725,
+    "sha256": "89ab6e12cb629321e92d8c483c434bb7973d3caa21f30e3db1dad16f6af30098"
+  },
+  "flash_attempt_3.log": {
+    "bytes": 725,
+    "sha256": "89ab6e12cb629321e92d8c483c434bb7973d3caa21f30e3db1dad16f6af30098"
+  },
+  "flash_attempt_4.log": {
+    "bytes": 1856,
+    "sha256": "5394f2180e0a75ccdc9cf386935bda5990bec767d81b44c0034e519902b7f699"
+  },
+  "flash_logs/vendor_flash_20261026_073723.log": {
+    "bytes": 896,
+    "sha256": "21ca226f663c2cce72afea631dad4837ee7dd3f55823c5b45b7d149d3b702f8e"
+  },
+  "initial_run_metadata.json": {
+    "bytes": 1130,
+    "sha256": "96d0ecb292293295856cf26a5f24449a59f8deb064de98c0f326f3e80449c10b"
+  },
+  "log_v22_gate.log": {
+    "bytes": 73243,
+    "sha256": "f6885c01531b10151e67477751fa1019ee5f2524b3c5aa44fd68f15b0fbc21c6"
+  },
+  "powershell_preflight.log": {
+    "bytes": 284,
+    "sha256": "01af2e2bc9ea2b0ce1dea4b7592e5ef0e98d1a7ca2bd011df0c03011af98e2b9"
+  },
+  "run_metadata.json": {
+    "bytes": 1341,
+    "sha256": "88fc6eb134d36013c31abd3fbedae383ab7b44a2cc0a14f1d4347caaa79863b0"
+  },
+  "script_events.csv": {
+    "bytes": 53,
+    "sha256": "e1a167ace8e92bc34871994628475bfd3306c6545743ab4b7c445d8fb892686e"
+  },
+  "summary.md": {
+    "bytes": 4521,
+    "sha256": "cb917a46970a28c56ba848d028365bd23f76155f8c0d9bfa19e09404baa092a7"
+  },
+  "ticks.csv": {
+    "bytes": 1062,
+    "sha256": "fbcaae10020a64b230324a072d85b68a00586b2895e3eb5fdd2c64dd8b98ee59"
+  }
+}

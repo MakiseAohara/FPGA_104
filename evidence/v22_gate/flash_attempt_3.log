@@ -1,0 +1,14 @@
+=== 厂商位流烧录前置检查 ===
+
+--- ① 文件类型 ---
+  文件    : C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace\evidence\v22_gate\v7_MERGE14.bit
+  大小    : 2829903 B
+  时间戳  : 10/25/2026 15:57:33
+
+--- ② sha256 校验 ---
+C:\Users\Makise Aohara\Documents\Codex\2026-10-15\https-github-com-makiseaohara-fpga-104\outputs\fpga_onboard_verified_
+20261020\tools\flash_vendor.ps1 : 无法将“Get-FileHash”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写
+，如果包括路径，请确保路径正确，然后再试一次。
+    + CategoryInfo          : ObjectNotFound: (Get-FileHash:String) [flash_vendor.ps1], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException,flash_vendor.ps1
+ 

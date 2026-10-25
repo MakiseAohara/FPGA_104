@@ -1,0 +1,29 @@
+[
+  {
+    "attempt": 1,
+    "started_wall": "2026-10-26T07:33:32.295+08:00",
+    "ended_wall": "2026-10-26T07:33:33.481+08:00",
+    "upload_completed": false,
+    "error": "RuntimeError('JTAG script exit=1; see flash_attempt_1.log')"
+  },
+  {
+    "attempt": 2,
+    "started_wall": "2026-10-26T07:33:35.482+08:00",
+    "ended_wall": "2026-10-26T07:33:36.608+08:00",
+    "upload_completed": false,
+    "error": "RuntimeError('JTAG script exit=1; see flash_attempt_2.log')"
+  },
+  {
+    "attempt": 3,
+    "started_wall": "2026-10-26T07:33:38.610+08:00",
+    "ended_wall": "2026-10-26T07:33:39.746+08:00",
+    "upload_completed": false,
+    "error": "RuntimeError('JTAG script exit=1; see flash_attempt_3.log')"
+  },
+  {
+    "attempt": 4,
+    "started_wall": "2026-10-26T07:37:17.325+08:00",
+    "ended_wall": "2026-10-26T07:39:29.938+08:00",
+    "upload_completed": true
+  }
+]

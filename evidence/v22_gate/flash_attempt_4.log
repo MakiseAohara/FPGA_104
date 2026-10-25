@@ -1,0 +1,53 @@
+=== 厂商位流烧录前置检查 ===
+
+--- ① 文件类型 ---
+  文件    : C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace\evidence\v22_gate\v7_MERGE14.bit
+  大小    : 2829903 B
+  时间戳  : 10/25/2026 15:57:33
+
+--- ② sha256 校验 ---
+  实际    : E399F99067E6544262315607B27FC3DD2394F37FD245F909DEE1EBA8A8B41FE8
+  期望    : E399F99067E6544262315607B27FC3DD2394F37FD245F909DEE1EBA8A8B41FE8
+  OK       sha256 一致
+
+--- ③ FTDI 驱动版本 ---
+
+DeviceName             DriverVersion
+----------             -------------
+USB Serial Port        2.12.36.20   
+USB Serial Converter D 2.12.36.20   
+USB Serial Port        2.12.36.20   
+USB Serial Converter C 2.12.36.20   
+USB Serial Port        2.12.36.20   
+USB Serial Converter B 2.12.36.20   
+USB Serial Port        2.12.36.20   
+USB Serial Converter A 2.12.36.20   
+
+
+
+  OK       FTDI 驱动统一且匹配选定版本 2.12.36.20
+  ftdibus.sys : 2.12.36.20
+  ftser2k.sys : 2.12.36.20
+
+--- ④ FTDI/JTAG 占用预检（只提示，不自动杀进程）---
+  OK   未发现明显占用 FTDI 的进程
+
+=== 前置检查全部通过：只做 JTAG 临时加载，不写 SPI 闪存 ===
+
+=== 烧录中（-m jtag，只下 .bit）===
+  Using board profile: 'Generic Board Profile Using FT4232H' for pinout connection
+  Connecting to JTAG_TAP: efx_ti
+  jtag programming started!
+  JTAG Programming on hiftdi://0x0403:0x6011/1
+  Programming 'C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace\evidence\v22_gate\v7_MERGE14.bit' via JTAG at freq 6.0 MHz
+  Device ID read from JTAG: 0x10660A79
+  ... finished with JTAG programming
+
+  日志: C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\outputs\FPGA_104\evidence\v22_gate\flash_logs\vendor_flash_20261026_073723.log
+
+=== 烧录判据 ===
+  Device ID read from JTAG : PASS  (期望 0x10660A79)
+  finished with JTAG programming : PASS
+  native exit code (仅参考，不作判据): 0
+  设备 ID: 0x10660A79
+  烧录成功
