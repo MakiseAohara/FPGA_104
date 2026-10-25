@@ -1,0 +1,17 @@
+[
+  {
+    "variant": "crop1",
+    "status": "OK",
+    "file": "tinyml_pdti8_v16_crop1_ae_dump.bin",
+    "size": 481594,
+    "crc32": "E9279CA4",
+    "sha256": "024bedeacf5fb766a60f9c1913fa77973e5f705e86fdc4c944e6ab42100d440c",
+    "dump_every": 10,
+    "crop_mode": 1,
+    "norm_on": 0,
+    "stretch_on": 0,
+    "extra": {
+      "AUTOEXP_ON": 1
+    }
+  }
+]
