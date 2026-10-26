@@ -1,0 +1,105 @@
+{
+  "definition": "additional v26 hold after each v19 release; not physical departure latency",
+  "records": [
+    {
+      "v19_release_ms": 169805,
+      "v26_next_off_ms": 187058,
+      "extra_hold_ms": 17253
+    },
+    {
+      "v19_release_ms": 174681,
+      "v26_next_off_ms": 187058,
+      "extra_hold_ms": 12377
+    },
+    {
+      "v19_release_ms": 187058,
+      "v26_next_off_ms": 187058,
+      "extra_hold_ms": 0
+    },
+    {
+      "v19_release_ms": 204181,
+      "v26_next_off_ms": 253596,
+      "extra_hold_ms": 49415
+    },
+    {
+      "v19_release_ms": 217091,
+      "v26_next_off_ms": 253596,
+      "extra_hold_ms": 36505
+    },
+    {
+      "v19_release_ms": 237508,
+      "v26_next_off_ms": 253596,
+      "extra_hold_ms": 16088
+    },
+    {
+      "v19_release_ms": 245025,
+      "v26_next_off_ms": 253596,
+      "extra_hold_ms": 8571
+    },
+    {
+      "v19_release_ms": 253068,
+      "v26_next_off_ms": 253596,
+      "extra_hold_ms": 528
+    },
+    {
+      "v19_release_ms": 329307,
+      "v26_next_off_ms": 365263,
+      "extra_hold_ms": 35956
+    },
+    {
+      "v19_release_ms": 346555,
+      "v26_next_off_ms": 365263,
+      "extra_hold_ms": 18708
+    },
+    {
+      "v19_release_ms": 356179,
+      "v26_next_off_ms": 365263,
+      "extra_hold_ms": 9084
+    },
+    {
+      "v19_release_ms": 383565,
+      "v26_next_off_ms": 397528,
+      "extra_hold_ms": 13963
+    },
+    {
+      "v19_release_ms": 397000,
+      "v26_next_off_ms": 397528,
+      "extra_hold_ms": 528
+    },
+    {
+      "v19_release_ms": 413071,
+      "v26_next_off_ms": 413071,
+      "extra_hold_ms": 0
+    },
+    {
+      "v19_release_ms": 445329,
+      "v26_next_off_ms": 445329,
+      "extra_hold_ms": 0
+    },
+    {
+      "v19_release_ms": 513705,
+      "v26_next_off_ms": 513705,
+      "extra_hold_ms": 0
+    },
+    {
+      "v19_release_ms": 531487,
+      "v26_next_off_ms": 532015,
+      "extra_hold_ms": 528
+    },
+    {
+      "v19_release_ms": 547565,
+      "v26_next_off_ms": 631876,
+      "extra_hold_ms": 84311
+    },
+    {
+      "v19_release_ms": 576547,
+      "v26_next_off_ms": 631876,
+      "extra_hold_ms": 55329
+    },
+    {
+      "v19_release_ms": 631876,
+      "v26_next_off_ms": 631876,
+      "extra_hold_ms": 0
+    }
+  ]
+}

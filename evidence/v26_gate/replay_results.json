@@ -1,0 +1,244 @@
+{
+  "method": "existing compile_model; actual extracted C executed as RV32IM under Unicorn; no full firmware build",
+  "inputs": {
+    "ticks.csv": "f8edd2ec5b77dec761d71132dd98a86a7ac134f5a59d11ae3bc90c08b371beeb",
+    "ai_samples.csv": "3a280f5e5362caeb99185baeca67d063f6863cca755da0e2da8ce03bd515306e"
+  },
+  "v19": {
+    "constants": {
+      "FW_DECISION_ON": 1,
+      "AI_P_TH": 0,
+      "AI_VOTE_N": 3,
+      "AI_VOTE_K": 2,
+      "AI_P_STRONG": 60,
+      "AI_P_OFF": -40,
+      "AI_AREA_MIN": 200,
+      "AI_AREA_MAX": 4000,
+      "DEC_CAND_FRAMES": 6,
+      "DEC_RELEASE_FRAMES": 3,
+      "DEC_WARMUP": 2
+    },
+    "source_sha256": "4c9cd5da85d897ffa2a3995c210e1d292515988d93998cd37ed824a318cf6f79",
+    "raw_function_sha1": {
+      "ai_vote_update": "02d4d67f9d3bd3669e5d68aef840a069f0604799",
+      "ai_reset": "d94890eb6cb157001b14cab75ab20411c6905af7",
+      "dec_update": "367d08c50a26287f722d6ae48abc8b70f280132c",
+      "dec_log": "b82cff3903be893bd28f9d60989f42127ab92a2e"
+    },
+    "extracted_functions_sha256": "2f996dfe86fe887e11249d3c7d8e104536f460c38c09dfe5f13f3b9ed28c48c2",
+    "dec_records": 876,
+    "compared_records": 876,
+    "mismatches": [],
+    "alarm_segments": 20,
+    "alarm_intervals": [
+      {
+        "start_ms": 166640,
+        "end_ms": 169805,
+        "duration_ms": 3165
+      },
+      {
+        "start_ms": 173095,
+        "end_ms": 174681,
+        "duration_ms": 1586
+      },
+      {
+        "start_ms": 179025,
+        "end_ms": 187058,
+        "duration_ms": 8033
+      },
+      {
+        "start_ms": 199958,
+        "end_ms": 204181,
+        "duration_ms": 4223
+      },
+      {
+        "start_ms": 209055,
+        "end_ms": 217091,
+        "duration_ms": 8036
+      },
+      {
+        "start_ms": 229469,
+        "end_ms": 237508,
+        "duration_ms": 8039
+      },
+      {
+        "start_ms": 239095,
+        "end_ms": 245025,
+        "duration_ms": 5930
+      },
+      {
+        "start_ms": 250426,
+        "end_ms": 253068,
+        "duration_ms": 2642
+      },
+      {
+        "start_ms": 263338,
+        "end_ms": 329307,
+        "duration_ms": 65969
+      },
+      {
+        "start_ms": 341156,
+        "end_ms": 346555,
+        "duration_ms": 5399
+      },
+      {
+        "start_ms": 349197,
+        "end_ms": 356179,
+        "duration_ms": 6982
+      },
+      {
+        "start_ms": 381979,
+        "end_ms": 383565,
+        "duration_ms": 1586
+      },
+      {
+        "start_ms": 390545,
+        "end_ms": 397000,
+        "duration_ms": 6455
+      },
+      {
+        "start_ms": 405561,
+        "end_ms": 413071,
+        "duration_ms": 7510
+      },
+      {
+        "start_ms": 437820,
+        "end_ms": 445329,
+        "duration_ms": 7509
+      },
+      {
+        "start_ms": 503557,
+        "end_ms": 513705,
+        "duration_ms": 10148
+      },
+      {
+        "start_ms": 522271,
+        "end_ms": 531487,
+        "duration_ms": 9216
+      },
+      {
+        "start_ms": 538999,
+        "end_ms": 547565,
+        "duration_ms": 8566
+      },
+      {
+        "start_ms": 573904,
+        "end_ms": 576547,
+        "duration_ms": 2643
+      },
+      {
+        "start_ms": 581951,
+        "end_ms": 631876,
+        "duration_ms": 49925
+      }
+    ],
+    "alarm_ticks": 330,
+    "total_closed_alarm_duration_ms": 223562,
+    "maximum_internal_alarm_off_gap_ms": 58228,
+    "protocol_proxy_empty_ticks": 136,
+    "protocol_proxy_empty_alarm_ticks": 0,
+    "release_after_last_nonoff_ai_ms": {
+      "min": 1584,
+      "median": 1586.0,
+      "max": 3292
+    },
+    "physical_presence_coverage": null,
+    "physical_presence_longest_interruption_ms": null,
+    "physical_empty_alarm_ticks": null,
+    "physical_departure_release_delay_ms": null
+  },
+  "v26": {
+    "constants": {
+      "FW_DECISION_ON": 1,
+      "AI_P_TH": 0,
+      "AI_VOTE_N": 3,
+      "AI_VOTE_K": 2,
+      "AI_P_STRONG": 60,
+      "AI_P_OFF": -80,
+      "AI_AREA_MIN": 200,
+      "AI_AREA_MAX": 20000,
+      "DEC_CAND_FRAMES": 6,
+      "DEC_RELEASE_FRAMES": 3,
+      "DEC_WARMUP": 2
+    },
+    "source_sha256": "7292f775d693c25cbb19ce30023e029ba62acb4319257d64a4f1b49149413591",
+    "raw_function_sha1": {
+      "ai_vote_update": "02d4d67f9d3bd3669e5d68aef840a069f0604799",
+      "ai_reset": "d94890eb6cb157001b14cab75ab20411c6905af7",
+      "dec_update": "367d08c50a26287f722d6ae48abc8b70f280132c",
+      "dec_log": "b82cff3903be893bd28f9d60989f42127ab92a2e"
+    },
+    "extracted_functions_sha256": "2f996dfe86fe887e11249d3c7d8e104536f460c38c09dfe5f13f3b9ed28c48c2",
+    "dec_records": 876,
+    "compared_records": null,
+    "mismatches": [],
+    "alarm_segments": 9,
+    "alarm_intervals": [
+      {
+        "start_ms": 166640,
+        "end_ms": 187058,
+        "duration_ms": 20418
+      },
+      {
+        "start_ms": 199958,
+        "end_ms": 253596,
+        "duration_ms": 53638
+      },
+      {
+        "start_ms": 263338,
+        "end_ms": 365263,
+        "duration_ms": 101925
+      },
+      {
+        "start_ms": 381979,
+        "end_ms": 397528,
+        "duration_ms": 15549
+      },
+      {
+        "start_ms": 405561,
+        "end_ms": 413071,
+        "duration_ms": 7510
+      },
+      {
+        "start_ms": 437820,
+        "end_ms": 445329,
+        "duration_ms": 7509
+      },
+      {
+        "start_ms": 503557,
+        "end_ms": 513705,
+        "duration_ms": 10148
+      },
+      {
+        "start_ms": 522271,
+        "end_ms": 532015,
+        "duration_ms": 9744
+      },
+      {
+        "start_ms": 538999,
+        "end_ms": 631876,
+        "duration_ms": 92877
+      }
+    ],
+    "alarm_ticks": 463,
+    "total_closed_alarm_duration_ms": 319318,
+    "maximum_internal_alarm_off_gap_ms": 58228,
+    "protocol_proxy_empty_ticks": 136,
+    "protocol_proxy_empty_alarm_ticks": 0,
+    "release_after_last_nonoff_ai_ms": {
+      "min": 1582,
+      "median": 1587,
+      "max": 3292
+    },
+    "physical_presence_coverage": null,
+    "physical_presence_longest_interruption_ms": null,
+    "physical_empty_alarm_ticks": null,
+    "physical_departure_release_delay_ms": null
+  },
+  "presence_labels": "not found in repository or supplied inputs; person/motion are not ground truth",
+  "proxy_empty_definition": "device_ms first tick +30s, and final tick -60s; protocol proxy, not verified presence",
+  "fixed_input_validity": "LP uses motion/last_person, not alarm; on-vote parameters unchanged and person sequences identical",
+  "source_change_scope": "only AI_P_OFF and AI_AREA_MAX; original IMG_DUMP_EVERY=40 and v19 boot text preserved",
+  "board_access": false,
+  "full_firmware_built": false
+}

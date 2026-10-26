@@ -1,0 +1,14 @@
+--- evidence/v19/main_live19.cc
++++ evidence/v26_gate/main_live26.cc
+@@ -98,9 +98,9 @@
+ #define AI_VOTE_N        3
+ #define AI_VOTE_K        2
+ #define AI_P_STRONG      60
+-#define AI_P_OFF         (-40)
++#define AI_P_OFF         (-80)
+ #define AI_AREA_MIN      200     /* 运动面积门限：压制全局亮变/AGC 型大 motion */
+-#define AI_AREA_MAX      4000
++#define AI_AREA_MAX      20000
+ #define DEC_CAND_FRAMES  6
+ #define DEC_RELEASE_FRAMES 3     /* 连续无运动且无 AI 的解除计数（≈1.6s） */
+ #define DEC_WARMUP       2

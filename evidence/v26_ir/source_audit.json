@@ -1,0 +1,482 @@
+{
+  "archive_sha256": "fcc93e5543d0fcbe519ccb3f1449b0e6aed1205ddb6401a02d350e22801dc6db",
+  "source_scope": "frozen MERGE14 source archive and v19 firmware; no board access",
+  "v25_log_sha256": "a473442f37e10183c9dc7b9ae949bdd8ba2fa607ed0b0e0c239e215d7939dea9",
+  "dec_records": 876,
+  "lp_records": 876,
+  "fields": {
+    "body": {
+      "450": 876
+    },
+    "irhot": {
+      "1": 876
+    },
+    "sht": {
+      "259": 9,
+      "260": 219,
+      "261": 294,
+      "262": 354
+    },
+    "rh": {
+      "576": 31,
+      "577": 25,
+      "578": 18,
+      "579": 75,
+      "580": 103,
+      "581": 59,
+      "582": 60,
+      "583": 73,
+      "584": 78,
+      "585": 30,
+      "586": 7,
+      "587": 20,
+      "588": 32,
+      "589": 38,
+      "590": 29,
+      "591": 47,
+      "592": 37,
+      "593": 22,
+      "594": 1,
+      "595": 22,
+      "596": 48,
+      "597": 10,
+      "598": 11
+    },
+    "ir_upd": {
+      "0": 9,
+      "1": 12,
+      "2": 7,
+      "3": 13,
+      "4": 1,
+      "5": 333,
+      "6": 1,
+      "7": 105,
+      "8": 2,
+      "9": 7,
+      "10": 7,
+      "11": 4,
+      "12": 6,
+      "13": 7,
+      "14": 27,
+      "15": 8,
+      "16": 1,
+      "17": 187,
+      "18": 14,
+      "19": 1,
+      "20": 59,
+      "21": 5,
+      "22": 1,
+      "23": 14,
+      "24": 8,
+      "25": 2,
+      "26": 5,
+      "27": 2,
+      "28": 21,
+      "29": 2,
+      "30": 3,
+      "31": 2
+    }
+  },
+  "sources": {
+    "rtl/v7/mmt/v7_mmt_core.v": {
+      "bytes": 17370,
+      "sha256": "8ceb00a56483439419c320152b393e9b8c1d2152cb5b158a3dc8ebd70a492b22",
+      "excerpts": [
+        {
+          "start": 99,
+          "end": 106,
+          "lines": [
+            "99:     wire sht_valid, sht_crc_err, sht_bus_err, ir_fv, ir_bus_err;",
+            "100:     wire signed [15:0] sht_t; wire [15:0] sht_rh; wire [9:0] ir_ra; wire [15:0] ir_rd;",
+            "101:     mmt_sensor_subsystem #(.CLK_HZ(CLK_HZ), .SCL_HZ(SCL_HZ), .SHT30_PERIOD_MS(SHT_PERIOD_MS), .IR_PERIOD_MS(IR_PERIOD_MS), .MLX_REFRESH_CODE(IR_REFRESH_CODE)) u_sns (",
+            "102:         .clk(clk), .rst_n(rst_n), .scl_i(scl_i), .scl_o(scl_o_w), .scl_oe(scl_oe_w), .sda_i(sda_i), .sda_o(sda_o_w), .sda_oe(sda_oe_w),",
+            "103:         .sht_data_valid(sht_valid), .sht_temp_c_x100(sht_t), .sht_rh_x100(sht_rh), .sht_temp_raw(), .sht_rh_raw(),",
+            "104:         .sht_crc_err(sht_crc_err), .sht_bus_err(sht_bus_err),",
+            "105:         .ir_frame_cnt(), .ir_frame_valid(ir_fv), .ir_ta_raw(), .ir_bus_err(ir_bus_err),",
+            "106:         .ir_rd_addr(ir_ra), .ir_rd_data(ir_rd), .i2c_busy(), .i2c_owner());"
+          ]
+        },
+        {
+          "start": 119,
+          "end": 140,
+          "lines": [
+            "119:     wire [15:0] hot_delta; wire ir_valid;",
+            "120:     v7_ir_proc u_ir (.clk(clk), .rst_n(rst_n), .frame_valid(ir_fv), .learn_req(learn_btn),",
+            "121:         .rd_addr(ir_ra), .rd_data(ir_rd), .heat_we(th_we), .heat_wa(th_wa), .heat_wd(th_wd),",
+            "122:         .hot_delta(hot_delta), .valid(ir_valid));",
+            "123:     // 温度换算：每一级都打拍（148.5MHz 下 DSP 乘法 + 长加法不能挤在一拍里）",
+            "124:     reg  [15:0] t_pos;       always @(posedge clk) t_pos <= sht_t_f[15] ? 16'd0 : sht_t_f;",
+            "125:     reg  [31:0] amb_m;       always @(posedge clk) amb_m <= t_pos * 32'd13107;   // ×0.1 ≈ ×13107/2^17",
+            "126:     reg  [15:0] amb_x10;     always @(posedge clk) amb_x10 <= amb_m[31:17];",
+            "127:     reg  [31:0] dl;          always @(posedge clk) dl <= hot_delta * IR_K;",
+            "128:     reg  [15:0] dl_x10;      always @(posedge clk) dl_x10 <= dl[15+IR_SH:IR_SH];",
+            "129:     reg  [15:0] body_raw;    always @(posedge clk) body_raw <= amb_x10 + dl_x10;",
+            "130:     reg  signed [15:0] body_x10;",
+            "131:     always @(posedge clk) body_x10 <= (body_raw > 16'd450) ? 16'sd450 : $signed(body_raw);",
+            "132: ",
+            "133:     //---------------- 融合决策 ----------------",
+            "134:     wire [7:0] cv, ct, ce; wire [8:0] score; wire in_win, alarm_raw;",
+            "135:     mmt_fusion_vote u_fv (.clk(clk), .rst_n(rst_n), .vision_prob(vision_prob), .vision_valid(vis_valid),",
+            "136:         .body_max_c_x10(body_x10), .ir_valid(ir_valid & al_ir & IR_IN_FUSION), .ambient_c_x10($signed(amb_x10)), .rh_x100(sht_rh_f),",
+            "137:         .env_valid(sht_seen & sht_t_ok & al_sht), .hour(hour), .score_thresh(8'd154), .auth_start_h(5'd22), .auth_end_h(5'd6),",
+            "138:         .conf_vision(cv), .conf_temp(ct), .conf_env(ce), .score(score), .in_auth_window(in_win), .alarm(alarm_raw), .alarm_valid());",
+            "139:     // 人体证据门控：运动 + 红外热点（热点在上一拍已寄存，hot_delta 来自 ir_proc 的输出寄存器）",
+            "140:     reg ir_hot; always @(posedge clk) ir_hot <= ir_valid && (hot_delta >= HOT_ON);"
+          ]
+        },
+        {
+          "start": 174,
+          "end": 202,
+          "lines": [
+            "174:     //---------------- I2C 诊断（SENSE6）----------------",
+            "175:     reg [1:0] dg_scl_s, dg_sda_s; always @(posedge clk) begin dg_scl_s <= {dg_scl_s[0], scl_i}; dg_sda_s <= {dg_sda_s[0], sda_i}; end",
+            "176:     reg [8:0] dg_rel_sda, dg_rel_scl;     // 主机释放线后的稳定计数（>=256 拍 ≈1.7us，远大于上拉上升时间）",
+            "177:     reg scl_oe_d, dg_slv_q, dg_slv, dg_stuck, dg_crc, dg_irseen;",
+            "178:     reg [15:0] dg_oe_cnt, dg_slv_cnt;",
+            "179:     wire dg_slv_now = dg_rel_sda[8] & ~dg_sda_s[1];       // 主机已释放 SDA 却为低 = 从机在拉低（ACK/数据）",
+            "180:     wire dg_stk_now = dg_rel_scl[8] & ~dg_scl_s[1];       // 主机已释放 SCL 却为低 = 被外部拉住",
+            "181:     always @(posedge clk or negedge rst_n) begin",
+            "182:         if (!rst_n) begin dg_rel_sda<=0; dg_rel_scl<=0; scl_oe_d<=0; dg_slv_q<=0; dg_slv<=0; dg_stuck<=0; dg_crc<=0; dg_irseen<=0; dg_oe_cnt<=0; dg_slv_cnt<=0; end",
+            "183:         else begin",
+            "184:             scl_oe_d <= scl_oe; dg_slv_q <= dg_slv_now;",
+            "185:             dg_rel_sda <= sda_oe ? 9'd0 : (dg_rel_sda[8] ? dg_rel_sda : dg_rel_sda + 1'b1);",
+            "186:             dg_rel_scl <= scl_oe ? 9'd0 : (dg_rel_scl[8] ? dg_rel_scl : dg_rel_scl + 1'b1);",
+            "187:             if (scl_oe & ~scl_oe_d & ~&dg_oe_cnt) dg_oe_cnt <= dg_oe_cnt + 1'b1;",
+            "188:             if (dg_slv_now & ~dg_slv_q & ~&dg_slv_cnt) dg_slv_cnt <= dg_slv_cnt + 1'b1;",
+            "189:             if (dg_slv_now) dg_slv <= 1'b1;",
+            "190:             if (dg_stk_now) dg_stuck <= 1'b1;",
+            "191:             if (sht_crc_err) dg_crc <= 1'b1;",
+            "192:             if (ir_fv) dg_irseen <= 1'b1;",
+            "193:         end",
+            "194:     end",
+            "195: ",
+            "196:     //---------------- I2C 地址扫描（SENSE7）：按住 KEY2 接管总线 ----------------",
+            "197:     wire probe_own = ~kl_q;",
+            "198:     wire pr_scl_o, pr_scl_oe, pr_sda_o, pr_sda_oe, pr_act; wire [7:0] pr_cnt, pr_scans; wire [6:0] pr_a0, pr_a1;",
+            "199:     v7_i2c_probe #(.CLK_HZ(CLK_HZ), .SCL_HZ(PROBE_SCL_HZ)) u_probe (.clk(clk), .rst_n(rst_n), .en(probe_own),",
+            "200:         .scl_i(scl_i), .sda_i(sda_i), .scl_o(pr_scl_o), .scl_oe(pr_scl_oe), .sda_o(pr_sda_o), .sda_oe(pr_sda_oe), .active(pr_act),",
+            "201:         .res_cnt(pr_cnt), .res_a0(pr_a0), .res_a1(pr_a1), .scans(pr_scans));",
+            "202:     assign scl_o  = probe_own ? pr_scl_o  : scl_o_w;"
+          ]
+        },
+        {
+          "start": 219,
+          "end": 241,
+          "lines": [
+            "219:     reg  [15:0] conf_x100; always @(posedge clk) conf_x100 <= (score * 9'd25) >> 6;   // score/256*100",
+            "220:     wire sns_ok = sht_seen & ~sht_bus_err & ~ir_bus_err;",
+            "221:     wire [15:0] ir_x10 = body_raw;",
+            "222:     v7_txt_fmt u_fmt (.clk(clk), .rst_n(rst_n), .refresh(vs_rise),",
+            "223:         .temp_x100(t_pos), .rh_x100(sht_rh_f), .ir_x10(ir_x10), .area(fd_area), .conf_x100(conf_x100),",
+            "224:         .ai_score(ai_score), .ai_alive(ai_alive), .ai_person(ai_p_eff), .motion(fd_motion), .alarm_on(alarm_final), .evt_code(fw_evt), .night(night), .sns_ok(sns_ok), .low_pwr(low_pwr),",
+            "225:         .dg_lb_scl(dg_lb_scl), .dg_lb_sda(dg_lb_sda), .pr_scans(pr_scans), .pr_cnt(pr_cnt), .pr_a0(pr_a0), .pr_a1(pr_a1), .dg_scl(dg_scl_s[1]), .dg_sda(dg_sda_s[1]), .dg_slv(dg_slv), .dg_stuck(dg_stuck), .dg_sht_err(sht_bus_err), .dg_ir_err(ir_bus_err),",
+            "226:         .dg_sht_seen(sht_seen), .dg_irseen(dg_irseen), .dg_crc(dg_crc), .dg_oe_cnt(dg_oe_cnt), .dg_slv_cnt(dg_slv_cnt),",
+            "227:         .txt_we(txt_we), .txt_wa(txt_wa), .txt_wd(txt_wd));",
+            "228: ",
+            "229:     //---------------- MERGE11: 证据快照（APB 字 11/12/13，供 RISC-V 做历史决策） ----------------",
+            "230:     // 全部在本时钟域；顶层 v7_apb_ext 在 vs 上升沿锁存后跨到 core_clk 域。",
+            "231:     reg [7:0] vs_cnt;                               // 视频帧计数（帧率测量用，8 位回绕）",
+            "232:     always @(posedge clk or negedge rst_n) begin",
+            "233:         if (!rst_n) vs_cnt <= 8'd0;",
+            "234:         else if (vs_rise) vs_cnt <= vs_cnt + 8'd1;",
+            "235:     end",
+            "236: ",
+            "237:     // 字 11：motion / IR 摘要",
+            "238:     wire [11:0] body_x10_u = body_x10[15] ? 12'd0 : body_x10[11:0];  // 已钳位 0..450",
+            "239:     wire [3:0]  evt_flags  = {sht_seen, ir_valid, ir_hot, fd_motion};",
+            "240:     assign obs_evt = {fd_area, body_x10_u, evt_flags};",
+            "241:     //   [31:16]=帧差面积  [15:4]=最高体温×10  [3]=sht_seen [2]=ir_valid [1]=ir_hot [0]=motion"
+          ]
+        }
+      ]
+    },
+    "rtl/v7/mmt/v7_ir_proc.v": {
+      "bytes": 4173,
+      "sha256": "48f8f98218139e5e89df8a4cb6da6c2825bf7e4e0d2f62e8c978137945ea6486",
+      "excerpts": [
+        {
+          "start": 34,
+          "end": 49,
+          "lines": [
+            "34:     wire signed [16:0] raw = {rd_data[15], rd_data};",
+            "35:     wire signed [16:0] base = {base_q[15], base_q};",
+            "36:     wire signed [16:0] d = raw - base;",
+            "37:     wire [15:0] d_pos = d[16] ? 16'd0 : d[15:0];",
+            "38:     // MERGE12/MERGE9: 有符号对称舍入（原先负数直接 >>>3 是向下取整，基线会永远追不上）",
+            "39:     wire signed [17:0] d_ext = d;",
+            "40:     wire signed [17:0] bstep18 = (d > 0) ? ((d_ext + 18'sd7) >>> 3)",
+            "41:                                        : -(((-d_ext) + 18'sd7) >>> 3);",
+            "42:     wire signed [16:0] bstep = bstep18[16:0];",
+            "43:     wire [15:0] hs = d_pos >> IR_HS;",
+            "44:     always @(posedge clk or negedge rst_n) begin",
+            "45:         if (!rst_n) begin",
+            "46:             st<=S_IDLE; i<=0; rd_addr<=0; learn_pend<=1; learn_cur<=0; freeze_prev<=0; pend_frame<=0;",
+            "47:             maxd<=0; base_we<=0; base_wd<=0; base_wa<=0; heat_we<=0; heat_wa<=0; heat_wd<=0;",
+            "48:             hot_delta<=0; valid<=0;",
+            "49:         end else begin"
+          ]
+        },
+        {
+          "start": 51,
+          "end": 75,
+          "lines": [
+            "51:             if (learn_req) learn_pend <= 1'b1;",
+            "52:             if (frame_valid) pend_frame <= 1'b1;",
+            "53:             case (st)",
+            "54:               S_IDLE: if (pend_frame) begin",
+            "55:                     pend_frame<=0; i<=0; maxd<=0; learn_cur<=learn_pend; learn_pend<=0; st<=S_ADDR; end",
+            "56:               S_ADDR: begin rd_addr<=i; st<=S_W1; end",
+            "57:               S_W1:   st<=S_W2;",
+            "58:               S_W2:   st<=S_USE;",
+            "59:               S_USE: begin",
+            "60:                   base_wa<=i; heat_wa<=i; heat_we<=1'b1;",
+            "61:                   if (learn_cur) begin",
+            "62:                       base_we<=1'b1; base_wd<=rd_data; heat_wd<=8'd0;",
+            "63:                   end else begin",
+            "64:                       if (!freeze_prev) begin base_we<=1'b1; base_wd<=base_q + bstep[15:0]; end",
+            "65:                       heat_wd <= (d_pos <= NOISE) ? 8'd0 : ((hs > 16'd255) ? 8'd255 : (hs[7:0] == 0 ? 8'd1 : hs[7:0]));",
+            "66:                       if (d_pos > maxd) maxd <= d_pos;",
+            "67:                   end",
+            "68:                   if (i == 10'd767) begin",
+            "69:                       st<=S_IDLE;",
+            "70:                       if (!learn_cur) begin",
+            "71:                           hot_delta <= (d_pos > maxd) ? d_pos : maxd;",
+            "72:                           freeze_prev <= (((d_pos > maxd) ? d_pos : maxd) > FREEZE_TH);",
+            "73:                       end",
+            "74:                       valid <= 1'b1; learn_cur <= 1'b0;",
+            "75:                   end else begin i<=i+10'd1; st<=S_ADDR; end"
+          ]
+        }
+      ]
+    },
+    "rtl/v7/mmt/v7_apb_ext.v": {
+      "bytes": 7919,
+      "sha256": "e1ba91cfd991c8c20f00a06df80c8feb7436f561e225de4b70befc3baa83a478",
+      "excerpts": [
+        {
+          "start": 75,
+          "end": 81,
+          "lines": [
+            "75:     wire       wr   = psel & penable & pwrite;",
+            "76: ",
+            "77:     // ------------------------------------------------------------------",
+            "78:     // core 域：固件写入的字 14 / 15",
+            "79:     // ------------------------------------------------------------------",
+            "80:     reg [31:0] w14_q, w15_q;",
+            "81:     always @(posedge core_clk or negedge core_rst_n) begin"
+          ]
+        },
+        {
+          "start": 189,
+          "end": 197,
+          "lines": []
+        }
+      ]
+    },
+    "rtl/v7/mmt/mmt_mlx90640_ctrl.v": {
+      "bytes": 17343,
+      "sha256": "a97bd535c6f47f0730b3ac698a8ccdbf71cf564354572aa7714318b60a3139f1",
+      "excerpts": [
+        {
+          "start": 45,
+          "end": 65,
+          "lines": [
+            "45: module mmt_mlx90640_ctrl #(",
+            "46:     parameter CLK_HZ          = 100_000_000,",
+            "47:     parameter I2C_ADDR        = 7'h33,        // MLX90640 默认 7 位地址",
+            "48:     parameter FRAME_PERIOD_MS = 500,          // 2Hz 取一帧",
+            "49:     // 必须与 FRAME_PERIOD_MS 对应的刷新率手动同步（见文件头刷新率表）：",
+            "50:     // 默认 500ms=2Hz -> 3'b010。改 FRAME_PERIOD_MS 时请同步改这个。",
+            "51:     parameter [2:0] REFRESH_CODE = 3'b010",
+            "52: )(",
+            "53:     input  wire        clk,",
+            "54:     input  wire        rst_n,",
+            "55: ",
+            "56:     // ---- 帧数据写入端口（双口 BRAM 的写侧）----",
+            "57:     output reg         frame_wr,",
+            "58:     output reg  [9:0]  frame_addr,        // 0..767=像素, 768..831=辅助区",
+            "59:     output reg  [15:0] frame_data,",
+            "60:     output reg  [15:0] frame_cnt,         // 完成的帧计数",
+            "61:     output reg         frame_valid,       // 一帧写入完成脉冲",
+            "62:     output reg  [15:0] ta_raw,            // frameData[800]（Ptat，见文件头②）",
+            "63:     output reg         bus_err,",
+            "64:     output reg         init_done,         // CTRL_REG 初始化已完成（新增）",
+            "65: "
+          ]
+        },
+        {
+          "start": 337,
+          "end": 345,
+          "lines": [
+            "337:             end",
+            "338:             //----------------------------------------------------------------",
+            "339:             ST_FRAME_DONE: begin",
+            "340:                 frame_valid <= 1'b1;",
+            "341:                 frame_cnt   <= frame_cnt + 16'd1;",
+            "342:                 bus_err     <= 1'b0;",
+            "343:                 tick_cnt    <= 32'd0;",
+            "344:                 state       <= ST_PERIOD_WAIT;",
+            "345:             end"
+          ]
+        }
+      ]
+    },
+    "rtl/v7/mmt/mmt_sensor_subsystem.v": {
+      "bytes": 9383,
+      "sha256": "527616ca308ae16c8857873f18261e6d3ee64837c8cf94b49601df1a6c876ff0",
+      "excerpts": [
+        {
+          "start": 207,
+          "end": 222,
+          "lines": [
+            "207:     mmt_mlx90640_ctrl #(",
+            "208:         .CLK_HZ          (CLK_HZ),",
+            "209:         .I2C_ADDR        (MLX90640_ADDR),",
+            "210:         .FRAME_PERIOD_MS (IR_PERIOD_MS),",
+            "211:         .REFRESH_CODE    (MLX_REFRESH_CODE)",
+            "212:     ) u_mlx90640 (",
+            "213:         .clk          (clk),",
+            "214:         .rst_n        (rst_n),",
+            "215:         .frame_wr     (ir_wr),",
+            "216:         .frame_addr   (ir_addr),",
+            "217:         .frame_data   (ir_data),",
+            "218:         .frame_cnt    (ir_frame_cnt),",
+            "219:         .frame_valid  (ir_frame_valid),",
+            "220:         .ta_raw       (ir_ta_raw),",
+            "221:         .bus_err      (ir_bus_err),",
+            "222:         .req          (r_req),"
+          ]
+        },
+        {
+          "start": 247,
+          "end": 257,
+          "lines": [
+            "247:     mmt_dpram #(",
+            "248:         .DW (16),",
+            "249:         .AW (10)",
+            "250:     ) u_ir_frame_ram (",
+            "251:         .clk   (clk),",
+            "252:         .we    (ir_wr),",
+            "253:         .waddr (ir_addr),",
+            "254:         .wdata (ir_data),",
+            "255:         .raddr (ir_rd_addr),",
+            "256:         .rdata (ir_rd_data)",
+            "257:     );"
+          ]
+        }
+      ]
+    },
+    "rtl/ti60f225_oob_top.v": {
+      "bytes": 59629,
+      "sha256": "f95faf2321c8d23cd0a8d5242a384fbcb55a257aaf291d0adff210dad327b4a9",
+      "excerpts": [
+        {
+          "start": 852,
+          "end": 858,
+          "lines": [
+            "852: // MERGE10: APB -> camera SCCB (16-bit register address, 8-bit data)",
+            "853: //   word16 (0x40) write I2C_CMD   : [31]=start [30]=rw [23:8]=reg addr [7:0]=wdata",
+            "854: //   word17 (0x44) read  I2C_STATUS: bit0=busy bit1=done(clear on read) bit2=ready",
+            "855: //   word18 (0x48) read  I2C_RDATA : [7:0]=last read data",
+            "856: // APB domain core_clk, I2C domain CLK_5M: command via toggle+2FF, status via 2FF.",
+            "857: // ========================================================================",
+            "858: wire        i2c_busy_5m, i2c_done_toggle_5m, i2c_ready_5m;"
+          ]
+        },
+        {
+          "start": 920,
+          "end": 940,
+          "lines": [
+            "920: always @* begin",
+            "921:   case(soc_apb_paddr[6:2])",
+            "922:     5'd0: soc_apb_prdata = {31'd0, cal_done};",
+            "923:     5'd1: soc_apb_prdata = soc_aw_cnt;",
+            "924:     5'd2: soc_apb_prdata = soc_ar_cnt;",
+            "925:     5'd3: soc_apb_prdata = {29'd0, bridge_state};",
+            "926:     5'd4: soc_apb_prdata = t_aw_cnt;",
+            "927:     5'd5: soc_apb_prdata = t_ar_cnt;",
+            "928:     5'd6: soc_apb_prdata = ci_cnt;",
+            "929:     5'd7: soc_apb_prdata = irq_cnt;",
+            "930:     5'd8: soc_apb_prdata = {31'd0, soc_system_reset};",
+            "931:     5'd9: soc_apb_prdata = {31'd0, osd_alarm_core};",
+            "932:     5'd10: soc_apb_prdata = {23'd0, ai_score_core};",
+            "933:     5'd11: soc_apb_prdata = apb_ext_prdata;   // MERGE11: word11 motion/IR evidence",
+            "934:     5'd12: soc_apb_prdata = apb_ext_prdata;   // MERGE11: word12 environment",
+            "935:     5'd13: soc_apb_prdata = apb_ext_prdata;   // MERGE11: word13 fusion/low-power/alarm status",
+            "936:     5'd16: soc_apb_prdata = 32'd0;   // MERGE10: I2C_CMD (write-only)",
+            "937:     5'd17: soc_apb_prdata = {29'd0, i2c_ready_core, i2c_done_sticky, i2c_busy_core}; // I2C_STATUS",
+            "938:     5'd18: soc_apb_prdata = {24'd0, i2c_rdata_core};                                   // I2C_RDATA",
+            "939:     default: soc_apb_prdata = 32'd0;",
+            "940:   endcase"
+          ]
+        },
+        {
+          "start": 1019,
+          "end": 1020,
+          "lines": [
+            "1019:  .system_i2c_0_io_scl_read(tie1), .system_i2c_0_io_scl_write(),",
+            "1020:  .system_i2c_0_io_sda_read(tie1), .system_i2c_0_io_sda_write(),"
+          ]
+        },
+        {
+          "start": 1473,
+          "end": 1498,
+          "lines": [
+            "1473: v7_apb_ext u_apb_ext (",
+            "1474:   .core_clk(core_clk), .core_rst_n(w_arstn),",
+            "1475:   .paddr(soc_apb_paddr), .pwdata(soc_apb_pwdata),",
+            "1476:   .psel(soc_apb_psel), .penable(soc_apb_penable), .pwrite(soc_apb_pwrite),",
+            "1477:   .prdata(apb_ext_prdata), .hit(apb_ext_hit),",
+            "1478:   .vid_clk(hdmi_tx_slow_clk), .vid_rst_n(vid_rst_n),",
+            "1479:   .vs_rise(vs_rise_v),",
+            "1480:   .evt_v(obs_evt_v), .env_v(obs_env_v), .st_v(obs_st_v),",
+            "1481:   .fw_decision_enable_v(fw_decision_enable_v), .fw_alarm_req_v(fw_alarm_req_v),",
+            "1482:   .fw_evt_v(fw_evt_v),",
+            "1483:   .fw_decision_enable(), .fw_alarm_req()",
+            "1484: );",
+            "1485: ",
+            "1486: v7_mmt_core #(.AI_MODE(1)) u_v7_mmt (",
+            "1487: \t.clk(hdmi_tx_slow_clk), .rst_n(vid_rst_n),",
+            "1488: \t.in_r(enc_r_in), .in_g(enc_g_in), .in_b(enc_b_in),",
+            "1489: \t.in_de(enc_de_in), .in_hs(enc_hs_in), .in_vs(enc_vs_in),",
+            "1490: \t.ai_person(osd_alarm_v2), .ai_score(ai_score_v2[7:0]), .ai_alive(ai_score_v2[8]), .key_night_n(key_night_n), .key_learn_n(key_learn_n),",
+            "1491: \t.fw_evt(fw_evt_v),",
+            "1492: \t.fw_decision_enable(fw_decision_enable_v), .fw_alarm_req(fw_alarm_req_v),",
+            "1493: \t.scl_i(io_sns_scl_IN), .sda_i(io_sns_sda_IN),",
+            "1494: \t.scl_o(io_sns_scl_OUT), .scl_oe(io_sns_scl_OE), .sda_o(io_sns_sda_OUT), .sda_oe(io_sns_sda_OE),",
+            "1495: \t.buzzer(sns_buzzer), .led(mmt_led), .alarm_active(mmt_alarm_active),",
+            "1496: \t.obs_evt(obs_evt_v), .obs_env(obs_env_v), .obs_st(obs_st_v),",
+            "1497: \t.txt_we(mmt_txt_we), .txt_wa(mmt_txt_wa), .txt_wd(mmt_txt_wd),",
+            "1498: \t.th_we(mmt_th_we), .th_wa(mmt_th_wa), .th_wd(mmt_th_wd)"
+          ]
+        }
+      ]
+    },
+    "ti60f225_oob.peri.xml": {
+      "bytes": 81338,
+      "sha256": "07423aef14c899eef0af2cb7e7472c4b261485c7064907efe817c2335dc42d1a",
+      "excerpts": [
+        {
+          "start": 293,
+          "end": 301,
+          "lines": [
+            "293:         <efxpt:comp_gpio name=\"io_sns_scl\" gpio_def=\"GPIOL_11\" mode=\"inout\" bus_name=\"\" io_standard=\"3.3 V LVCMOS\">",
+            "294:             <efxpt:input_config name=\"io_sns_scl_IN\" name_ddio_lo=\"\" conn_type=\"normal\" is_register=\"false\" clock_name=\"\" is_clock_inverted=\"false\" pull_option=\"weak pullup\" is_schmitt_trigger=\"false\" ddio_type=\"none\" is_bus_hold=\"false\" delay=\"0\" is_serial=\"false\" is_dyn_delay=\"false\" fastclk_name=\"\" pullup_ena_name=\"io_sns_scl_PULL_UP_ENA\" dyn_delay_en_name=\"io_sns_scl_DLY_ENA\" dyn_delay_reset_name=\"io_sns_scl_DLY_RST\" dyn_delay_ctrl_name=\"io_sns_scl_DLY_CTRL\" clkmux_buf_name=\"\"/>",
+            "295:             <efxpt:output_config name=\"io_sns_scl_OUT\" name_ddio_lo=\"\" register_option=\"none\" clock_name=\"\" is_clock_inverted=\"false\" is_slew_rate=\"false\" tied_option=\"none\" ddio_type=\"none\" delay=\"0\" is_serial=\"false\" drive_strength=\"2\" fastclk_name=\"\"/>",
+            "296:             <efxpt:output_enable_config name=\"io_sns_scl_OE\" is_register=\"false\" clock_name=\"\" is_clock_inverted=\"false\" name_oen=\"io_sns_scl_OEN\"/>",
+            "297:         </efxpt:comp_gpio>",
+            "298:         <efxpt:comp_gpio name=\"io_sns_sda\" gpio_def=\"GPIOL_09\" mode=\"inout\" bus_name=\"\" io_standard=\"3.3 V LVCMOS\">",
+            "299:             <efxpt:input_config name=\"io_sns_sda_IN\" name_ddio_lo=\"\" conn_type=\"normal\" is_register=\"false\" clock_name=\"\" is_clock_inverted=\"false\" pull_option=\"weak pullup\" is_schmitt_trigger=\"false\" ddio_type=\"none\" is_bus_hold=\"false\" delay=\"0\" is_serial=\"false\" is_dyn_delay=\"false\" fastclk_name=\"\" pullup_ena_name=\"io_sns_sda_PULL_UP_ENA\" dyn_delay_en_name=\"io_sns_sda_DLY_ENA\" dyn_delay_reset_name=\"io_sns_sda_DLY_RST\" dyn_delay_ctrl_name=\"io_sns_sda_DLY_CTRL\" clkmux_buf_name=\"\"/>",
+            "300:             <efxpt:output_config name=\"io_sns_sda_OUT\" name_ddio_lo=\"\" register_option=\"none\" clock_name=\"\" is_clock_inverted=\"false\" is_slew_rate=\"false\" tied_option=\"none\" ddio_type=\"none\" delay=\"0\" is_serial=\"false\" drive_strength=\"2\" fastclk_name=\"\"/>",
+            "301:             <efxpt:output_enable_config name=\"io_sns_sda_OE\" is_register=\"false\" clock_name=\"\" is_clock_inverted=\"false\" name_oen=\"io_sns_sda_OEN\"/>"
+          ]
+        }
+      ]
+    }
+  },
+  "firmware_source_sha256": "4c9cd5da85d897ffa2a3995c210e1d292515988d93998cd37ed824a318cf6f79",
+  "hardware_access": false,
+  "firmware_built": false,
+  "firmware_flashed": false,
+  "rtl_modified": false
+}
