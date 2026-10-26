@@ -1,0 +1,9 @@
+test_actual_ai_counts_images_and_same_frame_joins_without_boot (__main__.BuilderTests.test_actual_ai_counts_images_and_same_frame_joins_without_boot) ... ok
+test_disconnect_reconnects_without_any_write_or_reset (__main__.CaptureTests.test_disconnect_reconnects_without_any_write_or_reset) ... ok
+test_passive_capture_without_boot_preserves_received_bytes (__main__.CaptureTests.test_passive_capture_without_boot_preserves_received_bytes) ... ok
+test_zero_bytes_stops_after_three_passive_open_cycles (__main__.CaptureTests.test_zero_bytes_stops_after_three_passive_open_cycles) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.203s
+
+OK

@@ -1,0 +1,14 @@
+[
+    {
+        "Name":  "Get-FileHash",
+        "ModuleName":  "Microsoft.PowerShell.Utility"
+    },
+    {
+        "Name":  "Get-PnpDevice",
+        "ModuleName":  "PnpDevice"
+    },
+    {
+        "Name":  "Get-CimInstance",
+        "ModuleName":  "CimCmdlets"
+    }
+]
