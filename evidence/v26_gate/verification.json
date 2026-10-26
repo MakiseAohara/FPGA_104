@@ -1,0 +1,11 @@
+{
+  "serial_payload_matches_received_bytes": true,
+  "pending_tail_bytes": 1,
+  "dec_rows": 1050,
+  "actual_ai_rows": 1040,
+  "exact_pixel_frames": 27,
+  "manual_rows_preserved": true,
+  "raw_manual_rows": 2,
+  "firmware_crc32": "B7CCB8D0",
+  "raw_log_sha256": "e35e7af8df89056c978f8f342c9cf72c6a7c59f7b53e0c3ab19b47d3fae5f2a8"
+}

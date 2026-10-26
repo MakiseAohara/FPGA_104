@@ -1,0 +1,12 @@
+{
+  "records": 2,
+  "enter_records": 0,
+  "leave_records": 1,
+  "chair_records": [],
+  "human_finished": true,
+  "records_within_capture_window": 0,
+  "enter_within_capture_window": 0,
+  "leave_within_capture_window": 0,
+  "required_transitions_present": false,
+  "source": "actual operator input only; script prompts excluded"
+}

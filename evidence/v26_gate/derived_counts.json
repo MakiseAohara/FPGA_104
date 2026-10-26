@@ -1,0 +1,14 @@
+{
+  "pre_candidate_dec": 21,
+  "dec": 1050,
+  "complete_images": 27,
+  "pages": 1,
+  "events": 0,
+  "alarm_events": 15,
+  "lp_events": 2,
+  "ai_samples": 1040,
+  "motion_frames": 957,
+  "gaps": 0,
+  "reconnects": 0,
+  "unmatched_pp": 0
+}

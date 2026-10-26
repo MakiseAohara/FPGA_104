@@ -1,0 +1,3 @@
+event,wall,elapsed_s,device_ms_latest,prompt_phase,source
+ANNOTATIONS_FINISHED,2026-10-26T19:53:05.452+08:00,619.726,720277,END,human_button
+LEAVE,2026-10-26T19:53:10.961+08:00,625.236,720277,END,human_button

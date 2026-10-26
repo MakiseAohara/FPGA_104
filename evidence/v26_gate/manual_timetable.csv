@@ -1,0 +1,3 @@
+event,wall,elapsed_s,within_capture_window,device_ms_nearest,device_ms_interpolated,dec_wall,delta_ms,device_ms_latest,prompt_phase,source
+ANNOTATIONS_FINISHED,2026-10-26T19:53:05.452+08:00,619.726,False,720277,,2026-10-26T19:52:45.675+08:00,-19777.0,720277,END,human_button
+LEAVE,2026-10-26T19:53:10.961+08:00,625.236,False,720277,,2026-10-26T19:52:45.675+08:00,-25286.0,720277,END,human_button

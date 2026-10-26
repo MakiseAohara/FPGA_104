@@ -1,0 +1,7 @@
+test_old_firmware_excluded_manual_rows_preserved_and_mapped (__main__.Artifacts.test_old_firmware_excluded_manual_rows_preserved_and_mapped) ... ok
+test_no_human_input_never_creates_action_labels (__main__.Artifacts.test_no_human_input_never_creates_action_labels) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.078s
+
+OK
