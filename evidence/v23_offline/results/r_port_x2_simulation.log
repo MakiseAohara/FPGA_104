@@ -1,0 +1,89 @@
+================================================================
+ debayer_top_2to1 -- Bayer phase / colour mapping test
+ W=16 H=16, 2 pixels/clock, explicit Q8.8 gains; named R/G/B planes
+================================================================
+
+---- PART 1: single bright Bayer site -> output channel ----
+[DE] output line pulse 0 : 8 clocks DE high (capture line 0)
+[DE] output line pulse 1 : 8 clocks DE high (capture line 1)
+[DE] output line pulse 2 : 8 clocks DE high (capture line 2)
+[DE] output line pulse 3 : 8 clocks DE high (capture line 3)
+[DE] output line pulse 4 : 8 clocks DE high (capture line 4)
+[DE] output line pulse 5 : 8 clocks DE high (capture line 5)
+[DE] output line pulse 6 : 8 clocks DE high (capture line 6)
+[DE] output line pulse 7 : 8 clocks DE high (capture line 7)
+[DE] output line pulse 8 : 8 clocks DE high (capture line 8)
+[DE] output line pulse 9 : 8 clocks DE high (capture line 9)
+[DE] output line pulse 10 : 8 clocks DE high (capture line 10)
+[DE] output line pulse 11 : 8 clocks DE high (capture line 11)
+  PACK=0 site(x0,y0) -> sumR=  18227 sumG=      0 sumB=      0  bright= 77  => R
+  PACK=0 site(x1,y0) -> sumR=      0 sumG=  15155 sumB=      0  bright= 77  => G
+  PACK=0 site(x0,y1) -> sumR=      0 sumG=   4125 sumB=      0  bright= 35  => G
+  PACK=0 site(x1,y1) -> sumR=      0 sumG=      0 sumB=  19635  bright= 77  => B
+  PACK=1 site(x0,y0) -> sumR=      0 sumG=  15155 sumB=      0  bright= 77  => G
+  PACK=1 site(x1,y0) -> sumR=  18227 sumG=      0 sumB=      0  bright= 77  => R
+  PACK=1 site(x0,y1) -> sumR=      0 sumG=      0 sumB=  19635  bright= 77  => B
+  PACK=1 site(x1,y1) -> sumR=      0 sumG=   4125 sumB=      0  bright= 35  => G
+
+---- PART 2: pure colour field -> output triplet ----
+   a correct debayer gives: RED -> R, GREEN -> G, BLUE -> B
+  PACK=0 phase=RGGB field=RED -> sumR=   4576 sumG=      0 sumB=      0  bright= 66  => R
+  PACK=0 phase=RGGB field=GREEN -> sumR=      0 sumG=   4848 sumB=      0  bright= 72  => G
+  PACK=0 phase=RGGB field=BLUE -> sumR=      0 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=0 phase=BGGR field=RED -> sumR=      0 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=0 phase=BGGR field=GREEN -> sumR=      0 sumG=   4848 sumB=      0  bright= 72  => G
+  PACK=0 phase=BGGR field=BLUE -> sumR=   4576 sumG=      0 sumB=      0  bright= 66  => R
+  PACK=0 phase=GRBG field=RED -> sumR=      0 sumG=   3808 sumB=      0  bright= 42  => G
+  PACK=0 phase=GRBG field=GREEN -> sumR=   4576 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=0 phase=GRBG field=BLUE -> sumR=      0 sumG=   1040 sumB=      0  bright=  0  => G
+  PACK=0 phase=GBRG field=RED -> sumR=      0 sumG=   1040 sumB=      0  bright=  0  => G
+  PACK=0 phase=GBRG field=GREEN -> sumR=   4576 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=0 phase=GBRG field=BLUE -> sumR=      0 sumG=   3808 sumB=      0  bright= 42  => G
+  PACK=1 phase=RGGB field=RED -> sumR=      0 sumG=   3808 sumB=      0  bright= 42  => G
+  PACK=1 phase=RGGB field=GREEN -> sumR=   4576 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=1 phase=RGGB field=BLUE -> sumR=      0 sumG=   1040 sumB=      0  bright=  0  => G
+  PACK=1 phase=BGGR field=RED -> sumR=      0 sumG=   1040 sumB=      0  bright=  0  => G
+  PACK=1 phase=BGGR field=GREEN -> sumR=   4576 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=1 phase=BGGR field=BLUE -> sumR=      0 sumG=   3808 sumB=      0  bright= 42  => G
+  PACK=1 phase=GRBG field=RED -> sumR=   4576 sumG=      0 sumB=      0  bright= 66  => R
+  PACK=1 phase=GRBG field=GREEN -> sumR=      0 sumG=   4848 sumB=      0  bright= 72  => G
+  PACK=1 phase=GRBG field=BLUE -> sumR=      0 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=1 phase=GBRG field=RED -> sumR=      0 sumG=      0 sumB=   9856  bright= 77  => B
+  PACK=1 phase=GBRG field=GREEN -> sumR=      0 sumG=   4848 sumB=      0  bright= 72  => G
+  PACK=1 phase=GBRG field=BLUE -> sumR=   4576 sumG=      0 sumB=      0  bright= 66  => R
+
+---- PART 3a: grid PACK=1 phase=RGGB RED field (r0/g0/b0) ----
+   L0(8):   0/  0/  0   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64
+   L1(8):   0/  0/  0   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32
+   L2(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L3(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L4(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L5(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L6(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L7(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L8(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L9(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L10(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L11(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+
+---- PART 3b: grid PACK=0 phase=GRBG RED field (r0/g0/b0) ----
+   L0(8):   0/  0/  0   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64   0/ 32/ 64
+   L1(8):   0/  0/  0   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32   0/ 64/ 32
+   L2(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L3(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L4(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L5(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L6(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L7(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L8(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L9(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+   L10(8):   0/  0/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0   0/ 32/  0
+   L11(8):   0/  0/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0   0/ 64/  0
+
+---- PART 4: ramp scene (R ramps with x, G=200, B=16) ----
+   interior output line 6, columns 1..7, printed r/g/b
+   PACK=1 phase=RGGB :  100/ 20/255  200/ 28/255  200/ 32/255  200/ 36/255  200/ 40/255  200/ 44/255  200/ 48/255
+   PACK=1 phase=BGGR :  100/ 16/255  200/ 26/255  200/ 30/255  200/ 34/255  200/ 38/255  200/ 42/255  200/ 46/255
+
+=== DEBAYER TEST DONE ===
+C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\v23_colour\tb_merge14.v:365: $finish called at 89425000 (1ps)

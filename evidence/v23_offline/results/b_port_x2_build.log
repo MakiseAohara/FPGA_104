@@ -1,0 +1,1 @@
+C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\v23_colour\rtl\true_dual_port_ram.v:33: warning: Unsized expression (('sd1)<<(ADDR_WIDTH)) expanded beyond and was clipped to 65568 bits. Try using sized operands.

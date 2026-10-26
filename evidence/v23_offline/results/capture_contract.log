@@ -1,0 +1,13 @@
+test_host_markers_do_not_hide_serial_silence (__main__.CaptureContracts.test_host_markers_do_not_hide_serial_silence) ... ok
+test_lfcr_and_fragmented_lines_keep_boot_tail (__main__.CaptureContracts.test_lfcr_and_fragmented_lines_keep_boot_tail) ... ok
+test_ps5_environment_does_not_inherit_ps7_modules (__main__.CaptureContracts.test_ps5_environment_does_not_inherit_ps7_modules) ... ok
+test_reconnect_does_not_reflash (__main__.CaptureContracts.test_reconnect_does_not_reflash) ... ok
+test_schedule_is_six_rounds_and_390_seconds (__main__.CaptureContracts.test_schedule_is_six_rounds_and_390_seconds) ... ok
+test_empty_rebuild_removes_only_old_generated_sheets (__main__.ParserContracts.test_empty_rebuild_removes_only_old_generated_sheets) ... ok
+test_lfcr_fw_lp_ffff_and_nearest_future_dec (__main__.ParserContracts.test_lfcr_fw_lp_ffff_and_nearest_future_dec) ... ok
+test_partial_image_does_not_create_a_sheet (__main__.ParserContracts.test_partial_image_does_not_create_a_sheet) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.031s
+
+OK

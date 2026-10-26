@@ -1,0 +1,2 @@
+NUMERIC_GAIN_CHECKS=2048 CHANNEL_VALUES=4096
+C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\FPGA_104-main\evidence\v23_offline\tb_gain_numeric.v:50: $finish called at 20965000 (1ps)

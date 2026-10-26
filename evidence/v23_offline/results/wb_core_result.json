@@ -1,0 +1,12 @@
+{
+  "unicorn_version": "2.1.4",
+  "architecture": "RV32IM",
+  "return_code": 0,
+  "returned_to_sentinel": true,
+  "properties": 12,
+  "binary_sha256": "a6a5a4e2224a11cb78fdfb11c000651d5a2a1f13414d01720f0ca38a41c729fe",
+  "board_access": false,
+  "firmware_image_built": false,
+  "candidate_integrated": false,
+  "hardware_writes": false
+}

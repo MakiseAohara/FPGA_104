@@ -216,6 +216,11 @@ def build(evidence):
         event_rows.append(row)
     write_csv(evidence / "script_events.csv", ["event", "wall", "device_ms", "session", "dec_wall", "delta_ms", "note"], event_rows)
 
+    # A rebuilt evidence directory must not retain sheets from an older run.
+    # Only this generator's direct output names are replaced; raw logs remain.
+    for prior_page in evidence.glob("contact_sheet_p*.png"):
+        if re.fullmatch(r"contact_sheet_p\d+\.png", prior_page.name):
+            prior_page.unlink()
     pages = []
     if images:
         from PIL import Image, ImageDraw, ImageFont

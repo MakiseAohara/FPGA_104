@@ -1,0 +1,1123 @@
+{
+  "source_zip_sha256": "fcc93e5543d0fcbe519ccb3f1449b0e6aed1205ddb6401a02d350e22801dc6db",
+  "source_hashes": {
+    "rtl/true_dual_port_ram.v": "44bfb696e997b4d31bfd3c414623623c9b60964bfe711c611cf80a39222e8e8f",
+    "rtl/debayer/rgb_gain_v1.v": "020cfbfaa5d38a9b1d1c26aa804aff3b55ec1790220d4651d9213d2177789161",
+    "rtl/debayer/line_buffer.v": "b2772202f1c8a8773f23a4c62a9470d814978b462c8b8ea52b47d11745855a36",
+    "rtl/debayer/raw_to_rgb.v": "aac0bc773d4c829bd3f1580a350b1957441bb1fc9588fe8d9e69cf36106f5516",
+    "rtl/debayer/debayer_top_2to1.v": "00971c09dbdd5565610e36fbd2e8499878be2d067891695e78282d2da6002163"
+  },
+  "original_rtl_modified": false,
+  "board_access": false,
+  "observed_outputs": "named rgb_rout/rgb_gout/rgb_bout",
+  "variants": [
+    {
+      "variant": "unity",
+      "gains_q8_8": [
+        256,
+        256,
+        256
+      ],
+      "parsed_colour_cases": 24
+    },
+    {
+      "variant": "merge14",
+      "gains_q8_8": [
+        280,
+        232,
+        344
+      ],
+      "parsed_colour_cases": 24
+    },
+    {
+      "variant": "r_port_x2",
+      "gains_q8_8": [
+        512,
+        256,
+        256
+      ],
+      "parsed_colour_cases": 24
+    },
+    {
+      "variant": "b_port_x2",
+      "gains_q8_8": [
+        256,
+        256,
+        512
+      ],
+      "parsed_colour_cases": 24
+    }
+  ],
+  "colour_cases": {
+    "unity": [
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      }
+    ],
+    "merge14": [
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          6149,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4391,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          5390
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          5390
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4391,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          6149,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3451,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          6149,
+          0,
+          5390
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          940,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          940,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          6149,
+          0,
+          5390
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3451,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3451,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          6149,
+          0,
+          5390
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          940,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          940,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          6149,
+          0,
+          5390
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3451,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          6149,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4391,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          5390
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          5390
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4391,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          6149,
+          0,
+          0
+        ],
+        "dominant": "R"
+      }
+    ],
+    "r_port_x2": [
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          4576,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          9856
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          4576,
+          0,
+          0
+        ],
+        "dominant": "R"
+      }
+    ],
+    "b_port_x2": [
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          9152,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          9152,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          9152,
+          0,
+          4928
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          9152,
+          0,
+          4928
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "0",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "GREEN",
+        "sum_rgb": [
+          9152,
+          0,
+          4928
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "RGGB",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          1040,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "GREEN",
+        "sum_rgb": [
+          9152,
+          0,
+          4928
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "BGGR",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          3808,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "RED",
+        "sum_rgb": [
+          9152,
+          0,
+          0
+        ],
+        "dominant": "R"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GRBG",
+        "field": "BLUE",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "RED",
+        "sum_rgb": [
+          0,
+          0,
+          4928
+        ],
+        "dominant": "B"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "GREEN",
+        "sum_rgb": [
+          0,
+          4848,
+          0
+        ],
+        "dominant": "G"
+      },
+      {
+        "pack": "1",
+        "phase": "GBRG",
+        "field": "BLUE",
+        "sum_rgb": [
+          9152,
+          0,
+          0
+        ],
+        "dominant": "R"
+      }
+    ]
+  },
+  "numeric_word_checks": 2048,
+  "numeric_channel_values": 4096,
+  "limitations": [
+    "Synthetic Bayer fields do not establish the sensor's physical Bayer phase or neutral white point.",
+    "Display-path gamma/OSD/encoder are outside this debayer simulation."
+  ]
+}

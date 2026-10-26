@@ -1,0 +1,54 @@
+{
+  "source": "evidence\\v19\\main_live19_dump.cc",
+  "source_sha256": "a298abea77125a10a07a27747faa55ca9a03383daf3b228e45de9e5ac2cf6c9d",
+  "decision_functions_sha256": "2f996dfe86fe887e11249d3c7d8e104536f460c38c09dfe5f13f3b9ed28c48c2",
+  "constants": {
+    "FW_DECISION_ON": 1,
+    "AI_P_TH": 0,
+    "AI_VOTE_N": 3,
+    "AI_VOTE_K": 2,
+    "AI_P_STRONG": 60,
+    "AI_P_OFF": -40,
+    "AI_AREA_MIN": 200,
+    "AI_AREA_MAX": 4000,
+    "DEC_CAND_FRAMES": 6,
+    "DEC_RELEASE_FRAMES": 3,
+    "DEC_WARMUP": 2
+  },
+  "method": "execute unmodified extracted C functions under RV32IM; no firmware rebuild",
+  "checkpoint_policy": "exclude unknown prefix; synchronize only once at an observed paused frame per unknown epoch",
+  "logs": [
+    {
+      "file": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v19_board\\log_v19_A_dump.log",
+      "sha256": "200ed026929de262ed04002457105fad0181596ffd3defc716d0f074a4c70685",
+      "dec_records": 955,
+      "compared_records": 884,
+      "unknown_or_missing_input_records": 70,
+      "paused_checkpoint_records": 1,
+      "epochs": 1,
+      "mismatches": []
+    },
+    {
+      "file": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v19_board\\log_v19_B_official.log",
+      "sha256": "31a391825fce3f6fb8f3d5aaae7b1e5481e21f136535ac009ce102242d07e6ec",
+      "dec_records": 536,
+      "compared_records": 530,
+      "unknown_or_missing_input_records": 5,
+      "paused_checkpoint_records": 1,
+      "epochs": 1,
+      "mismatches": []
+    },
+    {
+      "file": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v22_gate\\log_v22_gate.log",
+      "sha256": "f6885c01531b10151e67477751fa1019ee5f2524b3c5aa44fd68f15b0fbc21c6",
+      "dec_records": 51,
+      "compared_records": 51,
+      "unknown_or_missing_input_records": 0,
+      "paused_checkpoint_records": 0,
+      "epochs": 1,
+      "mismatches": []
+    }
+  ],
+  "board_access": false,
+  "detector_performance_assessed": false
+}
