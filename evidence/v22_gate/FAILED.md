@@ -12,3 +12,7 @@
 - GitHub 推送环境：`GH_TOKEN` 未配置，标准 Git Credential Manager 无 GitHub 凭据，GitHub 插件未连接。main 只读访问正常；推送状态另见输出根目录的 `push_main.log`。
 
 固件 CRC32 `9410DBEF`，SHA256 `8C0AE09D06851257D5412EC834C5BF143D91BFE2F30D111AC298BC571F0D2AD3`。未重新编译、未修改曝光/AE。
+
+## 后续白平衡试用（2026-10-26）
+
+用户随后授权白平衡试用并要求继续。三轮只读 USER1 身份核对均读到正确器件 ID，但 VIO/LA 身份及版本全 FF；未提交新白平衡增益。已按三轮上限停止硬件尝试，记录在 `evidence/v24_wb/FAILED.md` 和 `evidence/v24_wb/summary.md`。原 v22 入侵实测仍未执行。

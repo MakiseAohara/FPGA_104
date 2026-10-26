@@ -1,0 +1,33 @@
+{
+  "started_wall": "2026-10-26T11:48:01.260+08:00",
+  "board_programming": false,
+  "firmware_writes": false,
+  "camera_writes": false,
+  "baseline_vio_from_bitstream_init": [
+    280,
+    232,
+    344,
+    0
+  ],
+  "vio_output_hardware_readback": false,
+  "captures": [],
+  "attempts": [
+    {
+      "attempt": 1,
+      "wall": "2026-10-26T11:48:01.260+08:00",
+      "error": "KeyError('EFINITY_USER_DIR')"
+    },
+    {
+      "attempt": 2,
+      "wall": "2026-10-26T11:48:02.261+08:00",
+      "error": "KeyError('EFINITY_USER_DIR')"
+    },
+    {
+      "attempt": 3,
+      "wall": "2026-10-26T11:48:03.262+08:00",
+      "error": "KeyError('EFINITY_USER_DIR')"
+    }
+  ],
+  "error": "KeyError('EFINITY_USER_DIR')",
+  "ended_wall": "2026-10-26T11:48:03.286+08:00"
+}

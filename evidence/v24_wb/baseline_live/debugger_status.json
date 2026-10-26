@@ -1,0 +1,22 @@
+{
+  "started_wall": "2026-10-26T11:49:00.741+08:00",
+  "board_programming": false,
+  "firmware_writes": false,
+  "camera_writes": false,
+  "baseline_vio_from_bitstream_init": [
+    280,
+    232,
+    344,
+    0
+  ],
+  "vio_output_hardware_readback": false,
+  "captures": [],
+  "attempts": [
+    {
+      "attempt": 1,
+      "wall": "2026-10-26T11:49:00.741+08:00"
+    }
+  ],
+  "error": "EfxDbgMisMatchCoreUUIDError('Debug Core UUID mismatch, Please check if the device is programmed with correct bitstream.')",
+  "ended_wall": "2026-10-26T11:49:01.486+08:00"
+}

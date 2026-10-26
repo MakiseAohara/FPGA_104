@@ -1,0 +1,29 @@
+{
+  "wall": "2026-10-26T12:34:57.101+08:00",
+  "tap": "efx_ti",
+  "user": "USER1",
+  "freq": 1000000.0,
+  "soft_reset_sent": false,
+  "gain_writes": false,
+  "camera_writes": false,
+  "device_idcode": "10660A79",
+  "tap_only_initialize": true,
+  "cores": {
+    "vio0": {
+      "received": "ffffffffffffffffffffffffffffffff",
+      "expected": "d2d3643a7f1e49a3a7f48b242e104fdd",
+      "version": [
+        255,
+        255
+      ]
+    },
+    "la0": {
+      "received": "ffffffffffffffffffffffffffffffff",
+      "expected": "40fc40c15a7b4e5392113defb86d2a4c",
+      "version": [
+        255,
+        255
+      ]
+    }
+  }
+}

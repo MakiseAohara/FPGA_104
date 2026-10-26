@@ -1,0 +1,70 @@
+{
+  "baseline/debugger_status.json": {
+    "bytes": 798,
+    "sha256": "c66acd9d2279fb9fb13cd829963649fb766a64fc40e93e79d533064d8aa76583"
+  },
+  "baseline/FAILED.md": {
+    "bytes": 68,
+    "sha256": "e826d12defa4ebb16ddd58d34d0d99d95ad1507a2615fec2ec63dc61d256c03c"
+  },
+  "baseline_live/debug_profile.json": {
+    "bytes": 1362,
+    "sha256": "838bffeb915a3dd9a67d3b77a3fadcf7d99ee065cb661b56b938b291b0199d68"
+  },
+  "baseline_live/debugger_status.json": {
+    "bytes": 581,
+    "sha256": "c6e9c6a55a31e21e90ff6c6df942128fd21ff6be9ad2b5732bfe529831d99088"
+  },
+  "baseline_live/FAILED.md": {
+    "bytes": 161,
+    "sha256": "faad08bd21bf295654f7f6db0c675a316d267faf5b445a6d6866a703566925a0"
+  },
+  "FAILED.md": {
+    "bytes": 1789,
+    "sha256": "cc4ff9598bbe9233133eff5f083c881c87014705f0b3889b712fc2949b8f119c"
+  },
+  "probe_identity_1.json": {
+    "bytes": 620,
+    "sha256": "61a426311b14cd15eb923b0271c4779874babdf1ea10b7f2e49130b2c97fe6ff"
+  },
+  "probe_identity_2.json": {
+    "bytes": 652,
+    "sha256": "67d57c5acafeb3b323728b08b28a98f72fcb8de285a788a3d7b14ba4f4c601a0"
+  },
+  "probe_identity_3.json": {
+    "bytes": 681,
+    "sha256": "13e54fe4a8558b78bc680e926f1488140e3b6e0a4a3099306e93a3133b2dfcb3"
+  },
+  "serial/log_v22_gate.log": {
+    "bytes": 4341604,
+    "sha256": "cf7b0292b549694486b0c229dbcd5a419a662527e2ab165f76a14cb33cbe22de"
+  },
+  "serial/serial_status.json": {
+    "bytes": 117,
+    "sha256": "a9cd4db0e63345d28ba7089661253cdbb87a1bdd8d7bcfa6a4bfe6e41123852c"
+  },
+  "serial_resume/log_v22_gate.log": {
+    "bytes": 1725769,
+    "sha256": "599dae57659842d548ecf98e7ba3dee24be5632d7fbc54769e26b0ac34327e1f"
+  },
+  "serial_resume/serial_status.json": {
+    "bytes": 116,
+    "sha256": "f9878b2f62cf80c280da345ce2463d463f766c2902df89d7562f01efaee313fc"
+  },
+  "summary.md": {
+    "bytes": 2687,
+    "sha256": "fe30fc9c992ef0d6b32f20c71ca6157fb1b2bde2003c98961bf238a78b9cddb4"
+  },
+  "tools/wb_debugger.py": {
+    "bytes": 5595,
+    "sha256": "ae84c25a450e821c48110d0d6293d918fa99b28de105b873548b450f9f186158"
+  },
+  "tools/wb_probe_readonly.py": {
+    "bytes": 2353,
+    "sha256": "860ce99c311641b68b9b9e671883bcd9928d207cc9ba21952fa2eede97d0662a"
+  },
+  "tools/wb_serial_monitor_executed.py": {
+    "bytes": 1514,
+    "sha256": "e82c5a5ce33e731b18d3d64a412c0269542b51145381e11298f1f8d75343659b"
+  }
+}
