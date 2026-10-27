@@ -1,0 +1,28 @@
+﻿
+===== [MERGE15] 5 步整流程  23:43:27 =====
+[1] efx_map 退出码=0
+[2] efx_pnr#1 退出码=0
+[3] efx_run -f interface
+  Creating D:\v7work\v7_MERGE15\outflow
+  Running: efx_run_pt_unified.py ti60f225_oob Titanium Ti60F225 --output_dir outflow --timing_model I3 --project_xml ti60f225_oob.xml
+     interface :	PASS 
+[4] filter_interface
+     - required input, 0, 21, 1, __bypass__, jtag_inst1_TDI
+     - required output, 0, 23, 0, __bypass__, jtag_inst1_TDO
+  wrote 483 lines -> D:\v7work\v7_MERGE15\out\ti60f225_oob.interface.csv
+[5] efx_pnr#2 --sync_file 退出码=0
+  验收: 'No valid pin(s) found for clock' = 0  （必须 0）
+        'No clocks matched'              = 87
+  时序 hold 违约:
+    Setup (Max) Clock Relationship
+    Hold (Min) Clock Relationship
+    WARNING  : Clock domain between tx_cal_clk_90edge (rising) and tx_cal_clk_90edge (rising) may not meet (slack: -0.523 ns) the hold (min) timing requirement
+    WARNING  : Clock domain between sdram_clk (rising) and sdram_clk (rising) may not meet (slack: -0.363 ns) the hold (min) timing requirement
+    WARNING  : Clock domain between rx_cal_clk (rising) and rx_cal_clk (rising) may not meet (slack: -0.456 ns) the hold (min) timing requirement
+    WARNING  : Clock domain between tx_cal_clk (rising) and tx_cal_clk (rising) may not meet (slack: -0.333 ns) the hold (min) timing requirement
+    WARNING  : Clock domain between hdmi_tx_slow_clk (rising) and hdmi_tx_slow_clk (rising) may not meet (slack: -0.564 ns) the hold (min) timing requirement
+    WARNING  : Clock domain between hdmi_tx_slow_clk (rising) and core_clk (rising) may not meet (slack: -0.805 ns) the hold (min) timing requirement
+    WARNING  : Clock domain between core_clk (rising) and core_clk (rising) may not meet (slack: -0.543 ns) the hold (min) timing requirement
+    Setup (Max) Clock Relationship
+  ✅ bit: D:\v7work\v7_MERGE15\out\v7_MERGE15.bit  2,825,877 B  SHA256 74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40
+===== [MERGE15] 完成 =====

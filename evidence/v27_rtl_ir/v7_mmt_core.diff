@@ -1,0 +1,49 @@
+﻿git.exe : warning: in the working copy of 'D:\v7work\v7_MERGE14\rtl\v7\mmt\v7_mmt_core.v', LF will be replaced by CRLF 
+the next time Git touches it
+At line:22 char:1
++ & git diff --no-index --unified=3 'D:\v7work\v7_MERGE14\rtl\v7\mmt\v7 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: in the working copy of 'D:\v7work\v7_MERGE15\rtl\v7\mmt\v7_mmt_core.v', LF will be replaced by CRLF the next t
+ime Git touches it
+diff --git "a/D:\\v7work\\v7_MERGE14\\rtl\\v7\\mmt\\v7_mmt_core.v" "b/D:\\v7work\\v7_MERGE15\\rtl\\v7\\mmt\\v7_mmt_core.v"
+index f96ec35..112e77c 100644
+--- "a/D:\\v7work\\v7_MERGE14\\rtl\\v7\\mmt\\v7_mmt_core.v"
++++ "b/D:\\v7work\\v7_MERGE15\\rtl\\v7\\mmt\\v7_mmt_core.v"
+@@ -21,7 +21,9 @@ module v7_mmt_core #(
+     parameter signed [7:0] AI_TH = 8'sd1,    // TinyML 人体得分阈值（固件写 APB reg10 后生效；得分 >= 阈值 才算有人）         // 1 = 视觉输入改用 SoC 的 TinyML 人体判决(ai_person)
+     parameter PROBE_SCL_HZ  = 50_000,    // 地址扫描的 SCL 频率
+     parameter FREEZE_MAX    = 600,       // 连续"有运动"超过此帧数（~10 s@60Hz）→ 视觉背景自动重新学习
+-    parameter HOT_ON        = 24,        // MERGE13: 48->24（≈0.9℃；离线诊断 0.5m 人体 Δ≈0.85℃）
++    parameter HOT_ON        = 24,        // MERGE13: 48->24（保留兼容；MERGE15 起 ir_hot 改用热像素计数）
++    parameter HOT_CNT_TH    = 6,         // MERGE15: 本帧 heat>NOISE 的像素数 >= 此值才判 ir_hot
++    parameter FREEZE_RECOVER_MS = 30000, // MERGE15: 冻结基线连续这么久后自动重学
+     parameter REQUIRE_IR    = 1,         // 兼容旧参数（IR_GATE_MODE=1 时等效）
+     parameter IR_GATE_MODE  = 0,         // MERGE14: 0=门控只看 ai_person；1=ir|ai；2=只看 ir_hot
+     parameter IR_IN_FUSION  = 1,         // MERGE14: 1=红外仍参与 60/25/15 融合分数（默认）；0=仅实验用
+@@ -116,8 +118,11 @@ module v7_mmt_core #(
+     v7_ts_align #(.MAX_AGE_SHT(120), .MAX_AGE_IR(60)) u_ts (.clk(clk), .rst_n(rst_n), .vs_rise(vs_rise),
+         .sht_new(sht_valid), .ir_new(ir_fv), .frame_cnt(ts_frame), .age_sht(ts_age_sht), .age_ir(ts_age_ir),
+         .aligned_sht(al_sht), .aligned_ir(al_ir));
+-    wire [15:0] hot_delta; wire ir_valid;
+-    v7_ir_proc u_ir (.clk(clk), .rst_n(rst_n), .frame_valid(ir_fv), .learn_req(learn_btn),
++    wire [15:0] hot_delta; wire ir_valid; wire [7:0] hot_cnt;
++    localparam IR_RECOVER_FRAMES = (FREEZE_RECOVER_MS + IR_PERIOD_MS - 1) / IR_PERIOD_MS;
++    v7_ir_proc #(.RECOVER_FRAMES(IR_RECOVER_FRAMES)) u_ir (
++        .clk(clk), .rst_n(rst_n), .frame_valid(ir_fv), .learn_req(learn_btn),
++        .ai_person(ai_p_eff), .hot_cnt(hot_cnt),
+         .rd_addr(ir_ra), .rd_data(ir_rd), .heat_we(th_we), .heat_wa(th_wa), .heat_wd(th_wd),
+         .hot_delta(hot_delta), .valid(ir_valid));
+     // 温度换算：每一级都打拍（148.5MHz 下 DSP 乘法 + 长加法不能挤在一拍里）
+@@ -137,7 +142,8 @@ module v7_mmt_core #(
+         .env_valid(sht_seen & sht_t_ok & al_sht), .hour(hour), .score_thresh(8'd154), .auth_start_h(5'd22), .auth_end_h(5'd6),
+         .conf_vision(cv), .conf_temp(ct), .conf_env(ce), .score(score), .in_auth_window(in_win), .alarm(alarm_raw), .alarm_valid());
+     // 人体证据门控：运动 + 红外热点（热点在上一拍已寄存，hot_delta 来自 ir_proc 的输出寄存器）
+-    reg ir_hot; always @(posedge clk) ir_hot <= ir_valid && (hot_delta >= HOT_ON);
++    // MERGE15: ir_hot = 有效帧 && 热像素数 >= HOT_CNT_TH（body_x10/APB_EVT 布局不变）
++    reg ir_hot; always @(posedge clk) ir_hot <= ir_valid && (hot_cnt >= HOT_CNT_TH);
+     v7_pwr_ctl #(.IDLE_FRAMES(PWR_IDLE_FRAMES), .DIV(PWR_DIV)) u_pwr (.clk(clk), .rst_n(rst_n), .vs_rise(vs_rise),
+         .human(fd_motion | ir_hot), .low_pwr(low_pwr), .proc_vs(fd_vs));
+     // MERGE13: 门控单列成模块，ir_hot 或 AI 人体判决任一成立即可
