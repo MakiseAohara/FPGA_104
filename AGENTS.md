@@ -1,30 +1,19 @@
-# 先读这个（给 Codex）——今天是关口日，时间紧
+# 先读这个（给 Codex）—— 10/27 更新（Claude / Kevin）
 
-更新：2026-10-26 13:10（Claude / Kevin）
+## 现在要做的(按顺序)
+按 comms/STATUS.md 最后一行和 10/27 总任务执行:
+1. 烧录 evidence/v27_rtl_ir/v7_MERGE15.bit(SHA256 74E205F8…13AF40),再加载 v26 固件(CRC32 B7CCB8D0)。
+2. 冒烟测试四条:HDMI/OSD 正常;人入画报警、离开释放;串口 MMT_DEC 持续且帧率约 60;空场 30 秒无报警。
+   任何一条不过,立刻刷回 v7_MERGE14.bit(SHA256 E399F990…A8B41FE8)并在 comms/codex/ 报告。
+3. 用 1512f07 的操作者面板做有真值重测(操作者点开始、按键标注),数据放 evidence/v27_gate/。
+4. 顺带记录红外:空场/有人时 irhot 的值,手机录 HDMI 红外热力图小窗,含手靠近 20 cm 的 10 秒。
+5. 在 comms/codex/ 写说明:冒烟是否通过、标注是否齐全、红外观察、异常。判定留给 Claude。
 
-## 现在只做一件事
-
-补测 v19 入侵→报警关口，6 轮真人。其余一律排后。
-
-1. 板子上跑的就是 v19（串口日志持续输出，MMT_DEC 行带 t= 与 person= 列）。不需要再烧录。若日志里没有 person= 列，才烧 evidence/v19/tinyml_pdti8_v19_dump.bin（CRC32 9410DBEF）。
-2. 用现成的 capture_v22.py 抓：空场 30 s → 6 轮[走入站稳 20 s → 走出 → 空场 30 s] → 空场 60 s，约 8 分钟。
-3. 开始前看显示器，确认人站在镜头前约 1–2 m 时全身在画面里；窗帘开、主灯开、台灯不对着人、不穿白色或纯黑。
-4. 数据推到 evidence/v25_gate/，并在 comms/codex/ 写一条说明（做了什么、没做什么、问题）。
-
-目标：今天 16:00 前推上来，Claude 当天给结论。
-
-## 今天明确不做
-
-- VIO / LA / debug_profile.wizard.json / USER TAP 调试通道：v24_wb 的记录已足够（三轮 IDCODE 正确、VIO/LA 全 FF），不要继续排查，不要向用户要这些文件。
-- 白平衡增益、AE/曝光、红外排查、帧缓冲核对、新 RTL、新固件、重新编译。
-这些已排到 10/27 以后，见 comms/claude/20261026_schedule.md。
+## 不做
+VIO/LA/白平衡/曝光/AE;不改固件;不重新编译 RTL;不自行调红外参数。
 
 ## 卡住时
-
-任何单个障碍超过 15 分钟没进展：在 comms/codex/ 写说明（做了什么、卡在哪、需要谁回答什么），然后换下一项能做的，不要等用户。烧录失败不是阻塞，板子本来就在跑 v19。
+单个障碍超过 15 分钟:在 comms/codex/ 写清做了什么、卡在哪、需要谁回答什么,然后做下一项,不要等。
 
 ## 约定
-
-- 证据（日志/脚本/图）只放 evidence/；判断与建议放 comms/。
-- 决策函数 ai_vote_update / ai_reset / dec_update / dec_log 的 sha1 必须与 v19 相同（02d4d67f9d / d94890eb6c / 367d08c50a / b82cff3903）；变了先报告再动。
-- 详细材料：comms/URGENT.md、comms/claude/20261026_gate_review.md、comms/claude/20261026_schedule.md、docs/Codex对接说明.md。
+证据只放 evidence/,判断与建议只放 comms/。
