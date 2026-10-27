@@ -61,8 +61,8 @@ def main():
     by_seg = defaultdict(list)
 
     for f in frames:
-        # int8 payload -> 0..255 for display
-        img = (f["pixels"].astype(np.int16) + 128).clip(0, 255).astype(np.uint8)
+        # 串口字节是 int8 的二进制补码；按 int8 解读后 +128 得到 0..255（模 256，不截断）
+        img = (f["pixels"].view(np.int8).astype(np.int16) + 128).astype(np.uint8)
         name = "%s_t%07d_p%d.png" % (f["stage"], f["t"], f["p"])
         Image.fromarray(img, mode="L").save(FRAMES / name)
         by_seg[f["stage"]].append((f, img))
