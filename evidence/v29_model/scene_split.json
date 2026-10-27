@@ -1,0 +1,28 @@
+{
+  "train": {
+    "n": 339,
+    "pos": 0.23893805309734514,
+    "sources": {
+      "evidence/merge12_v17/log_merge12_v17.log": 12,
+      "evidence/merge14_v18/log_merge14_v18.log": 9,
+      "evidence/merge14_v18_dump/log_merge14_v18_dump.log": 28,
+      "evidence/v19_board/log_v19_A_dump.log": 54,
+      "evidence/v19_board/log_v19_B_official.log": 10,
+      "evidence/v22_gate/log_v22_gate.log": 2,
+      "evidence/v24_wb/serial/log_v22_gate.log": 139,
+      "evidence/v24_wb/serial_resume/log_v22_gate.log": 58,
+      "evidence/v26_gate/log_v26_gate.log": 27
+    }
+  },
+  "val": {
+    "n": 148,
+    "pos": 0.4527027027027027,
+    "sources": {
+      "evidence/v25_gate/log_v25_gate.log": 81,
+      "evidence/v27_gate/load_attempt4/log_merge15_load.log": 1,
+      "evidence/v27_gate/log_v27_gate.log": 9,
+      "evidence/v27_gate/manual_smoke_attempt4/log_v27_gate.log": 3,
+      "evidence/v28_gate/log_v28_gate.log": 54
+    }
+  }
+}
