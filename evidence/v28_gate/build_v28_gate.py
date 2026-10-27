@@ -19,6 +19,12 @@ IMG = re.compile(r"^MMT_IMG\s+(\d{1,2})\s+([0-9a-fA-F]{192})\s*$")
 TZ = dt.timezone(dt.timedelta(hours=8))
 
 
+
+def _gray(pixels):
+    """int8 two's complement -> 0..255 grey (mod 256, no clipping)."""
+    import numpy as _np
+    return (_np.frombuffer(pixels, _np.int8).astype(_np.int16) + 128).astype(_np.uint8).tobytes()
+
 def wall_number(value):
     if not isinstance(value, str):
         return None
@@ -254,7 +260,7 @@ def build(evidence):
                 row = by_frame.get((item["session"], item["f"]))
                 item["device_ms"] = row["device_ms"] if row else None
                 x, y = (offset % 8) * cell_w, (offset // 8) * cell_h + 40
-                arr = Image.frombytes("L", (96, 96), item["pixels"]).resize((192, 192), Image.Resampling.NEAREST)
+                arr = Image.frombytes("L", (96, 96), _gray(item["pixels"])).resize((192, 192), Image.Resampling.NEAREST)
                 sheet.paste(arr, (x + 10, y + 4))
                 device_label = str(item["device_ms"]) if item["device_ms"] is not None else "unmatched"
                 draw.text((x + 10, y + 198), f"ms={device_label} p={item['p']}", fill="black", font=font)
@@ -271,7 +277,7 @@ def build(evidence):
             row = by_frame.get((item["session"], item["f"]))
             device_ms = row["device_ms"] if row else None
             filename = f"frame_{number:04d}_ms_{device_ms}_f_{item['f']}.png"
-            Image.frombytes("L", (96, 96), item["pixels"]).save(frame_dir / filename)
+            Image.frombytes("L", (96, 96), _gray(item["pixels"])).save(frame_dir / filename)
             image_index.append(dict(file="frames/"+filename, session=item["session"],
                                     device_ms=device_ms, f=item["f"], p=item["p"], wall=item["wall"]))
     write_csv(evidence / "frames.csv", ["file", "session", "device_ms", "f", "p", "wall"], image_index)
