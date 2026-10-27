@@ -1,0 +1,172 @@
+{
+  "firmware": {
+    "file": "tinyml_pdti8_v28.bin",
+    "bytes": 482754,
+    "crc32": "13F6B971",
+    "sha256": "259B2A78D3EC3480DDB9B7C48D0DFFB786959795FC52570EA69C2918E9B3777F"
+  },
+  "parameters": {
+    "IR_WIN": 10,
+    "IR_NEED": 2,
+    "IR_OFF_WIN": 15,
+    "AI_P_STRONG": 60,
+    "AI_P_OFF": -60,
+    "AI_AREA_MIN": 200,
+    "AI_AREA_MAX": 20000,
+    "AI_VOTE_N": 3,
+    "AI_VOTE_K": 2,
+    "AI_P_TH": 0,
+    "DEC_CAND_FRAMES": 6,
+    "IMG_DUMP_EVERY": 40,
+    "THUMB_DUMP_EVERY": 4
+  },
+  "raw_function_sha1": {
+    "v19": {
+      "ai_vote_update": "02d4d67f9d3bd3669e5d68aef840a069f0604799",
+      "ai_reset": "d94890eb6cb157001b14cab75ab20411c6905af7",
+      "dec_update": "367d08c50a26287f722d6ae48abc8b70f280132c",
+      "dec_log": "b82cff3903be893bd28f9d60989f42127ab92a2e"
+    },
+    "v26": {
+      "ai_vote_update": "02d4d67f9d3bd3669e5d68aef840a069f0604799",
+      "ai_reset": "d94890eb6cb157001b14cab75ab20411c6905af7",
+      "dec_update": "367d08c50a26287f722d6ae48abc8b70f280132c",
+      "dec_log": "b82cff3903be893bd28f9d60989f42127ab92a2e"
+    },
+    "v28": {
+      "ai_vote_update": "02d4d67f9d3bd3669e5d68aef840a069f0604799",
+      "ai_reset": "d94890eb6cb157001b14cab75ab20411c6905af7",
+      "dec_update": "99502fb642ace55d197fb6215f799acabc3cb247",
+      "dec_log": "eaf3d69459f444488dcfcf0d05b9f63fa4239eb0"
+    }
+  },
+  "ai_reset_source_unchanged": true,
+  "original_dump_image_source_unchanged": true,
+  "rtl_modified": false,
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "thumb_semantics": "uint8 grayscale 2x2 integer floor average; decision timestamp from same-frame DEC; LP samples fresh image without inference and p is reset sentinel -128",
+  "ir_ring_initialization": "zero padding on boot/reset; completely cleared on each LP decision",
+  "built": true,
+  "flashed": true,
+  "preprocessed_function_sha1": {
+    "ai_vote_update": "99c1af8b66416016321c61fb27a525072f69d438",
+    "ai_reset": "92a4b650603e3d4bb1e3595759d88696ec98b16c",
+    "dec_update": "7ac218850bed7486a7350db2c349a19ab57d4c6d",
+    "dec_log": "eaf3d69459f444488dcfcf0d05b9f63fa4239eb0",
+    "dump_thumb": "a8dfd18cfd9183d81f3ad1ebb5f9d1585debb96c"
+  },
+  "baseline_source": "evidence/v19/main_live19.cc",
+  "baseline_source_sha256": "4c9cd5da85d897ffa2a3995c210e1d292515988d93998cd37ed824a318cf6f79",
+  "source_sha256": "1419a6dff8e8c8b7bc93716a2c53da9939b703456fcae5b922c715d294b9edce",
+  "inherits_v26_AI_AREA_MAX": true,
+  "files": {
+    "ae_core.h": {
+      "bytes": 6017,
+      "sha256": "2231ea555725635c96a0c0d4d3fa2751c3fc3a0bd435ac8959fb018bc72bc6b1"
+    },
+    "build_stdout.log": {
+      "bytes": 263,
+      "sha256": "3773237722aba4b8cd6f05fdb8d5a59208370298ee0b0a65acdf041c019580f6"
+    },
+    "cam_ctrl_core.h": {
+      "bytes": 6427,
+      "sha256": "9034a1c402dba5c42f7b7d03c4d635bc99a781390de845e2fe7abe0ee94ccc37"
+    },
+    "compile_commands.json": {
+      "bytes": 358471,
+      "sha256": "20c4f0338cb5cd39926ad272fc00c247a7e55bd7e392840c1eee5dd3077617c9"
+    },
+    "elf-info.txt": {
+      "bytes": 1519,
+      "sha256": "a99502c404d7dc6a90e2864cf57a0ca717e4e63e37e53ac4e7853fb56ae583b0"
+    },
+    "link.log": {
+      "bytes": 112,
+      "sha256": "193476f343417f2f294ca9625db62c5eca5d1d976b5f894a7f78e0a50c5cbd81"
+    },
+    "link.rsp": {
+      "bytes": 11593,
+      "sha256": "18ae6a0125c1fe0118bea450d9aaa4392336dbd181544d38b8be476efa957724"
+    },
+    "main_live28.cc": {
+      "bytes": 34183,
+      "sha256": "1419a6dff8e8c8b7bc93716a2c53da9939b703456fcae5b922c715d294b9edce"
+    },
+    "preprocess.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preprocess_core.h": {
+      "bytes": 7691,
+      "sha256": "e5b0041aaa618f1d7283ad06ff2b5d1f1a33b4f19f5cb463369c2cdc4e03177b"
+    },
+    "README.md": {
+      "bytes": 2609,
+      "sha256": "e364bf4c42131e7a38f71f01cc942a4ed947b57584848ab9a98acf0a2d959344"
+    },
+    "replay/v26/actual_decision.c": {
+      "bytes": 4277,
+      "sha256": "75f3848f3213b0e94eb7fa1a33f94372d3138a411133531b3e8722405d82c262"
+    },
+    "replay/v26/replay_build.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "replay/v26/ticks_replayed.csv": {
+      "bytes": 24965,
+      "sha256": "50e434f42ad163e4119f507feea72c10ec5fb8cdd5bb3e87c604190f6cd2dbd5"
+    },
+    "replay/v28/actual_decision.c": {
+      "bytes": 5050,
+      "sha256": "e4228c37e70a6ee73f9fb9d7c63df1fc4c1f5a533681a5690abda94e77103b5d"
+    },
+    "replay/v28/replay_build.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "replay/v28/ticks_replayed.csv": {
+      "bytes": 25032,
+      "sha256": "4d2b183c39b7c95d6a98cb718d0028e3f784d67ee66b7464e38a208a9ba778e4"
+    },
+    "replay_label_segments.csv": {
+      "bytes": 2138,
+      "sha256": "b6c340f7867c8214209324065efeeb4cc79d5c4ee655b1ceb3e10ab4f50a78d9"
+    },
+    "replay_results.json": {
+      "bytes": 3173,
+      "sha256": "36b03b3f7c05da4ff9598776a205cb7b7bdb2042f8663cc4e620485e9e17fba0"
+    },
+    "replay_v28.py": {
+      "bytes": 10422,
+      "sha256": "ec84a9d51c0ecc33b89ceec367739fc540a424dc443ec5ef6b791e4813034a07"
+    },
+    "size.txt": {
+      "bytes": 867,
+      "sha256": "0349860e060350f5eec6f12e04f1f23249c03b137c210b63deed749c22a075c8"
+    },
+    "source.patch": {
+      "bytes": 6938,
+      "sha256": "76b9c4b28bbd6831f64a3ecc48f28183c073bc7fbd5ddc8fb3f4ea72ff850883"
+    },
+    "source_sync.json": {
+      "bytes": 244,
+      "sha256": "c0d9a2e11a70af0fa966cebc870bc15865e2a152d84f0afa2cf8a81272e0551e"
+    },
+    "test_thumb_actual_c.py": {
+      "bytes": 1789,
+      "sha256": "5cb38d622919ea78da46d3c5087504be734932eeccc5416c4be2709498220cce"
+    },
+    "thumb_c_checks.json": {
+      "bytes": 213,
+      "sha256": "d850e04f0abea447b651dab3aa97de5a3939ae730395a08491139026197c55b5"
+    },
+    "tinyml_pdti8_v28.bin": {
+      "bytes": 482754,
+      "sha256": "259b2a78d3ec3480ddb9b7c48d0dffb786959795fc52570ea69c2918e9b3777f"
+    },
+    "tinyml_pdti8_v28.elf": {
+      "bytes": 5334344,
+      "sha256": "8421b60bdb8f59b25640facfd5f586e6ee2faa44fdedfc3a241d964e8b8aa7c3"
+    }
+  }
+}

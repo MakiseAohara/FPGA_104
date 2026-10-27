@@ -1,0 +1,9 @@
+{
+  "serial_payload_matches_received_bytes": true,
+  "dec_rows": 2608,
+  "actual_ai_rows": 2097,
+  "exact_thumbnail_pixels": 649,
+  "malformed_thumbnail_lines": 0,
+  "sheet_pages": 11,
+  "raw_log_sha256": "1dcbd01a45d3b4f79f1b3e171759e59355fb36bcaaf78be5c8178055fc4b40ad"
+}

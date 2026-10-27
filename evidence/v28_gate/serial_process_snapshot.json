@@ -1,0 +1,12 @@
+{
+  "wall": "2026-10-27T18:01:02.8111316+08:00",
+  "candidate_processes": [
+    {
+      "ProcessId": 51148,
+      "ParentProcessId": 44888,
+      "Name": "python.exe",
+      "CommandLine": "\"C:\\Users\\Makise Aohara\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe\" -u evidence\\v28_gate\\capture_v28.py --seconds 1800"
+    }
+  ],
+  "note": "Read-only process snapshot during v28; current capture must remain running; no process terminated."
+}

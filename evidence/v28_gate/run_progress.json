@@ -1,0 +1,11 @@
+{
+  "state": "completed",
+  "wall": "2026-10-27T18:22:49.820+08:00",
+  "elapsed_s": 1800.0,
+  "remaining_s": 0,
+  "v28_dec_records": 2608,
+  "thumbs": 649,
+  "gaps": 4,
+  "reconnects": 20,
+  "source": "post-capture final counters"
+}

@@ -1,0 +1,89 @@
+{
+  "method": "actual extracted C functions under RV32IM Unicorn; fixed v27 inputs, not a Python reimplementation",
+  "input_sha256": {
+    "ticks.csv": "1f57c09e77a1e88a1ae436ab113f57685d4781046d3a794139f40e7a32170096",
+    "log_v27_gate.log": "3e78cdeaabacc67276bdfd7290a43658faf7aa79e3824fba7f52fdc905ed51b1",
+    "manual_events_raw.csv": "3188a7f4289d5726a1d08b7fad0d4907c1c7c56f39063e7027ff28549ea29bd9"
+  },
+  "versions": {
+    "v26": {
+      "dec_records": 479,
+      "baseline_mismatches": [],
+      "functions_sha256": "2f996dfe86fe887e11249d3c7d8e104536f460c38c09dfe5f13f3b9ed28c48c2",
+      "by_last_operator_label": {
+        "person": {
+          "ticks": 202,
+          "alarm_ticks": 106,
+          "duration_ms": 116840,
+          "alarm_ms": 62770
+        },
+        "empty": {
+          "ticks": 161,
+          "alarm_ticks": 138,
+          "duration_ms": 89551,
+          "alarm_ms": 77411
+        },
+        "unlabelled": {
+          "ticks": 116,
+          "alarm_ticks": 18,
+          "duration_ms": 60679,
+          "alarm_ms": 9493
+        },
+        "chair": {
+          "ticks": 25,
+          "alarm_ticks": 4,
+          "duration_ms": 14899,
+          "alarm_ms": 3820
+        }
+      },
+      "presence_coverage_tick_percent": 52.475247524752476,
+      "presence_coverage_time_percent": 53.72304005477576
+    },
+    "v28": {
+      "dec_records": 479,
+      "baseline_mismatches": [],
+      "functions_sha256": "346ad4826106a1b600083bb81264886fc1c1431a18a93149f5d71d3030e1ed9d",
+      "actual_c_boundary_checks": [
+        "motion candidate required even for strong AI",
+        "single p=60 starts without person vote",
+        "two IR positives start without AI person",
+        "15 IR zeros required for release",
+        "AI=-60 does not release",
+        "LP forces release and clears IR/AI",
+        "10-sample ring boundary"
+      ],
+      "by_last_operator_label": {
+        "person": {
+          "ticks": 202,
+          "alarm_ticks": 199,
+          "duration_ms": 116840,
+          "alarm_ms": 113550
+        },
+        "empty": {
+          "ticks": 161,
+          "alarm_ticks": 99,
+          "duration_ms": 89551,
+          "alarm_ms": 55122
+        },
+        "unlabelled": {
+          "ticks": 116,
+          "alarm_ticks": 0,
+          "duration_ms": 60679,
+          "alarm_ms": 0
+        },
+        "chair": {
+          "ticks": 25,
+          "alarm_ticks": 0,
+          "duration_ms": 14899,
+          "alarm_ms": 0
+        }
+      },
+      "presence_coverage_tick_percent": 98.51485148514851,
+      "presence_coverage_time_percent": 97.18418349880179
+    }
+  },
+  "label_policy": "last E/L/Space continued; initial state unknown; chair separately overlaid; duplicate/missing inputs not repaired",
+  "limitations": "v27 has duplicate ENTER and no ENTER before head/side after last LEAVE; metrics describe button labels, not independently verified physical truth",
+  "fixed_input_schedule": "AI on-votes/person are unchanged and equal in both replays, so observed LP/inference schedule is retained",
+  "ir_initialization": "zero-filled ring at boot and during LP; IR_OFF_WIN tests all ring entries, with no separate fill gate"
+}

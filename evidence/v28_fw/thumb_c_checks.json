@@ -1,0 +1,8 @@
+{
+  "actual_c_function": true,
+  "grayscale_view": "uint8 bytes, identical view to MMT_IMG",
+  "pixels_compared": 2304,
+  "hex_characters": 4608,
+  "header_arguments_match": true,
+  "signed_boundary_test": true
+}
