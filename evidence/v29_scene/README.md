@@ -43,3 +43,20 @@
 - **F 段（计划「人进出交替」）：符合预期**，空场帧 p 约 −70…−83，有人帧 p 约 +16…+111。
 - B–E 段未逐页复核，保留原图与段号，供看图判定。
 
+## 原始日志的分片
+
+log_v29_scene.log 共 8,206,080 B，因链路抖动改为 10 个分片上传：
+log_v29_scene.log.part01 … part10（每片 900,000 B，最后一片 106,080 B）。
+
+拼装与校验：
+
+`ash
+cat log_v29_scene.log.part0{1..9} log_v29_scene.log.part10 > log_v29_scene.log
+sha256sum log_v29_scene.log
+# A6D9F27AB5217BE634F407376F96D7588A4862A739561453F5AD7F3C77417AA1
+`
+
+已实测：从仓库取回 10 片拼装后与原文件**逐字节一致**。
+
+> 另外也放了 log_v29_scene.log.zip（2.58 MB，31.5%）供直接下载；
+> 分片与 zip 二选一，内容相同。
