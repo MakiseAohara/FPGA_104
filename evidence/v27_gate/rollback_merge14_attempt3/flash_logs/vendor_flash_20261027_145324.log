@@ -1,0 +1,17 @@
+﻿Using board profile: 'Generic Board Profile Using FT4232H' for pinout connection
+Connecting to JTAG_TAP: efx_ti
+jtag programming started!
+JTAG Programming on hiftdi://0x0403:0x6011/1
+Programming 'C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace\evidence\v22_gate\v7_MERGE14.bit' via JTAG at freq 6.0 MHz
+Device ID read from JTAG: 0x10660A79
+... finished with JTAG programming
+file   : C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace\evidence\v22_gate\v7_MERGE14.bit
+size   : 2829903
+mtime  : 10/25/2026 15:57:33
+sha256 : E399F99067E6544262315607B27FC3DD2394F37FD245F909DEE1EBA8A8B41FE8
+mode   : jtag (JTAG 临时加载，未写 SPI 闪存)
+board  : Generic Board Profile Using FT4232H
+usb    : hiftdi://0x0403:0x6011/1
+expect : Device ID read from JTAG: 0x10660A79 + finished with JTAG programming
+nativeExit: 0
+ts     : 20261027_145324

@@ -1,0 +1,67 @@
+{
+  "state": "SAVED",
+  "t0": "2026-10-27T15:12:15.444+08:00",
+  "ended_wall": "2026-10-27T15:13:34.411+08:00",
+  "device_ms": 353338,
+  "serial_lines": 1033,
+  "gaps": 0,
+  "reconnects": 0,
+  "events": 15,
+  "recent": [
+    {
+      "event": "ENTER",
+      "wall": "2026-10-27T15:13:28.071+08:00",
+      "elapsed_s": "72.627",
+      "device_ms_latest": 347526,
+      "source": "human_key"
+    },
+    {
+      "event": "ALARM_CONFIRMED",
+      "wall": "2026-10-27T15:13:28.810+08:00",
+      "elapsed_s": "73.366",
+      "device_ms_latest": 348053,
+      "source": "human_key"
+    },
+    {
+      "event": "LEAVE",
+      "wall": "2026-10-27T15:13:31.926+08:00",
+      "elapsed_s": "76.482",
+      "device_ms_latest": 351224,
+      "source": "human_key"
+    },
+    {
+      "event": "RELEASE_CONFIRMED",
+      "wall": "2026-10-27T15:13:34.203+08:00",
+      "elapsed_s": "78.759",
+      "device_ms_latest": 353338,
+      "source": "human_key"
+    },
+    {
+      "event": "CAPTURE_END",
+      "wall": "2026-10-27T15:13:34.263+08:00",
+      "elapsed_s": "78.819",
+      "device_ms_latest": 353338,
+      "source": "manual_smoke_sequence_complete"
+    }
+  ],
+  "error": null,
+  "mode": "smoke",
+  "serial_opened_wall": "2026-10-27T15:12:15.512+08:00",
+  "observation_started_wall": "2026-10-27T15:12:15.444+08:00",
+  "observation_ended_wall": "2026-10-27T15:13:34.263+08:00",
+  "started_wall": "2026-10-27T15:12:15.444+08:00",
+  "port": "COM15",
+  "baudrate": 115200,
+  "firmware_crc32": "B7CCB8D0",
+  "firmware_bytes": 477722,
+  "firmware_modified": false,
+  "camera_commands_sent": false,
+  "exposure_modified": false,
+  "reset_after_firmware_upload": false,
+  "action_prompts": false,
+  "enter_leave_markers": "actual_operator_input_only",
+  "acquisition_error": null,
+  "boot_lines": [],
+  "automatic_action_events": false,
+  "simulation_only": false
+}

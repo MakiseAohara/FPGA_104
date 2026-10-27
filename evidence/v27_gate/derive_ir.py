@@ -38,7 +38,9 @@ def build(evidence):
             phase = 'person' if prior[1] == 'ENTER' else 'empty' if prior[1] else 'unlabelled'
             rows.append(dict(session=session, device_ms=device_ms, wall=wall,
                              irhot=values.get('irhot', ''), body10=body_by_frame.get((session, values.get('f')), ''),
-                             human_phase=phase, human_phase_wall=prior[0], human_phase_event=prior[1]))
+                             human_phase=phase, human_phase_wall=prior[0], human_phase_event=prior[1],_frame=values.get('f')))
+    for row in rows:
+        row['body10']=body_by_frame.get((row['session'],row.pop('_frame')),'')
     with (evidence/'ir_observation.csv').open('w', encoding='utf-8', newline='') as stream:
         writer = csv.DictWriter(stream, fieldnames=['session','device_ms','wall','irhot','body10','human_phase','human_phase_wall','human_phase_event'])
         writer.writeheader()
@@ -48,14 +50,15 @@ def build(evidence):
     values = {r['irhot'] for r in rows if r['irhot'] != ''}
     result = dict(dec_rows=len(rows), irhot_by_operator_phase=counts,
                   constant_irhot=next(iter(values)) if len(values) == 1 else None,
-                  phase_source='actual ENTER/LEAVE/EMPTY_CONFIRMED inputs only; no inferred initial empty scene',
+                  phase_source='last actual ENTER/LEAVE/EMPTY_CONFIRMED input only; label continuity is not independently verified when inputs are missing',
                   body_source='same-session same-frame MMT_LP.body; missing values left blank',
-                  video_files=[p.name for p in evidence.glob('*.mp4')])
+                  video_files=[p.relative_to(evidence).as_posix() for p in evidence.rglob('*') if p.is_file() and p.suffix.lower() in ('.mp4','.mov')])
     (evidence/'ir_observation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     summary = evidence/'summary.md'
     with summary.open('a', encoding='utf-8', newline='\n') as stream:
         stream.write('\n## 红外串口观察\n\n')
         stream.write('ir_observation.csv 保留每条 DEC 的 irhot 及同帧 body10。阶段只沿用实际 ENTER / LEAVE / EMPTY_CONFIRMED 按键，首次按键之前标为 unlabelled。\n\n')
+        stream.write('这些阶段表示最后输入的标签状态；存在漏按、重复按键时，不能据此保证中间始终是真实空场或人在场。\n\n')
         stream.write('| 实际按键阶段 | irhot 计数 |\n|---|---|\n')
         for phase, values_count in counts.items():
             stream.write(f'| {phase} | `{json.dumps(values_count)}` |\n')

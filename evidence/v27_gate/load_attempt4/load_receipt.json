@@ -1,0 +1,19 @@
+{
+  "started_wall": "2026-10-27T15:07:26.535+08:00",
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "firmware_crc32": "B7CCB8D0",
+  "firmware_sha256": "BEF15238095C194D4A734BD9F40ED22A0BA6361F325CEB6395AAF51AF9E9828C",
+  "firmware_bytes": 477722,
+  "automatic_rollback": false,
+  "firmware_modified": false,
+  "camera_commands_sent": false,
+  "reset_after_upload": false,
+  "load_completed": true,
+  "board_crc_pass": true,
+  "boot_lines": [
+    "MMT_LIVE_BOOT v19 CROP=1 NORM=0 STRETCH=1 AE=0 LPCAM=0 FW_DEC=1 LOWPOWER=1"
+  ],
+  "dec_rows_observed": 22,
+  "ended_wall": "2026-10-27T15:09:44.012+08:00",
+  "port_closed": true
+}

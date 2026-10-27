@@ -1,0 +1,19 @@
+{
+  "status": "merge15_loaded_operator_smoke_recorded_formal_capture_saved",
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "firmware_crc32": "B7CCB8D0",
+  "firmware_sha256": "BEF15238095C194D4A734BD9F40ED22A0BA6361F325CEB6395AAF51AF9E9828C",
+  "firmware_bytes": 477722,
+  "latest_board_load": "load_attempt4/load_receipt.json",
+  "operator_smoke": "manual_smoke_attempt4/manual_events_raw.csv",
+  "operator_manual_sequence_complete": true,
+  "smoke_recorder_exited_before_formal": true,
+  "formal_capture_saved": true,
+  "host_errors_do_not_trigger_rollback": true,
+  "automatic_truth_judgment": false,
+  "previous_incidents": [
+    "board_setup_attempt1.json",
+    "board_setup_attempt2.json",
+    "board_setup_attempt3.json"
+  ]
+}

@@ -1,0 +1,12 @@
+test_disconnect_preserves_raw_bytes_and_does_not_add_actions (__main__.Checks.test_disconnect_preserves_raw_bytes_and_does_not_add_actions) ... ok
+test_no_empty_dataset_is_manufactured (__main__.Checks.test_no_empty_dataset_is_manufactured) ... ok
+test_no_prestart_io_no_planned_labels_and_exact_operator_t0 (__main__.Checks.test_no_prestart_io_no_planned_labels_and_exact_operator_t0) ... ok
+test_open_failure_is_not_saved_success_and_existing_run_is_protected (__main__.Checks.test_open_failure_is_not_saved_success_and_existing_run_is_protected) ... ok
+test_passive_parser_needs_no_boot_and_ir_uses_only_manual_phases (__main__.Checks.test_passive_parser_needs_no_boot_and_ir_uses_only_manual_phases) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.123s
+
+OK
+{"pre_capture_dec": 0, "dec": 2, "complete_images": 0, "pages": 0, "events": 0, "alarm_events": 0, "lp_events": 0, "ai_samples": 0, "motion_frames": 0, "gaps": 0, "reconnects": 1, "unmatched_pp": 0}
+{"pre_capture_dec": 0, "dec": 3, "complete_images": 1, "pages": 1, "events": 0, "alarm_events": 0, "lp_events": 0, "ai_samples": 3, "motion_frames": 0, "gaps": 0, "reconnects": 0, "unmatched_pp": 0}

@@ -1,0 +1,21 @@
+{
+  "dec_rows": 479,
+  "irhot_by_operator_phase": {
+    "unlabelled": {
+      "0": 115,
+      "1": 1
+    },
+    "empty": {
+      "0": 154,
+      "1": 7
+    },
+    "person": {
+      "0": 105,
+      "1": 97
+    }
+  },
+  "constant_irhot": null,
+  "phase_source": "last actual ENTER/LEAVE/EMPTY_CONFIRMED input only; label continuity is not independently verified when inputs are missing",
+  "body_source": "same-session same-frame MMT_LP.body; missing values left blank",
+  "video_files": []
+}

@@ -1,0 +1,7 @@
+{
+  "wall": "2026-10-27T15:06:42.0373535+08:00",
+  "audit_pid": 49740,
+  "candidates": [],
+  "terminated_pids": [],
+  "note": "Command-line candidates only; an exclusive serial open is checked separately. No old capture process was present."
+}

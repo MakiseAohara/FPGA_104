@@ -1,0 +1,27 @@
+{
+  "started_wall": "2026-10-27T14:44:36.148+08:00",
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "firmware_crc32": "B7CCB8D0",
+  "firmware_sha256": "BEF15238095C194D4A734BD9F40ED22A0BA6361F325CEB6395AAF51AF9E9828C",
+  "firmware_bytes": 477722,
+  "checks": {
+    "hdmi_osd": null,
+    "enter_alarm_leave_release": null,
+    "dec_and_camera_fps": null,
+    "empty_30s_no_alarm": null
+  },
+  "rollback_required": true,
+  "load_completed": false,
+  "formal_panel_opened": false,
+  "smoke_error": "SerialTimeoutException('Write timeout')",
+  "failure_kind": "loading_failure",
+  "smoke_ended_wall": "2026-10-27T14:46:24.188+08:00",
+  "dec_rows": 0,
+  "camera_fps_nonzero": [],
+  "operator_rows": 0,
+  "gaps": 3,
+  "smoke_gaps": 0,
+  "reconnects": 0,
+  "rollback_completed": false,
+  "rollback_error": "SerialException(\"could not open port 'COM15': FileNotFoundError(2, '系统找不到指定的文件。', None, 2)\")"
+}

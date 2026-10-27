@@ -28,10 +28,13 @@ $script:taskReady = $false
 if ($SelfTest -or $Mode -eq 'smoke') { $script:taskReady = $true }
 elseif (Test-Path -LiteralPath $BoardReceipt) {
     $taskReceipt = Get-Content -LiteralPath $BoardReceipt -Raw -Encoding UTF8 | ConvertFrom-Json
+    $taskManualReady = ($taskReceipt.operator_manual_sequence_complete -eq $true -and $taskReceipt.smoke_recorder_exited -eq $true -and
+        $taskReceipt.source -eq 'operator_buttons_only' -and $taskReceipt.simulation_only -ne $true)
+    $taskLegacyReady = ($taskReceipt.checks.hdmi_osd -eq $true -and $taskReceipt.checks.enter_alarm_leave_release -eq $true -and
+        $taskReceipt.checks.dec_and_camera_fps -eq $true -and $taskReceipt.checks.empty_30s_no_alarm -eq $true)
     $script:taskReady = ($taskReceipt.bitstream_sha256 -eq '74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40' -and
         $taskReceipt.firmware_crc32 -eq 'B7CCB8D0' -and $taskReceipt.rollback_required -eq $false -and
-        $taskReceipt.checks.hdmi_osd -eq $true -and $taskReceipt.checks.enter_alarm_leave_release -eq $true -and
-        $taskReceipt.checks.dec_and_camera_fps -eq $true -and $taskReceipt.checks.empty_30s_no_alarm -eq $true)
+        ($taskManualReady -or $taskLegacyReady))
 }
 
 $taskStartInfo = New-Object Diagnostics.ProcessStartInfo

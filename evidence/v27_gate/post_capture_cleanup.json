@@ -1,0 +1,7 @@
+{
+  "saved_state_verified": true,
+  "panel_pid": 49544,
+  "panel_exited": true,
+  "reason": "Operator ended capture; close saved UI and its idle backend without adding action events",
+  "wall": "2026-10-27T15:24:52.4825902+08:00"
+}

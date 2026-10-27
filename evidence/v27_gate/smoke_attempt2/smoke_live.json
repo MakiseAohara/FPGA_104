@@ -1,0 +1,14 @@
+{
+  "phase": "STOPPED",
+  "checks": {
+    "hdmi_osd": null,
+    "enter_alarm_leave_release": null,
+    "dec_and_camera_fps": null,
+    "empty_30s_no_alarm": null
+  },
+  "device_ms": null,
+  "camfps": null,
+  "irhot": null,
+  "body10": null,
+  "last_operator_event": ""
+}

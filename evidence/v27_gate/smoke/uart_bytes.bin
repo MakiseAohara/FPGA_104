@@ -1,0 +1,172 @@
+
+MMT_BOOT ONCHIP_UART DDR3_WAIT
+MMT_DDR_CAL_PASS
+MMT_DDR_PASS 256_SCATTERED_WORDS BUS aw=00000100 ar=00000100 state=00000000
+MMT_LOADER_READY
+MMT_LOAD_ACCEPT
+MMT_LOAD_CRC B7CCB8D0
+MMT_LOAD_PASS DDR_CRC
+MMT_LIVE_BOOT v19 CROP=1 NORM=0 STRETCH=1 AE=0 LPCAM=0 FW_DEC=1 LOWPOWER=1
+MMT_CFG v19 CROP_MODE=1 NORM_ON=0 STRETCH_ON=1 AUTOEXP_ON=0 LP_CAMFPS_ON=0 LP_VTS_MULT=3 FW_DECISION_ON=1 LOWPOWER_ON=1 INPUT_SUB128=0 AI_P_TH=0 AI_VOTE=2/3 AREA=[200,20000] DEC_CAND=6
+MMT_LIVE_MODEL in_bytes=9216 in_type=9
+Core 0 Hardware Settings:
+  Accelerator Active: 1
+  UUID: 0x4923687a
+  AXI DW: 128
+  AXI_DB_W: 16
+  Cache Enabled: 1
+  Cache Depth: 512
+  Conv Depthw Mode: 1
+  Conv Depthw Lite Parallel: 4
+  Add Mode: 0
+  FC Mode: 0
+  Mul Mode: 0
+  LR Mode: 0
+  Min-Max Mode: 0
+  Reshape Mode: 0
+MMT_LIVE_HW_READY uuid=0x4923687a
+MMT_CAM_VTS ok=1 vts=0x0x5dc rom_vts=0 fallback=1
+MMT_LP_ENTER f=0 cnt=1 ms=120455 fw_lp=0 rtl_lp=1
+MMT_LP f=0 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=0 ir_upd=0 sht=257 rh=453 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=120474 f=0 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=1 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=0 ir_upd=0 sht=257 rh=453 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=120990 f=1 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=2 lowpwr=1 fw_lp=0 paused=1 camfps=67 inf_hz=0 ddr_ar_s=122539 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=0 sht=257 rh=452 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=121506 f=2 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=3 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=0 sht=257 rh=452 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=122023 f=3 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=4 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=30 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=0 sht=257 rh=452 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=122539 f=4 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=5 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=0 sht=257 rh=452 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=123055 f=5 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=6 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=0 sht=257 rh=452 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=123571 f=6 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=7 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=0 sht=257 rh=452 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=124087 f=7 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=8 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=2 ir_upd=0 sht=257 rh=451 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=124603 f=8 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=9 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=2 ir_upd=0 sht=257 rh=451 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=125119 f=9 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=10 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=2 ir_upd=0 sht=257 rh=451 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=125635 f=10 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=11 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=2 ir_upd=0 sht=257 rh=451 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=126151 f=11 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=12 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=3 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=126667 f=12 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=13 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=3 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=127183 f=13 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=14 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=3 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=127699 f=14 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=15 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=3 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=128215 f=15 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=16 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=3 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=128731 f=16 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=17 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=3 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=129247 f=17 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=18 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=129763 f=18 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=19 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=130279 f=19 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=20 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=29 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=130795 f=20 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=21 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=131311 f=21 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=22 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=28 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=131827 f=22 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=23 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=132343 f=23 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=24 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=132859 f=24 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=25 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=133375 f=25 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=26 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=133891 f=26 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=27 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=4 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=134407 f=27 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=28 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=134923 f=28 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=29 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=135439 f=29 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=30 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=135955 f=30 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=31 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=136471 f=31 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=32 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=136987 f=32 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=33 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=137503 f=33 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=34 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=138019 f=34 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=35 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=138535 f=35 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=36 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=139051 f=36 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=37 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=139567 f=37 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=38 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=140083 f=38 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=39 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=140599 f=39 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=40 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=141115 f=40 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=41 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=5 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=141631 f=41 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=42 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=6 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=142147 f=42 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=43 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=6 ir_upd=0 sht=257 rh=449 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=142663 f=43 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=44 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=7 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=143179 f=44 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=45 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=7 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=143695 f=45 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=46 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=7 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=144211 f=46 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=47 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=7 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=144727 f=47 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=48 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=7 ir_upd=0 sht=257 rh=450 body=450 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=145243 f=48 score=56 mean=56 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=21 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=49 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=7 ir_upd=1 sht=257 rh=450 body=258 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=145759 f=49 score=74 mean=74 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=28 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=50 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=8 ir_upd=2 sht=257 rh=451 body=265 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=146275 f=50 score=79 mean=79 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=30 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=51 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=8 ir_upd=3 sht=257 rh=451 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=146791 f=51 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=52 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=8 ir_upd=3 sht=257 rh=451 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=147307 f=52 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=53 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=8 ir_upd=3 sht=257 rh=451 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=147823 f=53 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=54 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=9 ir_upd=4 sht=257 rh=452 body=259 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=148339 f=54 score=75 mean=75 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=55 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=9 ir_upd=4 sht=257 rh=452 body=259 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=148855 f=55 score=75 mean=75 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=56 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=10 ir_upd=5 sht=257 rh=453 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=149371 f=56 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=57 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=10 ir_upd=6 sht=257 rh=453 body=259 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=149888 f=57 score=75 mean=75 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=58 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=10 ir_upd=7 sht=257 rh=453 body=266 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=150404 f=58 score=79 mean=79 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=30 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=59 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=10 ir_upd=8 sht=257 rh=453 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=150921 f=59 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=60 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=11 ir_upd=9 sht=257 rh=454 body=270 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=151437 f=60 score=82 mean=82 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=32 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=61 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=11 ir_upd=10 sht=257 rh=454 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=151954 f=61 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=62 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=12 ir_upd=10 sht=257 rh=455 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=152470 f=62 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=63 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=12 ir_upd=11 sht=257 rh=455 body=281 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=152987 f=63 score=89 mean=89 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=34 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=64 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=13 ir_upd=12 sht=257 rh=456 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=153503 f=64 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=65 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=13 ir_upd=12 sht=257 rh=456 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=154020 f=65 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=66 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=13 ir_upd=13 sht=257 rh=456 body=258 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=154536 f=66 score=74 mean=74 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=28 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=67 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=14 ir_upd=14 sht=257 rh=457 body=259 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=155053 f=67 score=75 mean=75 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=68 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=14 ir_upd=15 sht=257 rh=457 body=260 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=155569 f=68 score=76 mean=76 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=69 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=15 ir_upd=16 sht=257 rh=458 body=259 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=156086 f=69 score=75 mean=75 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0
+MMT_LP f=70 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=27 tml_ar_s=0 infer=0 sht_upd=15 ir_upd=17 sht=257 rh=458 body=263 vts=0x000005dc vts_ok=1 fallback=1
+MMT_DEC t=156602 f=70 score=78 mean=78 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=30 rtl_alarm=0 cand=0 rel=0 person=0
+

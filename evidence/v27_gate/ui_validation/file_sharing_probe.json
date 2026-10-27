@@ -1,0 +1,15 @@
+{
+  "simulation_only": true,
+  "actual_incident_callsite_confirmed": false,
+  "note": "Third attempt saved no stack. This isolated filesystem test cannot identify the historical COM15 owner.",
+  "without_delete_share": {
+    "replace_succeeded": false,
+    "error": "PermissionError(13, '拒绝访问。')",
+    "winerror": 5
+  },
+  "with_delete_share": {
+    "replace_succeeded": false,
+    "error": "PermissionError(13, '拒绝访问。')",
+    "winerror": 5
+  }
+}

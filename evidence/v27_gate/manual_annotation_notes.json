@@ -1,0 +1,42 @@
+{
+  "event_counts": {
+    "CAPTURE_START": 1,
+    "ENTER": 5,
+    "LEAVE": 4,
+    "CHAIR_START": 1,
+    "CHAIR_END": 1,
+    "HEAD_DOWN_START": 1,
+    "HEAD_DOWN_END": 1,
+    "SIDE_START": 1,
+    "SIDE_END": 1,
+    "CAPTURE_END": 1
+  },
+  "issues": [
+    {
+      "kind": "consecutive_transition",
+      "previous": {
+        "event": "ENTER",
+        "wall": "2026-10-27T15:16:16.526+08:00",
+        "elapsed_s": "148.819",
+        "device_ms_latest": "515985",
+        "source": "human_key"
+      },
+      "event": {
+        "event": "ENTER",
+        "wall": "2026-10-27T15:16:24.189+08:00",
+        "elapsed_s": "156.482",
+        "device_ms_latest": "523497",
+        "source": "human_key"
+      }
+    },
+    {
+      "kind": "missing_event_types",
+      "events": [
+        "EMPTY_CONFIRMED"
+      ]
+    }
+  ],
+  "raw_events_modified": false,
+  "initial_empty_scene_independently_confirmed": false,
+  "note": "Head/side actions follow the last LEAVE with no new ENTER; no presence boundary is inferred or repaired."
+}

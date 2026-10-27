@@ -1,49 +1,29 @@
-# v27 操作者控制的标注面板
+# v27 MERGE15 + v26 实际采集
 
-当前仅完成软件准备与离线检查。MERGE15 文件未找到，未烧录、未执行冒烟、未正式采集；没有真实 v27 日志、动作 CSV 或手机视频。状态见 preflight.json、summary.md 与 comms/codex/20261027_v27_panel_merge15.md。
+正式数据：2026-10-27 15:13:47.707–15:18:17.184（UTC+08:00），269.477 秒。479 条 DEC、383 次实际 AI、10 张完整 96×96 图；GAP 0、重连 0。字节、逐 DEC 字段、图像像素、人工表及 irhot 行数已独立核对。
 
-## 面板
+manual_events_raw.csv 是实际按键，manual_timetable.csv 只作设备时钟映射。存在重复 ENTER、缺少 EMPTY_CONFIRMED、最后 LEAVE 后低头/侧身前缺少新 ENTER，详见 summary.md 与 manual_annotation_notes.json。不补造事件，不自动判断有效性。
 
-`manual_label_panel.ps1`：大号绿色开始按钮，点击时刻即 T0；红底显示录制计时，结束后显示已保存。E/L、C/V、H/J、S/D、Space 与九个按钮对应，触发时响一声并闪黄。按住快捷键不重复记事件；快捷键只在窗口有焦点时生效。下方显示最近五条已落盘事件。建议流程只显示文字。
+ir_observation.csv/JSON 的分段只是沿用最后一条实际 E/L/Space；漏按会使延续状态不能代表真实画面。irhot 本次有 0 和 1，不据此宣布红外恢复。没有手机视频文件。
 
-开始前不打开串口，也不创建日志或动作文件。开始/结束点击分别记 CAPTURE_START/CAPTURE_END；动作只来自操作者按键或按钮。不按键不生成动作。串口设备时间尚未收到时留空，不借用旧运行的 device_ms。关闭正在录制的窗口会按实际关闭时刻停止并保存，不补写离开事件。
+## 当前采集流程
 
-正式模式要求 `board_ready.json` 中四项冒烟事实全部为 true、位流/固件身份匹配、rollback_required 为 false。`smoke_status.template.json` 的 null 仅为待填写结构，不能启用采集；此文件不得冒充实测。冒烟结论需来自本次实际日志与操作者 HDMI/OSD 观察，不能仅凭模板生成。
+1. load_merge15_once.py 验证指定 MERGE15 SHA256、v26 CRC32/SHA256，调用原有已使用过的加载协议；主机错误不自动回刷。
+2. open_manual_flow.py 打开 manual_smoke_panel.ps1。串口只由 capture_v27.py 后端打开；面板经标准输入/输出发送实际按键。
+3. 冒烟只按目视记录 Space → E → 报警确认 A → L → 释放确认 R；串口输出不判定任何真值。五类实际输入依次齐备并保存后，整个冒烟记录器退出，才打开正式面板。
+4. 正式 manual_label_panel.ps1 沿用 1512f07 的操作者开始/T0、九个大按钮/快捷键、红色计时及结束保存；仅增加接受新的人工冒烟记录作为准入。正式采集由操作者点开始，不自动开始。
+5. build_v27_board.py、derive_ir.py、verify_v27_board.py 在采集结束后导出并核对事实。
 
-```powershell
-# 在仓库根目录；需先完成 MERGE15 加载及四项冒烟检查。
-pwsh -NoProfile -STA -File evidence/v27_gate/manual_label_panel.ps1
+run_merge15_smoke.py 是前三轮旧流程的历史代码/加载辅助，直接入口已停用，不再自动用串口判真值或因主机错误回退。新的加载器只复用其中的原始加载辅助函数。
 
-# 冒烟串口记录可使用独立目录；不包含刷写或复位。
-pwsh -NoProfile -STA -File evidence/v27_gate/manual_label_panel.ps1 `
-  -Mode smoke -Evidence evidence/v27_gate/smoke
-```
+## 证据范围
 
-操作者先在 HDMI 确认人距镜头 1.5–2 米、上半身到腰部入画，窗帘和主灯开，台灯不直照人，避免纯白/纯黑衣服。人先退出视野，Kevin 再点击开始。每次实际进入/完全离开分别按 E/L；椅子、低头、侧身按对应开始/结束键，确认真实空场按 Space。结束点红色区域下方的“结束采集并保存”。开始后不发相机命令、不复位、不刷写。
+- log_v27_gate.log / uart_bytes.bin：正式连续日志及收到的字节。
+- ticks.csv、ai_samples.csv、frames/、frames.csv、contact_sheet_p1.png：正式派生数据；每页最多 40 图，按同帧设备 ms 和 p 标注。
+- load_attempt4/、manual_smoke_attempt4/、manual_flow_transition.json：最终 MERGE15 加载、实际目视标注及进程退出/启动衔接。
+- smoke/、smoke_attempt2/、smoke_attempt3/、rollback_merge14*/、board_setup_attempt*.json：早先的中断和回退记录，不能混作正式数据。
+- com15_process_audit.json / com15_exclusive_check.json：事后进程检查与独占打开结果。历史报错时没有句柄快照，不臆造当时占用者。
+- software_preparation/：1512f07 时缺位流的软件准备状态，属于历史快照，不是当前状态。
+- ui_validation/：离线检查和明确标注的模拟界面预览；不包含模拟 UART/人工动作表。
 
-视频由现场手机录制 HDMI 右侧热力图；重测后手在 MLX 前约 20 cm 停 10 秒再拿开 10 秒也录入。没有视频文件就保留缺失状态，不作画面观察结论。
-
-## 接收与派生文件
-
-`capture_v27.py` 是接收后端，无烧录或串口发送逻辑；断线自动重连，不重刷，超过 5 秒空闲写 GAP。保留连续时间戳日志和收到的原始字节；断线时未完成的行另记十六进制，避免拼接不同连接的碎片。30 秒无法重连或设备时钟倒退时保存异常。现有采集文件受保护，不允许覆盖。
-
-```powershell
-# 真实采集结束后再运行，不产生缺失数据的空替代文件。
-python evidence/v27_gate/build_v27_board.py --evidence evidence/v27_gate
-python evidence/v27_gate/derive_ir.py --evidence evidence/v27_gate
-python evidence/v27_gate/verify_v27_board.py --evidence evidence/v27_gate
-```
-
-派生格式沿用 v26：ticks.csv、ai_samples.csv、frames/、frames.csv、每页 40 张的 contact_sheet_p*.png、事实 summary.md。直接抓已有运行，不要求日志中出现新的开机行。manual_timetable.csv 保留原始输入并按最近 DEC / 同分段插值映射时钟；缺失标注不从计划、运动或模型结果推断。ir_observation.csv 按实际 ENTER / LEAVE / EMPTY_CONFIRMED 划分 person / empty / unlabelled，只列收到的 irhot 与同帧 body10；不计算覆盖率或作报警判定。
-
-## 离线检查
-
-`test_capture_v27.py` 检查未开始不操作串口、不生成计划标注、T0/输入时刻保留、接收断线/原始字节、打开失败/保护旧数据、无需开机行的解析、图像像素、人工时钟映射及红外阶段来源。
-
-```powershell
-python evidence/v27_gate/test_capture_v27.py
-pwsh -NoProfile -STA -File evidence/v27_gate/manual_label_panel.ps1 `
-  -SelfTest -SelfTestOut C:/path/outside-evidence/v27_ui_test
-```
-
-UI 自测使用模拟串口，并强制把模拟日志放在 evidence/ 之外。ui_validation/ 只存自测结论和带“离线界面测试”标题的预览图，不包含模拟动作表或模拟上板日志。Windows PowerShell 5.1 与 PowerShell 7 均已运行检查；PS1 保留 UTF-8 BOM 以确保 PS5 正确显示中文。
+固件与 RTL 未修改、未重新编译；没有 VIO/LA、白平衡、曝光/AE 或相机命令。当前实际加载的 MERGE15 及原 v26 身份见 board_setup.json。数据有效性和报警判定由 Claude 分析。

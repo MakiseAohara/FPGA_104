@@ -19,7 +19,8 @@ import time
 sys.dont_write_bytecode = True
 TZ = dt.timezone(dt.timedelta(hours=8))
 EVENTS = {'ENTER', 'LEAVE', 'CHAIR_START', 'CHAIR_END', 'HEAD_DOWN_START',
-          'HEAD_DOWN_END', 'SIDE_START', 'SIDE_END', 'EMPTY_CONFIRMED'}
+          'HEAD_DOWN_END', 'SIDE_START', 'SIDE_END', 'EMPTY_CONFIRMED',
+          'ALARM_CONFIRMED', 'RELEASE_CONFIRMED'}
 FIELDS = ['event', 'wall', 'elapsed_s', 'device_ms_latest', 'source']
 
 

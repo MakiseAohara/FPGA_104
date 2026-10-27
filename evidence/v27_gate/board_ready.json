@@ -1,0 +1,26 @@
+{
+  "source": "operator_buttons_only",
+  "backend_exit_code": 0,
+  "expected_sequence": [
+    "EMPTY_CONFIRMED",
+    "ENTER",
+    "ALARM_CONFIRMED",
+    "LEAVE",
+    "RELEASE_CONFIRMED"
+  ],
+  "automatic_ai_alarm_judgment": false,
+  "simulation_only": false,
+  "backend_pid": 1228,
+  "smoke_recorder_exited": true,
+  "out": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v27_gate\\manual_smoke_attempt4",
+  "operator_manual_sequence_complete": true,
+  "action_count": 13,
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "firmware_crc32": "B7CCB8D0",
+  "rollback_required": false,
+  "smoke_panel_pid": 8740,
+  "smoke_panel_exit_code": 0,
+  "truth_source": "actual operator inputs only",
+  "load_receipt": "evidence\\v27_gate\\load_attempt4\\load_receipt.json",
+  "smoke_directory": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v27_gate\\manual_smoke_attempt4"
+}

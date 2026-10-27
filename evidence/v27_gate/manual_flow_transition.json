@@ -1,0 +1,8 @@
+{
+  "smoke_recorder_exited": true,
+  "smoke_panel_exit_code": 0,
+  "formal_panel_pid": 49544,
+  "formal_opened_wall": "2026-10-27T15:13:34.556+08:00",
+  "serial_overlap": false,
+  "formal_start": "operator must click Start; no automatic formal T0"
+}

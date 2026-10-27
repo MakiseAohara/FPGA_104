@@ -1,0 +1,18 @@
+{
+    "source":  "operator_buttons_only",
+    "backend_exit_code":  0,
+    "expected_sequence":  [
+                              "EMPTY_CONFIRMED",
+                              "ENTER",
+                              "ALARM_CONFIRMED",
+                              "LEAVE",
+                              "RELEASE_CONFIRMED"
+                          ],
+    "automatic_ai_alarm_judgment":  false,
+    "simulation_only":  true,
+    "backend_pid":  25608,
+    "smoke_recorder_exited":  true,
+    "out":  "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\manual_smoke_ui_qa",
+    "operator_manual_sequence_complete":  true,
+    "action_count":  5
+}

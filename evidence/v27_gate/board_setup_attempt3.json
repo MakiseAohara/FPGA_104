@@ -1,0 +1,39 @@
+{
+  "started_wall": "2026-10-27T14:51:00.631+08:00",
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "firmware_crc32": "B7CCB8D0",
+  "firmware_sha256": "BEF15238095C194D4A734BD9F40ED22A0BA6361F325CEB6395AAF51AF9E9828C",
+  "firmware_bytes": 477722,
+  "checks": {
+    "hdmi_osd": null,
+    "enter_alarm_leave_release": null,
+    "dec_and_camera_fps": false,
+    "empty_30s_no_alarm": null
+  },
+  "rollback_required": true,
+  "load_completed": true,
+  "formal_panel_opened": false,
+  "load_completed_wall": "2026-10-27T14:53:13.412+08:00",
+  "boot_lines": [
+    "MMT_LIVE_BOOT v19 CROP=1 NORM=0 STRETCH=1 AE=0 LPCAM=0 FW_DEC=1 LOWPOWER=1"
+  ],
+  "smoke_error": "PermissionError(13, '拒绝访问。')",
+  "failure_kind": "smoke_transport_interruption",
+  "smoke_ended_wall": "2026-10-27T14:53:18.181+08:00",
+  "dec_rows": 9,
+  "camera_fps_nonzero": [
+    72,
+    60,
+    60,
+    59
+  ],
+  "operator_rows": 0,
+  "gaps": 2,
+  "smoke_gaps": 0,
+  "reconnects": 0,
+  "rollback_completed": true,
+  "rollback_bitstream_sha256": "E399F99067E6544262315607B27FC3DD2394F37FD245F909DEE1EBA8A8B41FE8",
+  "rollback_firmware_crc32": "B7CCB8D0",
+  "rollback_ended_wall": "2026-10-27T14:55:36.989+08:00",
+  "rollback_dec_rows": 5
+}

@@ -133,8 +133,8 @@ class Checks(unittest.TestCase):
         for index, ms in enumerate((1000,2000,3000), 1):
             wall = f'2026-10-27T12:00:0{index}.000+08:00'
             rows.extend([f'{wall}\tMMT_AI f={index} p=-100 person=0',
-                         f'{wall}\tMMT_LP f={index} fw_lp=0 body={200+index}',
-                         f'{wall}\tMMT_DEC t={ms} f={index} motion=0 area=0 person=0 alarm_req=0 irhot={index%2}'])
+                         f'{wall}\tMMT_DEC t={ms} f={index} motion=0 area=0 person=0 alarm_req=0 irhot={index%2}',
+                         f'{wall}\tMMT_LP f={index} fw_lp=0 body={200+index}'])
             if index==1:
                 rows.append(f'{wall}\tMMT_IMGSTAT f=1 p=-100')
                 rows.extend(f'{wall}\tMMT_IMG {y} {pixels.hex()}' for y in range(96))
@@ -155,6 +155,8 @@ class Checks(unittest.TestCase):
             self.assertEqual(image.tobytes(), pixels*96)
         result = infrared.build(self.out)
         self.assertEqual(result['irhot_by_operator_phase'], {'unlabelled':{'1':1},'empty':{'0':1},'person':{'1':1}})
+        with (self.out/'ir_observation.csv').open(encoding='utf-8') as stream:
+            self.assertEqual([row['body10'] for row in csv.DictReader(stream)],['201','202','203'])
         with (self.out/'manual_timetable.csv').open(encoding='utf-8') as stream:
             mapped = list(csv.DictReader(stream))
         self.assertEqual([row['event'] for row in mapped], ['EMPTY_CONFIRMED','ENTER'])
