@@ -1,0 +1,4 @@
+log_v29_scene.log  8206080 bytes
+SHA256 A6D9F27AB5217BE634F407376F96D7588A4862A739561453F5AD7F3C77417AA1
+parts: log_v29_scene.log.part01..part10 (900000 x9 + 106080)
+verified: reassembled on 2026-10-27, byte-identical
