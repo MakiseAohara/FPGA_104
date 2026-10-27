@@ -12,6 +12,12 @@ KV=re.compile(r'\b([A-Za-z_][A-Za-z0-9_]*)=([^\s]+)')
 IMG=re.compile(r'^MMT_IMG\s+(\d{1,2})\s+([0-9a-fA-F]{192})\s*$')
 
 
+
+def _gray(pixels):
+    """int8 two's complement -> 0..255 grey (mod 256, no clipping)."""
+    import numpy as _np
+    return (_np.frombuffer(pixels, _np.int8).astype(_np.int16) + 128).astype(_np.uint8).tobytes()
+
 def decode(root):
     root=Path(root);destination=root/'thumbs';destination.mkdir(exist_ok=True)
     lines=(root/'log_v28_gate.log').read_bytes().decode('utf-8',errors='replace').split('\n')
@@ -43,7 +49,7 @@ def decode(root):
             name=f'thumb_{t}_a{alarm}_p{p}.png'
             used[name]=used.get(name,0)+1
             if used[name]>1:name=name[:-4]+f'_dup{used[name]}.png'
-            image=Image.frombytes('L',(48,48),pixels).resize((192,192),Image.Resampling.NEAREST)
+            image=Image.frombytes('L',(48,48),_gray(pixels)).resize((192,192),Image.Resampling.NEAREST)
             image.save(destination/name)
             decision=dec.get((session,f))
             dec_status='missing'
