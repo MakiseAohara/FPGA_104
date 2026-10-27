@@ -1,4 +1,4 @@
-# 加速器兼容性对比（v29 新模型 vs 现位流）
+﻿# 加速器兼容性对比（v29 新模型 vs 现位流）
 
 - 新模型：`v29_person_96_int8.tflite`（95,922 参数，全整数 INT8）
 - 现位流：`D:\v7work\v7_MERGE14`（板上 MERGE15/MERGE14 使用的 TinyML 加速器配置）
@@ -43,6 +43,10 @@ output(0) size: 2, type: 9
 
 > 生成器默认会把有 Dense 层的模型设成 `FC_MODE="STANDARD"`；本工程按现位流 RTL（FC=DISABLE）**强制改回 DISABLE** 后再生成，保证软件端 `define.cc` 的 `fc_mode=0` 与 RTL 一致。
 
+## 2.1 场景微调后复跑确认
+
+场景校准微调只改权重，重跑官方 Generator 后 `defines.v` 与微调前**逐字节一致**（已 diff 验证），因此以下兼容性结论不变。
+
 ## 3. 结论：现位流加速器**可以直接跑**新模型
 
 1. 新模型的 5 个卷积全部是**普通 `CONV_2D`**（无 depthwise），现位流的 `CONV_DEPTHW_MODE="LITE"` 正是为此配置，且 LITE 的并行参数（4 / AW=7）与生成值逐项一致 ⇒ 卷积层无需改 RTL。
@@ -63,3 +67,4 @@ Generator 报告 `fc_mode:1`，即 FC 可以走硬件。若要让 FC 上加速�
 
 - `tflite.exe` 的 `:3` 是"模式支持等级"，本工程按 `conv_depthw_mode:1`（LITE）验证过生成通过；但**未在板上实跑新模型**（本次只做离线训练/量化/生成，未烧录）。
 - 新模型的输入量化参数（INT8, scale=1/127.5, zp=-1）与旧模型完全一致，配合固件 `INPUT_SUB128=1`（像素减 128）时语义正确；若固件仍是 `INPUT_SUB128=0`，输入会亮度折叠，精度显著下降（已在旧模型上实测：55% vs 71%）。
+
