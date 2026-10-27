@@ -1,0 +1,14 @@
+{
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "firmware_crc32": "B7CCB8D0",
+  "rollback_required": null,
+  "checks": {
+    "hdmi_osd": null,
+    "enter_alarm_leave_release": null,
+    "dec_and_camera_fps": null,
+    "empty_30s_no_alarm": null
+  },
+  "observed_wall": null,
+  "operator": null,
+  "actual_evidence_references": []
+}

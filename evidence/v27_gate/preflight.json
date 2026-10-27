@@ -1,0 +1,58 @@
+{
+  "wall": "2026-10-27T11:38:56.322+08:00",
+  "repository_head": "fff43ebe3acd0e7d4129d484c53e5ffa8f6bd50a",
+  "assets": {
+    "merge15": {
+      "path": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v27_rtl_ir\\v7_MERGE15.bit",
+      "exists": false,
+      "expected_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+      "matches_expected": false
+    },
+    "merge14_fallback": {
+      "path": "C:\\Users\\Makise Aohara\\Documents\\deepseek-harness\\default-workspace\\evidence\\v22_gate\\v7_MERGE14.bit",
+      "exists": true,
+      "expected_sha256": "E399F99067E6544262315607B27FC3DD2394F37FD245F909DEE1EBA8A8B41FE8",
+      "bytes": 2829903,
+      "sha256": "E399F99067E6544262315607B27FC3DD2394F37FD245F909DEE1EBA8A8B41FE8",
+      "matches_expected": true
+    },
+    "firmware": {
+      "path": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v26_gate\\tinyml_pdti8_v26.bin",
+      "exists": true,
+      "expected_sha256": "BEF15238095C194D4A734BD9F40ED22A0BA6361F325CEB6395AAF51AF9E9828C",
+      "bytes": 477722,
+      "sha256": "BEF15238095C194D4A734BD9F40ED22A0BA6361F325CEB6395AAF51AF9E9828C",
+      "matches_expected": true,
+      "crc32": "B7CCB8D0"
+    }
+  },
+  "hardware_modified": false,
+  "flash_performed": false,
+  "smoke_checks": {
+    "hdmi_osd": null,
+    "enter_alarm_leave_release": null,
+    "dec_and_camera_fps": null,
+    "empty_30s_no_alarm": null
+  },
+  "formal_capture_performed": false,
+  "phone_video_received": false,
+  "serial_ports": [
+    "COM5",
+    "COM13",
+    "COM14",
+    "COM15",
+    "COM4",
+    "COM16"
+  ],
+  "serial_probe": {
+    "port": "COM15",
+    "opened": true,
+    "duration_s": 1,
+    "bytes_received": 0,
+    "receive_only": true
+  },
+  "ready_to_flash": false,
+  "blockers": [
+    "merge15 missing or identity mismatch"
+  ]
+}

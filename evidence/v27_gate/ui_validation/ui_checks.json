@@ -1,0 +1,22 @@
+{
+  "windows_powershell_5_1": {
+    "simulation_only": true,
+    "prestart_buttons_disabled": true,
+    "no_prestart_events": true,
+    "all_nine_hotkeys": true,
+    "all_nine_buttons": true,
+    "held_key_deduplicated": true,
+    "recent_five": true,
+    "operator_stop_saved": true
+  },
+  "powershell_7": {
+    "simulation_only": true,
+    "prestart_buttons_disabled": true,
+    "no_prestart_events": true,
+    "all_nine_hotkeys": true,
+    "all_nine_buttons": true,
+    "held_key_deduplicated": true,
+    "recent_five": true,
+    "operator_stop_saved": true
+  }
+}

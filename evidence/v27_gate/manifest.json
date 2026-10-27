@@ -1,0 +1,103 @@
+{
+  "status": "software_ready_merge15_file_missing",
+  "firmware_crc32": "B7CCB8D0",
+  "firmware_bytes": 477722,
+  "firmware_modified": false,
+  "rtl_modified": false,
+  "bitstream_compiled": false,
+  "board_flashed": false,
+  "smoke_checks_completed": false,
+  "formal_capture_started": false,
+  "actual_manual_annotations": 0,
+  "phone_video_received": false,
+  "operator_protocol_observed": null,
+  "blocker": "evidence/v27_rtl_ir/v7_MERGE15.bit unavailable locally and on inspected origin/main",
+  "checked_origin_main": "fff43ebe3acd0e7d4129d484c53e5ffa8f6bd50a",
+  "offline_backend_tests_passed": 5,
+  "ui_validation_hosts": [
+    "windows_powershell_5_1",
+    "powershell_7"
+  ],
+  "files": [
+    {
+      "path": "build_v27_board.py",
+      "bytes": 32291,
+      "sha256": "1222c85e63169e7e90ec3a58903eba8bcda80e5c59ef95372fcfd9e959c517cc"
+    },
+    {
+      "path": "capture_v27.py",
+      "bytes": 13743,
+      "sha256": "8139bb4a47414c35a814e1ba581322b30f5cdc30e198a9b1a6579710a9ed17d1"
+    },
+    {
+      "path": "derive_ir.py",
+      "bytes": 4131,
+      "sha256": "de2d2ba93ab2d3955b42da5746551d0dfe0316bbec30731f1612bd0029f2328a"
+    },
+    {
+      "path": "manual_label_panel.ps1",
+      "bytes": 18749,
+      "sha256": "d78a8509b837ed8ee483d991e099700233eb6c753aa7967b885d9dfc66ac71e9"
+    },
+    {
+      "path": "preflight.json",
+      "bytes": 1898,
+      "sha256": "32217cc49806796607925f5d39844f54ab61714c67146c8f06f3faaf3c82a41e"
+    },
+    {
+      "path": "preflight_v27.py",
+      "bytes": 3541,
+      "sha256": "5d95fb3951e85c7eee6e79807c00182ad61e0ac7ff4e1066a1e1c09b9acbcee5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4396,
+      "sha256": "0d162289595ab7905259d3fedebebe55561da45f4cbe8da46102e121818e0387"
+    },
+    {
+      "path": "smoke_status.template.json",
+      "bytes": 378,
+      "sha256": "3e1bcfd429dae2439cfa17a2e9b04083db31bf1fc1879ef5afb260dab2010af2"
+    },
+    {
+      "path": "summary.md",
+      "bytes": 2898,
+      "sha256": "a2afe446b0d87d365c8d43d10cd47eba7672546d4e1f7217231bb7600edb4c21"
+    },
+    {
+      "path": "test_capture_v27.py",
+      "bytes": 8118,
+      "sha256": "51c82ad94f4866b1e8b81e5d5f548cef3705a645ff399a8cc04908967c3ff194"
+    },
+    {
+      "path": "ui_validation/offline_checks.log",
+      "bytes": 1219,
+      "sha256": "217c32e034fd2213e0b6a3ca84e3f4406c95722d7a4b8c96a3d74514ff9ace78"
+    },
+    {
+      "path": "ui_validation/panel_idle.png",
+      "bytes": 75565,
+      "sha256": "4b3271c9e226f1e09365cd067a81b947dc66f024612d76e92a27854ad58b1a4b"
+    },
+    {
+      "path": "ui_validation/panel_recording.png",
+      "bytes": 68707,
+      "sha256": "ec161b12c8646b72559a6b5b3fc511576b19ba1702bfc162ac9eb87d34b6e9c3"
+    },
+    {
+      "path": "ui_validation/panel_saved.png",
+      "bytes": 81342,
+      "sha256": "1fd054c7e919e10c9b0e6105ab223cf0ae1784208713c713ab71d8f1b8644ef4"
+    },
+    {
+      "path": "ui_validation/ui_checks.json",
+      "bytes": 567,
+      "sha256": "1e92abe19edaf8c288cd3a4a9de49ad1a313c903184c8659ec00742c8dab62d1"
+    },
+    {
+      "path": "verify_v27_board.py",
+      "bytes": 3705,
+      "sha256": "2c359ae4abcb2a982b59ff25bfb0d4018cf511718c2f3457aeabd2f928a5b5f8"
+    }
+  ]
+}
