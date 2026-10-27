@@ -1,0 +1,27 @@
+{
+  "frames": 330,
+  "per_segment": {
+    "A": 56,
+    "B": 55,
+    "C": 55,
+    "D": 54,
+    "E": 55,
+    "F": 55
+  },
+  "sheets": [
+    "sheet_A_p1.png",
+    "sheet_B_p1.png",
+    "sheet_C_p1.png",
+    "sheet_D_p1.png",
+    "sheet_E_p1.png",
+    "sheet_F_p1.png"
+  ],
+  "params": {
+    "vts": 1500,
+    "exp20": 47824,
+    "exp_half_lines": 2989,
+    "gc": 129,
+    "gf": 63
+  },
+  "marks": 78
+}
