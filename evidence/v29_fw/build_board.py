@@ -17,8 +17,12 @@ for name in ('common','include','driver','tinyml_pdti8'):
     if (PROJECT/relative/name).exists():shutil.copytree(PROJECT/relative/name,clone/relative/name,dirs_exist_ok=True)
 shutil.copytree(PROJECT/'embedded_sw/SapphireSoc/bsp',clone/'embedded_sw/SapphireSoc/bsp',dirs_exist_ok=True)
 model=clone/relative/'tinyml_pdti8/src/model'
+# v29.1+: use the second-round (day-calibrated) generator, byte-identical to
+# evidence/v29_model/v29_person_96_int8.tflite. HERE/'generator' still holds the
+# round-1 model (different bytes, identical 619,325 B size) and must not be used.
+MODEL_SRC=ROOT/'evidence/v29_model/generator'
 for suffix in ('cc','h'):
-    shutil.copy2(HERE/'generator'/('v29_person_96_int8_model_data.'+suffix),model)
+    shutil.copy2(MODEL_SRC/('v29_person_96_int8_model_data.'+suffix),model)
 identities={}
 for preset in ('NIGHT','DAY'):
     source=HERE/'main_live29.cc'

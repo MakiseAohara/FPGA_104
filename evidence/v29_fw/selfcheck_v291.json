@@ -1,0 +1,49 @@
+{
+  "model_bytes": 101088,
+  "checks": [
+    {
+      "file": "tinyml_pdti8_v291_night.bin",
+      "bytes": 299210,
+      "crc32": "B534DE8E",
+      "embedded_model": true,
+      "old_model_present": false,
+      "strings": {
+        "MMT_WB_INIT": true,
+        "IR_SOLO_ON=%d": true,
+        "cause=%s": true,
+        "v29.1": true
+      },
+      "pass_": true
+    },
+    {
+      "file": "tinyml_pdti8_v291_day.bin",
+      "bytes": 299210,
+      "crc32": "AE5896F2",
+      "embedded_model": true,
+      "old_model_present": false,
+      "strings": {
+        "MMT_WB_INIT": true,
+        "IR_SOLO_ON=%d": true,
+        "cause=%s": true,
+        "v29.1": true
+      },
+      "pass_": true
+    },
+    {
+      "file": "tinyml_pdti8_v291_daycal.bin",
+      "bytes": 300362,
+      "crc32": "6BE60395",
+      "embedded_model": true,
+      "old_model_present": false,
+      "strings": {
+        "MMT_WB_INIT": true,
+        "IR_SOLO_ON=%d": true,
+        "cause=%s": true,
+        "v29.1": true,
+        "MMT_WB r=%d": true,
+        "MMT_WB_APPLY": true
+      },
+      "pass_": true
+    }
+  ]
+}

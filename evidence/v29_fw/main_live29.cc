@@ -101,6 +101,8 @@
 #define IR_WIN           10
 #define IR_NEED          2
 #define IR_OFF_WIN       15
+#define IR_SOLO_ON       1       /* v29.1: 红外单模态直通（不要求运动候选） */
+#define IR_SOLO_N        6       /* 最近 IR_SOLO_N 个样本 ir_hot 全为 1 即触发 */
 #define AI_P_STRONG      60
 #define AI_P_OFF         (-40)
 #define AI_AREA_MIN      200     /* 运动面积门限：压制全局亮变/AGC 型大 motion */
@@ -131,6 +133,15 @@
 #define APB_I2C_CMD   R32(16)
 #define APB_I2C_ST    R32(17)
 #define APB_I2C_RD    R32(18)
+/* MERGE16 白平衡：19/20/21 增益（Q8.8 可读写），22..26 中心区统计（只读） */
+#define APB_WB_R      R32(19)
+#define APB_WB_G      R32(20)
+#define APB_WB_B      R32(21)
+#define APB_WB_SR     R32(22)
+#define APB_WB_SG     R32(23)
+#define APB_WB_SB     R32(24)
+#define APB_WB_PIX    R32(25)
+#define APB_WB_SAT    R32(26)
 
 #define EVT_MOTION    (1u << 0)
 #define EVT_IR_HOT    (1u << 1)
@@ -386,7 +397,7 @@ static int clamp_i32(int32_t v, int32_t lo, int32_t hi)
 
 static int ai_p_now = -128, g_person_off = 0;
 static int ir_hist[IR_OFF_WIN];
-static int ir_idx = 0, ir_cnt10 = 0, ir_cnt15 = 0;
+static int ir_idx = 0, ir_cnt10 = 0, ir_cnt15 = 0, ir_cnt6 = 0;
 
 static int ai_vote_update(int p)
 {
@@ -416,15 +427,16 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
    /* v28: one IR sample per decision loop; LP clears the complete ring. */
    if (low_pwr_now) {
       for (int i = 0; i < IR_OFF_WIN; ++i) ir_hist[i] = 0;
-      ir_idx = 0; ir_cnt10 = 0; ir_cnt15 = 0;
+      ir_idx = 0; ir_cnt10 = 0; ir_cnt15 = 0; ir_cnt6 = 0;
    } else {
       ir_hist[ir_idx] = ir_hot ? 1 : 0;
       ir_idx = (ir_idx + 1) % IR_OFF_WIN;
-      ir_cnt10 = 0; ir_cnt15 = 0;
+      ir_cnt10 = 0; ir_cnt15 = 0; ir_cnt6 = 0;
       for (int i = 0; i < IR_OFF_WIN; ++i) {
          const int value = ir_hist[(ir_idx + IR_OFF_WIN - 1 - i) % IR_OFF_WIN];
          ir_cnt15 += value;
          if (i < IR_WIN) ir_cnt10 += value;
+         if (i < IR_SOLO_N) ir_cnt6 += value;   /* v29.1: 最近 6 样本 IR 全热 */
       }
    }
    const int cand = motion && (area >= AI_AREA_MIN) && (area <= AI_AREA_MAX);
@@ -433,11 +445,15 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
 
    const uint64_t now = now_ms();
    if (!alarm_on) {
-      if ((cand_left > 0) && ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG))) {
+      const int fusion = (cand_left > 0) &&
+                         ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG));
+      const int solo   = (IR_SOLO_ON && (ir_cnt6 >= IR_SOLO_N)) ? 1 : 0;
+      if (fusion || solo) {
          alarm_on = 1; alarm_frames = 0;
          alarm_start_ms = (int)now;
-         bsp_printf("MMT_ALARM start ms=%d f=%d person=%d motion=%d area=%d\n\r",
-                    (int)now, (int)g_frame, person, motion, (int)area);
+         bsp_printf("MMT_ALARM start ms=%d f=%d person=%d motion=%d area=%d cause=%s\n\r",
+                    (int)now, (int)g_frame, person, motion, (int)area,
+                    (solo && !fusion) ? "ir_solo" : "fusion");
       }
    } else {
       alarm_frames++;
@@ -651,6 +667,75 @@ static void bright_initialize(void)
    bright_log("MMT_BRIGHT_LOCKED");
 }
 
+// ===========================================================================
+// v29.1 白平衡（MERGE16 word 19..26）
+//   19/20/21 = R/G/B 增益（Q8.8）；22..26 = 中心 640x360 每帧统计（只读）
+//   WB_CAL=1：开机连续读 32 帧，丢弃 pix==0 或 sat*20 > pix（饱和 >5%）的帧，
+//             以 G 为基准求 R/B 新增益并写回，打印 MMT_WB；标定后把结果写进宏、
+//             WB_CAL=0 重编。
+// ===========================================================================
+#ifndef WB_R
+#define WB_R             0x158    /* 1.344x，历史收敛值 WBH7 */
+#endif
+#ifndef WB_G
+#define WB_G             0x118    /* 1.094x，G 作为基准不随标定改变 */
+#endif
+#ifndef WB_B
+#define WB_B             0x170    /* 1.4375x */
+#endif
+#ifndef WB_CAL
+#define WB_CAL           0        /* 1=开机标定一次（上板 a 步），0=使用宏内固定增益 */
+#endif
+
+static void wb_initialize(void)
+{
+   APB_WB_R = (uint32_t)WB_R;
+   APB_WB_G = (uint32_t)WB_G;
+   APB_WB_B = (uint32_t)WB_B;
+   bsp_printf("MMT_WB_INIT r=%d g=%d b=%d cal=%d\n\r", WB_R, WB_G, WB_B, WB_CAL);
+}
+
+#if WB_CAL
+static void wb_calibrate(void)
+{
+   uint64_t ar = 0, ag = 0, ab = 0;
+   uint32_t used = 0, skipped = 0;
+   for (uint32_t i = 0; i < 32; ++i) {
+      const uint32_t pix = APB_WB_PIX;
+      const uint32_t sat = APB_WB_SAT;
+      if (pix == 0 || ((uint64_t)sat * 20u > (uint64_t)pix)) {
+         skipped++;
+         delay_ms(40);
+         continue;
+      }
+      if (used == 0) {
+         bsp_printf("MMT_WB_STAT pix=%d sat=%d r=%d g=%d b=%d\n\r",
+                    (int)pix, (int)sat, (int)APB_WB_SR, (int)APB_WB_SG, (int)APB_WB_SB);
+      }
+      ar += APB_WB_SR; ag += APB_WB_SG; ab += APB_WB_SB;
+      used++;
+      delay_ms(40);
+   }
+   if (used < 8) {
+      bsp_printf("MMT_WB_FAIL used=%d skipped=%d (stat area not ready)\n\r", used, skipped);
+      return;
+   }
+   const uint32_t rm = (uint32_t)(ar / used);
+   const uint32_t gm = (uint32_t)(ag / used);
+   const uint32_t bm = (uint32_t)(ab / used);
+   uint32_t nr = (uint32_t)WB_G, nb = (uint32_t)WB_B;
+   if (rm) nr = (uint32_t)(((uint64_t)WB_G * gm) / rm);
+   if (bm) nb = (uint32_t)(((uint64_t)WB_G * gm) / bm);
+   if (nr > 0xFFFFu) nr = 0xFFFFu;
+   if (nb > 0xFFFFu) nb = 0xFFFFu;
+   bsp_printf("MMT_WB r=%d g=%d b=%d Rmean=%d Gmean=%d Bmean=%d used=%d skipped=%d\n\r",
+              nr, WB_G, nb, rm, gm, bm, used, skipped);
+   APB_WB_R = nr; APB_WB_G = (uint32_t)WB_G; APB_WB_B = nb;
+   delay_ms(60);
+   bsp_printf("MMT_WB_APPLY r=%d g=%d b=%d\n\r", APB_WB_R, APB_WB_G, APB_WB_B);
+}
+#endif
+
 void tinyml_init()
 {
    static tflite::MicroErrorReporter reporter;
@@ -686,7 +771,7 @@ void tinyml_init()
 // ===========================================================================
 extern "C" int main()
 {
-   MicroPrintf("MMT_LIVE_BOOT v29 CROP=%d NORM=%d STRETCH=%d AE=%d LPCAM=%d "
+   MicroPrintf("MMT_LIVE_BOOT v29.1 CROP=%d NORM=%d STRETCH=%d AE=%d LPCAM=%d "
                "FW_DEC=%d LOWPOWER=%d\n\r",
                CROP_MODE, NORM_ON, STRETCH_ON, AUTOEXP_ON, LP_CAMFPS_ON,
                FW_DECISION_ON, LOWPOWER_ON);
@@ -697,8 +782,10 @@ extern "C" int main()
                LP_VTS_MULT, FW_DECISION_ON, LOWPOWER_ON, INPUT_SUB128,
                AI_P_TH, AI_VOTE_K, AI_VOTE_N, AI_AREA_MIN, AI_AREA_MAX, DEC_CAND_FRAMES);
 
-   bsp_printf("MMT_FUSION IR_WIN=%d IR_NEED=%d IR_OFF_WIN=%d AI_P_STRONG=%d AI_P_OFF=%d THUMB_EVERY=%d\n\r",
-              IR_WIN, IR_NEED, IR_OFF_WIN, AI_P_STRONG, AI_P_OFF, THUMB_DUMP_EVERY);
+   bsp_printf("MMT_FUSION IR_WIN=%d IR_NEED=%d IR_OFF_WIN=%d AI_P_STRONG=%d AI_P_OFF=%d THUMB_EVERY=%d "
+              "IR_SOLO_ON=%d IR_SOLO_N=%d\n\r",
+              IR_WIN, IR_NEED, IR_OFF_WIN, AI_P_STRONG, AI_P_OFF, THUMB_DUMP_EVERY,
+              IR_SOLO_ON, IR_SOLO_N);
 
    const u32 hart = csr_read(mhartid);
    tinyml_init();
@@ -730,10 +817,14 @@ extern "C" int main()
    }
 
    bright_initialize();
+   wb_initialize();
    pp_stats_t boot_pst;
    sample_frame_box(input_snapshot,&boot_pst);
    bsp_printf("MMT_CAM_PRESET name=%s vts=1500 exp20=%d gc=%d gf=%d mean_sensor=%d\n\r",
               CAM_PRESET_NAME,BRIGHT_FIXED_EXP20,BRIGHT_FIXED_GC,BRIGHT_FIXED_GF,boot_pst.mean_sensor);
+#if WB_CAL
+   wb_calibrate();
+#endif
 
    /* 功能 2 初始化 */
 #if AUTOEXP_ON
