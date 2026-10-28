@@ -1,0 +1,13 @@
+{
+  "updated_wall": "2026-10-28",
+  "raw_96x96": {
+    "v26": 27,
+    "v28": 54,
+    "v29_scene": 329
+  },
+  "raw_48x48_thumbs": 649,
+  "withdrawn_conversion": "7997140 int8+128",
+  "rule": "received uint8 pixels unchanged",
+  "invalid_scene_group": "D_t0689078_p19.png",
+  "original_logs_modified": false
+}

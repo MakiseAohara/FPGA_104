@@ -1,0 +1,85 @@
+{
+  "firmware": {
+    "NIGHT": {
+      "file": "tinyml_pdti8_v29_night.bin",
+      "bytes": 298834,
+      "crc32": "C7927468",
+      "sha256": "9C0573C78E3A204174DBEA3CAEB41BF855F5BD8CFF3CAF45A1E88472F0279302",
+      "camera": {
+        "vts": 1500,
+        "exp20": 47824,
+        "gc": 129,
+        "gf": 63
+      }
+    },
+    "DAY": {
+      "file": "tinyml_pdti8_v29_day.bin",
+      "bytes": 298826,
+      "crc32": "58347D5F",
+      "sha256": "8ABA2BECC8B5E065475BA9C808A03344724E4A674174BA20B57A31CF1CD1F063",
+      "camera": {
+        "vts": 1500,
+        "exp20": 47824,
+        "gc": 129,
+        "gf": 42
+      }
+    }
+  },
+  "model_commit": "aea24d501f9c7e4df7297a40a9b58d1c6dd8f74e",
+  "model_sha256": "605b2ba8a2e8d47038e758c4dc921a222def896525f87edcf4a72c583597741b",
+  "generator_model_matches_tflite_byte_for_byte": true,
+  "raw_decision_function_sha1": {
+    "ai_vote_update": "02d4d67f9d3bd3669e5d68aef840a069f0604799",
+    "ai_reset": "d94890eb6cb157001b14cab75ab20411c6905af7",
+    "dec_update": "99502fb642ace55d197fb6215f799acabc3cb247",
+    "dec_log": "eaf3d69459f444488dcfcf0d05b9f63fa4239eb0"
+  },
+  "raw_decision_functions_unchanged_vs_v28": true,
+  "parameters": {
+    "INPUT_SUB128": 1,
+    "AI_P_TH": 0,
+    "AI_P_STRONG": 60,
+    "AI_P_OFF": -40,
+    "IR_WIN": 10,
+    "IR_NEED": 2,
+    "IR_OFF_WIN": 15,
+    "IMG_DUMP_EVERY": 40,
+    "THUMB_DUMP_EVERY": 4
+  },
+  "offline_check": {
+    "model_commit": "aea24d501f9c7e4df7297a40a9b58d1c6dd8f74e",
+    "model_sha256": "605b2ba8a2e8d47038e758c4dc921a222def896525f87edcf4a72c583597741b",
+    "F_frames": 55,
+    "max_abs_error": 6,
+    "within_one": 38,
+    "passed": false,
+    "input_shape": [
+      1,
+      96,
+      96,
+      1
+    ],
+    "output_shape": [
+      1,
+      2
+    ],
+    "input_quantization": [
+      0.007843137718737125,
+      -1
+    ],
+    "output_quantization": [
+      0.00390625,
+      -128
+    ],
+    "kPersonIndex": 1,
+    "kNotAPersonIndex": 0,
+    "reference_source": "aea24d5 eval_log.py input and class-1 scoring rule, reconstructed using LiteRT default kernels, matching eval_log.py default interpreter invocation",
+    "original_per_frame_reference_file_present": false,
+    "original_F_class_labels_present": false,
+    "ground_truth_F_medians_verified": false,
+    "scope": "actual board TFLite Micro C++ sources and generated model, shared C input centering and Invoke; host driver OP_ERR invokes existing software fallbacks, no hardware emulation"
+  },
+  "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
+  "rtl_modified": false,
+  "status": "built candidate; offline plus/minus-one check not passed; later user authorized board diagnostics"
+}

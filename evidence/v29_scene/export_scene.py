@@ -29,6 +29,8 @@ def parse():
     rows = {}
     for raw in LOG.read_text(encoding="utf-8", errors="replace").splitlines():
         s = raw.split("\t", 1)[-1].strip()
+        if s.startswith(("### RECONNECT_TRY", "### GAP ")):
+            cur, rows = None, {}
         if s.startswith("MMT_MARK"):
             m = dict(re.findall(r"(\w+)=([\w\.\-]+)", s))
             marks.append(m)
@@ -44,6 +46,9 @@ def parse():
         m = RE_IMG.search(s)
         if m and cur is not None:
             y = int(m.group(1))
+            if y != len(rows) or y >= 96:
+                cur, rows = None, {}
+                continue
             rows[y] = bytes.fromhex(m.group(2))
             if len(rows) == 96:
                 arr = np.zeros((96, 96), np.uint8)
@@ -61,8 +66,8 @@ def main():
     by_seg = defaultdict(list)
 
     for f in frames:
-        # 串口字节是 int8 的二进制补码；按 int8 解读后 +128 得到 0..255（模 256，不截断）
-        img = (f["pixels"].view(np.int8).astype(np.int16) + 128).astype(np.uint8)
+        # preprocess_core.h stores (signed char)u: the received byte is u unchanged.
+        img = f["pixels"]
         name = "%s_t%07d_p%d.png" % (f["stage"], f["t"], f["p"])
         Image.fromarray(img, mode="L").save(FRAMES / name)
         by_seg[f["stage"]].append((f, img))

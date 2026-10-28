@@ -14,9 +14,8 @@ IMG=re.compile(r'^MMT_IMG\s+(\d{1,2})\s+([0-9a-fA-F]{192})\s*$')
 
 
 def _gray(pixels):
-    """int8 two's complement -> 0..255 grey (mod 256, no clipping)."""
-    import numpy as _np
-    return (_np.frombuffer(pixels, _np.int8).astype(_np.int16) + 128).astype(_np.uint8).tobytes()
+    """MMT_IMG/MMT_THUMB bytes already are uint8 grayscale pixels."""
+    return bytes(pixels)
 
 def decode(root):
     root=Path(root);destination=root/'thumbs';destination.mkdir(exist_ok=True)

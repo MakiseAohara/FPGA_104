@@ -1,0 +1,206 @@
+[
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\c\\common.c",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\000.obj",
+    "returncode": 0,
+    "log": "common.c\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\core\\api\\error_reporter.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\001.obj",
+    "returncode": 0,
+    "log": "error_reporter.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\core\\api\\flatbuffer_conversions.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\002.obj",
+    "returncode": 0,
+    "log": "flatbuffer_conversions.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\core\\api\\op_resolver.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\003.obj",
+    "returncode": 0,
+    "log": "op_resolver.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\core\\api\\tensor_utils.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\004.obj",
+    "returncode": 0,
+    "log": "tensor_utils.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\kernels\\internal\\quantization_util.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\005.obj",
+    "returncode": 0,
+    "log": "quantization_util.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\kernels\\kernel_util.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\006.obj",
+    "returncode": 0,
+    "log": "kernel_util.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\debug_log.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\007.obj",
+    "returncode": 0,
+    "log": "debug_log.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\conv.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\008.obj",
+    "returncode": 0,
+    "log": "conv.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\conv_common.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\009.obj",
+    "returncode": 0,
+    "log": "conv_common.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\fully_connected.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\010.obj",
+    "returncode": 0,
+    "log": "fully_connected.cc\r\nC:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\include\\tensorflow/lite/kernels/internal/reference/integer_ops/fully_connected.h(21): warning C4067: \u9884\u5904\u7406\u5668\u6307\u4ee4\u540e\u6709\u610f\u5916\u6807\u8bb0 - \u5e94\u8f93\u5165\u6362\u884c\u7b26\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\fully_connected_common.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\011.obj",
+    "returncode": 0,
+    "log": "fully_connected_common.cc\r\nC:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\include\\tensorflow/lite/kernels/internal/reference/integer_ops/fully_connected.h(21): warning C4067: \u9884\u5904\u7406\u5668\u6307\u4ee4\u540e\u6709\u610f\u5916\u6807\u8bb0 - \u5e94\u8f93\u5165\u6362\u884c\u7b26\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\kernel_util.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\012.obj",
+    "returncode": 0,
+    "log": "kernel_util.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\reduce.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\013.obj",
+    "returncode": 0,
+    "log": "reduce.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\softmax.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\014.obj",
+    "returncode": 0,
+    "log": "softmax.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\kernels\\softmax_common.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\015.obj",
+    "returncode": 0,
+    "log": "softmax_common.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\memory_helpers.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\016.obj",
+    "returncode": 0,
+    "log": "memory_helpers.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\memory_planner\\greedy_memory_planner.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\017.obj",
+    "returncode": 0,
+    "log": "greedy_memory_planner.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\memory_planner\\linear_memory_planner.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\018.obj",
+    "returncode": 0,
+    "log": "linear_memory_planner.cc\r\n"
+  },
+  {
+    "source": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\micro_allocator.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\019.obj",
+    "returncode": 0,
+    "log": "micro_allocator.cc\r\nC:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\micro_allocator.cc(91): warning C4551: \u7f3a\u5c11\u53c2\u6570\u5217\u8868\u7684\u51fd\u6570\u8c03\u7528\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_error_reporter.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\020.obj",
+    "returncode": 0,
+    "log": "micro_error_reporter.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_graph.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\021.obj",
+    "returncode": 0,
+    "log": "micro_graph.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_interpreter.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\022.obj",
+    "returncode": 0,
+    "log": "micro_interpreter.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_profiler.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\023.obj",
+    "returncode": 0,
+    "log": "micro_profiler.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_string.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\024.obj",
+    "returncode": 0,
+    "log": "micro_string.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_time.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\025.obj",
+    "returncode": 0,
+    "log": "micro_time.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\micro_utils.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\026.obj",
+    "returncode": 0,
+    "log": "micro_utils.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\recording_micro_allocator.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\027.obj",
+    "returncode": 0,
+    "log": "recording_micro_allocator.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\recording_simple_memory_allocator.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\028.obj",
+    "returncode": 0,
+    "log": "recording_simple_memory_allocator.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\simple_memory_allocator.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\029.obj",
+    "returncode": 0,
+    "log": "simple_memory_allocator.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\micro\\system_setup.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\030.obj",
+    "returncode": 0,
+    "log": "system_setup.cc\r\n"
+  },
+  {
+    "source": "D:\\FPGA\\codex20\\official-tinyml\\tinyml_hello_world\\Ti60F225_tinyml_hello_world\\embedded_sw\\SapphireSoc\\software\\standalone\\tinyml_pdti8\\src\\tensorflow\\lite\\schema\\schema_utils.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\031.obj",
+    "returncode": 0,
+    "log": "schema_utils.cc\r\n"
+  },
+  {
+    "source": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v29_fw\\offline_invoke.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\032.obj",
+    "returncode": 0,
+    "log": "offline_invoke.cc\r\n"
+  },
+  {
+    "source": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\FPGA_104-main\\evidence\\v29_fw\\generator\\v29_person_96_int8_model_data.cc",
+    "object": "C:\\Users\\Makise Aohara\\Documents\\Codex\\2026-10-26\\yo\\work\\v29_host_build\\033.obj",
+    "returncode": 0,
+    "log": "v29_person_96_int8_model_data.cc\r\n"
+  }
+]

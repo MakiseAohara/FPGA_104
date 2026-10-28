@@ -1,0 +1,24 @@
+C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\v29_production_build\day\tinyml_pdti8.elf  :
+section                size     addr
+.init                   112     4096
+.text                177384     4208
+.init_array              76   181592
+.fini_array               4   181668
+.data                121250   181672
+.bss                 154684   302928
+.stack              2097152   457616
+.debug_info         2681321        0
+.debug_abbrev         98949        0
+.debug_aranges         5176        0
+.debug_line          627983        0
+.debug_str           768876        0
+.debug_line_str       21241        0
+.comment                102        0
+.riscv.attributes        67        0
+.debug_loclists      494706        0
+.debug_rnglists       89821        0
+.debug_frame          18440        0
+.debug_macro          25669        0
+Total               7383013
+
+

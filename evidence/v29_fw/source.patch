@@ -1,0 +1,241 @@
+--- evidence/v28_fw/main_live28.cc
++++ evidence/v29_fw/main_live29.cc
+@@ -46,12 +46,13 @@
+ #include "tensorflow/lite/micro/micro_time.h"
+ #include "platform/tinyml/profiler.h"
+ 
+-#include "model/mobilenetv1_person_detect_model_data.h"
++#include "generator/v29_person_96_int8_model_data.h"
+ #include "model/model_settings.h"
+ 
+ #include "preprocess_core.h"
+ #include "ae_core.h"
+ #include "cam_ctrl_core.h"
++#include "input_contract.h"
+ 
+ // ======================= 编译期开关（默认 = 不开新功能） =======================
+ #ifndef CROP_MODE
+@@ -76,7 +77,7 @@
+ #define LOWPOWER_ON      1       /* v15 默认 */
+ #endif
+ #ifndef INPUT_SUB128
+-#define INPUT_SUB128     0
++#define INPUT_SUB128     1
+ #endif
+ 
+ // 功能 2 参数
+@@ -101,7 +102,7 @@
+ #define IR_NEED          2
+ #define IR_OFF_WIN       15
+ #define AI_P_STRONG      60
+-#define AI_P_OFF         (-60)
++#define AI_P_OFF         (-40)
+ #define AI_AREA_MIN      200     /* 运动面积门限：压制全局亮变/AGC 型大 motion */
+ #define AI_AREA_MAX      20000
+ #define DEC_CAND_FRAMES  6
+@@ -300,13 +301,7 @@
+ static uint32_t sample_frame_box(int8_t* out, pp_stats_t* st)
+ {
+    uint32_t sum = pp_run(fb_get, 0, &g_pp_cfg, out, st);
+-#if INPUT_SUB128
+-   sum = 0;
+-   for (int i = 0; i < IMG_N; ++i) {
+-      out[i] = (int8_t)((int)out[i] - 128);
+-      sum += (uint8_t)out[i];
+-   }
+-#endif
++
+    return sum;
+ }
+ 
+@@ -537,20 +532,139 @@
+               (int)g_dec_ms, (int)frame, alarm_on, p, pixels);
+ }
+ 
++
++/* SC431HAI V1.1 p23-26. No mode-bit guesses, no VTS/FPS or digital-gain writes. */
++#define BRIGHT_CALIBRATION 0
++#define BRIGHT_FIXED_EXP20 47824
++#define BRIGHT_FIXED_GC 129
++#define NIGHT 1
++#define DAY 2
++#ifndef CAM_PRESET
++#define CAM_PRESET NIGHT
++#endif
++#if CAM_PRESET == NIGHT
++#define CAM_PRESET_NAME "NIGHT"
++#define BRIGHT_FIXED_GF 63
++#elif CAM_PRESET == DAY
++#define CAM_PRESET_NAME "DAY"
++#define BRIGHT_FIXED_GF 42
++#else
++#error Unsupported CAM_PRESET
++#endif
++static int bright_exp20=0, bright_gc=0, bright_gf=0, bright_ready=0;
++
++static int bright_read(int* vts_out,int* exp_out,int* gc_out,int* gf_out)
++{
++   unsigned char values[7];
++   const unsigned short regs[7]={0x320e,0x320f,0x3e00,0x3e01,0x3e02,0x3e08,0x3e09};
++   for(int i=0;i<7;i++)if(cam_raw_read(regs[i],&values[i]))return -1;
++   *vts_out=((values[0]&0x7f)<<8)|values[1];
++   *exp_out=((values[2]&0x0f)<<16)|(values[3]<<8)|(values[4]&0xf0);
++   *gc_out=values[5];*gf_out=values[6];return 0;
++}
++
++static int bright_apply(int exp20,int gc,int gf)
++{
++   const unsigned short regs[5]={0x3e00,0x3e01,0x3e02,0x3e08,0x3e09};
++   unsigned char old[5],value[5];
++   for(int i=0;i<5;i++)if(cam_raw_read(regs[i],&old[i]))return -1;
++   value[0]=(unsigned char)((old[0]&0xf0)|((exp20>>16)&0x0f));
++   value[1]=(unsigned char)((exp20>>8)&0xff);
++   value[2]=(unsigned char)((old[2]&0x0f)|(exp20&0xf0));
++   value[3]=(unsigned char)gc;value[4]=(unsigned char)gf;
++   for(int i=0;i<5;i++){
++      if(cam_checked_write(&g_cam_io,regs[i],value[i],0)!=CAM_OK){
++         for(int j=0;j<5;j++)(void)cam_checked_write(&g_cam_io,regs[j],old[j],0);
++         return -2;
++      }
++   }
++   int vts=0,exp=0,rc=0,rf=0;
++   if(bright_read(&vts,&exp,&rc,&rf)||exp!=exp20||rc!=gc||rf!=gf)return -3;
++   bright_exp20=exp;bright_gc=rc;bright_gf=rf;bright_ready=1;return 0;
++}
++
++static void bright_log(const char* tag)
++{
++   int vts=0,exp=0,gc=0,gf=0;
++   const int status=bright_read(&vts,&exp,&gc,&gf);
++   bsp_printf("%s ms=%d ok=%d vts=%d exp20=%d half_lines=%d gc=%d gf=%d fixed=%d\n\r",
++              tag,(int)now_ms(),status==0,vts,exp,exp>>4,gc,gf,bright_ready);
++}
++
++static void bright_initialize(void)
++{
++   unsigned char id_h=0,id_l=0;
++   if(cam_raw_read(0x3107,&id_h)||cam_raw_read(0x3108,&id_l)){
++      bsp_printf("MMT_BRIGHT_ERROR sensor_id_read\n\r");return;
++   }
++   bsp_printf("MMT_BRIGHT_ID id=%d\n\r",(id_h<<8)|id_l);
++   if(id_h!=0xcd||id_l!=0x6b){bsp_printf("MMT_BRIGHT_ERROR unexpected_sensor_id\n\r");return;}
++   int vts=0,original_exp=0,original_gc=0,original_gf=0;
++   if(bright_read(&vts,&original_exp,&original_gc,&original_gf)||vts<32||vts>0x7ff0){
++      bsp_printf("MMT_BRIGHT_ERROR invalid_boot_registers\n\r");return;
++   }
++   bright_log("MMT_BRIGHT_BEFORE");
++#if BRIGHT_CALIBRATION
++   const int gains[][2]={{0x80,0x2a},{0x80,0x3f},{0x81,0x2a},{0x81,0x3f},
++      {0x83,0x2a},{0x83,0x3f},{0x87,0x2a},{0x87,0x3f},{0x8f,0x2a},{0x8f,0x3f}};
++   const int limit=(2*vts-11)<<4;
++   const int fixed_exp=(original_exp<limit && original_exp>=64)?original_exp:limit;
++   int best_exp=original_exp,best_gc=original_gc,best_gf=original_gf,best_cost=100000;
++   for(int idx=-1;idx<(int)(sizeof(gains)/sizeof(gains[0]));idx++){
++      const int exp=idx<0?original_exp:fixed_exp;
++      const int gc=idx<0?original_gc:gains[idx][0],gf=idx<0?original_gf:gains[idx][1];
++      if(idx>=0 && bright_apply(exp,gc,gf)){bsp_printf("MMT_BRIGHT_ERROR apply_idx=%d\n\r",idx);break;}
++      delay_ms(300);
++      int means[8],sats[8];
++      for(int sample=0;sample<12;sample++){
++         static int8_t raw[IMG_N];pp_stats_t raw_stats;
++         pp_cfg_t raw_cfg={CROP_MODE,0,0};
++         (void)pp_run(fb_get,0,&raw_cfg,raw,&raw_stats);
++         int saturated=0;for(int i=0;i<IMG_N;i++)if((uint8_t)raw[i]>=250)saturated++;
++         const int sat=(saturated*1000)/IMG_N;
++         bsp_printf("MMT_BRIGHT_SAMPLE ms=%d idx=%d n=%d mean_sensor=%d sat_permille=%d\n\r",
++                    (int)now_ms(),idx,sample,raw_stats.mean_sensor,sat);
++         if(sample>=4){means[sample-4]=raw_stats.mean_sensor;sats[sample-4]=sat;}
++         delay_ms(120);
++      }
++      for(int i=0;i<8;i++)for(int j=i+1;j<8;j++){
++         if(means[j]<means[i]){int t=means[i];means[i]=means[j];means[j]=t;}
++         if(sats[j]<sats[i]){int t=sats[i];sats[i]=sats[j];sats[j]=t;}
++      }
++      const int median=(means[3]+means[4])/2,sat=(sats[3]+sats[4])/2;
++      int distance=median>95?median-95:95-median;
++      const int cost=distance+(sat>50?(sat-50)*10:0);
++      bsp_printf("MMT_BRIGHT_STEP ms=%d idx=%d vts=%d exp20=%d gc=%d gf=%d mean_sensor=%d sat_permille=%d cost=%d\n\r",
++                 (int)now_ms(),idx,vts,exp,gc,gf,median,sat,cost);
++      pp_stats_t preview;(void)sample_frame_box(input_snapshot,&preview);
++      dump_image(input_snapshot,(uint32_t)(2000000000+idx+1),-128);
++      if(idx>=0 && cost<best_cost){best_cost=cost;best_exp=exp;best_gc=gc;best_gf=gf;}
++      if(idx>=0 && median>=80 && median<=110 && sat<=50)break;
++   }
++   if(bright_apply(best_exp,best_gc,best_gf)){bsp_printf("MMT_BRIGHT_ERROR final_apply\n\r");return;}
++#else
++   const int expected=BRIGHT_FIXED_EXP20;
++   if(expected<64 || (expected>>4)>(2*vts-11) || bright_apply(expected,BRIGHT_FIXED_GC,BRIGHT_FIXED_GF)){
++      bsp_printf("MMT_BRIGHT_ERROR fixed_apply\n\r");return;
++   }
++#endif
++   bright_log("MMT_BRIGHT_LOCKED");
++}
++
+ void tinyml_init()
+ {
+    static tflite::MicroErrorReporter reporter;
+    error_reporter = &reporter;
+-   model = tflite::GetModel(mobilenetv1_person_detect_model_data);
++   model = tflite::GetModel(v29_person_96_int8_model_data);
+    if (model->version() != TFLITE_SCHEMA_VERSION) {
+       MicroPrintf("MMT_LIVE_FAIL MODEL_VERSION\n\r");
+       while (1) {}
+    }
+-   static tflite::MicroMutableOpResolver<5> resolver;
+-   resolver.AddAveragePool2D();
++   static tflite::MicroMutableOpResolver<4> resolver;
++   resolver.AddMean();
+    resolver.AddConv2D();
+-   resolver.AddDepthwiseConv2D();
+-   resolver.AddReshape();
++   resolver.AddFullyConnected();
++
+    resolver.AddSoftmax();
+    static FullProfiler prof;
+    static tflite::MicroInterpreter si(
+@@ -572,7 +686,7 @@
+ // ===========================================================================
+ extern "C" int main()
+ {
+-   MicroPrintf("MMT_LIVE_BOOT v28 CROP=%d NORM=%d STRETCH=%d AE=%d LPCAM=%d "
++   MicroPrintf("MMT_LIVE_BOOT v29 CROP=%d NORM=%d STRETCH=%d AE=%d LPCAM=%d "
+                "FW_DEC=%d LOWPOWER=%d\n\r",
+                CROP_MODE, NORM_ON, STRETCH_ON, AUTOEXP_ON, LP_CAMFPS_ON,
+                FW_DECISION_ON, LOWPOWER_ON);
+@@ -607,13 +721,19 @@
+ 
+    /* 功能 1：启动读相机寄存器（只有启用需要它的功能时才读，保证默认行为与 v15 一致） */
+    cam_boot_ok = 0;
+-   if (AUTOEXP_ON || LP_CAMFPS_ON) {
++   if (1) {
+       if (cam_boot_read_all() == 0) {
+          cam_boot_log();
+       } else {
+          MicroPrintf("MMT_CAM_ERR boot read failed (AE/LPCAM disabled)\n\r");
+       }
+    }
++
++   bright_initialize();
++   pp_stats_t boot_pst;
++   sample_frame_box(input_snapshot,&boot_pst);
++   bsp_printf("MMT_CAM_PRESET name=%s vts=1500 exp20=%d gc=%d gf=%d mean_sensor=%d\n\r",
++              CAM_PRESET_NAME,BRIGHT_FIXED_EXP20,BRIGHT_FIXED_GC,BRIGHT_FIXED_GF,boot_pst.mean_sensor);
+ 
+    /* 功能 2 初始化 */
+ #if AUTOEXP_ON
+@@ -669,6 +789,7 @@
+    uint32_t lp_entry_cnt = 0, lp_exit_cnt = 0;
+ 
+    while (1) {
++      if ((frame % 30) == 0 && bright_ready) bright_log("MMT_FIXED");
+       /* ---------------- 读 RTL 证据（每轮都读） ---------------- */
+       const uint32_t evt = APB_EVT;
+       const uint32_t env = APB_ENV;
+@@ -801,6 +922,7 @@
+       const uint32_t chk = sample_frame_box(model_input->data.int8, &pst);
+ 
+       for (int i = 0; i < IMG_N; ++i) input_snapshot[i] = model_input->data.int8[i];
++      prepare_model_input(model_input->data.int8, input_snapshot);
+       uint32_t bsum = 0;
+       for (int i = 0; i < IMG_N; ++i) bsum += (uint8_t)input_snapshot[i];
+       const uint32_t b0m = bsum / IMG_N;

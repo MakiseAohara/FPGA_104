@@ -1,0 +1,26 @@
+{
+  "NIGHT": {
+    "file": "tinyml_pdti8_v29_night.bin",
+    "bytes": 298834,
+    "crc32": "C7927468",
+    "sha256": "9C0573C78E3A204174DBEA3CAEB41BF855F5BD8CFF3CAF45A1E88472F0279302",
+    "camera": {
+      "vts": 1500,
+      "exp20": 47824,
+      "gc": 129,
+      "gf": 63
+    }
+  },
+  "DAY": {
+    "file": "tinyml_pdti8_v29_day.bin",
+    "bytes": 298826,
+    "crc32": "58347D5F",
+    "sha256": "8ABA2BECC8B5E065475BA9C808A03344724E4A674174BA20B57A31CF1CD1F063",
+    "camera": {
+      "vts": 1500,
+      "exp20": 47824,
+      "gc": 129,
+      "gf": 42
+    }
+  }
+}
