@@ -1,0 +1,2 @@
+﻿MERGE17: SHA256 3A69AAFB0E22E262E4CA7FE887CB332822772536356B596473D996BA190887CF (2,845,704 B, seed6)
+MERGE17: worst setup -0.984 ns (hdmi_tx_slow_clk -> core_clk); hold 7 warnings (same 7 paths as MERGE16); XLR 42,857/60,800 = 70.49%
