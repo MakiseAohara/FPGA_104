@@ -1,0 +1,8 @@
+phase,irhot,ticks,scene_truth
+BRIGHTNESS_NIGHT,0,1,planned phase only; Claude reviews images
+BRIGHTNESS_DAY,0,64,planned phase only; Claude reviews images
+DIRECTION_EMPTY,0,100,planned phase only; Claude reviews images
+DIRECTION_PERSON,0,45,planned phase only; Claude reviews images
+DIRECTION_PERSON,1,90,planned phase only; Claude reviews images
+FREE_MOVEMENT,0,2860,planned phase only; Claude reviews images
+FREE_MOVEMENT,1,619,planned phase only; Claude reviews images

@@ -73,13 +73,226 @@
     ],
     "kPersonIndex": 1,
     "kNotAPersonIndex": 0,
-    "reference_source": "aea24d5 eval_log.py input and class-1 scoring rule, reconstructed using LiteRT default kernels, matching eval_log.py default interpreter invocation",
+    "reference_source": "aea24d5 eval_log.py input and class-1 scoring rule, reconstructed using TensorFlow 2.16.1 default interpreter as in eval_log.py",
     "original_per_frame_reference_file_present": false,
     "original_F_class_labels_present": false,
     "ground_truth_F_medians_verified": false,
-    "scope": "actual board TFLite Micro C++ sources and generated model, shared C input centering and Invoke; host driver OP_ERR invokes existing software fallbacks, no hardware emulation"
+    "scope": "actual board TFLite Micro C++ sources and generated model, shared C input centering and Invoke; host driver OP_ERR invokes existing software fallbacks, no hardware emulation",
+    "reference_runtime": "TensorFlow 2.16.1",
+    "same_sign_count": 55,
+    "mean_abs_error": 1.1272727272727272
   },
   "bitstream_sha256": "74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40",
   "rtl_modified": false,
-  "status": "built candidate; offline plus/minus-one check not passed; later user authorized board diagnostics"
+  "status": "built candidate; offline plus/minus-one check not passed; later user authorized board diagnostics",
+  "files": {
+    "ae_core.h": {
+      "bytes": 6017,
+      "sha256": "2231ea555725635c96a0c0d4d3fa2751c3fc3a0bd435ac8959fb018bc72bc6b1"
+    },
+    "build_board.py": {
+      "bytes": 2495,
+      "sha256": "e26b05b39c6ba5118c07799d5ea1d4dc4145ab2af0cd77a602a36519332c620d"
+    },
+    "build_offline.py": {
+      "bytes": 5326,
+      "sha256": "776b6280b0f8fde1e0a6165daf365b792b2b86428e4a200aa73776a2c1b6e76b"
+    },
+    "cam_ctrl_core.h": {
+      "bytes": 6427,
+      "sha256": "9034a1c402dba5c42f7b7d03c4d635bc99a781390de845e2fe7abe0ee94ccc37"
+    },
+    "capture_v29.py": {
+      "bytes": 9521,
+      "sha256": "98c5bbea7b00de20faf6285e008a5aa4f6a6185ef97d684eeb3444a36d1b1a3c"
+    },
+    "check_offline.py": {
+      "bytes": 3490,
+      "sha256": "8ddc80bb3d286696dc827a2465fa2461d240902074dee434c3a488ed2fbc5f7e"
+    },
+    "check_offline_tf216.py": {
+      "bytes": 3514,
+      "sha256": "ae39bb10d213af896ed3061f4423bfd288dea572e7d72a0cbfc89b8a987f2438"
+    },
+    "day_build.log": {
+      "bytes": 269,
+      "sha256": "abf72354b10e30b4ac4076c75c2b056a14911c932e7bf45d5957b61c836b40cc"
+    },
+    "firmware_identities.json": {
+      "bytes": 591,
+      "sha256": "d540fdcd26dcfa8d8c04b4b524052cbe823bc40c6fc9aee15452e3064dbbc0b7"
+    },
+    "F_frame_scores.csv": {
+      "bytes": 4891,
+      "sha256": "6234b042eb73f790241dbbcd58c87300f15e7df3e2e67c63f4e09eb5201e5478"
+    },
+    "F_frame_scores_builtin_ref.csv": {
+      "bytes": 4892,
+      "sha256": "4bb1e2f6aa55d16497b9ef770ae15778889bd2cf415eeae6d09021787edbc831"
+    },
+    "F_frame_scores_tf216.csv": {
+      "bytes": 4891,
+      "sha256": "6234b042eb73f790241dbbcd58c87300f15e7df3e2e67c63f4e09eb5201e5478"
+    },
+    "host_build_results.json": {
+      "bytes": 14001,
+      "sha256": "9ca5e649e25f859b4b4854941662364a3313f402b58ce7a5ddba9940abb051e1"
+    },
+    "host_link.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "input_contract.h": {
+      "bytes": 258,
+      "sha256": "e3fc2f6dcaa03e46b5cb7d71aaa5214bb5925db4fe7ce6b03d6b97a0f807f923"
+    },
+    "main_live29.cc": {
+      "bytes": 39693,
+      "sha256": "2f6e892850a4a5dcb99a608a16a9f86a70344445a1f8e201d65351ae42dc2ae3"
+    },
+    "main_live29_day.cc": {
+      "bytes": 51,
+      "sha256": "a7bfd843499af0abdeed7da089ead784c871b35544ff0e52c5f8e3f28a718334"
+    },
+    "night_build.log": {
+      "bytes": 271,
+      "sha256": "a991f70d6a9193add52587e60417e03470dcebce6e621221fb203a1dedc1cf65"
+    },
+    "offline_check.json": {
+      "bytes": 1116,
+      "sha256": "ae4afe0142991024627aff1d64a377120d4c7c125c160c3d181da917984e1556"
+    },
+    "offline_check_builtin_ref.json": {
+      "bytes": 973,
+      "sha256": "7b8909db824c9fe55f9cc2fd48327630e37e44fdea63fd61e651601c44f37c17"
+    },
+    "offline_check_litert_default.json": {
+      "bytes": 1024,
+      "sha256": "fba1410dc631947f017958277fcc35cc1bfd5d840609bd15e5b4402508f80ae7"
+    },
+    "offline_check_tf216.json": {
+      "bytes": 1004,
+      "sha256": "cc00730ce19cf60a917a0e6a90f08f0914ddd499e3498e1b970785a1b6abcb86"
+    },
+    "offline_invoke.cc": {
+      "bytes": 1465,
+      "sha256": "e215b150ccafb31bece7429bd1ae051b10e3b2e4c71c3afe44f623eef50c315a"
+    },
+    "offline_invoke.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "pixel_export_correction.json": {
+      "bytes": 321,
+      "sha256": "305a07b748e83c64a709309c2df60a80fea1945edbef0ac5f1fcb8041539370f"
+    },
+    "prepare_v29.py": {
+      "bytes": 3111,
+      "sha256": "9bb6597723a842223db7fb08c00be4644e65ea5955674f174ce10977b3399c4b"
+    },
+    "preprocess_core.h": {
+      "bytes": 7691,
+      "sha256": "e5b0041aaa618f1d7283ad06ff2b5d1f1a33b4f19f5cb463369c2cdc4e03177b"
+    },
+    "README.md": {
+      "bytes": 4434,
+      "sha256": "ee80d0a4dbdc7f1fc2542e531bca7a77ef9ecc73d67a91dcf284d1a4329f924d"
+    },
+    "reexport_verification.json": {
+      "bytes": 97,
+      "sha256": "cb0881e8dd6e9c2a6dcedd6eee22738b86a5a4bd71b2224e0daf5f770645f947"
+    },
+    "runtime_install.log": {
+      "bytes": 1958,
+      "sha256": "53d37ca0cb315f511c307efae40c44162ca190e45bf2ddd027462f74056fdf3e"
+    },
+    "source.patch": {
+      "bytes": 9771,
+      "sha256": "82ed77abf52b0e25f9b031507cd9d0d1652049932f2c1a99a39e97992cbd5e98"
+    },
+    "tf216_check_stdout.log": {
+      "bytes": 955,
+      "sha256": "cf08cc5ae104426e084dcd7627e09cbf7f1408b612522c8ab41f3db76bcd236c"
+    },
+    "tf216_install_error.txt": {
+      "bytes": 184,
+      "sha256": "135bf2c85a00d8ee8b1112e058da79596d29aa835873e2859ef1c8aa158c3735"
+    },
+    "tf216_ipv4_install.log": {
+      "bytes": 10133,
+      "sha256": "87d5ec19f59fa5b0c7501e8d75cb4e95e7025a6d96378a0e5373671cf7ecfeee"
+    },
+    "tf216_retry_install.log": {
+      "bytes": 422,
+      "sha256": "345c4b62e91398a291c6b9f7b3d0057a098e1cd4c167723da35c0a98fa5febd6"
+    },
+    "tinyml_pdti8_v29_day.bin": {
+      "bytes": 298826,
+      "sha256": "8aba2becc8b5e065475ba9c808a03344724e4a674174ba20b57a31cf1cd1f063"
+    },
+    "tinyml_pdti8_v29_day.elf": {
+      "bytes": 5196220,
+      "sha256": "96f5d1db68a919b70dc048314ece9cb0e88a26ccd4af6843c47f323bb2de31e1"
+    },
+    "tinyml_pdti8_v29_night.bin": {
+      "bytes": 298834,
+      "sha256": "9c0573c78e3a204174dbea3caeb41bf855f5bd8cff3caf45a1e88472f0279302"
+    },
+    "tinyml_pdti8_v29_night.elf": {
+      "bytes": 5196172,
+      "sha256": "68ba9558c6f02df167491c13a33714f111e0019b8f74fd909136f49d928e7d2d"
+    },
+    "day/compile_commands.json": {
+      "bytes": 380863,
+      "sha256": "c98f8b3687ead921ea6ccf36dba504c0aa2b3b76a3b8a6b61c2d613217f18348"
+    },
+    "day/elf-info.txt": {
+      "bytes": 1555,
+      "sha256": "4035c644766a8b29ef4559d4015b0f35a005cf23cd5878aca020f038fd5b8bdc"
+    },
+    "day/link.log": {
+      "bytes": 114,
+      "sha256": "fe405a8d3018b88547cf7c9b2fffc41539f4adcd1ff7da946d5dca0a6d1dde18"
+    },
+    "day/size.txt": {
+      "bytes": 897,
+      "sha256": "3a6e83cb20ffb5f94cce80e64c60a940d1a499cd5aa49218d91d2c05df5eac61"
+    },
+    "generator/define.cc": {
+      "bytes": 191,
+      "sha256": "0fa62e8b128fb9a3119aed62c54e142dac4bac71edff9b13eec6a7c14f039b17"
+    },
+    "generator/define.h": {
+      "bytes": 267,
+      "sha256": "cc447cbe43ee42ba350caeb6c0fada08807feffd46a89171f417997aeef2f0d9"
+    },
+    "generator/defines.v": {
+      "bytes": 531,
+      "sha256": "482dcbed0bb34672fe23ff42435dc735ea865f655245f9bfcb91600b368032d6"
+    },
+    "generator/v29_person_96_int8_model_data.cc": {
+      "bytes": 619325,
+      "sha256": "645d68e6f9bc66193d786e37dd7bba58f5e5185a83f1b3ea34d8ced81a6ce1b6"
+    },
+    "generator/v29_person_96_int8_model_data.h": {
+      "bytes": 209,
+      "sha256": "844ff7abb0c59953566749e88c13239c280ec6985513e202d02dad7b09ea8918"
+    },
+    "night/compile_commands.json": {
+      "bytes": 381081,
+      "sha256": "315fc4d451b07a082cfd03e45290a1958f6ac6928b21f942a03f2b6f6cbba5ee"
+    },
+    "night/elf-info.txt": {
+      "bytes": 1555,
+      "sha256": "245f04e415e1ce8081db007d7d8e9c0b05aefb130d88310f99c3bd0a5b529a4b"
+    },
+    "night/link.log": {
+      "bytes": 114,
+      "sha256": "a0af812020d8e9d3a2349dfdf1258f36e1117773c09d87dfa949edc6f7dfd6e9"
+    },
+    "night/size.txt": {
+      "bytes": 899,
+      "sha256": "842e3879e42473bea6512bcd4836c109df6dc07a14538ac4ef328f8ef6816112"
+    }
+  }
 }

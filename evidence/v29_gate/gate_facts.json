@@ -1,0 +1,43 @@
+{
+  "selected_preset": "DAY",
+  "firmware": {
+    "file": "tinyml_pdti8_v29_day.bin",
+    "bytes": 298826,
+    "crc32": "58347D5F",
+    "sha256": "8ABA2BECC8B5E065475BA9C808A03344724E4A674174BA20B57A31CF1CD1F063",
+    "camera": {
+      "vts": 1500,
+      "exp20": 47824,
+      "gc": 129,
+      "gf": 42
+    }
+  },
+  "free_capture": {
+    "phase": "FREE_MOVEMENT",
+    "start_wall": "2026-10-28T12:21:41.433+08:00",
+    "start_device_ms": 285072,
+    "planned_seconds": 1800,
+    "actual_human_truth": false,
+    "end_wall": "2026-10-28T12:51:41.444+08:00",
+    "end_device_ms": 2084645,
+    "elapsed_seconds": 1800.0,
+    "ai_samples": 1845,
+    "p_median": -112,
+    "mean_sensor_median": 131,
+    "mean_sensor_max": 183
+  },
+  "total_thumbnails": 951,
+  "free_thumbnails": 870,
+  "total_full_frames": 48,
+  "free_gap_lines": 0,
+  "free_reconnects": 0,
+  "recorder_interruptions": [
+    {
+      "start_wall": "2026-10-28T12:18:50.639+08:00",
+      "end_wall": "2026-10-28T12:19:41.324+08:00",
+      "seconds": 50.685
+    }
+  ],
+  "offline_check_passed": false,
+  "truth_source": "Claude reviews images"
+}

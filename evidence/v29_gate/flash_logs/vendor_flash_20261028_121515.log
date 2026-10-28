@@ -1,0 +1,17 @@
+﻿Using board profile: 'Generic Board Profile Using FT4232H' for pinout connection
+Connecting to JTAG_TAP: efx_ti
+jtag programming started!
+JTAG Programming on hiftdi://0x0403:0x6011/1
+Programming 'C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\FPGA_104-main\evidence\v27_rtl_ir\v7_MERGE15.bit' via JTAG at freq 6.0 MHz
+Device ID read from JTAG: 0x10660A79
+... finished with JTAG programming
+file   : C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\FPGA_104-main\evidence\v27_rtl_ir\v7_MERGE15.bit
+size   : 2825877
+mtime  : 10/27/2026 14:27:36
+sha256 : 74E205F84613F23C1DD8040E2CF31F032BBF524D3ED81022DE551D998613AF40
+mode   : jtag (JTAG 临时加载，未写 SPI 闪存)
+board  : Generic Board Profile Using FT4232H
+usb    : hiftdi://0x0403:0x6011/1
+expect : Device ID read from JTAG: 0x10660A79 + finished with JTAG programming
+nativeExit: 0
+ts     : 20261028_121515

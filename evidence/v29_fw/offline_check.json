@@ -25,9 +25,12 @@
   ],
   "kPersonIndex": 1,
   "kNotAPersonIndex": 0,
-  "reference_source": "aea24d5 eval_log.py input and class-1 scoring rule, reconstructed using LiteRT default kernels, matching eval_log.py default interpreter invocation",
+  "reference_source": "aea24d5 eval_log.py input and class-1 scoring rule, reconstructed using TensorFlow 2.16.1 default interpreter as in eval_log.py",
   "original_per_frame_reference_file_present": false,
   "original_F_class_labels_present": false,
   "ground_truth_F_medians_verified": false,
-  "scope": "actual board TFLite Micro C++ sources and generated model, shared C input centering and Invoke; host driver OP_ERR invokes existing software fallbacks, no hardware emulation"
+  "scope": "actual board TFLite Micro C++ sources and generated model, shared C input centering and Invoke; host driver OP_ERR invokes existing software fallbacks, no hardware emulation",
+  "reference_runtime": "TensorFlow 2.16.1",
+  "same_sign_count": 55,
+  "mean_abs_error": 1.1272727272727272
 }

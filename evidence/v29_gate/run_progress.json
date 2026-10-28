@@ -1,0 +1,12 @@
+{
+  "wall": "2026-10-28T12:51:37.127+08:00",
+  "phase": "FREE_MOVEMENT",
+  "remaining_s": 0,
+  "preset": "DAY",
+  "gaps": 3,
+  "reconnects": 0,
+  "latest_device_ms": 2080663,
+  "mean_sensor": 137,
+  "complete": true,
+  "ended_wall": "2026-10-28T12:51:41.578+08:00"
+}

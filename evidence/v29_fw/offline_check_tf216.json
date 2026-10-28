@@ -1,0 +1,33 @@
+{
+  "model_commit": "aea24d501f9c7e4df7297a40a9b58d1c6dd8f74e",
+  "model_sha256": "605b2ba8a2e8d47038e758c4dc921a222def896525f87edcf4a72c583597741b",
+  "F_frames": 55,
+  "max_abs_error": 6,
+  "within_one": 38,
+  "passed": false,
+  "input_shape": [
+    1,
+    96,
+    96,
+    1
+  ],
+  "output_shape": [
+    1,
+    2
+  ],
+  "input_quantization": [
+    0.007843137718737125,
+    -1
+  ],
+  "output_quantization": [
+    0.00390625,
+    -128
+  ],
+  "kPersonIndex": 1,
+  "kNotAPersonIndex": 0,
+  "reference_source": "aea24d5 eval_log.py input and class-1 scoring rule, reconstructed using TensorFlow 2.16.1 default interpreter as in eval_log.py",
+  "original_per_frame_reference_file_present": false,
+  "original_F_class_labels_present": false,
+  "ground_truth_F_medians_verified": false,
+  "scope": "actual board TFLite Micro C++ sources and generated model, shared C input centering and Invoke; host driver OP_ERR invokes existing software fallbacks, no hardware emulation"
+}

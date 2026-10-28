@@ -1,0 +1,14 @@
+{
+  "pre_capture_dec": 0,
+  "dec": 3802,
+  "complete_images": 48,
+  "pages": 2,
+  "events": 0,
+  "alarm_events": 41,
+  "lp_events": 27,
+  "ai_samples": 2002,
+  "motion_frames": 1551,
+  "gaps": 3,
+  "reconnects": 0,
+  "unmatched_pp": 0
+}
