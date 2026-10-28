@@ -1,0 +1,72 @@
+
+Elitestek FPGA Placement and Routing.
+Version: 2026.1.132 
+Date: Wed Oct 28 14:37:58 2026
+
+Copyright (C) 2013 - 2026 Efinix, Inc. All rights reserved.
+ 
+Family: Titanium 
+Device: Ti60F225
+Top-level Entity Name: ti60f225_oob
+
+---------- IO Interface Summary (begin) ----------
+
++------------------------+--------------+
+| Missing Interface Pins | Input/Output |
++------------------------+--------------+
+|    jtag_inst1_DRCK     |    Input     |
+|     jtag_inst1_TMS     |    Input     |
+|   jtag_inst1_RUNTEST   |    Input     |
+| mipi_dp_data0_LP_P_IN  |    Input     |
+| mipi_dp_data0_LP_N_IN  |    Input     |
+|      ddr_addr[15]      |    Output    |
+|      ddr_addr[14]      |    Output    |
++------------------------+--------------+
+
+----------- IO Interface Summary (end) ----------
+
+
+---------- IO Placement Summary (begin) ----------
+
++----------------------+--------------+
+| Unassigned Core Pins | Input/Output |
++----------------------+--------------+
+|    jtag_inst1_TDI    |    Input     |
+|    jtag_inst1_TDO    |    Output    |
+|    pll_inst4_RSTN    |    Output    |
++----------------------+--------------+
+
+----------- IO Placement Summary (end) ----------
+
+
+---------- Module Resource Usage Distribution Estimates (begin) ----------
+
+'Module Resource Usage Distribution Estimates' table printed in: D:\v7work\v7_MERGE16\out\ti60f225_oob.hier_util.rpt
+
+----------- Module Resource Usage Distribution Estimates (end) ----------
+
+Elapsed time for packing: 0 hours 0 minutes 3 seconds
+---------- Resource Summary (begin) ----------
+Inputs: 118 / 1703 (6.93%)
+Outputs: 353 / 2267 (15.57%)
+Global Clocks (GBUF): 18 / 32 (56.25%)
+Regional Clocks (RBUF): 1 / 32 (3.12%)
+	RBUF: Core: 0 / 16 (0.00%)
+	RBUF: Periphery: 1 / 8 (12.50%)
+	RBUF: Multi-Region: 0 / 8 (0.00%)
+XLRs: 42692 / 60800 (70.22%)
+	XLRs needed for LUT4: 14325 / 60800 (23.56%)
+	XLRs needed for LUT4 + FF: 9688 / 60800 (15.93%)
+	XLRs needed for COMB4: 0 / 60800 (0.00%)
+	XLRs needed for COMB4 + FF: 0 / 60800 (0.00%)
+	XLRs needed for Adder: 5018 / 60800 (8.25%)
+	XLRs needed for Adder + FF: 2455 / 60800 (4.04%)
+	XLRs needed for SRL8: 1259 / 14720 (8.55%)
+	XLRs needed for SRL8 + FF: 0 / 14720 (0.00%)
+	XLRs needed for FF: 9947 / 60800 (16.36%)
+	XLRs needed for Routing: 0 / 60800 (0.00%)
+Memory Blocks: 189 / 256 (73.83%)
+DSP Blocks: 67 / 160 (41.88%)
+---------- Resource Summary (end) ----------
+
+Elapsed time for placement: 0 hours 1 minutes 31 seconds
