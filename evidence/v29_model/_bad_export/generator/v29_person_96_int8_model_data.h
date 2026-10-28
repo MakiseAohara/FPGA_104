@@ -1,0 +1,5 @@
+#ifndef _V29_PERSON_96_INT8_MODEL_DATA_H
+#define _V29_PERSON_96_INT8_MODEL_DATA_H
+extern const unsigned int v29_person_96_int8_model_data_len;
+extern const unsigned char v29_person_96_int8_model_data[];
+#endif

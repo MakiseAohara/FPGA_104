@@ -1,0 +1,10 @@
+{
+  "frames": 330,
+  "matched": 330,
+  "missing": 0,
+  "corr_bitreinterpret": 0.9574444679746951,
+  "mean_abs_diff": 4.239393939393939,
+  "max_abs_diff": 206,
+  "frac_le2": 0.7151515151515152,
+  "corr_sub128": -0.161650467308099
+}
