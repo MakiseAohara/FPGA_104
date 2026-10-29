@@ -1,0 +1,26 @@
+D:\v292_build\day\tinyml_pdti8.elf  :
+section                size     addr
+.init                   112     4096
+.text                183548     4208
+.init_array              68   187756
+.fini_array               4   187824
+.data                121370   187832
+.bss                 154700   309208
+.stack              2097152   463920
+.debug_info         2653237        0
+.debug_abbrev        101598        0
+.debug_aranges         5080        0
+.debug_line          626926        0
+.debug_str           766030        0
+.debug_line_str       14759        0
+.comment                102        0
+.riscv.attributes        67        0
+.debug_loclists      464374        0
+.debug_rnglists       77824        0
+.debug_frame          17636        0
+.debug_loc            34300        0
+.debug_ranges         17912        0
+.debug_macro          28638        0
+Total               7365437
+
+

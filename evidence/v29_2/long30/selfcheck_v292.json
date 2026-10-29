@@ -1,0 +1,22 @@
+{
+  "model_bytes": 101088,
+  "checks": [
+    {
+      "file": "tinyml_pdti8_v292_day.bin",
+      "bytes": 305106,
+      "crc32": "D7FE2D36",
+      "embedded_model": true,
+      "old_model_present": false,
+      "strings": {
+        "MMT_WB_INIT": true,
+        "IR_SOLO_ON=%d": true,
+        "cause=%s": true,
+        "v29.2": true,
+        "MMT_HOTSRC": true,
+        "hotsrc=%d": true,
+        "MMT_LPCAM enter": true
+      },
+      "pass_": true
+    }
+  ]
+}

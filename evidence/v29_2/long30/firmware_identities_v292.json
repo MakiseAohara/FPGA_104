@@ -1,0 +1,15 @@
+{
+  "DAY": {
+    "file": "tinyml_pdti8_v292_day.bin",
+    "bytes": 305106,
+    "crc32": "D7FE2D36",
+    "sha256": "FCC20A3ECE2C43CAA6BBB178CBE0CED20FB53A21F5784FC59A2FD990A8A759A1",
+    "model_sha256": "A78BB07CC09D5279CC88281EAAC5328746E98EDFD2CA471BDF28DDD4EF8941C5",
+    "camera": {
+      "vts": 1500,
+      "exp20": 47824,
+      "gc": 129,
+      "gf": 42
+    }
+  }
+}
