@@ -1,0 +1,12 @@
+{
+  "port": "COM15",
+  "baud": 115200,
+  "minutes": 30.0,
+  "elapsed_s": 1800.2,
+  "frames": 0,
+  "thumbs": 0,
+  "start": "2026-10-29T16:46:09.118212",
+  "end": "2026-10-29T17:16:09.277254",
+  "serial_log": "D:\\FPGA\\mmt\\out\\long30\\serial.log",
+  "size": 5444796
+}
