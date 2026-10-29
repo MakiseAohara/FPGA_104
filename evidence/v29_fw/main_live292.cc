@@ -108,6 +108,7 @@
 #define IR_SOLO_N        6       /* 最近 IR_SOLO_N 个样本 ir_hot 全为 1 即触发 */
 #define AI_P_STRONG      60
 #define AI_P_OFF         (-40)
+#define REL_QUIET_FRAMES 6      /* v29.3: 连续无候选帧数达到此值即可解除报警 */
 #define AI_AREA_MIN      200     /* 运动面积门限：压制全局亮变/AGC 型大 motion */
 #define AI_AREA_MAX      20000
 #define DEC_CAND_FRAMES  6
@@ -388,6 +389,7 @@ static uint32_t g_frame = 0;
 static uint32_t g_dec_ms = 0;
 static int alarm_on = 0, alarm_start_ms = 0, alarm_frames = 0;
 static int cand_left = 0, rel_cnt = 0, dec_evt = 0, dec_conf = 0;
+static int quiet_cnt = 0;   /* v29.3: 当前无运动候选连续帧数（解除判定用） */
 static int fw_lp = 0;
 static uint64_t lp_last_active_ms = 0, lp_enter_ms = 0;
 
@@ -444,13 +446,13 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
       }
    }
    const int cand = motion && (area >= AI_AREA_MIN) && (area <= AI_AREA_MAX);
-   if (cand) cand_left = DEC_CAND_FRAMES;
-   else if (cand_left > 0) cand_left--;
+   if (cand) { cand_left = DEC_CAND_FRAMES; quiet_cnt = 0; }
+   else { if (cand_left > 0) cand_left--; if (quiet_cnt < 1000) quiet_cnt++; }
 
    const uint64_t now = now_ms();
    if (!alarm_on) {
       const int fusion = (cand_left > 0) &&
-                         ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG));
+                         ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG && ir_cnt10 >= 1));
       int solo   = (IR_SOLO_ON && (ir_cnt6 >= IR_SOLO_N)) ? 1 : 0;
 #if HOTSRC_EXCL
       /* v29.2 热源排除：红外持续偏热但 AI 连续 AI_VOTE_N 次都判"无人"（p<AI_P_OFF），
@@ -472,7 +474,7 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
       }
    } else {
       alarm_frames++;
-      if (infer_ran && g_person_off && (ir_cnt15 == 0)) { /* v28: all 15 IR clear and all 3 AI off */
+      if (infer_ran && g_person_off && (ir_cnt15 == 0 || quiet_cnt >= REL_QUIET_FRAMES)) { /* v28: all 15 IR clear and all 3 AI off */
            bsp_printf("MMT_ALARM end ms=%d f=%d dur_ms=%d\n\r",
                       (int)now, (int)g_frame, (int)now - alarm_start_ms);
            alarm_on = 0;

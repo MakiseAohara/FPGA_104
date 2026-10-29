@@ -1,26 +1,26 @@
 D:\v292_build\day\tinyml_pdti8.elf  :
 section                size     addr
 .init                   112     4096
-.text                184580     4208
-.init_array              68   188788
-.fini_array               4   188856
-.data                121474   188864
-.bss                 154724   310344
-.stack              2097152   465072
-.debug_info         2654834        0
-.debug_abbrev        101637        0
+.text                184536     4208
+.init_array              68   188744
+.fini_array               4   188812
+.data                121474   188816
+.bss                 154728   310296
+.stack              2097152   465024
+.debug_info         2654757        0
+.debug_abbrev        101636        0
 .debug_aranges         5080        0
-.debug_line          629621        0
-.debug_str           766132        0
+.debug_line          629587        0
+.debug_str           766142        0
 .debug_line_str       14759        0
 .comment                102        0
 .riscv.attributes        67        0
-.debug_loclists      468204        0
-.debug_rnglists       78263        0
+.debug_loclists      467777        0
+.debug_rnglists       78269        0
 .debug_frame          17644        0
 .debug_loc            34300        0
 .debug_ranges         17912        0
 .debug_macro          28638        0
-Total               7375307
+Total               7374744
 
 
