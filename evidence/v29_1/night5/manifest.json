@@ -1,0 +1,26 @@
+{
+  "firmware": "tinyml_pdti8_v291_night.bin",
+  "crc32": "B534DE8E",
+  "port": "COM15",
+  "bitstream": "v7_MERGE16.bit",
+  "duration_s": 300,
+  "mean_sensor": 31,
+  "mean_sensor_expected": "80-130",
+  "started_local": "2026-10-29T15:23:36.007+08:00",
+  "started_ms": 1793258616007,
+  "ended_local": "2026-10-29T15:28:36.179+08:00",
+  "ended_ms": 1793258916179,
+  "lines": 1627,
+  "frames": 2,
+  "thumbs": 126,
+  "boot": [],
+  "interrupted": false,
+  "chunks": [
+    {
+      "start": "2026-10-29T15:23:36.007+08:00",
+      "end": "2026-10-29T15:28:36.179+08:00",
+      "seconds": 300.2,
+      "lines": 1627
+    }
+  ]
+}
