@@ -3,8 +3,8 @@
   "checks": [
     {
       "file": "tinyml_pdti8_v292_day.bin",
-      "bytes": 305106,
-      "crc32": "D7FE2D36",
+      "bytes": 306242,
+      "crc32": "3D334E58",
       "embedded_model": true,
       "old_model_present": false,
       "strings": {

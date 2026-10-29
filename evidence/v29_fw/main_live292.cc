@@ -65,7 +65,7 @@
 #define STRETCH_ON       1       /* v17 默认 1%/99% 分位拉伸 */
 #endif
 #ifndef AUTOEXP_ON
-#define AUTOEXP_ON       0
+#define AUTOEXP_ON       0       /* v29.2 本轮：旧 AE 关闭 */
 #endif
 #ifndef LP_CAMFPS_ON
 #define LP_CAMFPS_ON     1       /* v29.2: 低功耗降帧默认开启（任务书 ⑤）；写失败自动关闭并恢复 */
@@ -625,6 +625,90 @@ static void bright_log(const char* tag)
               tag,(int)now_ms(),status==0,vts,exp,exp>>4,gc,gf,bright_ready);
 }
 
+/* ---------------------------------------------------------------------------
+ * v29.2 亮度闭环（GAIN_AUTO）：不分档位，只有一个目标——画面平均亮度 mean_sensor 逼近 GA_TARGET。
+ * 曝光时间固定不动，只调"总增益" G（Q8，256=1x）= 粗增益(1/2/4/8/16x) x 细增益(gf/32，1.0~1.97x)。
+ * 每次按 目标/当前 修正，单步限幅 0.7~1.4 倍；偏差在 +-GA_BAND% 内不动；连续 GA_NEED 次才动。
+ * 有运动/有人/报警时冻结，只在空场调整，避免白衣服或人体把增益拉偏。
+ * ------------------------------------------------------------------------- */
+#ifndef GAIN_AUTO_ON
+#define GAIN_AUTO_ON 1       /* v29.2 本轮：新亮度闭环（GA_TARGET=100） */
+#endif
+#define GA_TARGET 100
+#define GA_BAND   15       /* 百分比 */
+#define GA_NEED   2
+#define GA_HOLD   1
+#define GA_GMIN   256u     /* 1x */
+#define GA_GMAX   8176u    /* 16 x 1.99 */
+static const unsigned char ga_gc_code[5] = {0x80, 0x81, 0x83, 0x87, 0x8f};
+
+static unsigned ga_g_from(unsigned gc, unsigned gf)
+{
+   unsigned k = 0;
+   for (unsigned i = 0; i < 5; ++i) if (ga_gc_code[i] == gc) k = i;
+   return ((unsigned)(1u << k)) * gf * 8u;     /* gf/32 * 256 = gf*8 */
+}
+
+static void ga_map(unsigned g, unsigned* gc, unsigned* gf)
+{
+   if (g < GA_GMIN) g = GA_GMIN;
+   if (g > GA_GMAX) g = GA_GMAX;
+   unsigned k = 0;
+   while (k < 4 && (g >> (k + 1)) >= 256u) k++;
+   unsigned fine = g >> k;                     /* 256..511 */
+   unsigned f = fine >> 3;                     /* 32..63 */
+   if (f < 0x20u) f = 0x20u;
+   if (f > 0x3fu) f = 0x3fu;
+   *gc = ga_gc_code[k];
+   *gf = f;
+}
+
+/* 纯决策：返回新的总增益；便于主机仿真测试 */
+static unsigned ga_decide(int mean, int allowed, unsigned g, int* cnt, int* hold)
+{
+   if (!allowed) { *cnt = 0; return g; }
+   if (*hold > 0) { (*hold)--; return g; }
+   if (mean < 1) mean = 1;
+   const int dev = (mean - GA_TARGET) * 100 / GA_TARGET;
+   if (dev <= GA_BAND && dev >= -GA_BAND) { *cnt = 0; return g; }
+   if (++(*cnt) < GA_NEED) return g;
+   *cnt = 0;
+   unsigned ratio = (unsigned)((GA_TARGET * 256) / mean);   /* Q8 */
+   if (ratio < 179u) ratio = 179u;                         /* 0.7x */
+   if (ratio > 358u) ratio = 358u;                         /* 1.4x */
+   unsigned ng = (unsigned)(((unsigned long)g * ratio) >> 8);
+   if (ng < GA_GMIN) ng = GA_GMIN;
+   if (ng > GA_GMAX) ng = GA_GMAX;
+   *hold = GA_HOLD;
+   return ng;
+}
+
+static unsigned g_ga_g = 0;
+static int g_ga_cnt = 0, g_ga_hold = 0, g_ga_off = 0;
+
+static void ga_update(int mean, int allowed)
+{
+#if GAIN_AUTO_ON
+   if (!bright_ready || g_ga_off) return;
+   if (g_ga_g == 0) g_ga_g = ga_g_from((unsigned)bright_gc, (unsigned)bright_gf);
+   const unsigned ng = ga_decide(mean, allowed, g_ga_g, &g_ga_cnt, &g_ga_hold);
+   if (ng != g_ga_g) {
+      unsigned gc, gf;
+      ga_map(ng, &gc, &gf);
+      if (bright_apply(bright_exp20, (int)gc, (int)gf) == 0) {
+         bsp_printf("MMT_GAIN g=%d->%d gc=0x%x gf=0x%x mean=%d target=%d\n\r",
+                    (int)g_ga_g, (int)ng, gc, gf, mean, GA_TARGET);
+         g_ga_g = ng;
+      } else {
+         g_ga_off = 1;   /* 写失败：保持当前增益，不再自动调整 */
+         bsp_printf("MMT_GAIN_ERR g=%d->%d mean=%d (auto disabled)\n\r", (int)g_ga_g, (int)ng, mean);
+      }
+   }
+#else
+   (void)mean; (void)allowed;
+#endif
+}
+
 static void bright_initialize(void)
 {
    unsigned char id_h=0,id_l=0;
@@ -699,7 +783,7 @@ static void bright_initialize(void)
 #define WB_G             0x118    /* 1.094x，G 作为基准不随标定改变 */
 #endif
 #ifndef WB_B
-#define WB_B             0x1C4    /* 1.78125x（v29.2 本轮默认值） */
+#define WB_B             0x1A4    /* 1.640625x（v29.2 本轮默认值） */
 #endif
 #ifndef WB_CAL
 #define WB_CAL           0        /* 1=开机标定一次（上板 a 步），0=使用宏内固定增益 */
@@ -1013,6 +1097,7 @@ extern "C" int main()
             /* Fresh visual evidence while inference remains paused. */
             pp_stats_t thumb_pst;
             sample_frame_box(input_snapshot, &thumb_pst);
+            ga_update(thumb_pst.mean_sensor, 1);
             dump_thumb(input_snapshot, frame, ai_p_now);
          }
          ++frame;
@@ -1029,6 +1114,7 @@ extern "C" int main()
       /* ---------------- 正常模式：采样（功能 4 可选）+ 推理 ---------------- */
       pp_stats_t pst;
       const uint32_t chk = sample_frame_box(model_input->data.int8, &pst);
+      ga_update(pst.mean_sensor, !(motion || alarm_on || last_person));
 
       for (int i = 0; i < IMG_N; ++i) input_snapshot[i] = model_input->data.int8[i];
       prepare_model_input(model_input->data.int8, input_snapshot);

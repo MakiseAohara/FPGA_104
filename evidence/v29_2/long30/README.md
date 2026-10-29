@@ -1,83 +1,79 @@
-# v29.2 DAY 固件 + 30 分钟自由采集（WB R/G/B = 0x158 / 0x118 / 0x1A4，自动亮度开）
+# v29.2 DAY 固件 + 30 分钟自由采集（WB = 0x158/0x118/0x1A4，GAIN_AUTO 闭环，旧 AE 关闭）
 
-## 1. 本轮固件
+## 1. 本轮固件（修正上一轮的 AUTOEXP 误编）
 
 | 项 | 值 |
 |---|---|
 | 文件 | `tinyml_pdti8_v292_day.bin` |
-| 大小 | **306,442 B** |
-| **CRC32** | **7CD244BA** |
-| SHA256 | `3BDC3B009279167DE623E56B1C68FA60E3B77676EB617469AB82A10B2BB93656` |
+| 大小 | **306,242 B** |
+| **CRC32** | **3D334E58** |
+| SHA256 | `611D5BBF5BAF0B23897C89AC51ACF3FA9E5CEE1DF5C10A35E8175F7CF060607F` |
 | 模型 | v29 第二轮 `v29_person_96_int8.tflite`（101,088 B） |
-| 相机 | VTS=1500、EXP20=47824、GC=129、GF=42（DAY 预设） |
 
-改动（`evidence/v29_fw/main_live292.cc`）：
-- `WB_R=0x158`、`WB_G=0x118`、**`WB_B=0x1A4`**（只改 WB_B）
-- **`AUTOEXP_ON=1`**（自动亮度；AE_TARGET_LO=95 / HI=125）
-- 其余宏未动（`LP_CAMFPS_ON=1`、`IR_SOLO_ON=1`、`INPUT_SUB128=1` 等保持）
+`main_live292.cc` 关键宏：
+
+| 宏 | 值 | 说明 |
+|---|---|---|
+| `AUTOEXP_ON` | **0** | 旧 AE 关闭（上一轮误开，导致 0x802a→0x8f8c 过曝） |
+| `GAIN_AUTO_ON` | **1** | v29.2 新亮度闭环（只调总增益，目标 `GA_TARGET=100`，单步 0.7~1.4×，±15% 死区，空场才调） |
+| `WB_R` / `WB_G` / `WB_B` | 0x158 / 0x118 / **0x1A4** | 白平衡 |
+| 其余 | 不动 | `LP_CAMFPS_ON=1`、`IR_SOLO_ON=1`、`INPUT_SUB128=1` 等 |
 
 构建：`python build_v292.py DAY` → **FIRMWARE BUILD PASS**；`python check_v292.py` → **SELFCHECK PASS**。
+固件内字符串核对：`MMT_GAIN` ✓、`MMT_GAIN_ERR` ✓、**`MMT_AE` ✗（不存在，旧 AE 已剔除）**。
 
-## 2. 加载与串口确认（原样）
-
-烧 MERGE17（`3A69AAFB…887CF`）→ `MMT_LOADER_READY` → UART 上传固件 →：
+## 2. 加载后串口确认（原样）
 
 ```
-MMT_LIVE_BOOT v29.2 CROP=1 NORM=0 STRETCH=1 AE=1 LPCAM=1 FW_DEC=1 LOWPOWER=1
+MMT_LIVE_BOOT v29.2 CROP=1 NORM=0 STRETCH=1 AE=0 LPCAM=1 FW_DEC=1 LOWPOWER=1
 MMT_WB_INIT r=344 g=280 b=420 cal=0
+MMT_GAIN g=1836->2567 gc=0x00000087 gf=0x00000028 mean=48 target=100
+MMT_GAIN g=3589->4542 gc=0x0000008f gf=0x00000023 mean=79 target=100
 ```
 
-`r=344=0x158`、`g=280=0x118`、`b=420=0x1A4` ✓ 三个值确认写入。
+- `AE=0` ✓（旧自动曝光未参与）
+- `r=344=0x158`、`g=280=0x118`、`b=420=0x1A4` ✓
+- 采集中 **`MMT_AE` 出现 0 次、`MMT_GAIN_ERR` 0 次**（与上一轮形成对比）
 
-自动亮度（固件打印标签是 `MMT_AE`，**本固件里没有 `MMT_GAIN*` 字符串**；对应错误标签为 `MMT_AE_ERR`）最先几条：
-
-```
-MMT_AE mean=30 act=3 exp 0x0000ffff->0x0000ffff gain 0x0000802a->0x00008f8c
-MMT_AE mean=209 act=2 exp 0x0000e146->0x0000c63d gain 0x00008f8c->0x00008f8c
-MMT_AE mean=205 act=2 exp 0x0000c63d->0x0000bbf0 gain 0x00008f8c->0x00008f8c
-MMT_AE mean=202 act=4 exp 0x0000bbf0->0x0000bbf0 gain 0x00008f8c->0x0000802a
-MMT_AE mean=20  act=1 exp 0x0000bbf0->0x0000d27e gain 0x0000802a->0x0000802a
-```
-
-**`MMT_AE_ERR` 0 次、`MMT_BRIGHT_ERROR` 0 次。**
-
-## 3. 30 分钟自由采集（16:46:09 → 17:16:09，1800 s）
+## 3. 30 分钟自由采集（17:33:10 → 18:03:10，1800.3 s）
 
 | 项 | 值 |
 |---|---|
-| `serial.log` | **5,444,796 B**（30 分钟连续） |
-| 缩略图 | **767 张 48×48 PNG**（`thumbs/`，来自 `MMT_THUMB` 4608 hex 字节原样） |
-| 报警帧 | 148 |
-| 启动日志 | `boot_v292_b0x1A4.log` |
+| `serial.log` | **5,896,605 B** |
+| 缩略图 | **807 张 48×48 PNG**（`thumbs/`，`MMT_THUMB` 4608 hex 字节原样） |
+| 报警帧 | 32 |
+| `MMT_GAIN` 调整次数 | **1 次**（增益落到 4542 后稳定，不再抖动） |
+| `MMT_GAIN_ERR` / `MMT_AE` | 0 / 0 |
 
-### 亮度（自动亮度效果，采集中实测）
+### 亮度（对比上一轮过曝）
 
-| 指标 | n | min | p50 | p90 | max | mean |
-|---|---|---|---|---|---|---|
-| `MMT_AE mean` | 58 | 20 | **64** | 219 | 243 | 117.1 |
-| `MMT_PP mean_in` | 925 | 24 | **86** | 209 | 237 | 131.1 |
+| 轮次 | 固件 | n | min | p50 | p90 | max | mean |
+|---|---|---|---|---|---|---|---|
+| 上一轮（旧 AE，已作废） | CRC 7CD244BA | 925 | 24 | 86 | 209 | 237 | 131.1 |
+| **本轮（GAIN_AUTO）** | **CRC 3D334E58** | **1246** | **53** | **80** | **81** | 218 | **79.9** |
 
-- **中位亮度 64（AE 口径）/ 86（PP 口径）**，高于 60 的告警线但偏低；AE 在 20~243 之间明显振荡（场景明暗交替时 ±12% 步长偏大）。
-- 按约定**没有自行改 AE 参数**，仅记录上报。
+- 本轮亮度 **p50=80、p90=81**，贴近目标 100，**不再出现上一轮 >150 的过曝聚集**（p90 从 209 降到 81）。
+- 采集期间未改任何参数。
 
 ## 4. 目录
 
 ```
 evidence/v29_2/long30/
-├── tinyml_pdti8_v292_day.bin   306,442 B  CRC32 7CD244BA
+├── tinyml_pdti8_v292_day.bin   306,242 B  CRC32 3D334E58（本轮）
 ├── tinyml_pdti8_v292_day.elf
 ├── day_build.log / link.log / size.txt / elf-info.txt
 ├── firmware_identities_v292.json / selfcheck_v292.json
-├── serial.log                  5,444,796 B（30 分钟）
-├── thumbs/                     767 × 48×48 PNG
-├── thumbs_manifest.json        缩略图/亮度统计
-├── boot_v292_b0x1A4.log        上电/加载启动日志（含 MMT_WB_INIT）
-├── serial_b0x1C4_aborted.log   上一版（B=0x1C4）被中止的短采集，留作对照
+├── serial.log                  5,896,605 B（30 分钟，本轮）
+├── thumbs/                     807 × 48×48 PNG（本轮）
+├── thumbs_manifest.json        缩略图/亮度统计（本轮）
+├── boot_v292_b0x1A4.log        上电/加载启动日志（AE=0、WB_INIT、GAIN）
+├── serial_v292_ae1_overexposed.log  上一轮（旧 AE 过曝）完整 30 分钟日志，保留对照
+├── serial_b0x1C4_aborted.log   更早（B=0x1C4）被中止的短采集
 └── README.md
 ```
 
 ## 5. 环境适配（仅路径，不改逻辑）
 
-- `build_v292.py` 的 `PROJECT` 指向本机可构建副本 `D:\v7work\tiny_proj`（`D:\FPGA\codex20` 不存在、`D:\FPGA\tinyml` 缺 bsp）。
-- `WORK` 指向 **`D:\v292_build`**（原路径含中文导致 riscv `ld.exe` 写 elf 失败）。
-- 加载流程：`flash_vendor.ps1` 烧 MERGE17 → 等 `MMT_LOADER_READY` → UART `MMTL` 协议上传 306,442 B → `MMT_LIVE_BOOT`。
+- `PROJECT` → 本机可构建副本 `D:\v7work\tiny_proj`。
+- `WORK` → `D:\v292_build`（避开中文路径导致的 ld 写 elf 失败）。
+- 加载：`flash_vendor.ps1` 烧 MERGE17（复位到 loader）→ UART `MMTL` 上传 306,242 B → `MMT_LIVE_BOOT`。
