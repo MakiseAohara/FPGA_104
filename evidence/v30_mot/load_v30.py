@@ -14,6 +14,7 @@ ap.add_argument('--out', type=Path, required=True)
 ap.add_argument('--boot-timeout', type=float, default=120.0)
 ap.add_argument('--capture-seconds', type=float, default=45.0)
 ap.add_argument('--no-upload', action='store_true')
+ap.add_argument('--pace-ms', type=float, default=0.0, help='每块之间额外延时（给板端 DDR 写入留时间）')
 a = ap.parse_args()
 a.out.mkdir(parents=True, exist_ok=True)
 log = (a.out / 'serial.log').open('w', encoding='utf-8', newline='\n')
@@ -82,12 +83,18 @@ with serial.Serial(a.port, 115200, timeout=0.05, write_timeout=5) as port:
                     break
                 print(f'  RETRY block={off//64} attempt={attempt+1}', flush=True)
             if ack == b'\x06':
-                time.sleep(0.003)               # 节奏控制：给板端 UART→DDR 留出时间
+                if a.pace_ms > 0:
+                    time.sleep(a.pace_ms / 1000.0)
             if ack != b'\x06':
                 print(f'ACK_FAIL block={off//64} at {off*100//len(data)}%', flush=True); sys.exit(4)
             if (off // 64) % 800 == 0:
                 print(f'  {off*100//len(data)}% ({off//64} blocks)', flush=True)
         print('UPLOAD_DONE', flush=True)
+        # 等板端 CRC 校验结论（不给结论就当失败，避免"传完了却没跑起来"的假成功）
+        tail = find_token(port, buffer, ['MMT_LOAD_PASS', 'MMT_LOAD_FAIL'], 20)
+        if not tail or 'MMT_LOAD_PASS' not in tail:
+            print('LOAD_NOT_CONFIRMED', flush=True); sys.exit(5)
+        print('LOAD_PASS_CONFIRMED', flush=True)   # wait LOAD_PASS
     read_lines(port, buffer, time.monotonic() + a.capture_seconds)
 
 (a.out / 'uart_raw.bin').write_bytes(bytes(raw))

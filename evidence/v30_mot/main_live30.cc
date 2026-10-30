@@ -180,8 +180,8 @@
 #define ST_VSCNT(w)   (((w) >> 24) & 0xFFu)
 
 #define IMG_N        (96 * 96)
-#define IMG_DUMP_EVERY 40
-#define THUMB_DUMP_EVERY 4
+#define IMG_DUMP_EVERY 20   /* v30e2：全幅帧更密，便于事后核对现场 */
+#define THUMB_DUMP_EVERY 2   /* v30e2：缩略图每 2 帧一张，采集容错 */
 #define THUMB_W 48
 
 namespace {
@@ -192,6 +192,7 @@ namespace {
    constexpr int kTensorArenaSize = 136 * 1024;
    uint8_t tensor_arena[kTensorArenaSize];
    int8_t input_snapshot[IMG_N];
+   int8_t mot_img[IMG_N];              /* v30：MOT 专用输入（不拉伸/不归一化，见 mot_sample_raw） */
 }
 
 static const char HEXD[] = "0123456789abcdef";
@@ -538,11 +539,24 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
 //   每帧（含低功耗轮询）跑一次：背景差分 → 连通域 → IOU 关联 → 速度/预测
 //   预测"即将进入 ROI"时立刻 PREWARN，并跳出低功耗提前恢复全速推理
 // ===========================================================================
+/* v30：MOT 必须看"传感器原始值"，不能看 STRETCH 后的画面。
+   STRETCH 是逐帧 1%/99% 分位重映射，人一进画面整幅灰度就被重排，
+   背景差分会把整幅判成前景（实测 area≈8800/9216、bbox 96x96）。
+   所以这里单独再采一遍（不拉伸、不归一化）。 */
+static void mot_sample_raw(void)
+{
+   pp_cfg_t cfg;
+   cfg.crop_mode = CROP_MODE;
+   cfg.norm_on = 0;
+   cfg.stretch_on = 0;
+   (void)pp_run(fb_get, 0, &cfg, mot_img, 0);
+}
+
 static void mot_track_frame(uint32_t frame)
 {
 #if MOT_ON
    int k, pre = 0, eta = -1, id = 0, nconf = 0;
-   mot_step(&g_mot, &g_motw, (const unsigned char*)input_snapshot);
+   mot_step(&g_mot, &g_motw, (const unsigned char*)mot_img);
 
    for (k = 0; k < g_mot.n_trk; ++k) {
       const mot_trk_t* t = &g_mot.trk[k];
@@ -1203,6 +1217,7 @@ extern "C" int main()
             /* Fresh visual evidence while inference remains paused. */
             pp_stats_t thumb_pst;
             sample_frame_box(input_snapshot, &thumb_pst);
+            mot_sample_raw();
             mot_track_frame(frame);      /* v30：低功耗下也跟踪，预测到人靠近就提前唤醒 */
             if ((frame % THUMB_DUMP_EVERY) == 0) {
                ga_update(thumb_pst.mean_sensor, 1);
@@ -1226,7 +1241,8 @@ extern "C" int main()
       ga_update(pst.mean_sensor, !(motion || alarm_on || last_person));
 
       for (int i = 0; i < IMG_N; ++i) input_snapshot[i] = model_input->data.int8[i];
-      mot_track_frame(frame);            /* v30：多目标跟踪 + 预测（用原始 u 字节） */
+      mot_sample_raw();
+      mot_track_frame(frame);            /* v30：多目标跟踪 + 预测（原始传感器值） */
       prepare_model_input(model_input->data.int8, input_snapshot);
       uint32_t bsum = 0;
       for (int i = 0; i < IMG_N; ++i) bsum += (uint8_t)input_snapshot[i];
