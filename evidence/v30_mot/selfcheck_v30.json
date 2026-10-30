@@ -1,0 +1,19 @@
+{
+  "file": "D:\\v30_build\\out_v30c\\tinyml_pdti8.bin",
+  "bytes": 312826,
+  "crc32": "52C82FCF",
+  "sha256": "04C6A9BBCA404132CF2E9839AB61F338742DA97F5C8F20B4F9673200122B081B",
+  "embedded_model": true,
+  "old_model_present": false,
+  "strings": {
+    "MMT_MOT_CFG": true,
+    "MMT_TRK": true,
+    "MMT_MOT ": true,
+    "MMT_PREWARN": true,
+    "MMT_PREDLEAD": true,
+    "MMT_FUSION": true,
+    "MMT_LIVE_BOOT": true,
+    "MMT_ALARM": true
+  },
+  "pass": true
+}
