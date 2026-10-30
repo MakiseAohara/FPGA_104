@@ -23,5 +23,6 @@ for line in open(a.log, encoding='utf-8', errors='replace'):
             big[y*96+x] = small[sy*48 + (x//2)]
     frames.append(bytes(big)); meta.append(dict(f=f, t=t, alarm=al, p=p))
 (out/'frames.bin').write_bytes(b''.join(frames))
+(out/'ai.txt').write_text(''.join(str(m['p']) + '\n' for m in meta), encoding='utf-8')
 (out/'frames.json').write_text(json.dumps(meta, indent=1), encoding='utf-8')
 print('frames', len(frames))

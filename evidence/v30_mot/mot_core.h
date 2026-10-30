@@ -36,7 +36,7 @@
 #define MOT_MAX_AREA     9000    /* 最大目标面积：人贴近镜头可占整幅九成，只有"整幅全变"才丢 */
 #define MOT_IOU_THR      200     /* IOU 阈值，千分比（200 = 0.20） */
 #ifndef MOT_MAX_MISS
-#define MOT_MAX_MISS     6       /* 连续丢失多少帧后删航迹（2fps ≈3 s，留出重连时间） */
+#define MOT_MAX_MISS     6       /* v1.3 Bug3：已确认航迹丢失 6 帧内可复用 ID（2fps ≈3 s） */
 #endif
 #ifndef MOT_REPORT_MISS
 #define MOT_REPORT_MISS  1       /* 丢失超过该帧数就不上报（仍留在表里等重连） */
@@ -46,6 +46,11 @@
 #define MOT_GATE_PX      16      /* 二级关联：质心距离门限（IOU 全丢失时按速度外推后仍可续轨） */
 #define MOT_BG_SHIFT     5       /* 背景更新 α = 1/(1<<5) */
 #define MOT_GHOST_DIV    8       /* 连通域内运动像素 < 面积/该值 ⇒ 判鬼影（要求 ≥12.5% 像素在动） */
+#define MOT_GHOST_IOU    300     /* v1.3 Bug1：与已确认航迹当前框 IOU ≥ 0.30 时不做鬼影剔除（千分比） */
+#define MOT_GHOST_GATE   10      /* v1.3 Bug1：连通域质心距已确认航迹质心 ≤ 该值也不剔除（px） */
+#define MOT_MAX_MISS_UNCONF 3    /* v1.3 Bug3：未确认航迹丢失 3 帧即删 */
+#define MOT_REID_PX      25      /* v1.3 Bug3：旧 ID 复用半径（px） */
+#define MOT_STILL_MAX    20      /* v1.3：静止目标最多豁免鬼影过滤 20 帧（≈10 s），之后按鬼影淘汰 */
 
 /* 行为预测用的 ROI：画面中间 2/3（进入这块才算"进入画面主体"） */
 #define MOT_ROI_X0       16
@@ -69,6 +74,7 @@ typedef struct {
    short hits, misses, age;
    short confirmed;
    short active;             /* 本帧是否在场（misses <= MOT_REPORT_MISS） */
+   short still;              /* 连续静止帧数（速度≈0） */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
@@ -77,6 +83,9 @@ typedef struct {
 typedef struct {
    int n_det;                        /* 本帧有效检测数 */
    int raw_area;                     /* 滤波前最大连通域面积（诊断） */
+   short raw_box[4];                 /* v1.3 Bug2：最大连通域包围盒（整幅前景时直接当检测） */
+   short raw_cx, raw_cy;
+   short big_reset, big_full;        /* v1.3 Bug2 诊断：本帧走的是重置背景还是整幅检测 */
    mot_det_t det[MOT_MAX_DET];
    int n_trk;                        /* 当前航迹数（含未确认） */
    mot_trk_t trk[MOT_MAX_TRK];
@@ -156,6 +165,37 @@ static void mot_bg_update(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur)
    c->have_prev = 1;
 }
 
+/* v1.3 Bug1：连通域是否与某个"已确认航迹"的当前框重合（IOU≥0.30 或质心足够近） */
+static int mot_hit_confirmed(const mot_ctx_t* c, int x0, int y0, int x1, int y1, int cx, int cy)
+{
+   int k;
+   for (k = 0; k < c->n_trk; ++k) {
+      const mot_trk_t* t = &c->trk[k];
+      int ix0, iy0, ix1, iy1;
+      if (!t->confirmed) continue;
+      if (t->still > MOT_STILL_MAX) continue;   /* 站太久（>10 s）的目标不再豁免，避免幽灵航迹永生 */
+      ix0 = x0 > t->x0 ? x0 : t->x0;
+      iy0 = y0 > t->y0 ? y0 : t->y0;
+      ix1 = x1 < t->x1 ? x1 : t->x1;
+      iy1 = y1 < t->y1 ? y1 : t->y1;
+      if (ix1 >= ix0 && iy1 >= iy0) {
+         const long inter = (long)(ix1 - ix0 + 1) * (iy1 - iy0 + 1);
+         const long ua = (long)(x1 - x0 + 1) * (y1 - y0 + 1)
+                       + (long)(t->x1 - t->x0 + 1) * (t->y1 - t->y0 + 1) - inter;
+         if (ua > 0 && inter * 1000 / ua >= MOT_GHOST_IOU) return 1;
+      }
+      {
+         int dx = cx - (int)t->cx, dy = cy - (int)t->cy;
+         if (dx < 0) dx = -dx;
+         if (dy < 0) dy = -dy;
+         /* 质心近还要面积可比，否则人体周边的碎片也会被当成"静止目标"放过，导致 ID 碎裂 */
+         if ((dx > dy ? dx : dy) <= MOT_GHOST_GATE &&
+             (long)(x1 - x0 + 1) * (y1 - y0 + 1) * 2 >= (long)(t->x1 - t->x0 + 1) * (t->y1 - t->y0 + 1)) return 1;
+      }
+   }
+   return 0;
+}
+
 /* ---------------- 4) 连通域 ---------------- */
 static int mot_label(mot_work_t* w, mot_ctx_t* c)
 {
@@ -192,10 +232,35 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
             }
          }
       }
-      if (area > c->raw_area) c->raw_area = area;
+      if (area > c->raw_area) {
+         c->raw_area = area;
+         c->raw_box[0] = (short)x0; c->raw_box[1] = (short)y0;
+         c->raw_box[2] = (short)x1; c->raw_box[3] = (short)y1;
+         c->raw_cx = (short)(sx / area); c->raw_cy = (short)(sy / area);
+      }
       if (area < MOT_MIN_AREA || area > MOT_MAX_AREA) continue;
-      if (mov * MOT_GHOST_DIV < area) continue;        /* 鬼影：没有当前运动 */
+      /* v1.3 Bug1：静止目标（站着不动）没有帧间运动，会被鬼影判据丢掉；
+         只要这个连通域和"已确认航迹"的当前框对得上，就跳过鬼影过滤。 */
+      if (mov * MOT_GHOST_DIV < area &&
+          !mot_hit_confirmed(c, x0, y0, x1, y1, (int)(sx / area), (int)(sy / area))) continue;
       if (n >= MOT_MAX_DET) continue;
+      {
+         /* v1.3：同一个人的重复连通域（膨胀后会裂开）只留大的，避免一帧内新建多条航迹 */
+         int dup = 0, q;
+         for (q = 0; q < n; ++q) {
+            const int ix0 = x0 > c->det[q].x0 ? x0 : c->det[q].x0;
+            const int iy0 = y0 > c->det[q].y0 ? y0 : c->det[q].y0;
+            const int ix1 = x1 < c->det[q].x1 ? x1 : c->det[q].x1;
+            const int iy1 = y1 < c->det[q].y1 ? y1 : c->det[q].y1;
+            if (ix1 >= ix0 && iy1 >= iy0) {
+               const long inter = (long)(ix1 - ix0 + 1) * (iy1 - iy0 + 1);
+               const long ua = (long)(x1 - x0 + 1) * (y1 - y0 + 1)
+                             + (long)(c->det[q].x1 - c->det[q].x0 + 1) * (c->det[q].y1 - c->det[q].y0 + 1) - inter;
+               if (ua > 0 && inter * 1000 / ua >= 500) { dup = 1; break; }
+            }
+         }
+         if (dup) continue;
+      }
       c->det[n].x0 = (short)x0; c->det[n].y0 = (short)y0;
       c->det[n].x1 = (short)x1; c->det[n].y1 = (short)y1;
       c->det[n].cx = (short)(sx / area);
@@ -260,6 +325,12 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    const int dy = (int)d->cy - (int)t->cy;
    t->vx = (short)(((int)t->vx * 3 + dx * 16) / 4);
    t->vy = (short)(((int)t->vy * 3 + dy * 16) / 4);
+   /* 整幅检测（人贴近镜头）不参与速度更新，否则质心跳变会算出几百 px/帧 的假速度 */
+   if ((int)(d->x1 - d->x0 + 1) > MOT_W * 4 / 5 && (int)(d->y1 - d->y0 + 1) > MOT_H * 4 / 5) {
+      t->vx = (short)0; t->vy = (short)0;
+   }
+   if (t->vx > -8 && t->vx < 8 && t->vy > -8 && t->vy < 8) { if (t->still < 32000) t->still++; }
+   else t->still = 0;
    t->x0 = d->x0; t->y0 = d->y0; t->x1 = d->x1; t->y1 = d->y1;
    t->cx = d->cx; t->cy = d->cy;
    if (t->hits < 32000) t->hits++;
@@ -347,7 +418,13 @@ static void mot_associate(mot_ctx_t* c)
             if (d < best) { best = d; bd = i; bt = k; }
          }
       }
-      if (bd < 0 || best > MOT_GATE_PX) break;
+      if (bd < 0) break;
+      {
+         /* v1.3 Bug3：刚丢的已确认航迹用更大的重连半径（25 px），避免同一个人换号 */
+         const int lost = c->trk[bt].misses;
+         const int gate = (c->trk[bt].confirmed && lost > 0) ? MOT_REID_PX : MOT_GATE_PX;
+         if (best > gate) break;
+      }
       det_used[bd] = 1; trk_used[bt] = 1;
       mot_update_track(c, bt, bd);
    }
@@ -401,7 +478,8 @@ static void mot_associate(mot_ctx_t* c)
    {
       int wr = 0;
       for (k = 0; k < c->n_trk; ++k) {
-         if (c->trk[k].misses > MOT_MAX_MISS) continue;
+         const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
+         if (c->trk[k].misses > miss_limit) continue;
          if (wr != k) c->trk[wr] = c->trk[k];
          wr++;
       }
@@ -434,8 +512,10 @@ static int mot_active_confirmed(const mot_ctx_t* c)
    return n;
 }
 
-/* 一站式：返回本帧航迹数 */
-static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur)
+/* 一站式：返回本帧航迹数
+ * ai_p：本帧 AI 人体分数（int8，-128..127）；<0 视为"AI 判无人"，>=0 视为"AI 判有人"。
+ *       v1.3 Bug2 用它决定"整幅前景"是光照突变（重置背景）还是人贴近镜头（输出整幅检测）。 */
+static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int ai_p)
 {
    if (!c || !w || !cur) return 0;
    if (!c->have_prev && c->frame == 0) {
@@ -446,8 +526,36 @@ static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur)
       c->frame++;
       return 0;
    }
+   c->big_reset = 0; c->big_full = 0;
    mot_foreground(c, w, cur);
    mot_label(w, c);
+
+   /* v1.3 Bug2：整幅前景（面积 > MOT_MAX_AREA）——
+      背景在前景区只有 1/128 更新速度，一旦整幅被判前景就学不回来（MOT 卡死）。 */
+   if (c->raw_area > MOT_MAX_AREA) {
+      if (ai_p < 0) {
+         /* AI 判无人 ⇒ 是光照/增益突变：直接把背景重置为当前帧，本帧不输出检测 */
+         memcpy(c->bg, cur, MOT_N);
+         memcpy(c->prev, cur, MOT_N);
+         c->have_prev = 1;
+         c->n_det = 0;
+         c->last_area = 0;
+         c->big_reset = 1;
+         if (c->n_trk > MOT_MAX_TRK) c->n_trk = MOT_MAX_TRK;
+         mot_associate(c);
+         c->frame++;
+         return c->n_trk;
+      }
+      /* AI 判有人 ⇒ 人贴近镜头占满画面：输出一个包围整块前景的检测，背景不重置 */
+      c->det[0].x0 = c->raw_box[0]; c->det[0].y0 = c->raw_box[1];
+      c->det[0].x1 = c->raw_box[2]; c->det[0].y1 = c->raw_box[3];
+      c->det[0].cx = c->raw_cx; c->det[0].cy = c->raw_cy;
+      c->det[0].area = (short)(c->raw_area > 32000 ? 32000 : c->raw_area);
+      c->n_det = 1;
+      c->last_area = c->raw_area;
+      c->big_full = 1;
+   }
+
    mot_bg_update(c, w, cur);
    if (c->n_trk > MOT_MAX_TRK) c->n_trk = MOT_MAX_TRK;
    mot_associate(c);

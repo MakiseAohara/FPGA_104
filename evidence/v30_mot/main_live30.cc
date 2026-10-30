@@ -430,6 +430,7 @@ static int      g_pre_on = 0;        /* 预警窗口是否打开 */
 static int      g_pre_id = 0, g_pre_eta = -1;
 static uint32_t g_pre_ms = 0, g_pre_lead_ms = 0;
 static int      g_track_conf = 0;    /* 本帧确认目标数 */
+static int      g_last_ai_p = -128;  /* v1.3：上一帧 AI 分数（MOT 判定整幅前景用） */
 static uint32_t g_pre_cnt = 0, g_lead_cnt = 0;
 
 static int ai_vote_update(int p)
@@ -556,11 +557,12 @@ static void mot_track_frame(uint32_t frame)
 {
 #if MOT_ON
    int k, pre = 0, eta = -1, id = 0, nconf = 0;
-   mot_step(&g_mot, &g_motw, (const unsigned char*)mot_img);
+   mot_step(&g_mot, &g_motw, (const unsigned char*)mot_img, g_last_ai_p);
 
    for (k = 0; k < g_mot.n_trk; ++k) {
       const mot_trk_t* t = &g_mot.trk[k];
-      if (!t->active) continue;          /* v30f: 丢失中的航迹保留但不报，等重连 */
+      if (!t->active) continue;         /* 丢失中的航迹保留但不报，等重连 */
+      if (!t->confirmed) continue;      /* v1.3 Bug3: 从没确认过的噪点航迹不打印 */
       if (t->confirmed) nconf++;
       bsp_printf("MMT_TRK f=%d id=%d c=%d,%d b=%d,%d,%d,%d v16=%d,%d dir=%d "
                  "hit=%d miss=%d conf=%d pred=%d,%d eta=%d\n\r",
@@ -1258,6 +1260,7 @@ extern "C" int main()
       infer_total++;
       infer_win++;
 
+      g_last_ai_p = p;                           /* v1.3：给下一帧 MOT 用 */
       const int person = ai_vote_update(p);      /* v17：p>=-86 且 4 帧 3 真 */
       const int alarm_ai = person;
       APB_OSD = (uint32_t)person;

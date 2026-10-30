@@ -1,0 +1,540 @@
+MMT_MOT f=0 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=1 id=1 c=38,62 b=0,3,88,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=38,62 eta=-1
+MMT_TRK f=1 id=2 c=28,14 b=23,11,34,18 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=28,14 eta=-1
+MMT_MOT f=1 nd=2 nt=2 conf=0 area=4905 raw=4905 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=2 id=1 c=45,48 b=0,0,95,95 v16=28,-56 dir=5 hit=2 miss=0 conf=1 pred=48,41 eta=-1
+MMT_TRK f=2 id=2 c=28,14 b=23,11,34,18 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=28,14 eta=-1
+MMT_MOT f=2 nd=1 nt=2 conf=1 area=8491 raw=8491 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=3 id=1 c=47,47 b=0,0,95,95 v16=29,-46 dir=5 hit=3 miss=0 conf=1 pred=50,42 eta=-1
+MMT_MOT f=3 nd=1 nt=2 conf=1 area=8921 raw=8921 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=4 id=1 c=48,47 b=0,0,95,95 v16=25,-34 dir=5 hit=4 miss=0 conf=1 pred=51,43 eta=-1
+MMT_MOT f=4 nd=1 nt=2 conf=1 area=8958 raw=8958 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=5 id=1 c=49,45 b=2,0,95,93 v16=25,-34 dir=5 hit=4 miss=1 conf=1 pred=52,41 eta=-1
+MMT_MOT f=5 nd=0 nt=1 conf=1 area=0 raw=9002 pre=0 pre_eta=-1 bigr=1 bigf=0
+MMT_TRK f=6 id=1 c=45,49 b=0,0,95,95 v16=2,-9 dir=3 hit=5 miss=0 conf=1 pred=45,48 eta=-1
+MMT_MOT f=6 nd=1 nt=1 conf=1 area=8430 raw=8430 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=7 id=1 c=73,81 b=35,57,95,95 v16=113,121 dir=5 hit=6 miss=0 conf=1 pred=87,96 eta=-1
+MMT_TRK f=7 id=3 c=24,83 b=23,75,28,94 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=24,83 eta=-1
+MMT_MOT f=7 nd=2 nt=2 conf=1 area=1200 raw=1200 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=8 id=1 c=79,83 b=57,63,95,95 v16=108,98 dir=5 hit=7 miss=0 conf=1 pred=92,95 eta=-1
+MMT_TRK f=8 id=3 c=24,83 b=22,74,27,93 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=24,83 eta=-1
+MMT_MOT f=8 nd=1 nt=2 conf=1 area=770 raw=770 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=9 id=1 c=80,83 b=59,67,95,95 v16=85,73 dir=5 hit=8 miss=0 conf=1 pred=90,92 eta=-1
+MMT_MOT f=9 nd=1 nt=2 conf=1 area=748 raw=748 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=10 id=1 c=79,84 b=57,67,95,95 v16=59,58 dir=5 hit=9 miss=0 conf=1 pred=86,91 eta=-1
+MMT_MOT f=10 nd=1 nt=2 conf=1 area=748 raw=748 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=11 id=1 c=82,87 b=63,73,95,95 v16=59,58 dir=5 hit=9 miss=1 conf=1 pred=89,94 eta=-1
+MMT_TRK f=11 id=4 c=45,48 b=0,0,95,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=45,48 eta=-1
+MMT_MOT f=11 nd=1 nt=2 conf=1 area=8494 raw=8494 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=12 id=4 c=45,48 b=0,1,93,95 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=45,48 eta=-1
+MMT_TRK f=12 id=5 c=91,50 b=87,25,95,74 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=91,50 eta=-1
+MMT_MOT f=12 nd=1 nt=3 conf=0 area=369 raw=369 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=13 id=1 c=90,80 b=87,65,95,95 v16=64,3 dir=2 hit=10 miss=0 conf=1 pred=98,80 eta=-1
+MMT_TRK f=13 id=5 c=91,50 b=87,26,95,75 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=91,50 eta=-1
+MMT_TRK f=13 id=6 c=2,61 b=0,47,10,70 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=2,61 eta=-1
+MMT_MOT f=13 nd=2 nt=4 conf=1 area=273 raw=273 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=14 id=1 c=90,83 b=87,71,95,95 v16=48,14 dir=5 hit=11 miss=0 conf=1 pred=96,84 eta=-1
+MMT_TRK f=14 id=6 c=2,61 b=0,50,7,73 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=2,61 eta=-1
+MMT_MOT f=14 nd=1 nt=4 conf=1 area=219 raw=219 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=15 id=1 c=93,83 b=89,71,95,95 v16=48,14 dir=5 hit=11 miss=1 conf=1 pred=99,84 eta=-1
+MMT_TRK f=15 id=4 c=45,49 b=0,0,95,95 v16=0,4 dir=0 hit=2 miss=0 conf=1 pred=45,49 eta=-1
+MMT_MOT f=15 nd=1 nt=4 conf=2 area=7608 raw=7608 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=16 id=4 c=46,49 b=0,0,95,95 v16=4,3 dir=0 hit=3 miss=0 conf=1 pred=46,49 eta=-1
+MMT_MOT f=16 nd=1 nt=3 conf=1 area=8203 raw=8203 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=17 id=1 c=90,83 b=87,71,95,95 v16=16,10 dir=5 hit=12 miss=0 conf=1 pred=92,84 eta=-1
+MMT_TRK f=17 id=4 c=46,49 b=0,2,94,95 v16=4,3 dir=0 hit=3 miss=1 conf=1 pred=46,49 eta=-1
+MMT_MOT f=17 nd=1 nt=2 conf=2 area=215 raw=215 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=18 id=1 c=91,83 b=87,71,95,95 v16=16,10 dir=5 hit=12 miss=1 conf=1 pred=93,84 eta=-1
+MMT_TRK f=18 id=4 c=46,53 b=0,0,95,95 v16=3,18 dir=4 hit=4 miss=0 conf=1 pred=46,55 eta=-1
+MMT_MOT f=18 nd=1 nt=2 conf=2 area=6363 raw=6363 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=19 id=4 c=45,54 b=0,0,95,95 v16=-1,17 dir=4 hit=5 miss=0 conf=1 pred=45,56 eta=-1
+MMT_MOT f=19 nd=1 nt=2 conf=1 area=7478 raw=7478 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=20 id=4 c=45,49 b=0,0,95,95 v16=0,-7 dir=0 hit=6 miss=0 conf=1 pred=45,49 eta=-1
+MMT_MOT f=20 nd=1 nt=2 conf=1 area=8195 raw=8195 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=21 id=1 c=90,83 b=87,71,95,95 v16=0,7 dir=0 hit=13 miss=0 conf=1 pred=90,83 eta=-1
+MMT_TRK f=21 id=4 c=45,49 b=0,2,93,95 v16=0,-7 dir=0 hit=6 miss=1 conf=1 pred=45,49 eta=-1
+MMT_TRK f=21 id=7 c=4,73 b=0,59,12,88 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=4,73 eta=-1
+MMT_TRK f=21 id=8 c=85,35 b=81,23,88,46 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=85,35 eta=-1
+MMT_MOT f=21 nd=3 nt=4 conf=2 area=219 raw=219 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=22 id=1 c=90,83 b=86,71,94,95 v16=0,7 dir=0 hit=13 miss=1 conf=1 pred=90,83 eta=-1
+MMT_TRK f=22 id=4 c=43,53 b=0,0,95,95 v16=-8,10 dir=5 hit=7 miss=0 conf=1 pred=42,54 eta=-1
+MMT_TRK f=22 id=7 c=4,73 b=0,59,10,88 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=4,73 eta=-1
+MMT_TRK f=22 id=8 c=85,35 b=82,24,89,47 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=85,35 eta=-1
+MMT_MOT f=22 nd=1 nt=4 conf=2 area=6662 raw=6662 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=23 id=4 c=45,45 b=0,0,95,95 v16=2,-24 dir=3 hit=8 miss=0 conf=1 pred=45,42 eta=-1
+MMT_MOT f=23 nd=1 nt=4 conf=1 area=8148 raw=8148 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=24 id=4 c=44,48 b=0,0,95,95 v16=-2,-6 dir=0 hit=9 miss=0 conf=1 pred=44,48 eta=-1
+MMT_MOT f=24 nd=1 nt=4 conf=1 area=8500 raw=8500 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=25 id=4 c=46,50 b=0,0,95,95 v16=6,3 dir=0 hit=10 miss=0 conf=1 pred=46,50 eta=-1
+MMT_TRK f=25 id=9 c=46,21 b=43,9,50,34 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=46,21 eta=-1
+MMT_MOT f=25 nd=2 nt=3 conf=1 area=6953 raw=6953 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=26 id=4 c=41,53 b=0,0,95,95 v16=-15,14 dir=5 hit=11 miss=0 conf=1 pred=40,54 eta=-1
+MMT_TRK f=26 id=9 c=46,21 b=43,9,50,34 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=46,21 eta=-1
+MMT_MOT f=26 nd=1 nt=3 conf=1 area=7197 raw=7197 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=27 id=4 c=46,50 b=0,0,95,95 v16=8,-1 dir=2 hit=12 miss=0 conf=1 pred=47,50 eta=-1
+MMT_MOT f=27 nd=1 nt=3 conf=1 area=8314 raw=8314 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=28 id=4 c=45,49 b=0,0,95,95 v16=2,-4 dir=0 hit=13 miss=0 conf=1 pred=45,49 eta=-1
+MMT_MOT f=28 nd=1 nt=2 conf=1 area=7808 raw=7808 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=29 id=4 c=17,56 b=0,0,34,95 v16=-110,25 dir=5 hit=14 miss=0 conf=1 pred=4,59 eta=-1
+MMT_TRK f=29 id=9 c=46,8 b=35,0,56,22 v16=0,-52 dir=3 hit=2 miss=0 conf=1 pred=46,2 eta=-1
+MMT_TRK f=29 id=11 c=59,90 b=47,81,72,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=59,90 eta=-1
+MMT_TRK f=29 id=12 c=90,60 b=87,53,95,66 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=90,60 eta=-1
+MMT_MOT f=29 nd=5 nt=4 conf=2 area=2108 raw=2108 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=30 id=4 c=11,57 b=0,10,28,95 v16=-110,25 dir=5 hit=14 miss=1 conf=1 pred=-2,60 eta=-1
+MMT_TRK f=30 id=9 c=46,5 b=36,0,57,16 v16=0,-52 dir=3 hit=2 miss=1 conf=1 pred=46,-1 eta=-1
+MMT_TRK f=30 id=12 c=90,66 b=87,33,95,95 v16=0,24 dir=4 hit=2 miss=0 conf=1 pred=90,69 eta=-1
+MMT_TRK f=30 id=14 c=4,75 b=1,55,6,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=4,75 eta=-1
+MMT_MOT f=30 nd=3 nt=4 conf=3 area=654 raw=654 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=31 id=12 c=90,82 b=84,71,95,95 v16=0,82 dir=4 hit=3 miss=0 conf=1 pred=90,92 eta=-1
+MMT_TRK f=31 id=14 c=4,75 b=2,55,7,95 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=4,75 eta=-1
+MMT_MOT f=31 nd=1 nt=4 conf=1 area=227 raw=666 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=32 id=12 c=90,87 b=85,75,95,95 v16=0,82 dir=4 hit=3 miss=1 conf=1 pred=90,97 eta=-1
+MMT_TRK f=32 id=16 c=45,21 b=41,8,50,34 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=45,21 eta=-1
+MMT_MOT f=32 nd=2 nt=4 conf=1 area=7180 raw=7180 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=33 id=16 c=46,26 b=42,19,50,34 v16=4,20 dir=4 hit=2 miss=0 conf=1 pred=46,28 eta=-1
+MMT_MOT f=33 nd=2 nt=4 conf=1 area=6750 raw=6750 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=34 id=16 c=46,27 b=42,20,50,35 v16=4,20 dir=4 hit=2 miss=1 conf=1 pred=46,29 eta=-1
+MMT_MOT f=34 nd=2 nt=4 conf=1 area=2603 raw=2603 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=35 id=16 c=31,41 b=0,0,78,95 v16=-57,71 dir=5 hit=3 miss=0 conf=1 pred=24,49 eta=-1
+MMT_MOT f=35 nd=3 nt=4 conf=1 area=5347 raw=5347 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=36 id=16 c=45,50 b=0,0,95,95 v16=13,89 dir=5 hit=4 miss=0 conf=1 pred=46,61 eta=-1
+MMT_MOT f=36 nd=1 nt=2 conf=1 area=8034 raw=8034 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=37 id=16 c=40,75 b=0,0,95,95 v16=-10,166 dir=5 hit=5 miss=0 conf=1 pred=39,95 eta=-1
+MMT_MOT f=37 nd=1 nt=2 conf=1 area=2011 raw=2011 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=38 id=16 c=46,50 b=0,0,95,95 v16=16,24 dir=5 hit=6 miss=0 conf=1 pred=48,53 eta=-1
+MMT_MOT f=38 nd=1 nt=1 conf=1 area=8066 raw=8066 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=39 id=16 c=45,49 b=0,0,95,95 v16=8,14 dir=5 hit=7 miss=0 conf=1 pred=46,50 eta=-1
+MMT_MOT f=39 nd=1 nt=1 conf=1 area=8376 raw=8376 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=40 id=16 c=44,51 b=0,0,95,95 v16=2,18 dir=4 hit=8 miss=0 conf=1 pred=44,53 eta=-1
+MMT_TRK f=40 id=17 c=46,26 b=43,21,50,32 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=46,26 eta=-1
+MMT_MOT f=40 nd=2 nt=2 conf=1 area=6683 raw=6683 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=41 id=16 c=18,63 b=1,0,30,95 v16=-102,61 dir=5 hit=9 miss=0 conf=1 pred=6,70 eta=-1
+MMT_TRK f=41 id=17 c=46,26 b=43,21,50,32 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=46,26 eta=-1
+MMT_TRK f=41 id=18 c=90,80 b=85,65,95,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=90,80 eta=-1
+MMT_TRK f=41 id=19 c=49,91 b=31,85,70,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=49,91 eta=-1
+MMT_MOT f=41 nd=3 nt=4 conf=1 area=966 raw=966 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=42 id=16 c=28,68 b=9,0,70,95 v16=-36,65 dir=5 hit=10 miss=0 conf=1 pred=24,76 eta=-1
+MMT_TRK f=42 id=18 c=90,83 b=85,71,95,95 v16=0,12 dir=4 hit=2 miss=0 conf=1 pred=90,84 eta=-1
+MMT_TRK f=42 id=19 c=49,91 b=30,86,69,95 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=49,91 eta=-1
+MMT_MOT f=42 nd=2 nt=4 conf=2 area=985 raw=985 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=43 id=16 c=22,51 b=0,0,51,95 v16=-51,-19 dir=5 hit=11 miss=0 conf=1 pred=16,49 eta=-1
+MMT_TRK f=43 id=17 c=51,16 b=48,7,54,24 v16=20,-40 dir=5 hit=2 miss=0 conf=1 pred=53,11 eta=-1
+MMT_TRK f=43 id=18 c=89,83 b=83,68,95,95 v16=-4,9 dir=4 hit=3 miss=0 conf=1 pred=89,84 eta=-1
+MMT_TRK f=43 id=22 c=45,77 b=37,75,54,80 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=45,77 eta=-1
+MMT_MOT f=43 nd=6 nt=4 conf=3 area=1970 raw=1970 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=44 id=16 c=46,49 b=0,0,95,95 v16=57,-22 dir=5 hit=12 miss=0 conf=1 pred=53,47 eta=-1
+MMT_TRK f=44 id=17 c=52,14 b=49,6,55,23 v16=20,-40 dir=5 hit=2 miss=1 conf=1 pred=54,9 eta=-1
+MMT_TRK f=44 id=18 c=89,83 b=83,70,95,95 v16=-4,9 dir=4 hit=3 miss=1 conf=1 pred=89,84 eta=-1
+MMT_TRK f=44 id=22 c=45,77 b=37,75,54,80 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=45,77 eta=-1
+MMT_MOT f=44 nd=1 nt=4 conf=3 area=8362 raw=8362 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=45 id=16 c=39,55 b=0,0,95,95 v16=14,7 dir=2 hit=13 miss=0 conf=1 pred=40,55 eta=-1
+MMT_TRK f=45 id=17 c=50,13 b=45,0,54,26 v16=7,-34 dir=3 hit=3 miss=0 conf=1 pred=50,9 eta=-1
+MMT_TRK f=45 id=23 c=79,17 b=77,9,82,25 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=79,17 eta=-1
+MMT_MOT f=45 nd=3 nt=4 conf=2 area=5066 raw=5066 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=46 id=16 c=37,52 b=0,0,95,95 v16=2,-6 dir=0 hit=14 miss=0 conf=1 pred=37,52 eta=-1
+MMT_TRK f=46 id=17 c=50,11 b=46,0,55,24 v16=7,-34 dir=3 hit=3 miss=1 conf=1 pred=50,7 eta=-1
+MMT_TRK f=46 id=25 c=69,44 b=67,33,73,52 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=69,44 eta=-1
+MMT_MOT f=46 nd=3 nt=4 conf=2 area=5838 raw=5838 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=47 id=16 c=45,53 b=0,0,95,95 v16=33,0 dir=2 hit=15 miss=0 conf=1 pred=49,53 eta=-1
+MMT_TRK f=47 id=25 c=69,44 b=66,35,72,54 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=69,44 eta=-1
+MMT_MOT f=47 nd=1 nt=4 conf=1 area=6785 raw=6785 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=48 id=16 c=45,52 b=0,0,95,95 v16=24,-4 dir=2 hit=16 miss=0 conf=1 pred=48,52 eta=-1
+MMT_MOT f=48 nd=1 nt=4 conf=1 area=6669 raw=6669 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=49 id=16 c=45,51 b=0,0,95,95 v16=18,-7 dir=2 hit=17 miss=0 conf=1 pred=47,51 eta=-1
+MMT_MOT f=49 nd=1 nt=4 conf=1 area=7786 raw=7786 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=50 id=16 c=46,50 b=0,0,95,95 v16=17,-9 dir=5 hit=18 miss=0 conf=1 pred=48,49 eta=-1
+MMT_MOT f=50 nd=1 nt=2 conf=1 area=8186 raw=8186 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=51 id=16 c=66,55 b=31,0,95,95 v16=92,13 dir=5 hit=19 miss=0 conf=1 pred=77,56 eta=-1
+MMT_TRK f=51 id=26 c=16,46 b=0,0,42,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=16,46 eta=-1
+MMT_TRK f=51 id=27 c=46,27 b=43,21,50,34 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=46,27 eta=-1
+MMT_MOT f=51 nd=3 nt=4 conf=1 area=3770 raw=3770 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=52 id=16 c=71,55 b=39,8,95,95 v16=92,13 dir=5 hit=19 miss=1 conf=1 pred=82,56 eta=-1
+MMT_TRK f=52 id=26 c=20,57 b=0,0,74,95 v16=16,44 dir=5 hit=2 miss=0 conf=1 pred=22,62 eta=-1
+MMT_TRK f=52 id=27 c=46,11 b=33,0,68,34 v16=0,-64 dir=3 hit=2 miss=0 conf=1 pred=46,3 eta=-1
+MMT_MOT f=52 nd=5 nt=3 conf=3 area=2742 raw=2742 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=53 id=16 c=86,58 b=63,0,95,95 v16=129,21 dir=5 hit=20 miss=0 conf=1 pred=102,60 eta=-1
+MMT_TRK f=53 id=26 c=19,58 b=0,0,62,95 v16=8,37 dir=5 hit=3 miss=0 conf=1 pred=20,62 eta=-1
+MMT_TRK f=53 id=27 c=44,10 b=33,0,66,32 v16=-8,-52 dir=5 hit=3 miss=0 conf=1 pred=43,4 eta=-1
+MMT_MOT f=53 nd=3 nt=3 conf=3 area=2719 raw=2719 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=54 id=16 c=94,59 b=78,12,95,95 v16=129,21 dir=5 hit=20 miss=1 conf=1 pred=110,61 eta=-1
+MMT_TRK f=54 id=26 c=39,57 b=0,0,95,95 v16=86,23 dir=5 hit=4 miss=0 conf=1 pred=49,59 eta=-1
+MMT_TRK f=54 id=27 c=45,11 b=33,0,65,36 v16=-2,-35 dir=3 hit=4 miss=0 conf=1 pred=45,7 eta=-1
+MMT_MOT f=54 nd=2 nt=3 conf=3 area=4016 raw=4016 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=55 id=26 c=38,57 b=0,0,95,95 v16=60,17 dir=5 hit=5 miss=0 conf=1 pred=45,59 eta=-1
+MMT_TRK f=55 id=27 c=50,11 b=33,0,74,34 v16=18,-26 dir=5 hit=5 miss=0 conf=1 pred=52,8 eta=-1
+MMT_MOT f=55 nd=2 nt=3 conf=2 area=3974 raw=3974 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=56 id=26 c=39,57 b=0,0,95,95 v16=49,12 dir=5 hit=6 miss=0 conf=1 pred=45,58 eta=-1
+MMT_TRK f=56 id=27 c=46,11 b=33,0,68,36 v16=-2,-19 dir=3 hit=6 miss=0 conf=1 pred=46,9 eta=-1
+MMT_MOT f=56 nd=2 nt=3 conf=2 area=3936 raw=3936 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=57 id=26 c=38,57 b=0,0,95,95 v16=32,9 dir=5 hit=7 miss=0 conf=1 pred=42,58 eta=-1
+MMT_TRK f=57 id=27 c=45,10 b=33,0,65,32 v16=-5,-18 dir=3 hit=7 miss=0 conf=1 pred=45,8 eta=-1
+MMT_MOT f=57 nd=2 nt=3 conf=2 area=3980 raw=3980 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=58 id=26 c=38,57 b=0,0,95,95 v16=24,6 dir=2 hit=8 miss=0 conf=1 pred=41,57 eta=-1
+MMT_TRK f=58 id=27 c=45,10 b=33,0,67,32 v16=-3,-13 dir=3 hit=8 miss=0 conf=1 pred=45,9 eta=-1
+MMT_MOT f=58 nd=2 nt=3 conf=2 area=3931 raw=3931 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=59 id=26 c=47,48 b=0,0,95,95 v16=54,-31 dir=5 hit=9 miss=0 conf=1 pred=53,45 eta=-1
+MMT_TRK f=59 id=27 c=45,10 b=28,0,62,26 v16=-3,-13 dir=3 hit=8 miss=1 conf=1 pred=45,9 eta=-1
+MMT_MOT f=59 nd=1 nt=3 conf=2 area=8407 raw=8407 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=60 id=26 c=48,46 b=0,0,95,95 v16=44,-31 dir=5 hit=10 miss=0 conf=1 pred=53,43 eta=-1
+MMT_MOT f=60 nd=1 nt=2 conf=1 area=8418 raw=8418 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=61 id=26 c=46,50 b=0,0,95,95 v16=25,-7 dir=2 hit=11 miss=0 conf=1 pred=49,50 eta=-1
+MMT_MOT f=61 nd=1 nt=2 conf=1 area=8272 raw=8272 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=62 id=26 c=67,58 b=33,0,95,95 v16=102,26 dir=5 hit=12 miss=0 conf=1 pred=79,61 eta=-1
+MMT_TRK f=62 id=28 c=15,48 b=0,0,42,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=15,48 eta=-1
+MMT_MOT f=62 nd=2 nt=3 conf=1 area=3711 raw=3711 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=63 id=26 c=46,51 b=0,0,95,95 v16=-7,-8 dir=3 hit=13 miss=0 conf=1 pred=46,50 eta=-1
+MMT_TRK f=63 id=28 c=15,48 b=0,1,36,95 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=15,48 eta=-1
+MMT_MOT f=63 nd=1 nt=3 conf=1 area=8176 raw=8176 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=64 id=26 c=40,50 b=0,0,95,95 v16=-29,-10 dir=5 hit=14 miss=0 conf=1 pred=37,49 eta=-1
+MMT_MOT f=64 nd=1 nt=3 conf=1 area=6206 raw=6206 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=65 id=26 c=28,75 b=0,35,82,95 v16=-69,92 dir=5 hit=15 miss=0 conf=1 pred=20,86 eta=-1
+MMT_TRK f=65 id=27 c=50,9 b=35,0,75,32 v16=17,-13 dir=5 hit=9 miss=0 conf=1 pred=52,8 eta=-1
+MMT_TRK f=65 id=30 c=12,8 b=0,0,25,22 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=12,8 eta=-1
+MMT_TRK f=65 id=31 c=16,32 b=10,27,22,40 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=16,32 eta=-1
+MMT_MOT f=65 nd=5 nt=4 conf=2 area=2050 raw=2050 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=66 id=26 c=27,75 b=0,33,88,95 v16=-55,69 dir=5 hit=16 miss=0 conf=1 pred=21,83 eta=-1
+MMT_TRK f=66 id=27 c=46,9 b=35,0,66,30 v16=-3,-9 dir=3 hit=10 miss=0 conf=1 pred=46,8 eta=-1
+MMT_TRK f=66 id=31 c=16,32 b=10,26,22,39 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=16,32 eta=-1
+MMT_TRK f=66 id=32 c=90,36 b=85,0,95,76 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=90,36 eta=-1
+MMT_MOT f=66 nd=3 nt=4 conf=2 area=2173 raw=2173 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=67 id=26 c=25,75 b=0,37,82,95 v16=-49,51 dir=5 hit=17 miss=0 conf=1 pred=19,81 eta=-1
+MMT_TRK f=67 id=27 c=51,7 b=35,0,75,20 v16=17,-14 dir=5 hit=11 miss=0 conf=1 pred=53,6 eta=-1
+MMT_TRK f=67 id=32 c=90,47 b=83,0,95,95 v16=0,44 dir=4 hit=2 miss=0 conf=1 pred=90,52 eta=-1
+MMT_MOT f=67 nd=3 nt=4 conf=3 area=2011 raw=2011 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=68 id=26 c=16,46 b=0,0,42,95 v16=-72,-77 dir=5 hit=18 miss=0 conf=1 pred=7,37 eta=-1
+MMT_TRK f=68 id=27 c=52,7 b=32,0,72,17 v16=17,-14 dir=5 hit=11 miss=1 conf=1 pred=54,6 eta=-1
+MMT_TRK f=68 id=32 c=68,51 b=33,0,95,95 v16=-88,49 dir=5 hit=3 miss=0 conf=1 pred=57,57 eta=-1
+MMT_TRK f=68 id=34 c=29,72 b=27,65,32,80 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=29,72 eta=-1
+MMT_MOT f=68 nd=4 nt=4 conf=3 area=4152 raw=4152 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=69 id=26 c=12,42 b=0,0,33,90 v16=-72,-77 dir=5 hit=18 miss=1 conf=1 pred=3,33 eta=-1
+MMT_TRK f=69 id=32 c=39,49 b=0,0,92,95 v16=-182,28 dir=5 hit=4 miss=0 conf=1 pred=17,52 eta=-1
+MMT_TRK f=69 id=34 c=29,72 b=27,65,32,80 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=29,72 eta=-1
+MMT_MOT f=69 nd=1 nt=4 conf=2 area=6099 raw=6099 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=70 id=32 c=44,52 b=0,0,95,95 v16=-116,33 dir=5 hit=5 miss=0 conf=1 pred=30,56 eta=-1
+MMT_TRK f=70 id=36 c=4,4 b=0,0,11,13 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=4,4 eta=-1
+MMT_MOT f=70 nd=3 nt=4 conf=1 area=7528 raw=7528 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=71 id=26 c=14,50 b=0,0,36,95 v16=-30,-9 dir=5 hit=19 miss=0 conf=1 pred=11,49 eta=-1
+MMT_TRK f=71 id=32 c=65,52 b=33,0,95,95 v16=-3,24 dir=4 hit=6 miss=0 conf=1 pred=65,55 eta=-1
+MMT_TRK f=71 id=36 c=4,4 b=0,0,10,11 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=4,4 eta=-1
+MMT_MOT f=71 nd=2 nt=4 conf=2 area=4723 raw=4723 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=72 id=26 c=13,50 b=0,3,31,95 v16=-30,-9 dir=5 hit=19 miss=1 conf=1 pred=10,49 eta=-1
+MMT_TRK f=72 id=32 c=46,51 b=0,0,95,95 v16=-78,14 dir=5 hit=7 miss=0 conf=1 pred=37,52 eta=-1
+MMT_MOT f=72 nd=1 nt=4 conf=2 area=7913 raw=7913 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=73 id=32 c=44,53 b=0,0,95,95 v16=-66,18 dir=5 hit=8 miss=0 conf=1 pred=36,55 eta=-1
+MMT_TRK f=73 id=36 c=3,3 b=0,0,8,10 v16=-4,-4 dir=0 hit=2 miss=0 conf=1 pred=3,3 eta=-1
+MMT_MOT f=73 nd=2 nt=4 conf=2 area=7520 raw=7520 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=74 id=32 c=42,56 b=0,0,95,95 v16=-57,25 dir=5 hit=9 miss=0 conf=1 pred=35,59 eta=-1
+MMT_TRK f=74 id=36 c=3,4 b=0,0,11,14 v16=-3,1 dir=0 hit=3 miss=0 conf=1 pred=3,4 eta=-1
+MMT_MOT f=74 nd=2 nt=3 conf=2 area=6847 raw=6847 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=75 id=32 c=42,56 b=0,0,95,95 v16=-42,18 dir=5 hit=10 miss=0 conf=1 pred=37,58 eta=-1
+MMT_TRK f=75 id=36 c=3,4 b=0,0,9,11 v16=-3,1 dir=0 hit=3 miss=1 conf=1 pred=3,4 eta=-1
+MMT_MOT f=75 nd=1 nt=3 conf=2 area=6578 raw=6578 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=76 id=32 c=44,53 b=0,0,95,95 v16=-23,1 dir=1 hit=11 miss=0 conf=1 pred=42,53 eta=-1
+MMT_MOT f=76 nd=1 nt=3 conf=1 area=7455 raw=7455 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=77 id=32 c=44,53 b=0,0,95,95 v16=-17,0 dir=1 hit=12 miss=0 conf=1 pred=42,53 eta=-1
+MMT_MOT f=77 nd=1 nt=3 conf=1 area=7594 raw=7594 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=78 id=32 c=45,53 b=0,0,95,95 v16=-8,0 dir=1 hit=13 miss=0 conf=1 pred=44,53 eta=-1
+MMT_MOT f=78 nd=1 nt=2 conf=1 area=7670 raw=7670 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=79 id=32 c=45,52 b=0,0,95,95 v16=-6,-4 dir=0 hit=14 miss=0 conf=1 pred=45,52 eta=-1
+MMT_TRK f=79 id=37 c=93,40 b=91,33,95,48 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=93,40 eta=-1
+MMT_MOT f=79 nd=2 nt=3 conf=1 area=7541 raw=7541 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=80 id=32 c=46,52 b=0,0,95,95 v16=0,-3 dir=0 hit=15 miss=0 conf=1 pred=46,52 eta=-1
+MMT_TRK f=80 id=37 c=93,40 b=91,33,95,48 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=93,40 eta=-1
+MMT_MOT f=80 nd=1 nt=3 conf=1 area=7687 raw=7687 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=81 id=32 c=45,52 b=0,0,95,95 v16=-4,-2 dir=0 hit=16 miss=0 conf=1 pred=45,52 eta=-1
+MMT_TRK f=81 id=37 c=93,38 b=91,31,95,48 v16=0,-8 dir=3 hit=2 miss=0 conf=1 pred=93,37 eta=-1
+MMT_MOT f=81 nd=2 nt=2 conf=2 area=7677 raw=7677 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=82 id=32 c=44,53 b=0,0,95,95 v16=-7,2 dir=0 hit=17 miss=0 conf=1 pred=44,53 eta=-1
+MMT_TRK f=82 id=37 c=93,38 b=91,30,95,47 v16=0,-8 dir=3 hit=2 miss=1 conf=1 pred=93,37 eta=-1
+MMT_MOT f=82 nd=1 nt=2 conf=2 area=7390 raw=7390 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=83 id=32 c=47,51 b=0,0,95,95 v16=6,-6 dir=0 hit=18 miss=0 conf=1 pred=47,51 eta=-1
+MMT_MOT f=83 nd=1 nt=2 conf=1 area=7725 raw=7725 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=84 id=32 c=46,52 b=0,0,95,95 v16=0,0 dir=0 hit=19 miss=0 conf=1 pred=46,52 eta=-1
+MMT_MOT f=84 nd=1 nt=2 conf=1 area=7678 raw=7678 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=85 id=32 c=47,53 b=0,0,95,95 v16=4,4 dir=0 hit=20 miss=0 conf=1 pred=47,53 eta=-1
+MMT_TRK f=85 id=38 c=42,4 b=37,0,50,10 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=42,4 eta=-1
+MMT_MOT f=85 nd=2 nt=3 conf=1 area=7041 raw=7041 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=86 id=32 c=48,51 b=0,0,95,95 v16=7,-5 dir=0 hit=21 miss=0 conf=1 pred=48,51 eta=-1
+MMT_TRK f=86 id=38 c=42,4 b=36,0,49,9 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=42,4 eta=-1
+MMT_MOT f=86 nd=1 nt=3 conf=1 area=8029 raw=8029 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=87 id=32 c=43,55 b=0,0,95,95 v16=-14,12 dir=5 hit=22 miss=0 conf=1 pred=42,56 eta=-1
+MMT_TRK f=87 id=39 c=79,14 b=77,7,82,22 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=79,14 eta=-1
+MMT_MOT f=87 nd=2 nt=4 conf=1 area=7063 raw=7063 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=88 id=32 c=47,51 b=0,0,95,95 v16=5,-7 dir=0 hit=23 miss=0 conf=1 pred=47,51 eta=-1
+MMT_TRK f=88 id=39 c=79,14 b=77,7,82,22 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=79,14 eta=-1
+MMT_MOT f=88 nd=1 nt=3 conf=1 area=7044 raw=7044 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=89 id=32 c=46,51 b=0,0,95,95 v16=0,-5 dir=0 hit=24 miss=0 conf=1 pred=46,51 eta=-1
+MMT_MOT f=89 nd=1 nt=2 conf=1 area=7497 raw=7497 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=90 id=32 c=48,51 b=0,0,95,95 v16=8,-3 dir=2 hit=25 miss=0 conf=1 pred=49,51 eta=-1
+MMT_MOT f=90 nd=1 nt=2 conf=1 area=8104 raw=8104 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=91 id=32 c=47,52 b=0,0,95,95 v16=2,1 dir=0 hit=26 miss=0 conf=1 pred=47,52 eta=-1
+MMT_MOT f=91 nd=1 nt=1 conf=1 area=7364 raw=7364 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=92 id=32 c=47,52 b=0,0,95,95 v16=1,0 dir=0 hit=27 miss=0 conf=1 pred=47,52 eta=-1
+MMT_MOT f=92 nd=1 nt=1 conf=1 area=7330 raw=7330 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=93 id=32 c=47,53 b=0,0,95,95 v16=0,4 dir=0 hit=28 miss=0 conf=1 pred=47,53 eta=-1
+MMT_MOT f=93 nd=1 nt=1 conf=1 area=7357 raw=7357 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=94 id=32 c=47,51 b=0,0,95,95 v16=0,-5 dir=0 hit=29 miss=0 conf=1 pred=47,51 eta=-1
+MMT_MOT f=94 nd=1 nt=1 conf=1 area=8184 raw=8184 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=95 id=32 c=44,52 b=0,0,95,95 v16=-12,0 dir=1 hit=30 miss=0 conf=1 pred=43,52 eta=-1
+MMT_MOT f=95 nd=1 nt=1 conf=1 area=7215 raw=7215 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=96 id=32 c=48,45 b=0,0,95,95 v16=7,-28 dir=3 hit=31 miss=0 conf=1 pred=48,42 eta=-1
+MMT_TRK f=96 id=40 c=67,65 b=63,59,72,70 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=67,65 eta=-1
+MMT_TRK f=96 id=41 c=12,26 b=9,21,17,33 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=12,26 eta=-1
+MMT_MOT f=96 nd=3 nt=3 conf=1 area=5711 raw=5711 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=97 id=32 c=45,48 b=0,0,95,95 v16=-6,-9 dir=3 hit=32 miss=0 conf=1 pred=45,47 eta=-1
+MMT_TRK f=97 id=40 c=67,65 b=63,60,72,71 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=67,65 eta=-1
+MMT_TRK f=97 id=41 c=12,26 b=8,20,16,32 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=12,26 eta=-1
+MMT_MOT f=97 nd=1 nt=3 conf=1 area=5220 raw=5220 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=98 id=32 c=44,52 b=0,0,95,95 v16=-8,9 dir=5 hit=33 miss=0 conf=1 pred=43,53 eta=-1
+MMT_MOT f=98 nd=1 nt=3 conf=1 area=4702 raw=4702 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=99 id=32 c=47,47 b=0,0,95,95 v16=6,-13 dir=3 hit=34 miss=0 conf=1 pred=47,46 eta=-1
+MMT_MOT f=99 nd=1 nt=3 conf=1 area=5493 raw=5493 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=100 id=32 c=44,53 b=0,0,95,95 v16=-7,14 dir=4 hit=35 miss=0 conf=1 pred=44,54 eta=-1
+MMT_TRK f=100 id=42 c=78,4 b=60,0,88,20 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=78,4 eta=-1
+MMT_MOT f=100 nd=2 nt=2 conf=1 area=6925 raw=6925 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=101 id=32 c=45,49 b=0,0,95,95 v16=-1,-5 dir=0 hit=36 miss=0 conf=1 pred=45,49 eta=-1
+MMT_TRK f=101 id=42 c=78,4 b=64,0,92,14 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=78,4 eta=-1
+MMT_MOT f=101 nd=1 nt=2 conf=1 area=5157 raw=5157 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=102 id=32 c=46,51 b=0,0,95,95 v16=3,4 dir=0 hit=37 miss=0 conf=1 pred=46,51 eta=-1
+MMT_MOT f=102 nd=1 nt=2 conf=1 area=5301 raw=5301 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=103 id=32 c=46,55 b=0,0,95,95 v16=2,19 dir=4 hit=38 miss=0 conf=1 pred=46,57 eta=-1
+MMT_TRK f=103 id=43 c=38,13 b=35,9,43,19 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=38,13 eta=-1
+MMT_MOT f=103 nd=2 nt=3 conf=1 area=6938 raw=6938 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=104 id=32 c=47,58 b=0,0,95,95 v16=5,26 dir=4 hit=39 miss=0 conf=1 pred=47,61 eta=-1
+MMT_TRK f=104 id=43 c=38,13 b=34,8,42,18 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=38,13 eta=-1
+MMT_TRK f=104 id=44 c=60,9 b=53,0,69,21 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=60,9 eta=-1
+MMT_MOT f=104 nd=2 nt=3 conf=1 area=5866 raw=5866 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=105 id=32 c=45,49 b=0,0,95,95 v16=-4,-16 dir=3 hit=40 miss=0 conf=1 pred=45,47 eta=-1
+MMT_TRK f=105 id=44 c=60,9 b=52,0,68,20 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=60,9 eta=-1
+MMT_MOT f=105 nd=1 nt=3 conf=1 area=7887 raw=7887 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=106 id=32 c=48,47 b=0,0,95,95 v16=9,-20 dir=5 hit=41 miss=0 conf=1 pred=49,45 eta=-1
+MMT_MOT f=106 nd=1 nt=3 conf=1 area=8537 raw=8537 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=107 id=32 c=45,49 b=0,0,95,95 v16=-5,-7 dir=0 hit=42 miss=0 conf=1 pred=45,49 eta=-1
+MMT_MOT f=107 nd=1 nt=2 conf=1 area=4915 raw=4915 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=108 id=32 c=45,48 b=0,0,95,95 v16=-3,-9 dir=3 hit=43 miss=0 conf=1 pred=45,47 eta=-1
+MMT_MOT f=108 nd=1 nt=1 conf=1 area=4965 raw=4965 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=109 id=32 c=34,50 b=0,0,88,95 v16=-46,1 dir=1 hit=44 miss=0 conf=1 pred=29,50 eta=-1
+MMT_TRK f=109 id=45 c=90,33 b=83,0,95,74 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=90,33 eta=-1
+MMT_MOT f=109 nd=2 nt=2 conf=1 area=4216 raw=4216 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=110 id=32 c=47,48 b=0,0,95,95 v16=17,-7 dir=2 hit=45 miss=0 conf=1 pred=49,48 eta=-1
+MMT_TRK f=110 id=45 c=90,33 b=84,0,95,70 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=90,33 eta=-1
+MMT_TRK f=110 id=46 c=93,87 b=91,79,95,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=93,87 eta=-1
+MMT_MOT f=110 nd=2 nt=3 conf=1 area=6648 raw=6648 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=111 id=32 c=25,60 b=0,0,80,95 v16=-75,42 dir=5 hit=46 miss=0 conf=1 pred=16,65 eta=-1
+MMT_TRK f=111 id=45 c=90,65 b=86,35,95,95 v16=0,128 dir=4 hit=2 miss=0 conf=1 pred=90,81 eta=-1
+MMT_TRK f=111 id=48 c=36,44 b=29,33,40,54 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=36,44 eta=-1
+MMT_TRK f=111 id=49 c=86,23 b=83,11,88,36 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=86,23 eta=-1
+MMT_MOT f=111 nd=5 nt=4 conf=2 area=3670 raw=3670 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=112 id=32 c=35,50 b=0,0,95,95 v16=-16,-8 dir=5 hit=47 miss=0 conf=1 pred=33,49 eta=-1
+MMT_TRK f=112 id=45 c=90,73 b=86,43,95,95 v16=0,128 dir=4 hit=2 miss=1 conf=1 pred=90,89 eta=-1
+MMT_TRK f=112 id=48 c=36,44 b=31,34,42,55 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=36,44 eta=-1
+MMT_TRK f=112 id=49 c=86,23 b=84,11,89,36 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=86,23 eta=-1
+MMT_MOT f=112 nd=1 nt=4 conf=2 area=5678 raw=5678 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=113 id=32 c=45,50 b=0,0,95,95 v16=28,-6 dir=2 hit=48 miss=0 conf=1 pred=48,50 eta=-1
+MMT_MOT f=113 nd=1 nt=4 conf=1 area=7807 raw=7807 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=114 id=32 c=45,48 b=0,0,95,95 v16=21,-12 dir=5 hit=49 miss=0 conf=1 pred=47,47 eta=-1
+MMT_MOT f=114 nd=1 nt=4 conf=1 area=5138 raw=5138 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=115 id=32 c=44,48 b=0,0,95,95 v16=11,-9 dir=5 hit=50 miss=0 conf=1 pred=45,47 eta=-1
+MMT_MOT f=115 nd=1 nt=2 conf=1 area=8230 raw=8230 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=116 id=32 c=44,50 b=0,0,95,95 v16=8,1 dir=2 hit=51 miss=0 conf=1 pred=45,50 eta=-1
+MMT_MOT f=116 nd=1 nt=2 conf=1 area=7782 raw=7782 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=117 id=32 c=45,48 b=0,0,95,95 v16=10,-7 dir=2 hit=52 miss=0 conf=1 pred=46,48 eta=-1
+MMT_MOT f=117 nd=1 nt=2 conf=1 area=8423 raw=8423 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=118 id=32 c=46,46 b=0,0,95,95 v16=11,-13 dir=5 hit=53 miss=0 conf=1 pred=47,45 eta=-1
+MMT_TRK f=118 id=50 c=4,86 b=0,73,8,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=4,86 eta=-1
+MMT_MOT f=118 nd=2 nt=2 conf=1 area=5833 raw=5833 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=119 id=32 c=45,52 b=0,0,95,95 v16=4,14 dir=4 hit=54 miss=0 conf=1 pred=45,53 eta=-1
+MMT_TRK f=119 id=50 c=4,86 b=0,75,8,95 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=4,86 eta=-1
+MMT_MOT f=119 nd=1 nt=2 conf=1 area=7493 raw=7493 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=120 id=32 c=46,52 b=0,0,95,95 v16=7,10 dir=4 hit=55 miss=0 conf=1 pred=46,53 eta=-1
+MMT_MOT f=120 nd=1 nt=2 conf=1 area=6586 raw=6586 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=121 id=32 c=42,49 b=0,0,95,95 v16=-10,-4 dir=1 hit=56 miss=0 conf=1 pred=41,49 eta=-1
+MMT_MOT f=121 nd=1 nt=2 conf=1 area=6451 raw=6451 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=122 id=32 c=45,51 b=0,0,95,95 v16=4,5 dir=0 hit=57 miss=0 conf=1 pred=45,51 eta=-1
+MMT_MOT f=122 nd=1 nt=1 conf=1 area=7763 raw=7763 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=123 id=32 c=48,55 b=0,0,95,95 v16=15,19 dir=5 hit=58 miss=0 conf=1 pred=49,57 eta=-1
+MMT_TRK f=123 id=51 c=53,8 b=39,0,67,21 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=53,8 eta=-1
+MMT_TRK f=123 id=52 c=40,15 b=37,9,44,26 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=40,15 eta=-1
+MMT_MOT f=123 nd=3 nt=3 conf=1 area=6894 raw=6894 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=124 id=32 c=43,50 b=0,0,95,95 v16=-8,-5 dir=1 hit=59 miss=0 conf=1 pred=42,50 eta=-1
+MMT_TRK f=124 id=51 c=53,8 b=39,0,67,19 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=53,8 eta=-1
+MMT_TRK f=124 id=52 c=40,15 b=37,7,44,24 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=40,15 eta=-1
+MMT_MOT f=124 nd=1 nt=3 conf=1 area=6708 raw=6708 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=125 id=32 c=49,52 b=0,0,95,95 v16=18,4 dir=2 hit=60 miss=0 conf=1 pred=51,52 eta=-1
+MMT_TRK f=125 id=52 c=39,14 b=37,9,43,22 v16=-4,-4 dir=0 hit=2 miss=0 conf=1 pred=39,14 eta=-1
+MMT_TRK f=125 id=53 c=3,86 b=0,79,6,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=3,86 eta=-1
+MMT_MOT f=125 nd=3 nt=4 conf=2 area=6365 raw=6365 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=126 id=32 c=41,52 b=0,0,95,95 v16=-18,3 dir=1 hit=61 miss=0 conf=1 pred=39,52 eta=-1
+MMT_TRK f=126 id=52 c=39,14 b=36,8,42,21 v16=-4,-4 dir=0 hit=2 miss=1 conf=1 pred=39,14 eta=-1
+MMT_TRK f=126 id=53 c=3,86 b=0,78,6,94 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=3,86 eta=-1
+MMT_MOT f=126 nd=1 nt=4 conf=2 area=6834 raw=6834 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=127 id=32 c=42,46 b=0,0,95,95 v16=-9,-21 dir=5 hit=62 miss=0 conf=1 pred=41,44 eta=-1
+MMT_TRK f=127 id=55 c=57,54 b=50,47,64,62 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=57,54 eta=-1
+MMT_TRK f=127 id=56 c=42,62 b=36,57,50,66 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=42,62 eta=-1
+MMT_MOT f=127 nd=4 nt=4 conf=1 area=6070 raw=6070 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=128 id=32 c=45,50 b=0,0,95,95 v16=5,0 dir=0 hit=63 miss=0 conf=1 pred=45,50 eta=-1
+MMT_TRK f=128 id=55 c=57,54 b=50,47,64,62 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=57,54 eta=-1
+MMT_TRK f=128 id=56 c=42,62 b=35,58,49,67 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=42,62 eta=-1
+MMT_MOT f=128 nd=1 nt=4 conf=1 area=6377 raw=6377 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=129 id=32 c=44,50 b=0,0,95,95 v16=0,0 dir=0 hit=64 miss=0 conf=1 pred=44,50 eta=-1
+MMT_MOT f=129 nd=1 nt=4 conf=1 area=6165 raw=6165 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=130 id=32 c=44,49 b=0,0,95,95 v16=0,-4 dir=0 hit=65 miss=0 conf=1 pred=44,49 eta=-1
+MMT_MOT f=130 nd=1 nt=4 conf=1 area=6066 raw=6066 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=131 id=32 c=47,50 b=0,0,95,95 v16=12,1 dir=2 hit=66 miss=0 conf=1 pred=48,50 eta=-1
+MMT_MOT f=131 nd=1 nt=2 conf=1 area=7400 raw=7400 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=132 id=32 c=25,57 b=0,0,88,95 v16=-79,28 dir=5 hit=67 miss=0 conf=1 pred=16,60 eta=-1
+MMT_TRK f=132 id=52 c=56,13 b=34,0,78,32 v16=65,-7 dir=2 hit=3 miss=0 conf=1 pred=64,13 eta=-1
+MMT_TRK f=132 id=58 c=89,23 b=83,15,95,30 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=89,23 eta=-1
+MMT_TRK f=132 id=59 c=85,91 b=79,85,92,95 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=85,91 eta=-1
+MMT_MOT f=132 nd=5 nt=4 conf=2 area=3978 raw=3978 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=133 id=32 c=33,48 b=0,0,86,95 v16=-27,-15 dir=5 hit=68 miss=0 conf=1 pred=30,47 eta=-1
+MMT_TRK f=133 id=52 c=60,13 b=38,0,82,29 v16=65,-7 dir=2 hit=3 miss=1 conf=1 pred=68,13 eta=-1
+MMT_TRK f=133 id=59 c=85,91 b=79,86,92,95 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=85,91 eta=-1
+MMT_TRK f=133 id=60 c=87,62 b=77,47,95,76 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=87,62 eta=-1
+MMT_MOT f=133 nd=2 nt=4 conf=2 area=5371 raw=5371 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=134 id=32 c=29,56 b=0,0,95,95 v16=-36,20 dir=5 hit=69 miss=0 conf=1 pred=25,58 eta=-1
+MMT_TRK f=134 id=52 c=58,10 b=37,0,78,30 v16=40,-17 dir=5 hit=4 miss=0 conf=1 pred=63,8 eta=-1
+MMT_TRK f=134 id=60 c=87,62 b=78,48,95,77 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=87,62 eta=-1
+MMT_MOT f=134 nd=2 nt=4 conf=2 area=4650 raw=4650 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=135 id=32 c=28,56 b=0,0,87,95 v16=-31,15 dir=5 hit=70 miss=0 conf=1 pred=25,57 eta=-1
+MMT_TRK f=135 id=52 c=59,10 b=37,0,78,30 v16=34,-12 dir=5 hit=5 miss=0 conf=1 pred=63,9 eta=-1
+MMT_MOT f=135 nd=2 nt=4 conf=2 area=4561 raw=4561 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=136 id=32 c=40,53 b=0,0,95,95 v16=24,0 dir=2 hit=71 miss=0 conf=1 pred=43,53 eta=-1
+MMT_TRK f=136 id=52 c=61,10 b=41,0,82,25 v16=34,-12 dir=5 hit=5 miss=1 conf=1 pred=65,9 eta=-1
+MMT_TRK f=136 id=61 c=90,23 b=87,15,95,36 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=90,23 eta=-1
+MMT_MOT f=136 nd=2 nt=4 conf=2 area=6240 raw=6240 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=137 id=32 c=44,50 b=0,0,95,95 v16=34,-12 dir=5 hit=72 miss=0 conf=1 pred=48,49 eta=-1
+MMT_TRK f=137 id=61 c=90,23 b=86,13,94,34 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=90,23 eta=-1
+MMT_MOT f=137 nd=1 nt=3 conf=1 area=7750 raw=7750 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=138 id=32 c=34,48 b=0,0,95,95 v16=-14,-17 dir=5 hit=73 miss=0 conf=1 pred=33,46 eta=-1
+MMT_MOT f=138 nd=1 nt=3 conf=1 area=5305 raw=5305 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=139 id=32 c=24,56 b=0,0,84,95 v16=-50,19 dir=5 hit=74 miss=0 conf=1 pred=18,58 eta=-1
+MMT_TRK f=139 id=52 c=57,13 b=33,0,78,32 v16=-6,3 dir=0 hit=6 miss=0 conf=1 pred=57,13 eta=-1
+MMT_MOT f=139 nd=2 nt=3 conf=2 area=3826 raw=3826 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=140 id=32 c=31,47 b=0,0,85,95 v16=-9,-21 dir=5 hit=75 miss=0 conf=1 pred=30,45 eta=-1
+MMT_TRK f=140 id=52 c=57,13 b=35,0,80,29 v16=-6,3 dir=0 hit=6 miss=1 conf=1 pred=57,13 eta=-1
+MMT_MOT f=140 nd=1 nt=2 conf=2 area=4949 raw=4949 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=141 id=32 c=27,56 b=0,0,88,95 v16=-22,20 dir=5 hit=76 miss=0 conf=1 pred=25,58 eta=-1
+MMT_TRK f=141 id=52 c=58,11 b=36,0,78,30 v16=0,-5 dir=0 hit=7 miss=0 conf=1 pred=58,11 eta=-1
+MMT_MOT f=141 nd=2 nt=2 conf=2 area=4292 raw=4292 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=142 id=32 c=35,56 b=0,0,95,95 v16=15,15 dir=5 hit=77 miss=0 conf=1 pred=36,57 eta=-1
+MMT_TRK f=142 id=52 c=57,10 b=36,0,80,30 v16=-4,-7 dir=0 hit=8 miss=0 conf=1 pred=57,10 eta=-1
+MMT_MOT f=142 nd=2 nt=2 conf=2 area=5070 raw=5070 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=143 id=32 c=31,57 b=0,0,90,95 v16=-4,15 dir=4 hit=78 miss=0 conf=1 pred=31,58 eta=-1
+MMT_TRK f=143 id=52 c=57,10 b=36,0,79,30 v16=-3,-5 dir=0 hit=9 miss=0 conf=1 pred=57,10 eta=-1
+MMT_MOT f=143 nd=2 nt=2 conf=2 area=4594 raw=4594 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=144 id=32 c=37,59 b=0,0,95,95 v16=21,19 dir=5 hit=79 miss=0 conf=1 pred=39,61 eta=-1
+MMT_TRK f=144 id=52 c=53,11 b=37,0,75,29 v16=-18,0 dir=1 hit=10 miss=0 conf=1 pred=51,11 eta=-1
+MMT_TRK f=144 id=62 c=60,90 b=55,89,68,94 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=60,90 eta=-1
+MMT_MOT f=144 nd=3 nt=3 conf=2 area=4454 raw=4454 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=145 id=32 c=50,55 b=0,0,95,95 v16=67,-1 dir=2 hit=80 miss=0 conf=1 pred=58,55 eta=-1
+MMT_TRK f=145 id=52 c=52,11 b=33,0,71,26 v16=-18,0 dir=1 hit=10 miss=1 conf=1 pred=50,11 eta=-1
+MMT_TRK f=145 id=62 c=60,90 b=54,88,67,93 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=60,90 eta=-1
+MMT_MOT f=145 nd=1 nt=3 conf=2 area=6164 raw=6164 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=146 id=32 c=44,54 b=0,0,95,95 v16=26,-4 dir=2 hit=81 miss=0 conf=1 pred=47,54 eta=-1
+MMT_TRK f=146 id=52 c=57,10 b=40,0,74,34 v16=6,-4 dir=0 hit=11 miss=0 conf=1 pred=57,10 eta=-1
+MMT_MOT f=146 nd=2 nt=3 conf=2 area=5919 raw=5919 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=147 id=32 c=45,53 b=0,0,95,95 v16=23,-7 dir=2 hit=82 miss=0 conf=1 pred=47,53 eta=-1
+MMT_TRK f=147 id=52 c=57,10 b=40,0,74,27 v16=6,-4 dir=0 hit=11 miss=1 conf=1 pred=57,10 eta=-1
+MMT_MOT f=147 nd=1 nt=3 conf=2 area=6566 raw=6566 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=148 id=32 c=44,46 b=0,0,95,95 v16=13,-33 dir=5 hit=83 miss=0 conf=1 pred=45,42 eta=-1
+MMT_MOT f=148 nd=1 nt=2 conf=1 area=7042 raw=7042 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=149 id=32 c=45,50 b=0,0,95,95 v16=13,-8 dir=5 hit=84 miss=0 conf=1 pred=46,49 eta=-1
+MMT_MOT f=149 nd=1 nt=2 conf=1 area=7731 raw=7731 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=150 id=32 c=45,47 b=0,0,95,95 v16=9,-18 dir=5 hit=85 miss=0 conf=1 pred=46,45 eta=-1
+MMT_MOT f=150 nd=1 nt=2 conf=1 area=8573 raw=8573 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=151 id=32 c=46,48 b=0,0,95,95 v16=10,-9 dir=5 hit=86 miss=0 conf=1 pred=47,47 eta=-1
+MMT_MOT f=151 nd=1 nt=2 conf=1 area=8918 raw=8918 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=152 id=32 c=45,47 b=0,0,95,95 v16=3,-10 dir=3 hit=87 miss=0 conf=1 pred=45,46 eta=-1
+MMT_MOT f=152 nd=1 nt=2 conf=1 area=8561 raw=8561 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=153 id=32 c=45,48 b=0,0,95,95 v16=2,-3 dir=0 hit=88 miss=0 conf=1 pred=45,48 eta=-1
+MMT_MOT f=153 nd=1 nt=1 conf=1 area=8187 raw=8187 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=154 id=32 c=45,48 b=0,0,95,95 v16=1,-2 dir=0 hit=89 miss=0 conf=1 pred=45,48 eta=-1
+MMT_MOT f=154 nd=1 nt=1 conf=1 area=7746 raw=7746 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=155 id=32 c=40,58 b=0,0,88,95 v16=-19,38 dir=5 hit=90 miss=0 conf=1 pred=38,62 eta=-1
+MMT_MOT f=155 nd=1 nt=1 conf=1 area=5435 raw=5435 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=156 id=32 c=39,59 b=0,0,95,95 v16=-18,32 dir=5 hit=91 miss=0 conf=1 pred=37,63 eta=-1
+MMT_MOT f=156 nd=1 nt=1 conf=1 area=5045 raw=5045 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=157 id=32 c=42,52 b=0,0,95,95 v16=-1,-4 dir=0 hit=92 miss=0 conf=1 pred=42,52 eta=-1
+MMT_MOT f=157 nd=1 nt=1 conf=1 area=5875 raw=5875 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=158 id=32 c=41,52 b=0,0,95,95 v16=-4,-3 dir=0 hit=93 miss=0 conf=1 pred=41,52 eta=-1
+MMT_MOT f=158 nd=1 nt=1 conf=1 area=5813 raw=5813 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=159 id=32 c=39,59 b=0,0,88,95 v16=-11,25 dir=5 hit=94 miss=0 conf=1 pred=38,62 eta=-1
+MMT_MOT f=159 nd=1 nt=1 conf=1 area=5045 raw=5045 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=160 id=32 c=39,58 b=0,0,88,95 v16=-8,14 dir=5 hit=95 miss=0 conf=1 pred=38,59 eta=-1
+MMT_TRK f=160 id=63 c=59,13 b=36,0,90,36 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=59,13 eta=-1
+MMT_MOT f=160 nd=2 nt=2 conf=1 area=5479 raw=5479 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=161 id=32 c=45,51 b=0,0,95,95 v16=18,-17 dir=5 hit=96 miss=0 conf=1 pred=47,49 eta=-1
+MMT_TRK f=161 id=63 c=59,13 b=32,0,86,31 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=59,13 eta=-1
+MMT_MOT f=161 nd=1 nt=2 conf=1 area=8020 raw=8020 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=162 id=32 c=42,50 b=0,0,95,95 v16=1,-16 dir=3 hit=97 miss=0 conf=1 pred=42,48 eta=-1
+MMT_MOT f=162 nd=1 nt=2 conf=1 area=6078 raw=6078 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=163 id=32 c=30,53 b=0,0,84,95 v16=-47,0 dir=1 hit=98 miss=0 conf=1 pred=25,53 eta=-1
+MMT_TRK f=163 id=64 c=85,65 b=77,53,89,76 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=85,65 eta=-1
+MMT_TRK f=163 id=65 c=72,10 b=65,1,80,20 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=72,10 eta=-1
+MMT_MOT f=163 nd=3 nt=4 conf=1 area=4818 raw=4818 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=164 id=32 c=34,56 b=0,0,95,95 v16=-19,12 dir=5 hit=99 miss=0 conf=1 pred=32,57 eta=-1
+MMT_TRK f=164 id=64 c=85,65 b=79,54,91,77 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=85,65 eta=-1
+MMT_TRK f=164 id=65 c=72,10 b=65,1,80,20 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=72,10 eta=-1
+MMT_TRK f=164 id=66 c=2,5 b=0,0,8,14 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=2,5 eta=-1
+MMT_MOT f=164 nd=2 nt=4 conf=1 area=5138 raw=5138 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=165 id=32 c=42,50 b=0,0,88,95 v16=17,-15 dir=5 hit=100 miss=0 conf=1 pred=44,49 eta=-1
+MMT_TRK f=165 id=66 c=2,5 b=0,0,6,12 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=2,5 eta=-1
+MMT_MOT f=165 nd=1 nt=4 conf=1 area=6635 raw=6635 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=166 id=32 c=47,53 b=0,0,95,95 v16=32,0 dir=2 hit=101 miss=0 conf=1 pred=51,53 eta=-1
+MMT_MOT f=166 nd=1 nt=4 conf=1 area=7225 raw=7225 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=167 id=32 c=42,50 b=0,0,95,95 v16=4,-12 dir=3 hit=102 miss=0 conf=1 pred=42,49 eta=-1
+MMT_TRK f=167 id=65 c=66,20 b=61,13,75,29 v16=-24,40 dir=5 hit=2 miss=0 conf=1 pred=63,25 eta=-1
+MMT_TRK f=167 id=67 c=11,49 b=6,39,18,60 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=11,49 eta=-1
+MMT_TRK f=167 id=68 c=57,2 b=41,0,72,6 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=57,2 eta=-1
+MMT_MOT f=167 nd=4 nt=4 conf=2 area=5575 raw=5575 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=168 id=32 c=42,51 b=0,0,95,95 v16=3,-5 dir=0 hit=103 miss=0 conf=1 pred=42,51 eta=-1
+MMT_TRK f=168 id=65 c=65,22 b=58,14,72,30 v16=-24,40 dir=5 hit=2 miss=1 conf=1 pred=62,27 eta=-1
+MMT_TRK f=168 id=67 c=11,49 b=5,39,17,60 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=11,49 eta=-1
+MMT_TRK f=168 id=68 c=57,2 b=42,0,73,5 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=57,2 eta=-1
+MMT_MOT f=168 nd=1 nt=4 conf=2 area=5973 raw=5973 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=169 id=32 c=44,48 b=0,0,95,95 v16=10,-15 dir=5 hit=104 miss=0 conf=1 pred=45,47 eta=-1
+MMT_MOT f=169 nd=1 nt=4 conf=1 area=7160 raw=7160 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=170 id=32 c=47,47 b=0,0,95,95 v16=19,-15 dir=5 hit=105 miss=0 conf=1 pred=49,46 eta=-1
+MMT_MOT f=170 nd=1 nt=4 conf=1 area=8592 raw=8592 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=171 id=32 c=47,47 b=0,0,95,95 v16=14,-11 dir=5 hit=106 miss=0 conf=1 pred=48,46 eta=-1
+MMT_MOT f=171 nd=1 nt=2 conf=1 area=9180 raw=9180 pre=0 pre_eta=-1 bigr=0 bigf=1
+MMT_TRK f=172 id=32 c=50,53 b=0,0,95,95 v16=22,15 dir=5 hit=107 miss=0 conf=1 pred=52,54 eta=-1
+MMT_TRK f=172 id=69 c=3,24 b=0,19,8,30 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=3,24 eta=-1
+MMT_MOT f=172 nd=2 nt=3 conf=1 area=6278 raw=6278 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=173 id=32 c=50,52 b=0,0,95,95 v16=16,7 dir=2 hit=108 miss=0 conf=1 pred=52,52 eta=-1
+MMT_TRK f=173 id=69 c=3,24 b=0,19,7,30 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=3,24 eta=-1
+MMT_MOT f=173 nd=1 nt=3 conf=1 area=7177 raw=7177 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=174 id=32 c=48,49 b=0,0,95,95 v16=4,-6 dir=0 hit=109 miss=0 conf=1 pred=48,49 eta=-1
+MMT_MOT f=174 nd=1 nt=2 conf=1 area=8658 raw=8658 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=175 id=32 c=42,50 b=0,0,88,95 v16=-21,0 dir=1 hit=110 miss=0 conf=1 pred=40,50 eta=-1
+MMT_MOT f=175 nd=1 nt=2 conf=1 area=7054 raw=7054 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=176 id=32 c=51,52 b=0,0,95,95 v16=20,8 dir=5 hit=111 miss=0 conf=1 pred=53,53 eta=-1
+MMT_MOT f=176 nd=1 nt=1 conf=1 area=7628 raw=7628 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=177 id=32 c=51,52 b=0,0,95,95 v16=15,6 dir=2 hit=112 miss=0 conf=1 pred=52,52 eta=-1
+MMT_MOT f=177 nd=1 nt=1 conf=1 area=7597 raw=7597 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=178 id=32 c=34,61 b=0,0,95,95 v16=-56,40 dir=5 hit=113 miss=0 conf=1 pred=27,66 eta=-1
+MMT_TRK f=178 id=70 c=84,18 b=71,0,95,44 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=84,18 eta=-1
+MMT_TRK f=178 id=71 c=59,35 b=53,26,66,46 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=59,35 eta=-1
+MMT_MOT f=178 nd=3 nt=3 conf=1 area=4046 raw=4046 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=179 id=32 c=13,53 b=0,0,30,95 v16=-126,-2 dir=1 hit=114 miss=0 conf=1 pred=-2,53 eta=-1
+MMT_TRK f=179 id=70 c=79,9 b=69,0,88,23 v16=-20,-36 dir=5 hit=2 miss=0 conf=1 pred=77,5 eta=-1
+MMT_TRK f=179 id=73 c=46,69 b=35,45,68,84 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=46,69 eta=-1
+MMT_TRK f=179 id=74 c=64,18 b=59,8,68,30 v16=0,0 dir=0 hit=1 miss=0 conf=0 pred=64,18 eta=-1
+MMT_MOT f=179 nd=5 nt=4 conf=2 area=2221 raw=2221 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=180 id=32 c=13,48 b=0,0,34,95 v16=-94,-21 dir=5 hit=115 miss=0 conf=1 pred=2,46 eta=-1
+MMT_TRK f=180 id=70 c=78,7 b=69,0,88,19 v16=-20,-36 dir=5 hit=2 miss=1 conf=1 pred=76,3 eta=-1
+MMT_TRK f=180 id=73 c=66,51 b=35,0,95,95 v16=80,-72 dir=5 hit=2 miss=0 conf=1 pred=76,42 eta=-1
+MMT_TRK f=180 id=74 c=64,18 b=60,7,69,29 v16=0,0 dir=0 hit=1 miss=1 conf=0 pred=64,18 eta=-1
+MMT_MOT f=180 nd=2 nt=4 conf=3 area=3913 raw=3913 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=181 id=32 c=13,54 b=0,0,26,95 v16=-70,8 dir=5 hit=116 miss=0 conf=1 pred=5,55 eta=-1
+MMT_TRK f=181 id=73 c=70,53 b=35,0,95,95 v16=76,-46 dir=5 hit=3 miss=0 conf=1 pred=79,48 eta=-1
+MMT_TRK f=181 id=74 c=72,28 b=71,20,76,36 v16=32,40 dir=5 hit=2 miss=0 conf=1 pred=76,33 eta=-1
+MMT_MOT f=181 nd=3 nt=4 conf=3 area=2690 raw=2690 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=182 id=32 c=9,54 b=0,7,22,95 v16=-70,8 dir=5 hit=116 miss=1 conf=1 pred=1,55 eta=-1
+MMT_TRK f=182 id=73 c=44,50 b=0,0,95,95 v16=-47,-46 dir=5 hit=4 miss=0 conf=1 pred=39,45 eta=-1
+MMT_TRK f=182 id=74 c=74,30 b=72,22,77,38 v16=32,40 dir=5 hit=2 miss=1 conf=1 pred=78,35 eta=-1
+MMT_MOT f=182 nd=1 nt=4 conf=3 area=6396 raw=6396 pre=0 pre_eta=-1 bigr=0 bigf=0
+MMT_TRK f=183 id=32 c=18,47 b=0,0,54,95 v16=-16,-22 dir=5 hit=117 miss=0 conf=1 pred=16,45 eta=-1
+MMT_TRK f=183 id=73 c=69,54 b=35,0,95,95 v16=64,-18 dir=5 hit=5 miss=0 conf=1 pred=77,52 eta=-1
+MMT_MOT f=183 nd=3 nt=4 conf=2 area=3377 raw=3377 pre=0 pre_eta=-1 bigr=0 bigf=0
