@@ -18,14 +18,14 @@ int main(int argc, char** argv)
       int n = mot_step(&ctx, &work, frame);
       for (k = 0; k < ctx.n_trk; ++k) {
          const mot_trk_t* t = &ctx.trk[k];
+         if (!t->active) continue;
          printf("MMT_TRK f=%d id=%d c=%d,%d b=%d,%d,%d,%d v16=%d,%d dir=%d hit=%d miss=%d conf=%d pred=%d,%d eta=%d\n",
                 idx, (int)t->id, t->cx, t->cy, t->x0, t->y0, t->x1, t->y1,
                 (int)t->vx, (int)t->vy, (int)t->dir, (int)t->hits, (int)t->misses,
                 (int)t->confirmed, (int)t->px, (int)t->py, (int)t->eta);
       }
       {
-         int nconf = 0;
-         for (k = 0; k < ctx.n_trk; ++k) if (ctx.trk[k].confirmed) nconf++;
+         const int nconf = mot_active_confirmed(&ctx);
          printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d pre=0 pre_eta=-1\n",
                 idx, ctx.n_det, n, nconf, ctx.last_area);
       }

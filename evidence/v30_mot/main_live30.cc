@@ -560,6 +560,7 @@ static void mot_track_frame(uint32_t frame)
 
    for (k = 0; k < g_mot.n_trk; ++k) {
       const mot_trk_t* t = &g_mot.trk[k];
+      if (!t->active) continue;          /* v30f: 丢失中的航迹保留但不报，等重连 */
       if (t->confirmed) nconf++;
       bsp_printf("MMT_TRK f=%d id=%d c=%d,%d b=%d,%d,%d,%d v16=%d,%d dir=%d "
                  "hit=%d miss=%d conf=%d pred=%d,%d eta=%d\n\r",
@@ -573,7 +574,7 @@ static void mot_track_frame(uint32_t frame)
          if (eta < 0 || (int)t->eta < eta) { eta = (int)t->eta; id = (int)t->id; }
       }
    }
-   g_track_conf = nconf;
+   g_track_conf = mot_active_confirmed(&g_mot);
    bsp_printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d raw=%d pre=%d pre_eta=%d\n\r",
               (int)frame, g_mot.n_det, g_mot.n_trk, nconf, g_mot.last_area,
               g_mot.raw_area, pre, eta);

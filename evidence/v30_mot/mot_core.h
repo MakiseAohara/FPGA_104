@@ -35,7 +35,12 @@
 #define MOT_MIN_AREA     60      /* 最小目标面积（膨胀后 px）：暗场噪点约 20-50 */
 #define MOT_MAX_AREA     9000    /* 最大目标面积：人贴近镜头可占整幅九成，只有"整幅全变"才丢 */
 #define MOT_IOU_THR      200     /* IOU 阈值，千分比（200 = 0.20） */
-#define MOT_MAX_MISS     3       /* 连续丢失多少帧后删航迹（2fps ≈1.5 s） */
+#ifndef MOT_MAX_MISS
+#define MOT_MAX_MISS     6       /* 连续丢失多少帧后删航迹（2fps ≈3 s，留出重连时间） */
+#endif
+#ifndef MOT_REPORT_MISS
+#define MOT_REPORT_MISS  1       /* 丢失超过该帧数就不上报（仍留在表里等重连） */
+#endif
 #define MOT_CONFIRM_HITS 2       /* 连续命中多少帧算确认目标 */
 #define MOT_HORIZON      2       /* 预测前视帧数（2fps → 1 s） */
 #define MOT_GATE_PX      16      /* 二级关联：质心距离门限（IOU 全丢失时按速度外推后仍可续轨） */
@@ -63,6 +68,7 @@ typedef struct {
    short dir;              /* 0=静止 1=左 2=右 3=上 4=下 5=斜移 */
    short hits, misses, age;
    short confirmed;
+   short active;             /* 本帧是否在场（misses <= MOT_REPORT_MISS） */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
@@ -260,6 +266,7 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    t->age++;
    t->misses = 0;
    if (t->hits >= MOT_CONFIRM_HITS) t->confirmed = 1;
+   t->active = 1;
    if (t->traj_n >= MOT_TRAJ_LEN) {
       memmove(&t->traj[0][0], &t->traj[1][0], sizeof(short) * 2 * (MOT_TRAJ_LEN - 1));
       t->traj_n = MOT_TRAJ_LEN - 1;
@@ -352,6 +359,7 @@ static void mot_associate(mot_ctx_t* c)
       if (trk_used[k]) continue;
       if (t->misses < 32000) t->misses++;
       t->age++;
+      t->active = (t->misses <= MOT_REPORT_MISS) ? 1 : 0;
       {
          const int dcx = (int)t->cx + (int)t->vx / 16;
          const int dcy = (int)t->cy + (int)t->vy / 16;
@@ -385,7 +393,7 @@ static void mot_associate(mot_ctx_t* c)
       t->x0 = c->det[i].x0; t->y0 = c->det[i].y0;
       t->x1 = c->det[i].x1; t->y1 = c->det[i].y1;
       t->cx = c->det[i].cx; t->cy = c->det[i].cy;
-      t->hits = 1; t->age = 1; t->traj_n = 1;
+      t->hits = 1; t->age = 1; t->traj_n = 1; t->active = 1;
       t->traj[0][0] = t->cx; t->traj[0][1] = t->cy;
    }
 
@@ -414,6 +422,16 @@ static void mot_associate(mot_ctx_t* c)
       else t->dir = 4;
       t->eta = (short)mot_eta_frames(t);
    }
+}
+
+/* 当前在场的确认航迹数（丢失中的不算） */
+static int mot_active_confirmed(const mot_ctx_t* c)
+{
+   int k, n = 0;
+   for (k = 0; k < c->n_trk; ++k) {
+      if (c->trk[k].confirmed && c->trk[k].active) n++;
+   }
+   return n;
 }
 
 /* 一站式：返回本帧航迹数 */
