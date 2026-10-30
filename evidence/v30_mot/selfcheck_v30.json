@@ -1,8 +1,8 @@
 {
-  "file": "D:\\v30_build\\out_v30f\\tinyml_pdti8.bin",
-  "bytes": 310474,
-  "crc32": "8714C1FA",
-  "sha256": "8CA2DFAE165D399494A33185710F19E48161CD2CDD000D5204D08620999A1897",
+  "file": "D:\\v30_build\\out_v30i\\tinyml_pdti8.bin",
+  "bytes": 313882,
+  "crc32": "8524F78E",
+  "sha256": "C9C239693BDBDC118E662C0E46F2BAB08118C52889D71FB69823E1B80B4795E9",
   "embedded_model": true,
   "old_model_present": false,
   "strings": {
