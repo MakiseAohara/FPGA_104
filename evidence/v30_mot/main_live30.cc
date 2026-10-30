@@ -560,8 +560,9 @@ static void mot_track_frame(uint32_t frame)
       }
    }
    g_track_conf = nconf;
-   bsp_printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d pre=%d pre_eta=%d\n\r",
-              (int)frame, g_mot.n_det, g_mot.n_trk, nconf, g_mot.last_area, pre, eta);
+   bsp_printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d raw=%d pre=%d pre_eta=%d\n\r",
+              (int)frame, g_mot.n_det, g_mot.n_trk, nconf, g_mot.last_area,
+              g_mot.raw_area, pre, eta);
 
 #if MOT_PRE_ON
    if (pre && !g_pre_on) {

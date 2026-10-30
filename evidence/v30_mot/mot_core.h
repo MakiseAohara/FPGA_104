@@ -33,7 +33,7 @@
 #define MOT_DIFF_THR     14      /* 与背景的差阈值（拉伸后画面） */
 #define MOT_MOTION_THR   10      /* 帧间差分阈值（鬼影剔除用） */
 #define MOT_MIN_AREA     60      /* 最小目标面积（膨胀后 px）：暗场噪点约 20-50 */
-#define MOT_MAX_AREA     6000    /* 最大目标面积（整幅亮变丢弃） */
+#define MOT_MAX_AREA     9000    /* 最大目标面积：人贴近镜头可占整幅九成，只有"整幅全变"才丢 */
 #define MOT_IOU_THR      200     /* IOU 阈值，千分比（200 = 0.20） */
 #define MOT_MAX_MISS     3       /* 连续丢失多少帧后删航迹（2fps ≈1.5 s） */
 #define MOT_CONFIRM_HITS 2       /* 连续命中多少帧算确认目标 */
@@ -70,6 +70,7 @@ typedef struct {
 
 typedef struct {
    int n_det;                        /* 本帧有效检测数 */
+   int raw_area;                     /* 滤波前最大连通域面积（诊断） */
    mot_det_t det[MOT_MAX_DET];
    int n_trk;                        /* 当前航迹数（含未确认） */
    mot_trk_t trk[MOT_MAX_TRK];
@@ -153,6 +154,7 @@ static void mot_bg_update(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur)
 static int mot_label(mot_work_t* w, mot_ctx_t* c)
 {
    int i, n = 0;
+   c->raw_area = 0;
    memset(w->lab, 0, sizeof(w->lab));
    for (i = 0; i < MOT_N; ++i) {
       int sp = 0, area = 0, mov = 0;
@@ -184,6 +186,7 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
             }
          }
       }
+      if (area > c->raw_area) c->raw_area = area;
       if (area < MOT_MIN_AREA || area > MOT_MAX_AREA) continue;
       if (mov * MOT_GHOST_DIV < area) continue;        /* 鬼影：没有当前运动 */
       if (n >= MOT_MAX_DET) continue;

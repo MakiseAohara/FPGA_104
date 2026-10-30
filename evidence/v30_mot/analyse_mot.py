@@ -12,7 +12,7 @@ a = ap.parse_args()
 
 trk = re.compile(r'MMT_TRK f=(\d+) id=(\d+) c=(-?\d+),(-?\d+) b=(-?\d+),(-?\d+),(-?\d+),(-?\d+) '
                  r'v16=(-?\d+),(-?\d+) dir=(\d+) hit=(\d+) miss=(\d+) conf=(\d+) pred=(-?\d+),(-?\d+) eta=(-?\d+)')
-mot = re.compile(r'MMT_MOT f=(\d+) nd=(\d+) nt=(\d+) conf=(\d+) area=(\d+) pre=(\d+) pre_eta=(-?\d+)')
+mot = re.compile(r'MMT_MOT f=(\d+) nd=(\d+) nt=(\d+) conf=(\d+) area=(\d+)(?: raw=(\d+))? pre=(\d+) pre_eta=(-?\d+)')
 pre = re.compile(r'MMT_PREWARN f=(\d+) id=(\d+) eta=(-?\d+) ms=(\d+)')
 lead = re.compile(r'MMT_PREDLEAD f=(\d+) lead_ms=(\d+) id=(\d+) eta=(-?\d+)')
 alarm = re.compile(r'MMT_ALARM (start|end) ms=(\d+)')
@@ -31,7 +31,8 @@ for line in open(a.log, encoding='utf-8', errors='replace'):
         continue
     m = mot.search(line)
     if m:
-        mot_rows.append(dict(zip(['f','nd','nt','conf','area','pre','pre_eta'], map(int, m.groups()))))
+        g = m.groups()
+        mot_rows.append(dict(f=int(g[0]), nd=int(g[1]), nt=int(g[2]), conf=int(g[3]), area=int(g[4]), pre=int(g[6]), pre_eta=int(g[7])))
         conf_max = max(conf_max, int(m.group(4)))
         continue
     m = pre.search(line)
