@@ -104,6 +104,7 @@ typedef struct {
    short still;              /* 连续静止帧数（速度≈0） */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short edge_entry;       /* v15：边缘入场标记（1=首次出现即在边缘带且朝内） */
+   short merge_cnt;        /* v15：与本航迹重叠的其他航迹持续帧数 */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
 } mot_trk_t;
@@ -296,6 +297,45 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
             }
          }
          if (dup) continue;
+#if MOT_V15_MERGE
+         {
+            /* v15 (2a) 碎片合并：小框被大框覆盖 >=70%，或两框间隙 <=4 px → 合并成一个检测 */
+            int q2, merged = 0;
+            for (q2 = 0; q2 < n && !merged; ++q2) {
+               const int ax0 = x0 > c->det[q2].x0 ? x0 : c->det[q2].x0;
+               const int ay0 = y0 > c->det[q2].y0 ? y0 : c->det[q2].y0;
+               const int ax1 = x1 < c->det[q2].x1 ? x1 : c->det[q2].x1;
+               const int ay1 = y1 < c->det[q2].y1 ? y1 : c->det[q2].y1;
+               long inter = 0;
+               if (ax1 >= ax0 && ay1 >= ay0) inter = (long)(ax1 - ax0 + 1) * (ay1 - ay0 + 1);
+               const long a_small = (long)(x1 - x0 + 1) * (y1 - y0 + 1);
+               const long b_small = (long)(c->det[q2].x1 - c->det[q2].x0 + 1) * (c->det[q2].y1 - c->det[q2].y0 + 1);
+               const long small = a_small < b_small ? a_small : b_small;
+               int gx = 0, gy = 0;
+               if (x1 < c->det[q2].x0) gx = c->det[q2].x0 - x1;
+               else if (c->det[q2].x1 < x0) gx = x0 - c->det[q2].x1;
+               if (y1 < c->det[q2].y0) gy = c->det[q2].y0 - y1;
+               else if (c->det[q2].y1 < y0) gy = y0 - c->det[q2].y1;
+               if ((small > 0 && inter * 100 >= small * 70) || (gx <= 4 && gy <= 4)) {
+                  /* 合并到 det[q2]：并集框、面积相加、质心按面积加权 */
+                  mot_det_t* m = &c->det[q2];
+                  const int nx0 = x0 < m->x0 ? x0 : m->x0;
+                  const int ny0 = y0 < m->y0 ? y0 : m->y0;
+                  const int nx1 = x1 > m->x1 ? x1 : m->x1;
+                  const int ny1 = y1 > m->y1 ? y1 : m->y1;
+                  const long na = (long)m->area + area;
+                  const long nmean = (long)m->mean * m->area + (long)(c->cur ? sumv / area : 0) * area;
+                  m->cx = (short)(((long)m->cx * m->area + (long)(sx / area) * area) / (na ? na : 1));
+                  m->cy = (short)(((long)m->cy * m->area + (long)(sy / area) * area) / (na ? na : 1));
+                  m->x0 = (short)nx0; m->y0 = (short)ny0; m->x1 = (short)nx1; m->y1 = (short)ny1;
+                  m->area = (short)(na > 32000 ? 32000 : na);
+                  if (na) m->mean = (short)(nmean / na);
+                  merged = 1;
+               }
+            }
+            if (merged) continue;
+         }
+#endif
       }
       c->det[n].x0 = (short)x0; c->det[n].y0 = (short)y0;
       c->det[n].x1 = (short)x1; c->det[n].y1 = (short)y1;
@@ -602,7 +642,13 @@ static void mot_associate(mot_ctx_t* c)
    {
       int wr = 0;
       for (k = 0; k < c->n_trk; ++k) {
-         const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
+   #if MOT_V15_MERGE
+      const int miss_limit = (c->trk[k].confirmed &&
+                              c->trk[k].still >= 2 && c->ai_p >= MOT_P_PERSON)
+                             ? 10 : (c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF);
+#else
+      const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
+#endif
          if (c->trk[k].misses > miss_limit) continue;
          if (wr != k) c->trk[wr] = c->trk[k];
          wr++;
@@ -610,6 +656,51 @@ static void mot_associate(mot_ctx_t* c)
       c->n_trk = wr;
    }
 
+#if MOT_V15_MERGE
+   /* v15 (2b) 航迹级合并：两框重叠（交/较小框）>=60% 持续 2 帧，保留 hits 多的 */
+   {
+      int a, b;
+      for (a = 0; a < c->n_trk; ++a) c->trk[a].merge_cnt = 0;
+      for (a = 0; a < c->n_trk; ++a) {
+         for (b = a + 1; b < c->n_trk; ++b) {
+            const int ix0 = c->trk[a].x0 > c->trk[b].x0 ? c->trk[a].x0 : c->trk[b].x0;
+            const int iy0 = c->trk[a].y0 > c->trk[b].y0 ? c->trk[a].y0 : c->trk[b].y0;
+            const int ix1 = c->trk[a].x1 < c->trk[b].x1 ? c->trk[a].x1 : c->trk[b].x1;
+            const int iy1 = c->trk[a].y1 < c->trk[b].y1 ? c->trk[a].y1 : c->trk[b].y1;
+            long inter = 0;
+            if (ix1 >= ix0 && iy1 >= iy0) inter = (long)(ix1 - ix0 + 1) * (iy1 - iy0 + 1);
+            const long aa = (long)(c->trk[a].x1 - c->trk[a].x0 + 1) * (c->trk[a].y1 - c->trk[a].y0 + 1);
+            const long bb = (long)(c->trk[b].x1 - c->trk[b].x0 + 1) * (c->trk[b].y1 - c->trk[b].y0 + 1);
+            const long small = aa < bb ? aa : bb;
+            if (small > 0 && inter * 100 >= small * 60) {
+               c->trk[a].merge_cnt++;
+               c->trk[b].merge_cnt++;
+            }
+         }
+      }
+      for (a = c->n_trk - 1; a >= 0; --a) {
+         if (c->trk[a].merge_cnt < 2) continue;
+         /* 找与它重叠且 hits 更多的另一条 */
+         int drop = -1;
+         for (b = 0; b < c->n_trk; ++b) {
+            if (b == a) continue;
+            if (c->trk[b].hits > c->trk[a].hits) { drop = a; break; }
+         }
+         if (drop < 0 && c->trk[a].hits > 0) {
+            /* a 的 hits 更多：删掉重叠的较年轻者 */
+            for (b = 0; b < c->n_trk; ++b) {
+               if (b != a && c->trk[b].merge_cnt >= 2 && c->trk[b].hits <= c->trk[a].hits) drop = b;
+            }
+         }
+         if (drop >= 0) {
+            int k2;
+            for (k2 = drop; k2 < c->n_trk - 1; ++k2) c->trk[k2] = c->trk[k2 + 1];
+            c->n_trk--;
+            break;
+         }
+      }
+   }
+#endif
    /* 预测 + 方向 + ROI 到达时间 */
    for (k = 0; k < c->n_trk; ++k) {
       mot_trk_t* t = &c->trk[k];

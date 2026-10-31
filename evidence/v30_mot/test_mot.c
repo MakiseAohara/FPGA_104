@@ -259,6 +259,49 @@ int main(void)
       check("S13 fast walk keeps id", kept && id0 > 0, "");
    }
 
+   /* ---------- S14 (v15 MERGE) 同帧碎片合并：两个近邻连通域 → 一个检测 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int nd1 = -1;
+      bg(fA, 60);
+      rect(fA, 30, 30, 18, 30, 200);      /* 主体 */
+      rect(fA, 48, 32, 4, 26, 200);       /* 右侧碎片，间隙 0 px */
+      mot_step(&ctx, &work, fA, 90, 2);
+      nd1 = ctx.n_det;
+      check("S14 merge fragments to one det", nd1 == 1, "");
+   }
+
+   /* ---------- S15 (v15 MERGE) 两条重叠航迹 → 合并为一条 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int n_after = -1, f2;
+      for (f2 = 0; f2 < 4; ++f2) {          /* 建两条重叠航迹（两处检测互相重叠） */
+         bg(fA, 60);
+         rect(fA, 30, 30, 18, 30, 200);
+         rect(fA, 34, 32, 18, 30, 200);
+         mot_step(&ctx, &work, fA, 90, 2);
+      }
+      n_after = ctx.n_trk;
+      check("S15 merge overlapping tracks", n_after <= 1, "");
+   }
+
+   /* ---------- S16 (v15 MERGE) 两人相距较远：不合并 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int f2, n_max = 0;
+      for (f2 = 0; f2 < 4; ++f2) {
+         bg(fA, 60);
+         rect(fA, 12, 30, 14, 26, 200);
+         rect(fA, 62, 30, 14, 26, 200);    /* 相距 36 px */
+         mot_step(&ctx, &work, fA, 90, 2);
+         if (ctx.n_trk > n_max) n_max = ctx.n_trk;
+      }
+      check("S16 distant targets not merged", n_max >= 2, "");
+   }
+
    printf("\nMOT_TESTS %s (fails=%d)\n", fails ? "FAIL" : "PASS", fails);
    return fails ? 1 : 0;
 }
