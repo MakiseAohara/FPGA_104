@@ -223,8 +223,11 @@ int main(void)
       for (f = 0; f < 3; ++f) {
          bg(fA, 60); rect(fA, 4 + f * 3, 34, 12, 26, 200);
          mot_step(&ctx, &work, fA, 90, 2);
+         /* 规则：首帧建轨（无位移，无法判朝内），第 2 帧首次有位移 → edge 置位并当帧 eta=1。
+            因此在该帧检查，而不是循环结束后（那时目标已进 ROI，eta 变 -1）。 */
+         if (f == 1 && ctx.n_trk > 0)
+            ok = (ctx.trk[0].edge_entry == 1) && (ctx.trk[0].eta == 1);
       }
-      if (ctx.n_trk > 0) ok = (ctx.trk[0].edge_entry == 1) && (ctx.trk[0].eta == 1);
       check("S11 edge entry warns", ok, "");
    }
 
