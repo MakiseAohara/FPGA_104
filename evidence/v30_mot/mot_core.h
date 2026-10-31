@@ -60,6 +60,22 @@
 #define MOT_IR_NEED      2       /* v1.5 Bug1：红外 10 帧内热计数阈值（与固件 IR_NEED 对齐） */
 
 /* 行为预测用的 ROI：画面中间 2/3（进入这块才算"进入画面主体"） */
+/* ---------------- v15 第三轮开关（默认全开；关掉回到第二轮行为） ---------------- */
+#ifndef MOT_V15_SPEED
+#define MOT_V15_SPEED    1      /* 速度初始化直接取位移 + 前 3 帧自适应 EMA + 静止衰减 */
+#endif
+#ifndef MOT_V15_ENTRY
+#define MOT_V15_ENTRY    1      /* 边缘入场当帧预警 + ROI 相交判定 */
+#endif
+#ifndef MOT_V15_MERGE
+#define MOT_V15_MERGE    1      /* （预留）检测级/航迹级碎片合并 */
+#endif
+#ifndef MOT_V15_GATE
+#define MOT_V15_GATE     1      /* 二级关联门限随速度与框尺寸自适应 */
+#endif
+#define MOT_ENTRY_BAND   12     /* 边缘带宽（px，离画面边界） */
+#define MOT_GATE_MAX     40     /* 自适应门限上限（px） */
+
 #define MOT_ROI_X0       16
 #define MOT_ROI_Y0       16
 #define MOT_ROI_X1       80
@@ -87,6 +103,7 @@ typedef struct {
    short mean;               /* v1.7 #4：平均灰度 */
    short still;              /* 连续静止帧数（速度≈0） */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
+   short edge_entry;       /* v15：边缘入场标记（1=首次出现即在边缘带且朝内） */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
 } mot_trk_t;
@@ -322,6 +339,21 @@ static int mot_iou(const mot_det_t* a, const short* b)
 static int mot_eta_frames(const mot_trk_t* t)
 {
    /* 已在 ROI 内 → -1（不需要"提前"响应） */
+#if MOT_V15_ENTRY
+   {
+      /* 框与 ROI 相交（占框面积 ≥30%）即视为"已进入"，不再要求质心进 ROI */
+      const int ix0 = (t->x0 > MOT_ROI_X0) ? t->x0 : MOT_ROI_X0;
+      const int ix1 = (t->x1 < MOT_ROI_X1) ? t->x1 : MOT_ROI_X1;
+      const int iy0 = (t->y0 > MOT_ROI_Y0) ? t->y0 : MOT_ROI_Y0;
+      const int iy1 = (t->y1 < MOT_ROI_Y1) ? t->y1 : MOT_ROI_Y1;
+      const int bw = (int)t->x1 - (int)t->x0 + 1;
+      const int bh = (int)t->y1 - (int)t->y0 + 1;
+      const int area = bw * bh;
+      const int ov = (ix1 >= ix0 && iy1 >= iy0) ? (ix1 - ix0 + 1) * (iy1 - iy0 + 1) : 0;
+      if (area > 0 && ov * 100 >= area * 30) return -1;
+      if (t->edge_entry && t->supported) return 1;   /* 边缘入场：不等速度收敛 */
+   }
+#endif
    const int in_x = (t->cx >= MOT_ROI_X0 && t->cx <= MOT_ROI_X1);
    const int in_y = (t->cy >= MOT_ROI_Y0 && t->cy <= MOT_ROI_Y1);
    int k;
@@ -343,8 +375,31 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    const mot_det_t* d = &c->det[bd];
    const int dx = (int)d->cx - (int)t->cx;
    const int dy = (int)d->cy - (int)t->cy;
+#if MOT_V15_SPEED
+   /* v15 (1)：首帧直接取位移；第 2~3 帧取 1/2；之后回到 1/4 EMA。
+      连续 2 帧位移 < 1.5 px 时速度衰减一半，避免停下后仍沿旧速度外推。 */
+   if (t->hits == 0) {
+      t->vx = (short)(dx * 16);
+      t->vy = (short)(dy * 16);
+   } else if (t->hits < 3) {
+      t->vx = (short)(((int)t->vx + dx * 16) / 2);
+      t->vy = (short)(((int)t->vy + dy * 16) / 2);
+   } else {
+      t->vx = (short)(((int)t->vx * 3 + dx * 16) / 4);
+      t->vy = (short)(((int)t->vy * 3 + dy * 16) / 4);
+   }
+   {
+      const int kx = (dx >= 0) ? dx : -dx;
+      const int ky = (dy >= 0) ? dy : -dy;
+      if (kx < 2 && ky < 2) {          /* ~<1.5 px/帧 */
+         t->vx = (short)(t->vx / 2);
+         t->vy = (short)(t->vy / 2);
+      }
+   }
+#else
    t->vx = (short)(((int)t->vx * 3 + dx * 16) / 4);
    t->vy = (short)(((int)t->vy * 3 + dy * 16) / 4);
+#endif
    /* 整幅检测（人贴近镜头）不参与速度更新，否则质心跳变会算出几百 px/帧 的假速度 */
    if ((int)(d->x1 - d->x0 + 1) > MOT_W * 4 / 5 && (int)(d->y1 - d->y0 + 1) > MOT_H * 4 / 5) {
       t->vx = (short)0; t->vy = (short)0;
@@ -353,6 +408,19 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    else t->still = 0;
    t->x0 = d->x0; t->y0 = d->y0; t->x1 = d->x1; t->y1 = d->y1;
    t->cx = d->cx; t->cy = d->cy;
+#if MOT_V15_ENTRY
+   if (t->hits <= 1) {
+      const int near_l = (t->x0 <= MOT_ENTRY_BAND);
+      const int near_r = (t->x1 >= MOT_W - MOT_ENTRY_BAND);
+      const int near_t = (t->y0 <= MOT_ENTRY_BAND);
+      const int near_b = (t->y1 >= MOT_H - MOT_ENTRY_BAND);
+      const int inward = ((near_l && dx > 0) || (near_r && dx < 0) ||
+                          (near_t && dy > 0) || (near_b && dy < 0));
+      if ((near_l || near_r || near_t || near_b) && inward) t->edge_entry = 1;
+   }
+#else
+   t->edge_entry = 0;
+#endif
    if (t->hits < 32000) t->hits++;
    t->age++;
    t->misses = 0;
@@ -461,7 +529,21 @@ static void mot_associate(mot_ctx_t* c)
       {
          /* v1.3 Bug3：刚丢的已确认航迹用更大的重连半径（25 px），避免同一个人换号 */
          const int lost = c->trk[bt].misses;
-         const int gate = (c->trk[bt].confirmed && lost > 0) ? MOT_REID_PX : MOT_GATE_PX;
+      #if MOT_V15_GATE
+   int gate;
+   if (c->trk[bt].confirmed && lost > 0) {
+      gate = MOT_REID_PX;
+   } else {
+      const int sp = abs((int)c->trk[bt].vx) > abs((int)c->trk[bt].vy) ? abs((int)c->trk[bt].vx) : abs((int)c->trk[bt].vy);
+      const int rad = ((int)c->trk[bt].x1 - (int)c->trk[bt].x0 + (int)c->trk[bt].y1 - (int)c->trk[bt].y0) / 4;
+      int g = 16 + (sp * 3) / 2 + (rad * 3) / 10;
+      if (g < MOT_GATE_PX) g = MOT_GATE_PX;
+      if (g > MOT_GATE_MAX) g = MOT_GATE_MAX;
+      gate = g;
+   }
+#else
+   const int gate = (c->trk[bt].confirmed && lost > 0) ? MOT_REID_PX : MOT_GATE_PX;
+#endif
          if (best > gate) break;
       }
       det_used[bd] = 1; trk_used[bt] = 1;

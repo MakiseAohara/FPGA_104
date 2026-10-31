@@ -215,6 +215,47 @@ int main(void)
       check("S10 shake: no new track", n_during <= n_before && ctx.n_trk == 0, "");
    }
 
+   /* ---------- S11 (v15) 边缘入场：左边缘首次出现且朝内 → edge_entry=1, eta=1 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int ok = 0;
+      for (f = 0; f < 3; ++f) {
+         bg(fA, 60); rect(fA, 4 + f * 3, 34, 12, 26, 200);
+         mot_step(&ctx, &work, fA, 90, 2);
+      }
+      if (ctx.n_trk > 0) ok = (ctx.trk[0].edge_entry == 1) && (ctx.trk[0].eta == 1);
+      check("S11 edge entry warns", ok, "");
+   }
+
+   /* ---------- S12 (v15) 停止后预测不漂：移动几帧后停住，速度衰减 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int v_move = 0, v_still = 0;
+      for (f = 0; f < 5; ++f) { bg(fA, 60); rect(fA, 20 + f * 6, 34, 12, 26, 200); mot_step(&ctx, &work, fA, 90, 2); }
+      if (ctx.n_trk > 0) v_move = ctx.trk[0].vx < 0 ? -ctx.trk[0].vx : ctx.trk[0].vx;
+      for (f = 0; f < 3; ++f) { bg(fA, 60); rect(fA, 50, 34, 12, 26, 200); mot_step(&ctx, &work, fA, 90, 2); }
+      if (ctx.n_trk > 0) v_still = ctx.trk[0].vx < 0 ? -ctx.trk[0].vx : ctx.trk[0].vx;
+      check("S12 stop damps velocity", v_still <= v_move, "");
+   }
+
+   /* ---------- S13 (v15) 快走不换号：每帧 10 px 快速移动，ID 保持 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int id0 = -1, kept = 1;
+      for (f = 0; f < 6; ++f) {
+         bg(fA, 60); rect(fA, 6 + f * 10, 34, 12, 26, 200);
+         mot_step(&ctx, &work, fA, 90, 2);
+         if (ctx.n_trk > 0) {
+            if (id0 < 0) id0 = ctx.trk[0].id;
+            else if (ctx.trk[0].id != id0) kept = 0;
+         }
+      }
+      check("S13 fast walk keeps id", kept && id0 > 0, "");
+   }
+
    printf("\nMOT_TESTS %s (fails=%d)\n", fails ? "FAIL" : "PASS", fails);
    return fails ? 1 : 0;
 }
