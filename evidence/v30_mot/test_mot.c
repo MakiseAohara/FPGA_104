@@ -33,20 +33,20 @@ int main(void)
 
    /* S0 静止场景 */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
-   for (f = 0; f < 5; ++f) mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
+   for (f = 0; f < 5; ++f) mot_step(&ctx, &work, fA, 0, 2);
    check("S0 static: no det", ctx.n_det == 0 && ctx.n_trk == 0, "");
 
    /* S1 双目标同向右移 2 / 3 px 每帧 */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    {
       int idA = -1, idB = -1, stable = 1;
       for (f = 0; f < 12; ++f) {
          bg(fA, 60);
          rect(fA, 6 + f*2, 20, 10, 26, 200);
          rect(fA, 54 + f*3, 55, 8, 20, 210);
-         mot_step(&ctx, &work, fA, 0);
+         mot_step(&ctx, &work, fA, 0, 2);
          if (f >= 6) {
             int k;
             if (idA < 0 || idB < 0) {
@@ -73,12 +73,12 @@ int main(void)
 
    /* S2 纵向移动 + 预测 */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    {
       int id = -1, pred_ok = 1, dir_ok = 1;
       for (f = 0; f < 14; ++f) {
          bg(fA, 60); rect(fA, 40, 8 + f*3, 14, 18, 200);
-         mot_step(&ctx, &work, fA, 0);
+         mot_step(&ctx, &work, fA, 0, 2);
          if (f >= 6) {
             int k = find_trk(id);
             if (id < 0 && ctx.n_trk > 0) { id = ctx.trk[0].id; k = 0; }
@@ -96,14 +96,14 @@ int main(void)
 
    /* S3 目标离开：鬼影不产生检测，航迹按时删除 */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    {
       int ghost_ok = 1;
-      for (f = 0; f < 6; ++f) { bg(fA,60); rect(fA, 30 + f*2, 30, 12, 20, 200); mot_step(&ctx,&work,fA, 0); }
+      for (f = 0; f < 6; ++f) { bg(fA,60); rect(fA, 30 + f*2, 30, 12, 20, 200); mot_step(&ctx,&work,fA, 0, 2); }
       check("S3 track exists", ctx.n_trk == 1, "");
       bg(fA, 60);
       for (f = 0; f < MOT_MAX_MISS + 1; ++f) {
-         mot_step(&ctx, &work, fA, 0);
+         mot_step(&ctx, &work, fA, 0, 2);
          if (f < 2 && ctx.n_det > 0) ghost_ok = 0;   /* 人走后 2 帧内不应再有检测 */
       }
       check("S3 no ghost detection", ghost_ok, "");
@@ -112,34 +112,34 @@ int main(void)
 
    /* S4 交叉 */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    {
       for (f = 0; f < 18; ++f) {
          bg(fA, 60);
          rect(fA, 4 + f*4, 30, 10, 24, 200);
          rect(fA, 80 - f*4, 34, 10, 24, 205);
-         mot_step(&ctx, &work, fA, 0);
+         mot_step(&ctx, &work, fA, 0, 2);
       }
       check("S4 crossing survives", ctx.n_trk >= 1 && ctx.n_trk <= MOT_MAX_TRK, "");
    }
 
    /* S5 整幅亮变（AGC/开灯）应被面积门限丢弃 */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    bg(fA, 200);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    check("S5 global change rejected", ctx.n_det == 0, "");
 
    /* ---------- S6 (Bug1) 静止目标：走进来后站着不动 10 帧不能被鬼影过滤丢掉 ---------- */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, 0);
+   mot_step(&ctx, &work, fA, 0, 2);
    {
       int id0 = -1, alive = 0, ok = 1;
       for (f = 0; f < 16; ++f) {
          bg(fA, 60);
          if (f >= 2 && f <= 5) rect(fA, 20 + (f - 2) * 6, 30, 16, 30, 200);   /* 走进来（有运动） */
          else if (f > 5) rect(fA, 38, 30, 16, 30, 200);                        /* 站定不动 */
-         mot_step(&ctx, &work, fA, 80);
+         mot_step(&ctx, &work, fA, 80, 2);
          if (f == 5 && ctx.n_trk > 0) id0 = ctx.trk[0].id;
          if (f > 5) {
             int k = find_trk(id0);
@@ -152,17 +152,17 @@ int main(void)
 
    /* ---------- S7 (Bug2) 整幅突变：AI 判无人时 1 帧复位、3 帧内恢复 ---------- */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, -100);
+   mot_step(&ctx, &work, fA, -100, 0);
    {
       int jump_det = -1, recover_frames = -1, k;
-      for (f = 0; f < 3; ++f) { mot_step(&ctx, &work, fA, -100); }      /* 空场稳定 */
+      for (f = 0; f < 3; ++f) { mot_step(&ctx, &work, fA, -100, 0); }      /* 空场稳定 */
       bg(fA, 200);                                                       /* 整幅变亮 */
-      mot_step(&ctx, &work, fA, -100);                                   /* ai_p<0 ⇒ 复位背景 */
+      mot_step(&ctx, &work, fA, -100, 0);                                   /* ai_p<0 ⇒ 复位背景 */
       jump_det = ctx.n_det;
       for (f = 0; f < 4; ++f) {
          bg(fA, 200);
          rect(fA, 30 + f, 30, 14, 24, 40);                                /* 恢复后有人 */
-         mot_step(&ctx, &work, fA, 90);
+         mot_step(&ctx, &work, fA, 90, 2);
          if (recover_frames < 0 && ctx.n_det > 0) recover_frames = f + 1;
       }
       k = (recover_frames > 0 && recover_frames <= 3) && jump_det == 0;
@@ -171,18 +171,18 @@ int main(void)
 
    /* ---------- S8 (Bug3) 目标消失 5 帧后原位重现，ID 不变 ---------- */
    mot_reset(&ctx); bg(fA, 60);
-   mot_step(&ctx, &work, fA, -100);
+   mot_step(&ctx, &work, fA, -100, 0);
    {
       int id0 = -1, same = 0, gone = 0;
       for (f = 0; f < 5; ++f) {                                          /* 人走动几帧，建立 ID */
          bg(fA, 60); rect(fA, 20 + f * 2, 30, 14, 26, 200);
-         mot_step(&ctx, &work, fA, 90);
+         mot_step(&ctx, &work, fA, 90, 2);
       }
       if (ctx.n_trk > 0) id0 = ctx.trk[0].id;
       bg(fA, 60);
-      for (f = 0; f < 5; ++f) { mot_step(&ctx, &work, fA, -60); gone++; }  /* 消失 5 帧 */
+      for (f = 0; f < 5; ++f) { mot_step(&ctx, &work, fA, -60, 0); gone++; }  /* 消失 5 帧 */
       bg(fA, 60); rect(fA, 28, 30, 14, 26, 200);                          /* 原位重现 */
-      mot_step(&ctx, &work, fA, 90);
+      mot_step(&ctx, &work, fA, 90, 2);
       if (id0 >= 0) same = (find_trk(id0) >= 0);
       check("S8 same ID after 5-frame gap", same && gone == 5, "");
    }

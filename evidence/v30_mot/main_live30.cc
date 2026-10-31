@@ -480,9 +480,6 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
       }
    }
    int cand = motion && (area >= AI_AREA_MIN) && (area <= AI_AREA_MAX);
-#if MOT_PRE_ON
-   if (!cand && g_pre_on) cand = 1;   /* v30：预测即将进入 ROI 时提前打开候选窗口 */
-#endif
    if (cand) { cand_left = DEC_CAND_FRAMES; quiet_cnt = 0; }
    else { if (cand_left > 0) cand_left--; if (quiet_cnt < 1000) quiet_cnt++; }
 
@@ -494,7 +491,7 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
       int shape_ok = 1;
 #if MOT_ON
       shape_ok = ((int)area <= FUSION_AREA_MAX) &&
-                 (mot_active_confirmed(&g_mot) >= FUSION_NEED_TRK);
+                 (mot_moving_confirmed(&g_mot) >= FUSION_NEED_TRK);
 #endif
       const int fusion = (cand_left > 0) && shape_ok &&
                          ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG && ir_cnt10 >= 1));
@@ -571,7 +568,7 @@ static void mot_track_frame(uint32_t frame)
 {
 #if MOT_ON
    int k, pre = 0, eta = -1, id = 0, nconf = 0;
-   mot_step(&g_mot, &g_motw, (const unsigned char*)mot_img, g_last_ai_p);
+   mot_step(&g_mot, &g_motw, (const unsigned char*)mot_img, g_last_ai_p, ir_cnt10);
 
    for (k = 0; k < g_mot.n_trk; ++k) {
       const mot_trk_t* t = &g_mot.trk[k];

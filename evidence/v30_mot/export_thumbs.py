@@ -8,6 +8,11 @@ ap = argparse.ArgumentParser()
 ap.add_argument('log'); ap.add_argument('out')
 a = ap.parse_args()
 out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+irpat = re.compile(r'MMT_DEC t=\d+ f=(\d+) .*ir_cnt=(\d+)')
+ir_map = {}
+for line in open(a.log, encoding='utf-8', errors='replace'):
+    mi = irpat.search(line)
+    if mi: ir_map[int(mi.group(1))] = int(mi.group(2))
 pat = re.compile(r'MMT_THUMB t=(\d+) f=(\d+) alarm=(\d+) p=(-?\d+) ([0-9a-f]+)')
 frames, meta = [], []
 for line in open(a.log, encoding='utf-8', errors='replace'):
@@ -23,6 +28,7 @@ for line in open(a.log, encoding='utf-8', errors='replace'):
             big[y*96+x] = small[sy*48 + (x//2)]
     frames.append(bytes(big)); meta.append(dict(f=f, t=t, alarm=al, p=p))
 (out/'frames.bin').write_bytes(b''.join(frames))
+(out/'ir.txt').write_text(''.join(str(ir_map.get(m['f'], 2)) + '\n' for m in meta), encoding='utf-8')
 (out/'ai.txt').write_text(''.join(str(m['p']) + '\n' for m in meta), encoding='utf-8')
 (out/'frames.json').write_text(json.dumps(meta, indent=1), encoding='utf-8')
 print('frames', len(frames))

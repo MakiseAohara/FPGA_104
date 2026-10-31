@@ -9,9 +9,11 @@ int main(int argc, char** argv)
    if (argc < 2) { fprintf(stderr, "usage: replay_mot frames.bin\n"); return 2; }
    FILE* fp = fopen(argv[1], "rb");
    if (!fp) { perror("open"); return 2; }
-   FILE* fa = NULL;
+   FILE* fa = NULL; FILE* fi = NULL;
    if (argc > 2) { fa = fopen(argv[2], "r"); }
+   if (argc > 3) { fi = fopen(argv[3], "r"); }
    int ai_p = -100;   /* ai.txt 缺省：按"判无人"处理 */
+   int ir_c = 2;      /* ir.txt 缺省：按"红外热"处理（保守，不触发背景复位） */
    static unsigned char frame[MOT_N];
    static mot_ctx_t ctx;
    static mot_work_t work;
@@ -19,7 +21,8 @@ int main(int argc, char** argv)
    mot_reset(&ctx);
    while (fread(frame, 1, MOT_N, fp) == MOT_N) {
       if (fa) { if (fscanf(fa, "%d", &ai_p) != 1) ai_p = -100; }
-      int n = mot_step(&ctx, &work, frame, ai_p);
+      if (fi) { if (fscanf(fi, "%d", &ir_c) != 1) ir_c = 2; }
+      int n = mot_step(&ctx, &work, frame, ai_p, ir_c);
       for (k = 0; k < ctx.n_trk; ++k) {
          const mot_trk_t* t = &ctx.trk[k];
          if (!t->active) continue;
@@ -37,6 +40,7 @@ int main(int argc, char** argv)
    }
    fclose(fp);
    if (fa) fclose(fa);
+   if (fi) fclose(fi);
    fprintf(stderr, "replayed %d frames\n", idx);
    return 0;
 }

@@ -1,5 +1,5 @@
 /*==============================================================================
- * mot_core.h — 多目标跟踪（IOU Tracker）+ 行为预测      v1.1
+ * mot_core.h — 多目标跟踪（IOU Tracker）+ 行为预测      v1.5（按 10/31 任务书重写门控）
  *
  * 纯 C（无平台依赖、无动态内存），固件与电脑端测试共用。
  * 输入：每帧 96x96 uint8 灰度（固件里就是 AI 输入的那张图，字节原样 u）
@@ -50,7 +50,9 @@
 #define MOT_GHOST_GATE   10      /* v1.3 Bug1：连通域质心距已确认航迹质心 ≤ 该值也不剔除（px） */
 #define MOT_MAX_MISS_UNCONF 3    /* v1.3 Bug3：未确认航迹丢失 3 帧即删 */
 #define MOT_REID_PX      25      /* v1.3 Bug3：旧 ID 复用半径（px） */
-#define MOT_STILL_MAX    20      /* v1.3：静止目标最多豁免鬼影过滤 20 帧（≈10 s），之后按鬼影淘汰 */
+#define MOT_P_PERSON     60      /* v1.5 Bug1：AI 判人阈值（p>=60 视为人体证据） */
+#define MOT_STILL_MAX    20      /* v1.6：仅靠红外豁免时，静止目标最多保 20 帧（≈10 s），防止箱子/家具长期占轨 */
+#define MOT_IR_NEED      2       /* v1.5 Bug1：红外 10 帧内热计数阈值（与固件 IR_NEED 对齐） */
 
 /* 行为预测用的 ROI：画面中间 2/3（进入这块才算"进入画面主体"） */
 #define MOT_ROI_X0       16
@@ -85,7 +87,8 @@ typedef struct {
    int raw_area;                     /* 滤波前最大连通域面积（诊断） */
    short raw_box[4];                 /* v1.3 Bug2：最大连通域包围盒（整幅前景时直接当检测） */
    short raw_cx, raw_cy;
-   short big_reset, big_full;        /* v1.3 Bug2 诊断：本帧走的是重置背景还是整幅检测 */
+   short big_reset, big_full;        /* v1.5 Bug2 诊断：整幅前景时是 coast 还是复位背景 */
+   int ai_p, ir_cnt;                 /* v1.5：本帧人体/红外证据（鬼影豁免与整幅复位判定） */
    mot_det_t det[MOT_MAX_DET];
    int n_trk;                        /* 当前航迹数（含未确认） */
    mot_trk_t trk[MOT_MAX_TRK];
@@ -166,14 +169,16 @@ static void mot_bg_update(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur)
 }
 
 /* v1.3 Bug1：连通域是否与某个"已确认航迹"的当前框重合（IOU≥0.30 或质心足够近） */
-static int mot_hit_confirmed(const mot_ctx_t* c, int x0, int y0, int x1, int y1, int cx, int cy)
+static int mot_hit_confirmed(const mot_ctx_t* c, int x0, int y0, int x1, int y1, int cx, int cy,
+                              int ai_p, int ir_cnt)
 {
    int k;
    for (k = 0; k < c->n_trk; ++k) {
       const mot_trk_t* t = &c->trk[k];
       int ix0, iy0, ix1, iy1;
       if (!t->confirmed) continue;
-      if (t->still > MOT_STILL_MAX) continue;   /* 站太久（>10 s）的目标不再豁免，避免幽灵航迹永生 */
+      /* v1.6 Bug1：AI 明确判人 → 站着不动也保；只靠红外 → 最多保 MOT_STILL_MAX 帧（箱子/家具不会长期占轨） */
+      if (!(ai_p >= MOT_P_PERSON || (ir_cnt >= MOT_IR_NEED && t->still <= MOT_STILL_MAX))) continue;
       ix0 = x0 > t->x0 ? x0 : t->x0;
       iy0 = y0 > t->y0 ? y0 : t->y0;
       ix1 = x1 < t->x1 ? x1 : t->x1;
@@ -242,7 +247,7 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
       /* v1.3 Bug1：静止目标（站着不动）没有帧间运动，会被鬼影判据丢掉；
          只要这个连通域和"已确认航迹"的当前框对得上，就跳过鬼影过滤。 */
       if (mov * MOT_GHOST_DIV < area &&
-          !mot_hit_confirmed(c, x0, y0, x1, y1, (int)(sx / area), (int)(sy / area))) continue;
+          !mot_hit_confirmed(c, x0, y0, x1, y1, (int)(sx / area), (int)(sy / area), c->ai_p, c->ir_cnt)) continue;
       if (n >= MOT_MAX_DET) continue;
       {
          /* v1.3：同一个人的重复连通域（膨胀后会裂开）只留大的，避免一帧内新建多条航迹 */
@@ -512,10 +517,20 @@ static int mot_active_confirmed(const mot_ctx_t* c)
    return n;
 }
 
+/* 在动且已确认的航迹数（静止的箱子/家具不算"人体证据"） */
+static int mot_moving_confirmed(const mot_ctx_t* c)
+{
+   int k, n = 0;
+   for (k = 0; k < c->n_trk; ++k) {
+      if (c->trk[k].confirmed && c->trk[k].active && c->trk[k].still <= 6) n++;
+   }
+   return n;
+}
+
 /* 一站式：返回本帧航迹数
  * ai_p：本帧 AI 人体分数（int8，-128..127）；<0 视为"AI 判无人"，>=0 视为"AI 判有人"。
  *       v1.3 Bug2 用它决定"整幅前景"是光照突变（重置背景）还是人贴近镜头（输出整幅检测）。 */
-static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int ai_p)
+static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int ai_p, int ir_cnt)
 {
    if (!c || !w || !cur) return 0;
    if (!c->have_prev && c->frame == 0) {
@@ -527,33 +542,28 @@ static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int a
       return 0;
    }
    c->big_reset = 0; c->big_full = 0;
+   c->ai_p = ai_p; c->ir_cnt = ir_cnt;
    mot_foreground(c, w, cur);
    mot_label(w, c);
 
-   /* v1.3 Bug2：整幅前景（面积 > MOT_MAX_AREA）——
-      背景在前景区只有 1/128 更新速度，一旦整幅被判前景就学不回来（MOT 卡死）。 */
+   /* v1.5 Bug2：整幅前景（面积 > MOT_MAX_AREA）——
+      不再丢帧、不再指望 1/128 的背景更新自己恢复：
+      · 沿用上一帧的轨迹做预测（coast），本帧不产生新检测；
+      · 只有 AI 判无人 且 红外也不热 时，才把背景快速重置为当前帧。 */
    if (c->raw_area > MOT_MAX_AREA) {
-      if (ai_p < 0) {
-         /* AI 判无人 ⇒ 是光照/增益突变：直接把背景重置为当前帧，本帧不输出检测 */
+      c->n_det = 0;
+      c->last_area = 0;
+      c->big_full = 1;
+      if (ai_p < 0 && ir_cnt < MOT_IR_NEED) {
          memcpy(c->bg, cur, MOT_N);
          memcpy(c->prev, cur, MOT_N);
          c->have_prev = 1;
-         c->n_det = 0;
-         c->last_area = 0;
          c->big_reset = 1;
-         if (c->n_trk > MOT_MAX_TRK) c->n_trk = MOT_MAX_TRK;
-         mot_associate(c);
-         c->frame++;
-         return c->n_trk;
       }
-      /* AI 判有人 ⇒ 人贴近镜头占满画面：输出一个包围整块前景的检测，背景不重置 */
-      c->det[0].x0 = c->raw_box[0]; c->det[0].y0 = c->raw_box[1];
-      c->det[0].x1 = c->raw_box[2]; c->det[0].y1 = c->raw_box[3];
-      c->det[0].cx = c->raw_cx; c->det[0].cy = c->raw_cy;
-      c->det[0].area = (short)(c->raw_area > 32000 ? 32000 : c->raw_area);
-      c->n_det = 1;
-      c->last_area = c->raw_area;
-      c->big_full = 1;
+      if (c->n_trk > MOT_MAX_TRK) c->n_trk = MOT_MAX_TRK;
+      mot_associate(c);          /* n_det=0 ⇒ 所有航迹按速度外推（coast） */
+      c->frame++;
+      return c->n_trk;
    }
 
    mot_bg_update(c, w, cur);
