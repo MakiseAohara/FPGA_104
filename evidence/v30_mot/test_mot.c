@@ -187,6 +187,34 @@ int main(void)
       check("S8 same ID after 5-frame gap", same && gone == 5, "");
    }
 
+   /* ---------- S9 (#2) 无支撑航迹：先有支撑确认，再撤掉 AI/红外/运动 → supported=0 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int k, sup_ok = 0;
+      for (f = 0; f < 4; ++f) { bg(fA, 60); rect(fA, 38, 30, 14, 26, 200); mot_step(&ctx, &work, fA, 90, 0); }   /* 有 AI 支撑 */
+      for (f = 0; f < 8; ++f) { bg(fA, 60); rect(fA, 38, 30, 14, 26, 200); mot_step(&ctx, &work, fA, -100, 0); } /* 撤掉支撑 */
+      if (ctx.n_trk == 0) sup_ok = 1;                      /* 直接删掉也算"不再输出" */
+      for (k = 0; k < ctx.n_trk; ++k) if (!ctx.trk[k].supported) sup_ok = 1;
+      check("S9 unsupported flagged", sup_ok == 1, "");
+   }
+
+   /* ---------- S10 (#3) 相机被移动：整幅前景期间不产生新航迹，稳定后清空 ---------- */
+   mot_reset(&ctx); bg(fA, 60);
+   mot_step(&ctx, &work, fA, -100, 0);
+   {
+      int i2, n_before = 0, n_during = 0;
+      for (i2 = 0; i2 < 4; ++i2) { bg(fA, 60); rect(fA, 30 + i2, 30, 12, 20, 200); mot_step(&ctx, &work, fA, 90, 2); }
+      n_before = ctx.n_trk;
+      for (i2 = 0; i2 < 4; ++i2) {                       /* 整幅前景 + 大位移 */
+         bg(fA, 40 + i2 * 40);
+         mot_step(&ctx, &work, fA, -90, 0);
+      }
+      n_during = ctx.n_trk;
+      for (i2 = 0; i2 < 3; ++i2) { bg(fA, 60); mot_step(&ctx, &work, fA, -90, 0); }
+      check("S10 shake: no new track", n_during <= n_before && ctx.n_trk == 0, "");
+   }
+
    printf("\nMOT_TESTS %s (fails=%d)\n", fails ? "FAIL" : "PASS", fails);
    return fails ? 1 : 0;
 }

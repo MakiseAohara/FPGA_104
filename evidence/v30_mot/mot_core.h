@@ -49,7 +49,12 @@
 #define MOT_GHOST_IOU    300     /* v1.3 Bug1：与已确认航迹当前框 IOU ≥ 0.30 时不做鬼影剔除（千分比） */
 #define MOT_GHOST_GATE   10      /* v1.3 Bug1：连通域质心距已确认航迹质心 ≤ 该值也不剔除（px） */
 #define MOT_MAX_MISS_UNCONF 3    /* v1.3 Bug3：未确认航迹丢失 3 帧即删 */
-#define MOT_REID_PX      25      /* v1.3 Bug3：旧 ID 复用半径（px） */
+#define MOT_REID_PX      25      /* 旧 ID 复用半径（px） */
+#define MOT_SUP_MAX      3       /* v1.8 #2：连续 3 帧无支撑就不输出/不预警（更严） */
+#define MOT_SHAKE_N      3       /* v1.7 #3：连续多少帧整幅前景判为"相机被移动" */
+#define MOT_GRAY_TOL     28      /* v1.7 #4：重连时允许的平均灰度差 */
+#define MOT_AREA_LO      50      /* v1.7 #4：重连时面积比下限（%） */
+#define MOT_AREA_HI      200     /* v1.7 #4：重连时面积比上限（%） */
 #define MOT_P_PERSON     60      /* v1.5 Bug1：AI 判人阈值（p>=60 视为人体证据） */
 #define MOT_STILL_MAX    20      /* v1.6：仅靠红外豁免时，静止目标最多保 20 帧（≈10 s），防止箱子/家具长期占轨 */
 #define MOT_IR_NEED      2       /* v1.5 Bug1：红外 10 帧内热计数阈值（与固件 IR_NEED 对齐） */
@@ -64,6 +69,7 @@ typedef struct {
    short x0, y0, x1, y1;   /* 闭区间包围盒 */
    short cx, cy;           /* 质心 */
    short area;
+   short mean;             /* v1.7 #4：连通域平均灰度（重连时比对） */
 } mot_det_t;
 
 typedef struct {
@@ -76,6 +82,9 @@ typedef struct {
    short hits, misses, age;
    short confirmed;
    short active;             /* 本帧是否在场（misses <= MOT_REPORT_MISS） */
+   short sup;                /* v1.7 #2：连续无支撑帧数 */
+   short supported;          /* v1.7 #2：本帧是否有 AI/红外/运动支撑 */
+   short mean;               /* v1.7 #4：平均灰度 */
    short still;              /* 连续静止帧数（速度≈0） */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short traj_n;
@@ -88,7 +97,10 @@ typedef struct {
    short raw_box[4];                 /* v1.3 Bug2：最大连通域包围盒（整幅前景时直接当检测） */
    short raw_cx, raw_cy;
    short big_reset, big_full;        /* v1.5 Bug2 诊断：整幅前景时是 coast 还是复位背景 */
-   int ai_p, ir_cnt;                 /* v1.5：本帧人体/红外证据（鬼影豁免与整幅复位判定） */
+   int ai_p, ir_cnt;                 /* 本帧人体/红外证据 */
+   const unsigned char* cur;         /* v1.7 #4：本帧像素（算平均灰度） */
+   int shake_cnt;                    /* v1.7 #3：连续整幅前景帧数（相机被移动） */
+   short shaking;                    /* v1.7 #3：本帧判定为"相机移动中" */
    mot_det_t det[MOT_MAX_DET];
    int n_trk;                        /* 当前航迹数（含未确认） */
    mot_trk_t trk[MOT_MAX_TRK];
@@ -209,6 +221,7 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
    memset(w->lab, 0, sizeof(w->lab));
    for (i = 0; i < MOT_N; ++i) {
       int sp = 0, area = 0, mov = 0;
+      long sumv = 0;
       int x0 = MOT_W, y0 = MOT_H, x1 = -1, y1 = -1;
       long sx = 0, sy = 0;
       if (!w->mask[i] || w->lab[i]) continue;
@@ -219,6 +232,7 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
          const int px = p % MOT_W, py = p / MOT_W;
          area++;
          if (w->dmask[p]) mov++;
+         if (c->cur) sumv += c->cur[p];
          sx += px; sy += py;
          if (px < x0) x0 = px;
          if (px > x1) x1 = px;
@@ -271,6 +285,7 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
       c->det[n].cx = (short)(sx / area);
       c->det[n].cy = (short)(sy / area);
       c->det[n].area = (short)area;
+      c->det[n].mean = (short)(c->cur ? sumv / area : 0);
       n++;
    }
    {
@@ -343,6 +358,15 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    t->misses = 0;
    if (t->hits >= MOT_CONFIRM_HITS) t->confirmed = 1;
    t->active = 1;
+   t->mean = d->mean;
+   /* v1.7 #2：AI 判人 / 红外仍热 / 自身在动 → 有支撑；否则累计无支撑帧数 */
+   if (c->ai_p >= MOT_P_PERSON ||
+       t->vx <= -24 || t->vx >= 24 || t->vy <= -24 || t->vy >= 24) {
+      t->sup = 0;
+   } else if (t->sup < 32000) {
+      t->sup++;
+   }
+   t->supported = (t->sup <= MOT_SUP_MAX) ? 1 : 0;
    if (t->traj_n >= MOT_TRAJ_LEN) {
       memmove(&t->traj[0][0], &t->traj[1][0], sizeof(short) * 2 * (MOT_TRAJ_LEN - 1));
       t->traj_n = MOT_TRAJ_LEN - 1;
@@ -420,6 +444,16 @@ static void mot_associate(mot_ctx_t* c)
             if (dx < 0) dx = -dx;
             if (dy < 0) dy = -dy;
             d = (dx > dy ? dx : dy) + ((dx + dy) >> 2);       /* 近似欧氏距离 */
+            {
+               /* v1.7 #4：位置之外再比"大小"和"平均灰度"，减少同一人换号 */
+               const int an = (int)(c->det[i].x1 - c->det[i].x0 + 1) * (int)(c->det[i].y1 - c->det[i].y0 + 1);
+               const int ao = (int)(c->trk[k].x1 - c->trk[k].x0 + 1) * (int)(c->trk[k].y1 - c->trk[k].y0 + 1);
+               const long ratio = (long)an * 100 / (ao > 0 ? ao : 1);
+               const int dg = (int)c->det[i].mean - (int)c->trk[k].mean;
+               const int dga = dg < 0 ? -dg : dg;
+               if (ratio < MOT_AREA_LO || ratio > MOT_AREA_HI) continue;
+               if (dga > MOT_GRAY_TOL) continue;
+            }
             if (d < best) { best = d; bd = i; bt = k; }
          }
       }
@@ -442,6 +476,9 @@ static void mot_associate(mot_ctx_t* c)
       if (t->misses < 32000) t->misses++;
       t->age++;
       t->active = (t->misses <= MOT_REPORT_MISS) ? 1 : 0;
+      if (c->ai_p >= MOT_P_PERSON) t->sup = 0;
+      else if (t->sup < 32000) t->sup++;
+      t->supported = (t->sup <= MOT_SUP_MAX) ? 1 : 0;
       {
          const int dcx = (int)t->cx + (int)t->vx / 16;
          const int dcy = (int)t->cy + (int)t->vy / 16;
@@ -475,7 +512,7 @@ static void mot_associate(mot_ctx_t* c)
       t->x0 = c->det[i].x0; t->y0 = c->det[i].y0;
       t->x1 = c->det[i].x1; t->y1 = c->det[i].y1;
       t->cx = c->det[i].cx; t->cy = c->det[i].cy;
-      t->hits = 1; t->age = 1; t->traj_n = 1; t->active = 1;
+      t->hits = 1; t->age = 1; t->traj_n = 1; t->active = 1; t->supported = 1; t->mean = c->det[i].mean;
       t->traj[0][0] = t->cx; t->traj[0][1] = t->cy;
    }
 
@@ -543,6 +580,7 @@ static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int a
    }
    c->big_reset = 0; c->big_full = 0;
    c->ai_p = ai_p; c->ir_cnt = ir_cnt;
+   c->cur = cur;
    mot_foreground(c, w, cur);
    mot_label(w, c);
 
@@ -550,6 +588,19 @@ static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int a
       不再丢帧、不再指望 1/128 的背景更新自己恢复：
       · 沿用上一帧的轨迹做预测（coast），本帧不产生新检测；
       · 只有 AI 判无人 且 红外也不热 时，才把背景快速重置为当前帧。 */
+   /* v1.7 #3：整幅大位移 = 相机被移动。期间不出新航迹、不预警，画面稳定后再重建背景与航迹。 */
+   if (c->raw_area > MOT_MAX_AREA) {
+      c->shake_cnt++;
+   } else {
+      if (c->shake_cnt >= MOT_SHAKE_N) {
+         c->n_trk = 0;              /* 抖完重建：丢掉抖动期间的全部航迹 */
+         c->next_id = c->next_id < 1000 ? c->next_id : 1;
+         c->big_reset = 1;
+      }
+      c->shake_cnt = 0;
+   }
+   c->shaking = (c->shake_cnt >= MOT_SHAKE_N) ? 1 : 0;
+
    if (c->raw_area > MOT_MAX_AREA) {
       c->n_det = 0;
       c->last_area = 0;

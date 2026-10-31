@@ -96,6 +96,12 @@
 #ifndef MOT_ON
 #define MOT_ON           1       /* v30：多目标跟踪 + 行为预测（0=回到 v29.2 行为） */
 #endif
+#ifndef MOT_EXTRA_POLLS
+#define MOT_EXTRA_POLLS  2      /* v1.7：每次推理后额外插 2 次采样+MOT，跟踪率 ≈ 5-6 Hz */
+#endif
+#ifndef MOT_EXTRA_MS
+#define MOT_EXTRA_MS     120    /* 每次额外轮询之间的间隔（ms） */
+#endif
 #ifndef MOT_PRE_ON
 #define MOT_PRE_ON       1       /* v30：预测触发的提前响应（预警 + 提前退出低功耗） */
 #endif
@@ -479,21 +485,13 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
          if (i < IR_SOLO_N) ir_cnt6 += value;   /* v29.1: 最近 6 样本 IR 全热 */
       }
    }
-   int cand = motion && (area >= AI_AREA_MIN) && (area <= AI_AREA_MAX);
+   const int cand = motion && (area >= AI_AREA_MIN) && (area <= AI_AREA_MAX);
    if (cand) { cand_left = DEC_CAND_FRAMES; quiet_cnt = 0; }
    else { if (cand_left > 0) cand_left--; if (quiet_cnt < 1000) quiet_cnt++; }
 
    const uint64_t now = now_ms();
    if (!alarm_on) {
-      /* v1.4 B：整幅假运动（光照/红外闪变）面积远大于人体，直接排除；
-         v1.4 C：融合报警要求"存在已确认航迹"（形状/连续性证据），把单帧抖动挡在外面。
-         MOT_ON=0 时两条门控都不生效，行为回到 v29.2。 */
-      int shape_ok = 1;
-#if MOT_ON
-      shape_ok = ((int)area <= FUSION_AREA_MAX) &&
-                 (mot_moving_confirmed(&g_mot) >= FUSION_NEED_TRK);
-#endif
-      const int fusion = (cand_left > 0) && shape_ok &&
+      const int fusion = (cand_left > 0) &&
                          ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG && ir_cnt10 >= 1));
       int solo   = (IR_SOLO_ON && (ir_cnt6 >= IR_SOLO_N)) ? 1 : 0;
 #if HOTSRC_EXCL
@@ -573,7 +571,8 @@ static void mot_track_frame(uint32_t frame)
    for (k = 0; k < g_mot.n_trk; ++k) {
       const mot_trk_t* t = &g_mot.trk[k];
       if (!t->active) continue;         /* 丢失中的航迹保留但不报，等重连 */
-      if (!t->confirmed) continue;      /* v1.3 Bug3: 从没确认过的噪点航迹不打印 */
+      if (!t->confirmed) continue;      /* 从没确认过的噪点航迹不打印 */
+      if (!t->supported) continue;      /* v1.8 #2：无支撑（sup>3 / hits<3 / 面积<80）的航迹不输出 */
       if (t->confirmed) nconf++;
       bsp_printf("MMT_TRK f=%d id=%d c=%d,%d b=%d,%d,%d,%d v16=%d,%d dir=%d "
                  "hit=%d miss=%d conf=%d pred=%d,%d eta=%d\n\r",
@@ -582,7 +581,7 @@ static void mot_track_frame(uint32_t frame)
                  (int)t->vx, (int)t->vy, (int)t->dir,
                  (int)t->hits, (int)t->misses, (int)t->confirmed,
                  (int)t->px, (int)t->py, (int)t->eta);
-      if (t->confirmed && t->eta >= 0 && t->eta <= MOT_HORIZON) {
+      if (t->supported && t->hits >= 1 && t->eta >= 0 && t->eta <= (MOT_HORIZON + 3) && !g_mot.shaking) {
          pre = 1;
          if (eta < 0 || (int)t->eta < eta) { eta = (int)t->eta; id = (int)t->id; }
       }
@@ -1340,6 +1339,15 @@ extern "C" int main()
                  (int)amb10, (int)rh10, (int)body10, (unsigned)vts, vts_ok,
                  1 - LP_CAMFPS_ON);
 
+#if MOT_EXTRA_POLLS > 0
+      /* v1.7 提高跟踪频率：AI 推理约 2 Hz，人走快时两帧位移太大容易换 ID。
+         推理结束后再插几次"采样 + MOT"，用同一帧缓冲拿到更新的画面（不重复推理）。 */
+      for (int mp = 0; mp < MOT_EXTRA_POLLS; ++mp) {
+         delay_ms(MOT_EXTRA_MS);
+         mot_sample_raw();
+         mot_track_frame(frame);
+      }
+#endif
       if ((frame % IMG_DUMP_EVERY) == 0) {
          dump_image(input_snapshot, frame, p);
       }
