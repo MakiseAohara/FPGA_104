@@ -35,6 +35,10 @@ files = []
 for p in sorted((WS / 'FPGA_104' / 'evidence' / 'v30_mot').rglob('*')):
     if p.is_file():
         files.append((p.relative_to(WS / 'FPGA_104').as_posix(), p))
+for rel in ('tools/mot_view.py', 'tools/load_v30.ps1'):
+    p = WS / 'FPGA_104' / rel
+    if p.exists():
+        files.append((rel, p))
 files.append(('docs/赛题完成度看板.md', WS / 'FPGA_104' / 'docs' / '赛题完成度看板.md'))
 print('files to push:', len(files))
 
