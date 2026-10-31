@@ -99,6 +99,12 @@
 #ifndef MOT_PRE_ON
 #define MOT_PRE_ON       1       /* v30：预测触发的提前响应（预警 + 提前退出低功耗） */
 #endif
+#ifndef FUSION_AREA_MAX
+#define FUSION_AREA_MAX  4000    /* v1.4 B：融合报警的面积上限（去掉整幅假运动） */
+#endif
+#ifndef FUSION_NEED_TRK
+#define FUSION_NEED_TRK  1       /* v1.4 C：融合报警需要至少 N 条已确认 MOT 航迹 */
+#endif
 
 // 功能 2 参数
 #ifndef AE_EVAL_FRAMES
@@ -482,7 +488,15 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
 
    const uint64_t now = now_ms();
    if (!alarm_on) {
-      const int fusion = (cand_left > 0) &&
+      /* v1.4 B：整幅假运动（光照/红外闪变）面积远大于人体，直接排除；
+         v1.4 C：融合报警要求"存在已确认航迹"（形状/连续性证据），把单帧抖动挡在外面。
+         MOT_ON=0 时两条门控都不生效，行为回到 v29.2。 */
+      int shape_ok = 1;
+#if MOT_ON
+      shape_ok = ((int)area <= FUSION_AREA_MAX) &&
+                 (mot_active_confirmed(&g_mot) >= FUSION_NEED_TRK);
+#endif
+      const int fusion = (cand_left > 0) && shape_ok &&
                          ((ir_cnt10 >= IR_NEED) || (ai_p_now >= AI_P_STRONG && ir_cnt10 >= 1));
       int solo   = (IR_SOLO_ON && (ir_cnt6 >= IR_SOLO_N)) ? 1 : 0;
 #if HOTSRC_EXCL
