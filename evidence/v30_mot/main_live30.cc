@@ -583,7 +583,7 @@ static void mot_track_frame(uint32_t frame)
                  (int)t->px, (int)t->py, (int)t->eta);
       if (t->supported && t->hits >= 1 && t->eta >= 0 && t->eta <= (MOT_HORIZON + 3) && !g_mot.shaking
 #if MOT_V15_ENTRY
-       && (t->confirmed || t->edge_entry)
+       && (t->confirmed || t->edge_entry) && t->pre_ok >= MOT_PRE_OK_N
 #endif
       ) {
          pre = 1;

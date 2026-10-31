@@ -74,6 +74,9 @@
 #define MOT_V15_GATE     1      /* 二级关联门限随速度与框尺寸自适应 */
 #endif
 #define MOT_ENTRY_BAND   12     /* 边缘带宽（px，离画面边界） */
+#ifndef MOT_PRE_OK_N
+#define MOT_PRE_OK_N     1      /* 预警需连续满足的帧数（2fps 下 2 会几乎无法触发，默认 1） */
+#endif
 #define MOT_GATE_MAX     40     /* 自适应门限上限（px） */
 
 #define MOT_ROI_X0       16
@@ -105,6 +108,7 @@ typedef struct {
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short edge_entry;       /* v15：边缘入场标记（1=首次出现即在边缘带且朝内） */
    short merge_cnt;        /* v15：与本航迹重叠的其他航迹持续帧数 */
+   short pre_ok;           /* v15：连续满足预警条件的帧数（>=2 才发） */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
 } mot_trk_t;
@@ -714,6 +718,11 @@ static void mot_associate(mot_ctx_t* c)
       else if (ay <= -8) t->dir = 3;
       else t->dir = 4;
       t->eta = (short)mot_eta_frames(t);
+#if MOT_V15_ENTRY
+      if (t->eta >= 0 && t->eta <= (MOT_HORIZON + 3) && t->supported) {
+         if (t->pre_ok < 32000) t->pre_ok++;
+      } else t->pre_ok = 0;
+#endif
    }
 }
 

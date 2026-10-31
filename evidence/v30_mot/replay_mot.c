@@ -18,6 +18,7 @@ int main(int argc, char** argv)
    static mot_ctx_t ctx;
    static mot_work_t work;
    int idx = 0, k;
+   int prev_pre = 0;
    mot_reset(&ctx);
    while (fread(frame, 1, MOT_N, fp) == MOT_N) {
       if (fa) { if (fscanf(fa, "%d", &ai_p) != 1) ai_p = -100; }
@@ -33,8 +34,21 @@ int main(int argc, char** argv)
       }
       {
          const int nconf = mot_active_confirmed(&ctx);
-         printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d raw=%d pre=0 pre_eta=-1 bigr=%d bigf=%d\n",
-                idx, ctx.n_det, n, nconf, ctx.last_area, ctx.raw_area, ctx.big_reset, ctx.big_full);
+         int pre = 0, pre_eta = -1, pre_id = -1;
+         for (k = 0; k < ctx.n_trk; ++k) {
+            const mot_trk_t* t = &ctx.trk[k];
+            if (!t->active) continue;
+            if (!(t->supported && t->hits >= 1 && t->eta >= 0 && t->eta <= (MOT_HORIZON + 3))) continue;
+#if MOT_V15_ENTRY
+            if (!(t->confirmed || t->edge_entry)) continue;
+            if (t->pre_ok < MOT_PRE_OK_N) continue;
+#endif
+            if (pre_eta < 0 || (int)t->eta < pre_eta) { pre = 1; pre_eta = (int)t->eta; pre_id = (int)t->id; }
+         }
+         if (pre && !prev_pre) printf("MMT_PREWARN f=%d id=%d eta=%d\n", idx, pre_id, pre_eta);
+         prev_pre = pre;
+         printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d raw=%d pre=%d pre_eta=%d bigr=%d bigf=%d\n",
+                idx, ctx.n_det, n, nconf, ctx.last_area, ctx.raw_area, pre, pre_eta, ctx.big_reset, ctx.big_full);
       }
       idx++;
    }
