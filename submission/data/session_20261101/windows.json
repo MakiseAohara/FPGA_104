@@ -1,0 +1,23 @@
+{
+  "T1-T3 活跃测试": {
+    "alarms": 21,
+    "lp_minutes": 0.0,
+    "person_frames": 335,
+    "lp_enter": 0,
+    "lines": 27414
+  },
+  "T4 低功耗": {
+    "alarms": 1,
+    "lp_minutes": 3.7,
+    "person_frames": 11,
+    "lp_enter": 0,
+    "lines": 4088
+  },
+  "T7 空场长采集": {
+    "alarms": 2,
+    "lp_minutes": 40.4,
+    "person_frames": 3,
+    "lp_enter": 6,
+    "lines": 30946
+  }
+}

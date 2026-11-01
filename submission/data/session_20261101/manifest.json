@@ -1,0 +1,16 @@
+{
+  "port": "COM15",
+  "start": "2026-11-01T17:14:18",
+  "end": "2026-11-01T17:59:18",
+  "seconds": 2700.1,
+  "marks": 1,
+  "firmware": {
+    "path": "FPGA_104\\evidence\\v29_fw\\tinyml_pdti8_v292_day.bin",
+    "crc32": "C15D47FD"
+  },
+  "bitstream": {
+    "path": "FPGA_104\\evidence\\v29_rtl_ir_rot\\v7_MERGE17.bit",
+    "sha256": "3A69AAFB0E22E262E4CA7FE887CB332822772536356B596473D996BA190887CF"
+  },
+  "log": "FPGA_104\\out\\session_20261101\\serial.log"
+}
