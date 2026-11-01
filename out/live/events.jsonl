@@ -1,0 +1,12 @@
+{"kind": "alarm_start", "ts": "2026-11-01T19:47:21", "wall": 1793533641.370538, "detail": {"f": 19381, "person": 0, "p": 66}, "thumb": "FPGA_104/out/live/thumbs/20261101_194721_alarm_start.png"}
+{"kind": "alarm_end", "ts": "2026-11-01T19:47:32", "wall": 1793533652.4253068, "detail": {"f": 19405, "person": 0, "p": -69}, "thumb": "FPGA_104/out/live/thumbs/20261101_194732_alarm_end.png"}
+{"kind": "alarm_start", "ts": "2026-11-01T19:55:25", "wall": 1793534125.2997038, "detail": {"f": 20500, "person": 0, "p": -77}, "thumb": "FPGA_104/out/live/thumbs/20261101_195525_alarm_start.png"}
+{"kind": "alarm_end", "ts": "2026-11-01T19:55:35", "wall": 1793534135.088802, "detail": {"f": 20521, "person": 0, "p": -75}, "thumb": "FPGA_104/out/live/thumbs/20261101_195535_alarm_end.png"}
+{"kind": "alarm_start", "ts": "2026-11-01T20:06:18", "wall": 1793534778.6831894, "detail": {"f": 22011, "person": 0, "p": -80}, "thumb": "FPGA_104/out/live/thumbs/20261101_200618_alarm_start.png"}
+{"kind": "alarm_end", "ts": "2026-11-01T20:06:35", "wall": 1793534795.1303587, "detail": {"f": 22048, "person": 0, "p": -88}, "thumb": "FPGA_104/out/live/thumbs/20261101_200635_alarm_end.png"}
+{"kind": "alarm_start", "ts": "2026-11-01T20:06:35", "wall": 1793534795.4343512, "detail": {"f": 22049, "person": 0, "p": -93}, "thumb": "FPGA_104/out/live/thumbs/20261101_200635_alarm_start.png"}
+{"kind": "alarm_end", "ts": "2026-11-01T20:06:44", "wall": 1793534804.7926738, "detail": {"f": 22073, "person": 0, "p": -77}, "thumb": "FPGA_104/out/live/thumbs/20261101_200644_alarm_end.png"}
+{"kind": "alarm_start", "ts": "2026-11-01T20:12:30", "wall": 1793535150.4282725, "detail": {"f": 22872, "person": 0, "p": -88}, "thumb": "FPGA_104/out/live/thumbs/20261101_201230_alarm_start.png"}
+{"kind": "alarm_end", "ts": "2026-11-01T20:12:38", "wall": 1793535158.3637018, "detail": {"f": 22888, "person": 0, "p": -85}, "thumb": "FPGA_104/out/live/thumbs/20261101_201238_alarm_end.png"}
+{"kind": "alarm_start", "ts": "2026-11-01T20:13:03", "wall": 1793535183.769294, "detail": {"f": 22949, "person": 0, "p": -100}, "thumb": "FPGA_104/out/live/thumbs/20261101_201303_alarm_start.png"}
+{"kind": "alarm_end", "ts": "2026-11-01T20:13:11", "wall": 1793535191.7046497, "detail": {"f": 22965, "person": 0, "p": -87}, "thumb": "FPGA_104/out/live/thumbs/20261101_201311_alarm_end.png"}
