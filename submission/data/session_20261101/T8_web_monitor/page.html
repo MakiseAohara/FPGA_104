@@ -1,0 +1,28 @@
+﻿<!doctype html><meta charset=utf-8><title>MMT 实时监控</title>
+<style>body{background:#111;color:#ddd;font:14px/1.5 Consolas,monospace;margin:16px}
+.box{border:1px solid #333;padding:10px;margin-bottom:10px;border-radius:6px}
+img{image-rendering:pixelated;border:1px solid #333;width:384px}
+.alarm{color:#f55;font-weight:bold}.ok{color:#5f5}.lp{color:#fc5}
+table{border-collapse:collapse}td{padding:2px 10px}</style>
+<body><h2>MMT 多模态终端 · 实时监控</h2>
+<div class=box><img id=fr src=/frame.png><div id=st>...</div></div>
+<div class=box><b>统计</b><div id=sm></div></div>
+<div class=box><b>最近事件</b><div id=ev></div></div>
+<script>
+async function tick(){
+ try{const r=await fetch("/api/status");const j=await r.json();
+  document.getElementById("st").innerHTML=
+   "帧 "+j.f+" · p="+j.p+" · person="+j.person+" · motion="+j.motion+" · area="+j.area+
+   "<br>ALARM "+(j.alarm?"<span class=alarm>ON</span>":"<span class=ok>off</span>")+
+   " · LOWPWR "+(j.lowpwr?"<span class=lp>ON</span>":"off")+
+   " · camfps="+j.camfps+" · inf_hz="+j.inf_hz+
+   "<br>温度 "+j.sht+" · 湿度 "+j.rh+" · 体表 "+j.body;
+  document.getElementById("fr").src="/frame.png?t="+Date.now();
+  const sm=await (await fetch("/api/summary")).json();
+  document.getElementById("sm").innerHTML="统计自 "+sm.started+"：帧 "+sm.frames+" · 有人帧 "+sm.person+" ("+sm.person_pct+"%) · 运动帧 "+sm.motion+" ("+sm.motion_pct+"%)<br>报警起报 "+sm.alarm_starts+" 次 · 低功耗帧 "+sm.lp+" ("+sm.lp_pct+"%)";
+  const e=await (await fetch("/api/events")).json();
+  document.getElementById("ev").innerHTML=e.slice(-12).reverse().map(x=>x.ts+" "+x.kind).join("<br>");
+ }catch(e){}
+ setTimeout(tick,700);}
+tick();
+</script>

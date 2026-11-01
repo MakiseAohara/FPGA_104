@@ -15,6 +15,7 @@ ap.add_argument("--out", type=Path, default=Path("out/live"))
 a = ap.parse_args()
 a.out.mkdir(parents=True, exist_ok=True)
 
+stats = dict(frames=0, person=0, motion=0, lp=0, alarm_starts=0, started=time.strftime("%Y-%m-%dT%H:%M:%S"))
 state = dict(t=0, f=0, p=-128, person=0, motion=0, area=0, ir=0, alarm=0, lowpwr=0, paused=0,
              camfps=0, inf_hz=0, sht=0, rh=0, body=0, events=[], frame_png=None, last=0)
 events = []
@@ -76,6 +77,10 @@ def handle(s):
         state.update(t=int(m.group(1)), f=int(m.group(2)), motion=int(m.group(3)),
                      area=int(m.group(5)), person=int(m.group(6)), ir=int(m.group(7)))
         state["last"] = time.time()
+        stats["frames"] += 1
+        if state["person"]: stats["person"] += 1
+        if state["motion"]: stats["motion"] += 1
+        if state["lowpwr"]: stats["lp"] += 1
         return
     m = re.search(r"MMT_AI f=\d+ p=(-?\d+)", s)
     if m:
@@ -83,6 +88,8 @@ def handle(s):
     m = re.search(r"MMT_ALARM (start|end)", s)
     if m:
         state["alarm"] = 1 if m.group(1) == "start" else 0
+        if m.group(1) == "start":
+            stats["alarm_starts"] += 1
         add_event("alarm_" + m.group(1), dict(f=state["f"], person=state["person"], p=state["p"]))
         return
     m = re.search(r"lowpwr=(\d) fw_lp=(\d) paused=(\d) camfps=(\d+) inf_hz=(\d+)", s)
@@ -111,7 +118,7 @@ img{image-rendering:pixelated;border:1px solid #333;width:384px}
 table{border-collapse:collapse}td{padding:2px 10px}</style>
 <body><h2>MMT 多模态终端 · 实时监控</h2>
 <div class=box><img id=fr src=/frame.png><div id=st>...</div></div>
-<div class=box><b>最近事件</b><div id=ev></div></div>
+<div class=box><b>统计</b><div id=sm></div></div>\n<div class=box><b>最近事件</b><div id=ev></div></div>
 <script>
 async function tick(){
  try{const r=await fetch("/api/status");const j=await r.json();
@@ -122,6 +129,8 @@ async function tick(){
    " · camfps="+j.camfps+" · inf_hz="+j.inf_hz+
    "<br>温度 "+j.sht+" · 湿度 "+j.rh+" · 体表 "+j.body;
   document.getElementById("fr").src="/frame.png?t="+Date.now();
+  const sm=await (await fetch("/api/summary")).json();
+  document.getElementById("sm").innerHTML="统计自 "+sm.started+"：帧 "+sm.frames+" · 有人帧 "+sm.person+" ("+sm.person_pct+"%) · 运动帧 "+sm.motion+" ("+sm.motion_pct+"%)<br>报警起报 "+sm.alarm_starts+" 次 · 低功耗帧 "+sm.lp+" ("+sm.lp_pct+"%)";
   const e=await (await fetch("/api/events")).json();
   document.getElementById("ev").innerHTML=e.slice(-12).reverse().map(x=>x.ts+" "+x.kind).join("<br>");
  }catch(e){}
@@ -136,6 +145,13 @@ class H(BaseHTTPRequestHandler):
         if self.path.startswith("/api/status"):
             body = json.dumps({k: v for k, v in state.items() if k not in ("events", "frame_png")}, ensure_ascii=False).encode()
             self.send_response(200); self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body); return
+        if self.path.startswith("/api/summary"):
+            total = max(1, stats["frames"])
+            body = json.dumps(dict(stats, person_pct=round(100.0*stats["person"]/total,1),
+                                   motion_pct=round(100.0*stats["motion"]/total,1),
+                                   lp_pct=round(100.0*stats["lp"]/total,1)), ensure_ascii=False).encode()
+            self.send_response(200); self.send_header("Content-Type","application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body); return
         if self.path.startswith("/api/events"):
             body = json.dumps(events[-50:], ensure_ascii=False).encode()
