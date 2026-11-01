@@ -1,0 +1,16 @@
+name	gpio_def	mode	clock	ddio
+mdc_o	GPIOL_N_11	output	osc_inst1_CLKOUT	none
+mdio_io	GPIOL_P_11	inout		none
+phy_rst_n	GPIOL_01	output		none
+rx_dv	GPIOL_N_08	input	rxc	resync
+rxc	GPIOL_P_09	input		none
+rxd[0]	GPIOL_N_07	input	rxc	resync
+rxd[1]	GPIOL_N_06	input	rxc	resync
+rxd[2]	GPIOL_P_00	input	rxc	resync
+rxd[3]	GPIOL_N_05	input	rxc	resync
+tx_en_o	GPIOL_N_00	output	ge0_tx_clk	resync
+txc	GPIOL_P_07	output	ge0_tx_clk_90	resync
+txd[0]	GPIOL_P_06	output	ge0_tx_clk	resync
+txd[1]	GPIOL_P_05	output	ge0_tx_clk	resync
+txd[2]	GPIOL_N_09	output	ge0_tx_clk	resync
+txd[3]	GPIOL_N_10	output	ge0_tx_clk	resync
