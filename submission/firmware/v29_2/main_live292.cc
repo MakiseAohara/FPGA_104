@@ -111,6 +111,9 @@
 #define REL_QUIET_FRAMES 6      /* v29.3: 连续无候选帧数达到此值即可解除报警 */
 #define AI_AREA_MIN      200     /* 运动面积门限：压制全局亮变/AGC 型大 motion */
 #define AI_AREA_MAX      20000
+#ifndef LP_MOTION_AREA_MIN
+#define LP_MOTION_AREA_MIN 200   /* v29.3：低功耗只认面积>=该值的运动；更小的是图像噪声（与 AI_AREA_MIN 一致） */
+#endif
 #define DEC_CAND_FRAMES  6
 #define DEC_RELEASE_FRAMES 3     /* 连续无运动且无 AI 的解除计数（≈1.6s） */
 #define DEC_WARMUP       2
@@ -993,6 +996,7 @@ extern "C" int main()
       const int      ir_hot  = (evt & EVT_IR_HOT) ? 1 : 0;
       const uint32_t body10  = EVT_BODY_X10(evt);
       const uint32_t area    = EVT_AREA(evt);
+      const int      motion_lp = (motion && (int)area >= LP_MOTION_AREA_MIN) ? 1 : 0;   /* v29.3：仅低功耗用 */
       const int32_t  amb10   = (int32_t)(int16_t)(env & 0xFFFFu);
       const uint32_t rh10    = (env >> 16) & 0xFFFFu;
       const int32_t  score   = ST_SCORE(st);
@@ -1061,9 +1065,9 @@ extern "C" int main()
 
       /* ---------------- ⑤ 低功耗：暂停推理，低频轮询（v15 原样） ---------------- */
 #if LOWPOWER_ON
-      if (motion || last_person) {
+      if (motion_lp || last_person) {
          lp_last_active_ms = now_ms();
-         if (motion) fw_lp = 0;
+         if (motion_lp) fw_lp = 0;
       } else if ((!fw_lp) && ((now_ms() - lp_last_active_ms) >= LP_ENTER_MS)) {
          fw_lp = 1;
       }
