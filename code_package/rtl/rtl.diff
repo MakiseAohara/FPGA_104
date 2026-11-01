@@ -1,0 +1,346 @@
+git : warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/i2c_phy.v', LF will be replaced by CRLF the next ti
+me Git touches it
+At line:4 char:1
++ git diff --no-index -- $a\rtl $b\rtl > "$out\rtl.diff" 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/i2c_phy.v', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/imx185_1080p_reg.mem', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/imx185_1080p_reg.mem', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/imx185_config.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/imx185_config.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_1080p_reg - Copy.mem', LF will be replaced by CRLF t
+he next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_1080p_reg - Copy.mem', LF will be replaced by CRLF t
+he next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_1080p_reg.mem', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_1080p_reg.mem', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_720p_7M_1L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_720p_7M_1L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_720p_7M_2L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_720p_7M_2L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_720p_9M_1L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_720p_9M_1L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_720p_9M_2L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_720p_9M_2L_reg.mem', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam/piv2_config.v', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam/piv2_config.v', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam_i2c_ctrl/i2c/i2c_master_ctrl_top.v', LF will be replaced 
+by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam_i2c_ctrl/i2c/i2c_master_ctrl_top.v', LF will be replaced 
+by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam_i2c_ctrl/i2c_master/i2c_master_byte_ctrl.v', LF will be r
+eplaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam_i2c_ctrl/i2c_master/i2c_master_byte_ctrl.v', LF will be r
+eplaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam_i2c_ctrl/i2c_master/i2c_master_defines.v', LF will be rep
+laced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam_i2c_ctrl/i2c_master/i2c_master_defines.v', LF will be rep
+laced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam_i2c_ctrl/i2c_master/oc_i2c_master.v', LF will be replaced
+ by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam_i2c_ctrl/i2c_master/oc_i2c_master.v', LF will be replaced
+ by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/cam_i2c_ctrl/i2c_master/timescale.v', LF will be replaced by 
+CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/cam_i2c_ctrl/i2c_master/timescale.v', LF will be replaced by 
+CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/ddr3_controller/axi4_bus_ctl/axi_upsizer.v', LF will be repla
+ced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/ddr3_controller/axi4_bus_ctl/axi_upsizer.v', LF will be repla
+ced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/ddr3_controller/common/efx_fifo_v2.3/efx_fifo_wrapper.v', LF 
+will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/ddr3_controller/common/efx_fifo_v2.3/efx_fifo_wrapper.v', LF 
+will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/ddr3_controller/ddr3_parameter.vh', LF will be replaced by CR
+LF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/ddr3_controller/ddr3_parameter.vh', LF will be replaced by CR
+LF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/debayer/debayer_top_2to1.v', LF will be replaced by CRLF the 
+next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/debayer/debayer_top_2to1.v', LF will be replaced by CRLF the 
+next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/debayer/line_buffer.v', LF will be replaced by CRLF the next 
+time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/debayer/line_buffer.v', LF will be replaced by CRLF the next 
+time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/debayer/raw_to_rgb.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/debayer/raw_to_rgb.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/debayer/rgb_gain.v', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/debayer/rgb_gain.v', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/debayer/true_dual_port_ram.v', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/debayer/true_dual_port_ram.v', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/dvi_tx/audio_packet.sv', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/dvi_tx/audio_packet.sv', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/dvi_tx/auxiliary_video_information_info_frame.sv', LF will be
+ replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/dvi_tx/auxiliary_video_information_info_frame.sv', LF will be
+ replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/dvi_tx/simple_dual_port_ram/ram_init_file.mem', LF will be re
+placed by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/dvi_tx/simple_dual_port_ram/ram_init_file.mem', LF will be re
+placed by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/dvi_tx/simple_dual_port_ram/simple_dual_port_ram.v', LF will 
+be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/dvi_tx/simple_dual_port_ram/simple_dual_port_ram.v', LF will 
+be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/dvi_tx/simple_dual_port_ram/simple_dual_port_ram_tb.v', LF wi
+ll be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/dvi_tx/simple_dual_port_ram/simple_dual_port_ram_tb.v', LF wi
+ll be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/dvi_tx/simple_dual_port_ram.v', LF will be replaced by CRLF t
+he next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/dvi_tx/simple_dual_port_ram.v', LF will be replaced by CRLF t
+he next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/frame_buffer_V4/frame_buffer.v', LF will be replaced by CRLF 
+the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/frame_buffer_V4/frame_buffer.v', LF will be replaced by CRLF 
+the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/gamma_conrrection/gamma8.mem', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/gamma_conrrection/gamma8.mem', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/gamma_conrrection/gamma_correction.v', LF will be replaced by
+ CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/gamma_conrrection/gamma_correction.v', LF will be replaced by
+ CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/gamma_conrrection/testbench/gamma_correction_tb.do', LF will 
+be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/gamma_conrrection/testbench/gamma_correction_tb.do', LF will 
+be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/gamma_conrrection/testbench/true_dual_port_ram.v', LF will be
+ replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/gamma_conrrection/testbench/true_dual_port_ram.v', LF will be
+ replaced by CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/gamma_conrrection/testbench/vga_gen.v', LF will be replaced b
+y CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/gamma_conrrection/testbench/vga_gen.v', LF will be replaced b
+y CRLF the next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/mmt/osd/mmt_osd_demo.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/mmt/osd/mmt_osd_demo.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/mmt/osd/mmt_osd_overlay.v', LF will be replaced by CRLF the n
+ext time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/mmt/osd/mmt_osd_overlay.v', LF will be replaced by CRLF the n
+ext time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/mmt_ai_mem_bridge3.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/mmt_ai_mem_bridge3.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/ti60f225_oob_top.v', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/ti60f225_oob_top.v', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_alarm_ctrl.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_alarm_ctrl.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_dpram.v', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_dpram.v', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_fusion_vote.v', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_fusion_vote.v', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_i2c_hub.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_i2c_hub.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_i2c_master.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_i2c_master.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_mlx90640_ctrl.v', LF will be replaced by CRLF the 
+next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_mlx90640_ctrl.v', LF will be replaced by CRLF the 
+next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_sensor_subsystem.v', LF will be replaced by CRLF t
+he next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_sensor_subsystem.v', LF will be replaced by CRLF t
+he next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_sht30_ctrl.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_sht30_ctrl.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/mmt_video_downscale.v', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/mmt_video_downscale.v', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_alarm_gate.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_alarm_gate.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_alarm_sel.v', LF will be replaced by CRLF the next 
+time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_alarm_sel.v', LF will be replaced by CRLF the next 
+time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_apb_ext.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_apb_ext.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_bin2bcd.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_bin2bcd.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_frame_diff.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_frame_diff.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_freeze_ctl.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_freeze_ctl.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_i2c_probe.v', LF will be replaced by CRLF the next 
+time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_i2c_probe.v', LF will be replaced by CRLF the next 
+time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_ir_proc.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_ir_proc.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_mmt_core.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_mmt_core.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_pwr_ctl.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_pwr_ctl.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_sns_filter.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_sns_filter.v', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_ts_align.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_ts_align.v', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_txt_fmt.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_txt_fmt.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/mmt/v7_wb_stat.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/mmt/v7_wb_stat.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/osd/v7_osd_overlay.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/osd/v7_osd_overlay.v', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE16\rtl/v7/osd/v7_osd_top.v', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'PROJECT:\v7work\v7_MERGE17\rtl/v7/osd/v7_osd_top.v', LF will be replaced by CRLF the next ti
+me Git touches it
+diff --git "a/PROJECT:\\v7work\\v7_MERGE16\\rtl/ti60f225_oob_top.v" "b/PROJECT:\\v7work\\v7_MERGE17\\rtl/ti60f225_oob_top.v"
+index 2d8d64f..1249fde 100644
+--- "a/PROJECT:\\v7work\\v7_MERGE16\\rtl/ti60f225_oob_top.v"
++++ "b/PROJECT:\\v7work\\v7_MERGE17\\rtl/ti60f225_oob_top.v"
+@@ -928,7 +928,7 @@ always @(posedge core_clk or negedge w_arstn) begin
+   if (!w_arstn) begin
+     wb_r_core <= 16'h158;
+     wb_g_core <= 16'h118;
+-    wb_b_core <= 16'h170;
++    wb_b_core <= 16'h1C8;   // MERGE17: B 增益复位默认 0x1C8（原 0x170）
+   end else if (soc_apb_psel && soc_apb_penable && soc_apb_pwrite) begin
+     case (soc_apb_paddr[6:2])
+       5'd19: wb_r_core <= soc_apb_pwdata[15:0];
+diff --git "a/PROJECT:\\v7work\\v7_MERGE16\\rtl/v7/osd/v7_osd_overlay.v" "b/PROJECT:\\v7work\\v7_MERGE17\\rtl/v7/osd/v7_osd_overlay.v"
+index 29da9d0..4a7def2 100644
+--- "a/PROJECT:\\v7work\\v7_MERGE16\\rtl/v7/osd/v7_osd_overlay.v"
++++ "b/PROJECT:\\v7work\\v7_MERGE17\\rtl/v7/osd/v7_osd_overlay.v"
+@@ -3,7 +3,7 @@
+ //                            + 热图下方信息条（HOT 像素数 / EST 体表温度）
+ //
+ //  与 MERGE15 的差异：
+-//   1) 热图窗口 32×24 放大 6 倍 = 192×144，位置右上角 (TH_X0=1696, TH_Y0=32)；
++//   1) 热图窗口 32×24 放大 6 倍并**转置**：显示宽=行数24×6=144、高=列数32×6=192，右上角 (TH_X0=1744, TH_Y0=32)；
+ //      窗口内**不透明**：色阶 0 也画深蓝，不再透出原视频。
+ //   2) 色阶 16 档查表：蓝->青->绿->黄->红->白（色阶由 v7_ir_proc 按帧 min/max 拉伸）。
+ //      热图 RAM 字节：bit7 = 该像素 hot（d_pos>NOISE），bit[3:0] = 0..15 色阶。
+@@ -22,7 +22,7 @@ module v7_osd_overlay #(
+     parameter YW         = 11,
+     // ---- 温度热力图小窗 ----
+     parameter TH_SCALE   = 6,           // MERGE16: 4 -> 6（32×24 -> 192×144）
+-    parameter TH_X0      = 1696,        // 右上角（右侧留 32 边距）
++    parameter TH_X0      = 1744,        // MERGE17: 1920-144-32（右侧留 32 边距）
+     parameter TH_Y0      = 32,
+     // ---- 主文字 ----
+     parameter FONT_W     = 8,
+@@ -34,8 +34,8 @@ module v7_osd_overlay #(
+     parameter TXT_Y0     = 960,
+     parameter BORDER     = 8,
+     // ---- 信息条（热图下方） ----
+-    parameter INFO_X0    = 1696,
+-    parameter INFO_Y0    = 184,         // 32 + 144 + 8
++    parameter INFO_X0    = 1744,
++    parameter INFO_Y0    = 232,         // MERGE17: 32 + 192 + 8
+     parameter INFO_CW    = 6,           // 字符格宽（5×7 点阵 + 1 间隔）
+     parameter INFO_CH    = 8            // 字符格高
+ )(
+@@ -115,8 +115,8 @@ module v7_osd_overlay #(
+     //====================================================================
+     // S0：区域判定
+     //====================================================================
+-    localparam TH_W = 32 * TH_SCALE;
+-    localparam TH_H = 24 * TH_SCALE;
++    localparam TH_W = 24 * TH_SCALE;   // MERGE17: 宽 = 行数(24)×6
++    localparam TH_H = 32 * TH_SCALE;   // MERGE17: 高 = 列数(32)×6
+ 
+     wire in_therm = (x_cnt >= TH_X0) && (x_cnt < TH_X0 + TH_W) &&
+                     (y_cnt >= TH_Y0) && (y_cnt < TH_Y0 + TH_H);
+@@ -139,16 +139,18 @@ module v7_osd_overlay #(
+     wire [XW-1:0] th_dx = x_cnt - TH_X0;
+     wire [YW-1:0] th_dy = y_cnt - TH_Y0;
+     // /6 近似：(v*171)>>10（171/1024 = 0.16699 ≈ 1/6）
++    // MERGE17 转置：显示 x -> 红外行号(row)，显示 y -> 红外列号(col)
++    //   数据 (col,row) 地址 = row*32+col；显示 (dx,dy) = (row*6+块内x, col*6+块内y)
+     wire [17:0] sx_mul = {7'd0, th_dx} * 18'd171;
+     wire [17:0] sy_mul = {7'd0, th_dy} * 18'd171;
+-    wire [4:0]  th_sx  = sx_mul[14:10];
+-    wire [4:0]  th_sy  = sy_mul[14:10];
+-    wire [9:0]  th_addr = {th_sy, th_sx};
+-    // 块内偏移：dx - 6*sx
+-    wire [10:0] six_sx = {6'd0, th_sx} * 11'd6;
+-    wire [10:0] six_sy = {6'd0, th_sy} * 11'd6;
+-    wire [3:0]  blk_x  = th_dx[3:0] - six_sx[3:0];
+-    wire [3:0]  blk_y  = th_dy[3:0] - six_sy[3:0];
++    wire [4:0]  th_row = sx_mul[14:10];      // 0..23（行号）
++    wire [4:0]  th_col = sy_mul[14:10];      // 0..31（列号）
++    wire [9:0]  th_addr = {th_row, th_col};  // row*32 + col
++    // 块内偏移：dx - 6*row / dy - 6*col
++    wire [10:0] six_rx = {6'd0, th_row} * 11'd6;
++    wire [10:0] six_cy = {6'd0, th_col} * 11'd6;
++    wire [3:0]  blk_x  = th_dx[3:0] - six_rx[3:0];
++    wire [3:0]  blk_y  = th_dy[3:0] - six_cy[3:0];
+     wire        blk_edge = (blk_x == 4'd0) || (blk_x == 4'd5) ||
+                            (blk_y == 4'd0) || (blk_y == 4'd5);
+ 
