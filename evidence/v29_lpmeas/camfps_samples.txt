@@ -1,0 +1,67 @@
+# v29.3-lpmeas 串口测量明细（MMT_CAMFPS2 与 LP 进入/退出）
+
+## v1 10ms-raw  (lpmeas/serial.log, 18 行)
+```
+23:13:54 MMT_CAMFPS2 base=40 crop=1 vscnt=25
+23:13:54 MMT_LPCAM enter vts=0x0x5dc->0x0x1194 mult=3
+23:13:54 MMT_LP_ENTER f=0 cnt=1 ms=78090 fw_lp=0 rtl_lp=1
+23:13:55 MMT_CAMFPS2 lp=9 vts=0x0x1194 n=1 lowpwr=1 vs=25
+23:13:57 MMT_CAMFPS2 lp=9 vts=0x0x1194 n=2 lowpwr=1 vs=59
+23:13:58 MMT_CAMFPS2 lp=12 vts=0x0x1194 n=3 lowpwr=1 vs=59
+23:14:00 MMT_LPCAM exit vts restored=0x0x5dc
+23:14:00 MMT_LP_EXIT f=5 cnt=1 ms=84627
+23:14:25 MMT_LPCAM enter vts=0x0x5dc->0x0x1194 mult=3
+23:14:25 MMT_LP_ENTER f=58 cnt=2 ms=108935 fw_lp=0 rtl_lp=1
+23:14:32 MMT_LPCAM exit vts restored=0x0x5dc
+23:14:32 MMT_LP_EXIT f=69 cnt=2 ms=116057
+23:14:57 MMT_LPCAM enter vts=0x0x5dc->0x0x1194 mult=3
+23:14:57 MMT_LP_ENTER f=121 cnt=3 ms=141776 fw_lp=0 rtl_lp=1
+23:15:05 MMT_LPCAM exit vts restored=0x0x5dc
+23:15:05 MMT_LP_EXIT f=133 cnt=3 ms=149407
+23:15:40 MMT_LPCAM enter vts=0x0x5dc->0x0x1194 mult=3
+23:15:40 MMT_LP_ENTER f=205 cnt=4 ms=183715 fw_lp=0 rtl_lp=1
+```
+
+## v2 5ms-raw  (lpmeas2/serial.log, 18 行)
+```
+23:20:30 MMT_CAMFPS2 kind=base fps=200 med=5 chg=120
+23:20:32 MMT_CAMFPS2 kind=base fps=200 med=5 chg=120
+23:20:34 MMT_CAMFPS2 kind=base fps=200 med=5 chg=120
+23:20:34 MMT_LPCAM enter vts=0x5dc->0x0x1194 mult=3
+23:20:34 MMT_LP_ENTER f=0 cnt=1 ms=83276 fw_lp=0 rtl_lp=1
+23:20:37 MMT_CAMFPS2 kind=lp fps=200 med=5 chg=36 n=1 vts=0x1194 vs=13
+23:20:39 MMT_CAMFPS2 kind=lp fps=200 med=5 chg=35 n=2 vts=0x1194 vs=59
+23:20:42 MMT_CAMFPS2 kind=lp fps=200 med=5 chg=33 n=3 vts=0x1194 vs=60
+23:20:44 MMT_LPCAM exit vts restored=0x0x5dc
+23:20:44 MMT_LP_EXIT f=5 cnt=1 ms=92812
+23:21:13 MMT_LPCAM enter vts=0x5dc->0x0x1194 mult=3
+23:21:13 MMT_LP_ENTER f=77 cnt=2 ms=121946 fw_lp=0 rtl_lp=1
+23:21:17 MMT_LPCAM exit vts restored=0x0x5dc
+23:21:17 MMT_LP_EXIT f=84 cnt=2 ms=126054
+23:21:43 MMT_LPCAM enter vts=0x5dc->0x0x1194 mult=3
+23:21:43 MMT_LP_ENTER f=147 cnt=3 ms=151949 fw_lp=0 rtl_lp=1
+23:21:50 MMT_LPCAM exit vts restored=0x0x5dc
+23:21:50 MMT_LP_EXIT f=157 cnt=3 ms=158550
+```
+
+## v3 5ms-debounce  (lpmeas3/serial.log, 18 行)
+```
+23:27:26 MMT_CAMFPS2 kind=base fps=10 chg=20
+23:27:28 MMT_CAMFPS2 kind=base fps=10 chg=20
+23:27:30 MMT_CAMFPS2 kind=base fps=10 chg=20
+23:27:30 MMT_LPCAM enter vts=0x5dc->0x0x1194 mult=3
+23:27:30 MMT_LP_ENTER f=0 cnt=1 ms=83129 fw_lp=0 rtl_lp=1
+23:27:33 MMT_CAMFPS2 kind=lp fps=3 chg=7 n=1 vts=0x1194 vs=11
+23:27:35 MMT_CAMFPS2 kind=lp fps=3 chg=6 n=2 vts=0x1194 vs=59
+23:27:38 MMT_CAMFPS2 kind=lp fps=3 chg=7 n=3 vts=0x1194 vs=60
+23:27:40 MMT_LPCAM exit vts restored=0x0x5dc
+23:27:40 MMT_LP_EXIT f=5 cnt=1 ms=92665
+23:28:24 MMT_LPCAM enter vts=0x5dc->0x0x1194 mult=3
+23:28:24 MMT_LP_ENTER f=114 cnt=2 ms=137090 fw_lp=0 rtl_lp=1
+23:28:31 MMT_LPCAM exit vts restored=0x0x5dc
+23:28:31 MMT_LP_EXIT f=125 cnt=2 ms=144213
+23:28:58 MMT_LPCAM enter vts=0x5dc->0x0x1194 mult=3
+23:28:58 MMT_LP_ENTER f=192 cnt=3 ms=170959 fw_lp=0 rtl_lp=1
+23:29:04 MMT_LPCAM exit vts restored=0x0x5dc
+23:29:04 MMT_LP_EXIT f=201 cnt=3 ms=177024
+```

@@ -1,0 +1,8 @@
+{
+  "bin": "D:\\v30_build\\out_lpmeas3\\tinyml_pdti8.bin",
+  "bytes": 302226,
+  "crc32": "D2EF9830",
+  "sha256": "5305A2AB9E6304B979A11E1BADCEF8AEC134F31CE0FCB7B88F9BC23957613D32",
+  "preset": "DAY",
+  "base": "v29.3-lpfix"
+}
