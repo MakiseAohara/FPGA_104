@@ -1,7 +1,7 @@
-﻿# 加速器兼容性对比（v29 新模型 vs 现位流）
+# 加速器兼容性对比（v29 新模型 vs 现位流）
 
 - 新模型：`v29_person_96_int8.tflite`（95,922 参数，全整数 INT8）
-- 现位流：`D:\v7work\v7_MERGE14`（板上 MERGE15/MERGE14 使用的 TinyML 加速器配置）
+- 现位流：`PROJECT:\v7work\v7_MERGE14`（板上 MERGE15/MERGE14 使用的 TinyML 加速器配置）
 - 工具：官方 TinyML Generator（PyQt6 headless）+ 内置 `bin/tflite.exe`
 
 ## 1. 新模型的算子清单（官方 `tflite.exe` 逐层报告）

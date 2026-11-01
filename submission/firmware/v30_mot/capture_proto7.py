@@ -14,7 +14,7 @@ r"""capture_proto7.py — 七阶段上板采集（与 evidence/v29_3/proto7 同�
   - STILL 阶段报警覆盖率（要求连续）
   - EXIT 阶段"最后一次 MMT_ALARM end"相对 EXIT 开始的延迟（要求 4–7 s）
 
-用法：py -3 capture_proto7.py --out D:\cap7 [--scale 1.0] [--port COM15]
+用法：py -3 capture_proto7.py --out PROJECT:\cap7 [--scale 1.0] [--port COM15]
 """
 import argparse, re, sys, time
 from pathlib import Path

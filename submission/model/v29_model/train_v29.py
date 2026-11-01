@@ -1,8 +1,8 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """v29 人检模型训练（96x96x1，5 Conv + GAP + 2 Dense，<=100K 参数）
 
 用法：
-  python train_v29.py --data D:\FPGA\mmt\work_v29\data\vww96 --out D:\FPGA\mmt\work_v29\out
+  python train_v29.py --data PROJECT:\mmt\work_v29\data\vww96 --out PROJECT:\mmt\work_v29\out
 按任务书要求：Adam、batch 128、~30 epoch、亮度/对比度/水平翻转/轻微平移增强。
 """
 import argparse, json, os, csv

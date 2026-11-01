@@ -158,7 +158,7 @@ evidence/v30_mot/
 重建：
 
 ```powershell
-py -3 evidence\v30_mot\build_v30.py --project D:\v30_build\project --out D:\v30_build\out_v30c
+py -3 evidence\v30_mot\build_v30.py --project PROJECT:\v30_build\project --out PROJECT:\v30_build\out_v30c
 py -3 evidence\v30_mot\check_v30.py
 ```
 

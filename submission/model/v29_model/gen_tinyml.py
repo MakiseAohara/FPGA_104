@@ -1,8 +1,8 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """用官方 TinyML Generator（PyQt6 offscreen）为新 tflite 生成 RTL/软件配置与模型数据。"""
 import os, sys, json
 
-GEN = r'D:\FPGA\mmt\work_v29\demo\Demo\tinyml-main\tools\tinyml_generator'
+GEN = r'PROJECT:\mmt\work_v29\demo\Demo\tinyml-main\tools\tinyml_generator'
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 sys.path.insert(0, GEN)
 os.chdir(GEN)

@@ -1,7 +1,7 @@
 # 下载 COCO parquet 分片（带重试，可断点续传）
 $ErrorActionPreference = 'Continue'
-$dl = 'D:\FPGA\mmt\work_v29\data\coco'
-$tree = Get-Content 'D:\FPGA\mmt\work_v29\dl\coco_tree.json' -Raw | ConvertFrom-Json
+$dl = 'PROJECT:\mmt\work_v29\data\coco'
+$tree = Get-Content 'PROJECT:\mmt\work_v29\dl\coco_tree.json' -Raw | ConvertFrom-Json
 $base = 'https://hf-mirror.com/datasets/detection-datasets/coco/resolve/main/'
 
 # 选择：val 全部 2 个 + train 前 16 个

@@ -37,6 +37,6 @@
       "6 EXIT 走出画面并离开,保持不在"
     ]
   ],
-  "serial_log": "D:\\FPGA\\mmt\\out\\proto7\\serial.log",
+  "serial_log": "PROJECT:\\FPGA\\mmt\\out\\proto7\\serial.log",
   "size": 1856086
 }

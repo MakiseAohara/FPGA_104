@@ -1,7 +1,7 @@
 # MERGE17 — 红外热图小窗转置 + 白平衡 B 增益默认值
 
 > 基线：MERGE16（`evidence/v29_rtl_display/`，位流 `v7_MERGE16.bit`，SHA256 `81332CD1…1F8882`）
-> 工程：`D:\v7work\v7_MERGE17`（由 MERGE16 完整复制后只改两个文件）
+> 工程：`PROJECT:\v7work\v7_MERGE17`（由 MERGE16 完整复制后只改两个文件）
 > 位流：`v7_MERGE17.bit` **2,845,704 B**，**SHA256 `3A69AAFB0E22E262E4CA7FE887CB332822772536356B596473D996BA190887CF`**（pnr2 seed 6）
 > 本轮**未烧板**。
 
@@ -91,5 +91,5 @@ evidence/v29_rtl_ir_rot/
 ## 7. 复现
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File tools\v7_flow_seed6.ps1 -Work D:\v7work\v7_MERGE17 -Tag MERGE17
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\v7_flow_seed6.ps1 -Work PROJECT:\v7work\v7_MERGE17 -Tag MERGE17
 ```

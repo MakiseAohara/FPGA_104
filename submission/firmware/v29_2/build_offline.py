@@ -14,7 +14,7 @@ import shutil
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
-APP=Path(r'D:\FPGA\codex20\official-tinyml\tinyml_hello_world\Ti60F225_tinyml_hello_world\embedded_sw\SapphireSoc\software\standalone\tinyml_pdti8')
+APP=Path(r'PROJECT:\FPGA\TOOL20\official-tinyml\tinyml_hello_world\Ti60F225_tinyml_hello_world\embedded_sw\SapphireSoc\software\standalone\tinyml_pdti8')
 WORK=ROOT.parent/'v29_host_build'
 WORK.mkdir(exist_ok=True)
 overlay=WORK/'include';overlay.mkdir(exist_ok=True)

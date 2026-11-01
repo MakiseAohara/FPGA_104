@@ -3,7 +3,7 @@
 import csv, collections, os, sys
 from PIL import Image
 
-d = r'D:\FPGA\mmt\comms\scene_labels_v29_day'
+d = r'PROJECT:\mmt\comms\scene_labels_v29_day'
 rows = list(csv.DictReader(open(os.path.join(d, 'labels_v29_day.csv'), encoding='utf-8')))
 print('rows', len(rows))
 print('label distribution', collections.Counter(r['label_intruder'] for r in rows))

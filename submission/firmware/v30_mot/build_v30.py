@@ -1,13 +1,13 @@
 """build_v30.py — 从仓库源码重建 v30（多目标跟踪 + 行为预测）固件。
 
 前置：
-  - SoC 软件工程树（Ti60F225_tinyml_hello_world）复制到无空格短路径，例如 D:\v30_build\project
+  - SoC 软件工程树（Ti60F225_tinyml_hello_world）复制到无空格短路径，例如 PROJECT:\v30_build\project
   - 模型：evidence/v29_model/generator/v29_person_96_int8_model_data.{cc,h}
         拷到 project/.../tinyml_pdti8/src/model/ 和 .../src/generator/（头文件按 generator/ 路径包含）
-  - 工具链：D:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1\bin
+  - 工具链：TOOLS:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1\bin
 
 用法：
-  py -3 build_v30.py --project D:\v30_build\project --out D:\v30_build\out_v30
+  py -3 build_v30.py --project PROJECT:\v30_build\project --out PROJECT:\v30_build\out_v30
   py -3 build_v30.py --project ... --out ... --night     # NIGHT 预设（默认 DAY）
 """
 import argparse, hashlib, json, shutil, subprocess, sys, zlib
@@ -19,7 +19,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument('--project', type=Path, required=True)
 ap.add_argument('--out', type=Path, required=True)
 ap.add_argument('--toolchain', type=Path,
-                default=Path(r'D:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1\bin'))
+                default=Path(r'TOOLS:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1\bin'))
 ap.add_argument('--night', action='store_true')
 a = ap.parse_args()
 

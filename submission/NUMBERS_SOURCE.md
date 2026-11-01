@@ -51,7 +51,7 @@
 | lp7 低功耗 17.0 s 进入 | `submission/data/lp7/report.md` | 「低功耗时序」表 A 列 `fw_lp=1` |
 | lp7 `MMT_LPCAM enter` @24.6 s（VTS 0x5dc→0x1194） | 同上 | 同上 + 事件列表 |
 | long30 低功耗 21 次进入/恢复 | `submission/data/long30/README.md`、`serial.log` | `MMT_LP_ENTER` 21 条 |
-| long30 30 对区间 / 707 s / 中位 15.4 s / 最长 97.8 s / 冻结 61.4% | **仓库外** `log_lp2.txt`（本机 `D:\FPGA\mmt\log_lp2.txt`） | 全文 5 行汇总；**仓库内无对应文件** |
+| long30 30 对区间 / 707 s / 中位 15.4 s / 最长 97.8 s / 冻结 61.4% | **仓库外** `log_lp2.txt`（本机 `PROJECT:\mmt\log_lp2.txt`） | 全文 5 行汇总；**仓库内无对应文件** |
 | 亮度 mean 69–97（中位 75） | `submission/data/lp7/report.md`、`submission/data/empty30/serial.log` | `mean_sensor` 统计 |
 
 ## 5 MOT（v30）

@@ -13,14 +13,14 @@ from pathlib import Path
 ap = argparse.ArgumentParser()
 ap.add_argument('--image', type=Path, required=True)
 ap.add_argument('--out', type=Path, required=True)
-ap.add_argument('--bit', default=r'C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace\FPGA_104\evidence\v29_rtl_ir_rot\v7_MERGE17.bit')
+ap.add_argument('--bit', default=r'USER\Documents\deepseek-harness\default-workspace\FPGA_104\evidence\v29_rtl_ir_rot\v7_MERGE17.bit')
 ap.add_argument('--bit-sha', default='3A69AAFB0E22E262E4CA7FE887CB332822772536356B596473D996BA190887CF')
-ap.add_argument('--flash-script', default=r'D:\v30_build\flash_vendor_utf8.ps1')
+ap.add_argument('--flash-script', default=r'PROJECT:\v30_build\flash_vendor_utf8.ps1')
 ap.add_argument('--capture-seconds', type=float, default=240)
 ap.add_argument('--attempts', type=int, default=8)
 a = ap.parse_args()
 
-loader = Path(r'D:\v30_build\load_v30.py')
+loader = Path(r'PROJECT:\v30_build\load_v30.py')
 for i in range(1, a.attempts + 1):
     print(f'=== attempt {i}/{a.attempts} ===', flush=True)
     flash = subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass',

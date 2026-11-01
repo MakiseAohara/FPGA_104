@@ -1,6 +1,6 @@
 # MERGE16 — 红外热图显示重做 + 白平衡可调可测
 
-> 基线：`D:\v7work\v7_MERGE15`（evidence/v27_rtl_ir 的 MERGE15 源码）。工程：`D:\v7work\v7_MERGE16`。
+> 基线：`PROJECT:\v7work\v7_MERGE15`（evidence/v27_rtl_ir 的 MERGE15 源码）。工程：`PROJECT:\v7work\v7_MERGE16`。
 > 位流：`v7_MERGE16.bit`（2,836,515 B）
 > **SHA256 = `81332CD17DA35CDB7103C666434AE0DF1702A65EBEAEAAEB80AE70C8801F8882`**
 > 本轮**未烧板**（按要求只出位流与证据）。回滚位流：MERGE15 `74E205F8…13AF40`（见 evidence/v27_rtl_ir/）。
@@ -182,9 +182,9 @@ evidence/v29_rtl_display/
 
 ```powershell
 # 构建（ASCII 路径；一次只跑一个 Efinity）
-powershell -NoProfile -ExecutionPolicy Bypass -File tools\v7_flow.ps1 -Work D:\v7work\v7_MERGE16 -Tag MERGE16
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\v7_flow.ps1 -Work PROJECT:\v7work\v7_MERGE16 -Tag MERGE16
 # 若 pnr2 报 Routing FAILED（随机拥塞），换 seed 重跑 pnr2：
-#   参考 D:\v7work\v7_MERGE16\tools\rerun_pnr2.ps1（seed 2/4/6 实测可成功）
+#   参考 PROJECT:\v7work\v7_MERGE16\tools\rerun_pnr2.ps1（seed 2/4/6 实测可成功）
 ```
 
 ## 9. 未完成 / 风险

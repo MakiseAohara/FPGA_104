@@ -3,7 +3,7 @@
 用法：
   py -3 tools\mot_view.py --live COM15
   py -3 tools\mot_view.py --replay FPGA_104\evidence\v30_mot\board_v30f\serial.log
-  py -3 tools\mot_view.py --replay <log> --save-mp4 D:\out\v30.mp4
+  py -3 tools\mot_view.py --replay <log> --save-mp4 PROJECT:\out\v30.mp4
 
 画面：96×96 灰度放大 6×（576×576），ROI=(16,16,80,80) 黄框；
 每个目标画框 + ID + 最近 20 帧轨迹线 + 2 帧预测箭头；

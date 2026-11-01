@@ -4,7 +4,7 @@ import hashlib, json, shutil, subprocess, sys, zlib
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-PROJECT = Path(r'D:\FPGA\codex20\official-tinyml\tinyml_hello_world\Ti60F225_tinyml_hello_world')
+PROJECT = Path(r'PROJECT:\FPGA\TOOL20\official-tinyml\tinyml_hello_world\Ti60F225_tinyml_hello_world')
 WORK = ROOT.parent / 'v291_build'
 clone = WORK / 'project'
 relative = Path('embedded_sw/SapphireSoc/software/standalone')
@@ -32,7 +32,7 @@ for name, source in TARGETS:
         continue
     out = WORK / name.lower()
     command = [sys.executable, str(ROOT / 'sw/tinyml_live/build_tinyml_firmware.py'),
-               '--project', str(clone), '--toolchain', r'D:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1\bin',
+               '--project', str(clone), '--toolchain', r'TOOLS:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1\bin',
                '--out', str(out), '--main-source', str(source)]
     result = subprocess.run(command, capture_output=True, timeout=600)
     (HERE / (name.lower() + '_build.log')).write_bytes(result.stdout + result.stderr)

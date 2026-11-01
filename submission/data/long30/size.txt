@@ -1,4 +1,4 @@
-D:\v292_build\day\tinyml_pdti8.elf  :
+PROJECT:\v292_build\day\tinyml_pdti8.elf  :
 section                size     addr
 .init                   112     4096
 .text                183548     4208

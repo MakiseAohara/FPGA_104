@@ -5,9 +5,9 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from decode_scene_log import load_old_model, infer_old, RE_STAT, RE_IMG
 
-LOG = r'D:\FPGA\易灵思\工作区\_外部仓库\FPGA_104\evidence\v29_scene\log_v29_scene.log'
-MODEL = r'D:\FPGA\mmt\work_v29\out\old_person_detect_fixed.tflite'
-LABELS = r'D:\FPGA\mmt\comms\scene_labels_v29\labels_v29_scene.csv'
+LOG = r'PROJECT:\workspace\工作区\_外部仓库\FPGA_104\evidence\v29_scene\log_v29_scene.log'
+MODEL = r'PROJECT:\mmt\work_v29\out\old_person_detect_fixed.tflite'
+LABELS = r'PROJECT:\mmt\comms\scene_labels_v29\labels_v29_scene.csv'
 
 
 def parse_strict(path):

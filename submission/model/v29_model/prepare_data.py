@@ -1,8 +1,8 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """COCO parquet -> 96x96 灰度 npy（Visual Wake Words 口径：person 框面积 >= 0.5% 为正样本）
 
 用法：
-  python prepare_data.py --parquet-dir D:\FPGA\mmt\work_v29\data\coco --out D:\FPGA\mmt\work_v29\data\vww96
+  python prepare_data.py --parquet-dir PROJECT:\mmt\work_v29\data\coco --out PROJECT:\mmt\work_v29\data\vww96
 自适应 schema：支持 objects.category 为字符串或 int（person=1）。
 """
 import argparse, glob, io, json, os, sys

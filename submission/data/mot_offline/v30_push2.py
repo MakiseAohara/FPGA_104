@@ -1,8 +1,8 @@
 """v30_push2.py - push round-2 deliverables (evidence + tools + out/mot_check)"""
 import base64, json, time, urllib.request, urllib.error
 from pathlib import Path
-WS = Path(r"C:\Users\Makise Aohara\Documents\deepseek-harness\default-workspace")
-REPO = "MakiseAohara/FPGA_104"
+WS = Path(r"USER\Documents\deepseek-harness\default-workspace")
+REPO = "USER/FPGA_104"
 TOKEN = (WS / "_tmp" / "gh_token.txt").read_text(encoding="utf-8").strip()
 API = "https://api.github.com"
 

@@ -10,8 +10,8 @@ import pyarrow.parquet as pq
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from board_preprocess import board_sample_src, person_ratio_crop
 
-SRC = r'D:\FPGA\mmt\work_v29\data\coco'
-OUT = r'D:\FPGA\mmt\work_v29\data\vww96_board'
+SRC = r'PROJECT:\mmt\work_v29\data\coco'
+OUT = r'PROJECT:\mmt\work_v29\data\vww96_board'
 
 
 def main():

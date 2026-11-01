@@ -2,7 +2,7 @@
 """统计 v29_scene 标签（按段 / label_intruder）"""
 import csv, collections, os, sys
 
-p = sys.argv[1] if len(sys.argv) > 1 else r'D:\FPGA\mmt\comms\scene_labels_v29\labels_v29_scene.csv'
+p = sys.argv[1] if len(sys.argv) > 1 else r'PROJECT:\mmt\comms\scene_labels_v29\labels_v29_scene.csv'
 rows = list(csv.DictReader(open(p, encoding='utf-8')))
 print('rows', len(rows), 'cols', rows[0].keys() if rows else None)
 seg = collections.Counter(r['segment'] for r in rows)

@@ -14,7 +14,7 @@
 
 构建入口：`build_v291.py`（NIGHT/DAY/DAYCAL 三个目标，`python build_v291.py [NIGHT|DAY|DAYCAL]` 可只建一个）。
 官方工程副本建在 `<repo 上级>/v291_build/`，不修改外部官方工程。工具链
-`D:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1`。三个目标均 `FIRMWARE BUILD PASS`，ram 占用 15.2%。
+`TOOLS:\riscv\xpack-riscv-none-elf-gcc-15.2.0-1`。三个目标均 `FIRMWARE BUILD PASS`，ram 占用 15.2%。
 
 体积 299 KB 对应新模型（旧 MobileNet 版本是 485 KB），与交接预期一致。
 

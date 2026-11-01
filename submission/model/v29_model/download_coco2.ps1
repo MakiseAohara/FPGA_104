@@ -1,8 +1,8 @@
 # 可靠下载 COCO parquet：先探测是否被 HF 限流（限流响应不是 PAR1），再 Range 续传
 $ErrorActionPreference = 'Continue'
-$dl = 'D:\FPGA\mmt\work_v29\data\coco'
+$dl = 'PROJECT:\mmt\work_v29\data\coco'
 New-Item -ItemType Directory -Force -Path $dl | Out-Null
-$tree = Get-Content 'D:\FPGA\mmt\work_v29\dl\coco_tree.json' -Raw | ConvertFrom-Json
+$tree = Get-Content 'PROJECT:\mmt\work_v29\dl\coco_tree.json' -Raw | ConvertFrom-Json
 $base = 'https://hf-mirror.com/datasets/detection-datasets/coco/resolve/main/'
 
 function Test-Parquet($path) {

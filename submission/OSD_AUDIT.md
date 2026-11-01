@@ -4,7 +4,7 @@
 
 **RTL 侧生成，不在固件**：
 
-- 字符格式化：`rtl/v7/mmt/v7_txt_fmt.v`（MERGE17 工程对应 `D:\v7work\v7_MERGE17\rtl\v7\mmt\v7_txt_fmt.v`，244 行）。
+- 字符格式化：`rtl/v7/mmt/v7_txt_fmt.v`（MERGE17 工程对应 `PROJECT:\v7work\v7_MERGE17\rtl\v7\mmt\v7_txt_fmt.v`，244 行）。
 - 叠加：`rtl/v7/osd/v7_osd_overlay.v`（读 `txt_rd_data`，L170 `txt_rd_addr`、L307 打两拍后叠加）。
 - 固件只写 APB 原始值（`main_live292.cc`）：`temp_x100`、`rh_x100`、`ir_x10`、`area`、`conf_x100`、`ai_score`、`evt_code`（APB word14）、`night`、`sns_ok`、`low_pwr` 等。
 

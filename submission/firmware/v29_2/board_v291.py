@@ -3,8 +3,8 @@ import argparse, binascii, hashlib, os, struct, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-FLASH = Path(r'C:\Users\Makise Aohara\Documents\Codex\2026-10-15\https-github-com-makiseaohara-fpga-104\outputs\fpga_onboard_verified_20261020\tools\flash_vendor.ps1')
-EFINITY = Path(r'D:\Efinity\2026.1')
+FLASH = Path(r'USER\Documents\TOOL\2026-10-15\https-github-com-USER-fpga-104\outputs\fpga_onboard_verified_20261020\tools\flash_vendor.ps1')
+EFINITY = Path(r'TOOLS:\Efinity\2026.1')
 BIT = ROOT / 'evidence/v27_rtl_ir/../v29_rtl_display/v7_MERGE16.bit'
 BIT_SHA = '81332CD17DA35CDB7103C666434AE0DF1702A65EBEAEAAEB80AE70C8801F8882'
 

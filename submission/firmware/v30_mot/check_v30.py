@@ -7,11 +7,11 @@ import argparse, hashlib, json, re, sys, zlib
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 ap = argparse.ArgumentParser()
-ap.add_argument('--bin', type=Path, default=Path(r'D:\v30_build\out_v30c\tinyml_pdti8.bin'))
+ap.add_argument('--bin', type=Path, default=Path(r'PROJECT:\v30_build\out_v30c\tinyml_pdti8.bin'))
 a = ap.parse_args()
 data = a.bin.read_bytes()
 tflite = (ROOT / 'evidence/v29_model/v29_person_96_int8.tflite').read_bytes()
-old_cc = Path(r'D:\v30_build\project\embedded_sw\SapphireSoc\software\standalone\tinyml_pdti8\src\model/mobilenetv1_person_detect_model_data.cc').read_text(encoding='utf-8', errors='replace')
+old_cc = Path(r'PROJECT:\v30_build\project\embedded_sw\SapphireSoc\software\standalone\tinyml_pdti8\src\model/mobilenetv1_person_detect_model_data.cc').read_text(encoding='utf-8', errors='replace')
 old_head = bytes(int(x, 16) for x in re.findall(r'0x([0-9a-fA-F]{2})', old_cc))[:32]
 
 strings = ['MMT_MOT_CFG', 'MMT_TRK', 'MMT_MOT ', 'MMT_PREWARN', 'MMT_PREDLEAD',

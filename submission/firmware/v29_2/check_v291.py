@@ -5,7 +5,7 @@ import json, re, sys
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 tflite = (ROOT / 'evidence/v29_model/v29_person_96_int8.tflite').read_bytes()
-old_cc = Path(r'D:\FPGA\codex20\official-tinyml\tinyml_hello_world\Ti60F225_tinyml_hello_world\embedded_sw\SapphireSoc\software\standalone\tinyml_pdti8\src\model\mobilenetv1_person_detect_model_data.cc').read_text(encoding='utf-8', errors='replace')
+old_cc = Path(r'PROJECT:\FPGA\TOOL20\official-tinyml\tinyml_hello_world\Ti60F225_tinyml_hello_world\embedded_sw\SapphireSoc\software\standalone\tinyml_pdti8\src\model\mobilenetv1_person_detect_model_data.cc').read_text(encoding='utf-8', errors='replace')
 old_bytes = bytes(int(x, 16) for x in re.findall(r'0x([0-9a-fA-F]{2})', old_cc))
 old_head = old_bytes[:32]
 identities = json.loads((HERE / 'firmware_identities_v291.json').read_text(encoding='utf-8'))

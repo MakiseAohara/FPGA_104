@@ -1,4 +1,4 @@
-C:\Users\Makise Aohara\Documents\Codex\2026-10-26\yo\work\v29_production_build\night\tinyml_pdti8.elf  :
+USER\Documents\TOOL\2026-10-26\yo\work\v29_production_build\night\tinyml_pdti8.elf  :
 section                size     addr
 .init                   112     4096
 .text                177384     4208

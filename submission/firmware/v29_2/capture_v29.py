@@ -47,8 +47,8 @@ def main():
     OUT.mkdir(exist_ok=True)
     identity=json.loads((HERE/'firmware_identities.json').read_text(encoding='utf-8'))
     args=argparse.Namespace(out=OUT,port='COM15',bit=ROOT/'evidence/v27_rtl_ir/v7_MERGE15.bit',
-        efinity=Path(r'D:\Efinity\2026.1'),
-        flash=Path(r'C:\Users\Makise Aohara\Documents\Codex\2026-10-15\https-github-com-makiseaohara-fpga-104\outputs\fpga_onboard_verified_20261020\tools\flash_vendor.ps1'))
+        efinity=Path(r'TOOLS:\Efinity\2026.1'),
+        flash=Path(r'USER\Documents\TOOL\2026-10-15\https-github-com-USER-fpga-104\outputs\fpga_onboard_verified_20261020\tools\flash_vendor.ps1'))
     assert hashlib.sha256(args.bit.read_bytes()).hexdigest().upper()==continuous.M15
     sys.path.append(str(args.efinity/'python311/Lib/site-packages'));import serial
     previous=json.loads((OUT/'run_metadata.json').read_text(encoding='utf-8')) if options.resume else {}
@@ -122,7 +122,7 @@ def main():
             bitstream_sha256=continuous.M15,gaps=cap.gaps,reconnects=cap.reconnects,phases=events,results=results,
             fixed_readbacks=cap.fixed,offline_check_passed=False,
             authorization='User subsequently instructed serial reconnected and 上板 after the offline discrepancy was reported',
-            truth_source='Claude reviews exported images; scheduled phases are not labels')
+            truth_source='TOOL reviews exported images; scheduled phases are not labels')
         continuous.save(OUT/'run_metadata.json',result)
         display('采集已保存',error or '三十分钟采集结束，正在整理数据。','结果与异常将写入 comms/。')
         try:panel.stdin.close();panel.wait(timeout=3)
