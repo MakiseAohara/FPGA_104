@@ -35,6 +35,12 @@
 #ifndef MOT_SPLIT_MIN_W
 #define MOT_SPLIT_MIN_W  20
 #endif      /* v1.9：宽度 >= 该值的连通域才尝试"两人粘连"切分 */
+#ifndef MOT_SPLIT_MIN_ASPECT
+#define MOT_SPLIT_MIN_ASPECT 70  /* 宽度/高度 >= 70% 才认为"像两个人并肩"（单人约 30~40%） */
+#endif
+#ifndef MOT_SPLIT_MAX_ASPECT
+#define MOT_SPLIT_MAX_ASPECT 170 /* 宽度/高度 <= 170%：再宽就是背景墙条，不是两个并肩的人 */
+#endif
 #ifndef MOT_SPLIT_MIN_H
 #define MOT_SPLIT_MIN_H  12
 #endif
@@ -291,6 +297,8 @@ static int mot_find_split(const mot_work_t* w, unsigned char id,
    long la = 0, ra = 0;
    const int wd = x1 - x0 + 1, ht = y1 - y0 + 1;
    if (wd < MOT_SPLIT_MIN_W || ht < MOT_SPLIT_MIN_H) return -1;
+   if (wd * 100 < ht * MOT_SPLIT_MIN_ASPECT) return -1;   /* 单个人：宽高比远小于 0.7，不切 */
+   if (wd * 100 > ht * MOT_SPLIT_MAX_ASPECT) return -1;   /* 背景墙条：宽高比过大，不切 */
    if (area < 2 * MOT_MIN_AREA) return -1;
    for (x = x0; x <= x1; ++x) col[x] = 0;
    for (y = y0; y <= y1; ++y) {
