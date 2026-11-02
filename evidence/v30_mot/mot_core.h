@@ -35,6 +35,9 @@
 #ifndef MOT_MERGE_PX
 #define MOT_MERGE_PX        14   /* v2.0：两条航迹质心距离 <= 该值（px）且面积相近 => 合并 */
 #endif
+#ifndef MOT_NEWTRK_IOU
+#define MOT_NEWTRK_IOU   320   /* 千分比：新检测与已确认航迹（含外推框）IoU >= 该值 => 视为同一目标，不再新建航迹 */
+#endif
 #ifndef MOT_MERGE_IOU
 #define MOT_MERGE_IOU     300   /* 千分比：两框 IoU >= 0.30 才认为是同一目标被切开 */
 #endif
@@ -688,10 +691,18 @@ static void mot_associate(mot_ctx_t* c)
       }
    }
 
-   /* 未匹配检测：新建航迹 */
+   /* 未匹配检测：新建航迹（v2.1：先排除"其实就是已有确认航迹"的检测，避免一人多轨） */
    for (i = 0; i < c->n_det; ++i) {
       mot_trk_t* t;
+      int dup_of_trk = 0;
       if (det_used[i]) continue;
+      for (k = 0; k < c->n_trk; ++k) {
+         short b4[4]; int pcx, pcy;
+         if (!c->trk[k].confirmed || !c->trk[k].active) continue;
+         mot_predict_box(&c->trk[k], 16, b4, &pcx, &pcy);
+         if (mot_iou4(&c->det[i], b4) >= MOT_NEWTRK_IOU) { dup_of_trk = 1; break; }
+      }
+      if (dup_of_trk) continue;
       if (c->n_trk >= MOT_MAX_TRK) {
          int victim = -1, j;
          for (j = 0; j < c->n_trk; ++j) if (!c->trk[j].confirmed) { victim = j; break; }
