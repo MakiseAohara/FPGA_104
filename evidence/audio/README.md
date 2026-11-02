@@ -102,3 +102,13 @@ assign audio_beep_en = (!audio_boot_done) | mmt_alarm_active;
 
 恢复供电后即可验证：刷 MERGE19 → 录 12 s → `D:\v30_build\rec_analyze_on.py`（信噪比 > 3 判为出声）。
 验证完请刷回 `MERGE18_AUDIO`（正常版）。
+
+## 8. 重要更正：音频与视频不能共存（2026-11-02）
+
+- 带音频的位流 `MERGE18_AUDIO` / `MERGE19_AUDIO_ON` 刷上去后，**显示器黑屏**；
+- 同一时间串口完全正常（`MMT_DEC`/`MMT_MOT`/缩略图持续输出，甚至录到 5 次报警），
+  说明相机→DDR→推理→OSD 链路是活的，坏的是 **HDMI TMDS 输出**；
+- 因此 ⑦ 的准确状态是：**音频通道已验证出声，但音频包插入破坏了视频 → 未落地**；
+- 交付位流固定为 **`v7_MERGE17.bit`**（无音频），固件 `C15D47FD`；
+- 待验证的隔离实验：`MERGE20_AUDIO_SILENT`（2,827,041 B / `9354EF19…4730`，音频端口照接但 `audio_valid=0`、L/R=0），
+  用来区分"是音频包内容有问题"还是"光是接上这几根线就破坏 TMDS"。
