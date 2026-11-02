@@ -1,0 +1,72 @@
+<!doctype html><meta charset=utf-8><title>MMT 实时监控</title>
+<style>
+body{background:#111;color:#ddd;font:15px/1.6 "Microsoft YaHei",Consolas,monospace;margin:16px;max-width:560px}
+.box{border:1px solid #333;padding:12px;margin-bottom:10px;border-radius:8px}
+img{image-rendering:pixelated;border:1px solid #333;width:100%;max-width:512px;display:block;margin:0 auto 10px}
+#big{font-size:26px;font-weight:bold;text-align:center;padding:6px 0}
+#sum{text-align:center;color:#aaa;font-size:15px}
+.ok{color:#5f5}.warn{color:#f55}.idle{color:#fc5}.dim{color:#777}
+details summary{cursor:pointer;color:#8ab}
+td{padding:2px 12px;color:#bbb}
+</style>
+<body>
+<h2>MMT 多模态终端 · 实时监控</h2>
+<div class=box>
+  <img id=fr src=/frame.png>
+  <div id=imgage class=dim style="text-align:center;font-size:13px"></div>
+  <div id=big>连接中…</div>
+  <div id=sum></div>
+</div>
+<details class=box open><summary>画面里的目标</summary><div id=tgt class=dim>—</div></details>
+<details class=box><summary>技术细节（后台数值）</summary><div id=tech class=dim>—</div></details>
+<details class=box><summary>最近事件</summary><div id=ev class=dim>—</div></details>
+<script>
+function h(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+async function tick(){
+ try{
+  const j=await (await fetch("/api/status")).json();
+  const age=(Date.now()/1000-j.last);
+  const big=document.getElementById("big"), sum=document.getElementById("sum");
+
+  const n=(typeof j.mot_obs==="number")?j.mot_obs:(j.mot_conf||0);
+  if(age>3){
+    big.className="warn"; big.textContent="数据中断 "+age.toFixed(1)+" 秒";
+    sum.textContent="下面的数字都是旧的，请检查串口/板子";
+  } else if(j.alarm){
+    big.className="warn"; big.textContent="⚠ 报警中";
+    sum.textContent="画面里 "+n+" 人 · 画面帧率 "+j.camfps;
+  } else {
+    const lp=(j.lowpwr||j.fw_lp);
+    if(n>0){ big.className="ok"; big.textContent="画面里 "+n+" 人"; }
+    else if(lp){ big.className="idle"; big.textContent="低功耗中 · 画面无人"; }
+    else { big.className="ok"; big.textContent="正常 · 画面无人"; }
+    sum.textContent="画面帧率 "+j.camfps+(lp?" · 推理已暂停":"");
+  }
+
+  document.getElementById("fr").src="/frame.png?t="+Date.now();
+  const ia=(j.thumb_ts>0)?(Date.now()/1000-j.thumb_ts):-1;
+  document.getElementById("imgage").textContent = ia<0 ? "" :
+    "画面为 "+ia.toFixed(1)+" 秒前（下面的数值是实时的）";
+  document.getElementById("tgt").innerHTML=
+    "画面里的人数：<b>"+n+"</b>　<span class=dim>只数本帧真的看到、框够大的</span><br>"+
+    "航迹表：<b>"+j.mot_nt+"</b> 条<span class=dim>（含正在丢失/噪点）</span>　检测框：<b>"+j.mot_nd+"</b><br>"+
+    "最近一次报警时的检测人数：<b>"+(j.alarm_nd>=0?j.alarm_nd:"—")+"</b>"+
+    (j.alarm_nt>=0?"（航迹 "+j.alarm_nt+"）":"");
+  document.getElementById("tech").innerHTML=
+    "<table><tr><td>AI 判人 / 画面人数</td><td>"+(j.person?"有人":"无人")+"　/　"+n+" 人</td></tr>"+
+    "<tr><td>AI 人体分 p</td><td>"+j.p+"　(≥0 判有人)</td></tr>"+
+    "<tr><td>运动 / 面积</td><td>"+(j.motion?"有":"无")+"　"+j.area+"</td></tr>"+
+    "<tr><td>红外热点(irhot)</td><td>"+(j.irhot?"有":"无")+"</td></tr>"+
+    "<tr><td>低功耗（固件/RTL）</td><td>"+(j.fw_lp?"开":"关")+"　/　"+(j.lowpwr?"开":"关")+"</td></tr>"+
+    "<tr><td>推理</td><td>"+(j.paused?"已暂停":"运行中")+"</td></tr>"+
+    "<tr><td>画面帧率 / 推理频率</td><td>"+j.camfps+"　/　"+j.inf_hz+" Hz</td></tr>"+
+    "<tr><td>温度 / 湿度 / 体表</td><td>"+j.sht+" °C　"+j.rh+" %　"+j.body+"</td></tr>"+
+    "<tr><td>数据延迟</td><td>"+age.toFixed(1)+" s</td></tr></table>";
+  const e=await (await fetch("/api/events")).json();
+  document.getElementById("ev").innerHTML=e.slice(-8).reverse()
+    .map(x=>x.ts.replace("T"," ")+"　"+x.kind).join("<br>")||"—";
+ }catch(e){}
+ setTimeout(tick,400);
+}
+tick();
+</script>

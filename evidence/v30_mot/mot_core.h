@@ -27,7 +27,7 @@
 #define MOT_N            (MOT_W * MOT_H)
 
 #define MOT_MAX_DET      6
-#define MOT_MAX_TRK      4
+#define MOT_MAX_TRK      2       /* v2.1：现场最多 2 人；4 会容纳超分割产生的虚警轨（3~4群 占 22~27%） */
 #define MOT_TRAJ_LEN     12      /* 每目标保留的轨迹点数 */
 
 #define MOT_DIFF_THR     14      /* 与背景的差阈值（拉伸后画面） */
@@ -39,13 +39,14 @@
 #define MOT_NEWTRK_IOU   320   /* 千分比：新检测与已确认航迹（含外推框）IoU >= 该值 => 视为同一目标，不再新建航迹 */
 #endif
 #ifndef MOT_MERGE_IOU
-#define MOT_MERGE_IOU     300   /* 千分比：两框 IoU >= 0.30 才认为是同一目标被切开 */
+#define MOT_MERGE_IOU     300   /* 千分比：旧判据（对切分两半恒不触发，已废弃，仅保留作关闭开关） */
+#define MOT_MERGE_Y_OVERLAP 80  /* v2.1：两框竖向带交叠 >= 较小框高度的 80% 才并 */
 #endif
 #ifndef MOT_MERGE_AREA_HI
 #define MOT_MERGE_AREA_HI  170   /* v2.0：面积比上限（%） */
 #endif
 #ifndef MOT_SPLIT_MIN_SEP
-#define MOT_SPLIT_MIN_SEP    9   /* v2.0：切开后左右两半质心至少相距该值（px），否则不切 */
+#define MOT_SPLIT_MIN_SEP    12  /* v2.0：切开后左右两半质心至少相距该值（px），否则不切（v2.1: 9->12，减少超分割） */
 #endif
 #ifndef MOT_SPLIT_HALF_H
 #define MOT_SPLIT_HALF_H    60   /* v2.0：切开后每一半高度 >= 整块高度的 60% 才认 */
@@ -62,8 +63,10 @@
 #ifndef MOT_SPLIT_MIN_H
 #define MOT_SPLIT_MIN_H  12
 #endif
-#define MOT_SPLIT_VALLEY 35      /* 谷深：切分列像素数 <= 峰值 * 35% */
+#define MOT_SPLIT_VALLEY 45      /* 谷深：切分列像素数 <= 峰值 * 45%（v2.1: 35->45，要求更明显的谷才切） */
 #define MOT_MIN_AREA     60      /* 最小目标面积（膨胀后 px）：暗场噪点约 20-50 */
+#define MOT_MIN_PERSON_AREA 150  /* v3.6：页面"人数"只数面积达标的框（<150 是噪点/反光） */
+#define MOT_MIN_PERSON_H    12   /* v3.6：且高度 >=12（96 格里 12.5%，8 m 外的人也比他高） */
 #define MOT_MAX_AREA     9000    /* 最大目标面积：人贴近镜头可占整幅九成，只有"整幅全变"才丢 */
 #define MOT_IOU_THR      200     /* IOU 阈值，千分比（200 = 0.20） */
 #ifndef MOT_MAX_MISS
@@ -91,10 +94,10 @@
 #define MOT_IR_NEED      2       /* v1.5 Bug1：红外 10 帧内热计数阈值（与固件 IR_NEED 对齐） */
 
 /* 行为预测用的 ROI：画面中间 2/3（进入这块才算"进入画面主体"） */
-#define MOT_ROI_X0       16
-#define MOT_ROI_Y0       16
-#define MOT_ROI_X1       80
-#define MOT_ROI_Y1       80
+#define MOT_ROI_X0       0       /* v3.0: 报警区扩到整幅（原 16..80 只认中心） */
+#define MOT_ROI_Y0       0
+#define MOT_ROI_X1       95
+#define MOT_ROI_Y1       95
 
 typedef struct {
    short x0, y0, x1, y1;   /* 闭区间包围盒 */
@@ -117,6 +120,7 @@ typedef struct {
    short supported;          /* v1.7 #2：本帧是否有 AI/红外/运动支撑 */
    short mean;               /* v1.7 #4：平均灰度 */
    short still;              /* 连续静止帧数（速度≈0） */
+   short full;               /* v3.6：整幅检测（>80% 宽且 >80% 高）——光照突变，不是人 */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
@@ -481,7 +485,9 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    t->vx = (short)(((int)t->vx * 3 + dx * 16) / 4);
    t->vy = (short)(((int)t->vy * 3 + dy * 16) / 4);
    /* 整幅检测（人贴近镜头）不参与速度更新，否则质心跳变会算出几百 px/帧 的假速度 */
-   if ((int)(d->x1 - d->x0 + 1) > MOT_W * 4 / 5 && (int)(d->y1 - d->y0 + 1) > MOT_H * 4 / 5) {
+   t->full = ((int)(d->x1 - d->x0 + 1) > MOT_W * 4 / 5 &&
+              (int)(d->y1 - d->y0 + 1) > MOT_H * 4 / 5) ? 1 : 0;
+   if (t->full) {
       t->vx = (short)0; t->vy = (short)0;
    }
    if (t->vx > -8 && t->vx < 8 && t->vy > -8 && t->vy < 8) { if (t->still < 32000) t->still++; }
@@ -568,19 +574,19 @@ static void mot_merge_tracks(mot_ctx_t* c)
 #ifdef MOT_TEST_DEBUG
          mot_dbg.t_area++;
 #endif
+         if (MOT_MERGE_IOU > 1000) continue;   /* -DMOT_MERGE_IOU=2001 = 整体关闭合并（A/B 用） */
          {
-            /* 关键判据：两条航迹的框必须"重叠"（同一个人被切开时两块必然重叠），
-               并排站着的两个人框基本不重叠，从而不会被误并 */
-            const int ix0 = a->x0 > b->x0 ? a->x0 : b->x0;
-            const int iy0 = a->y0 > b->y0 ? a->y0 : b->y0;
-            const int ix1 = a->x1 < b->x1 ? a->x1 : b->x1;
-            const int iy1 = a->y1 < b->y1 ? a->y1 : b->y1;
-            long inter, uni;
-            if (ix1 < ix0 || iy1 < iy0) continue;
-            inter = (long)(ix1 - ix0 + 1) * (iy1 - iy0 + 1);
-            uni = ar + br - inter;
-            if (uni <= 0) continue;
-            if (inter * 1000 / uni < MOT_MERGE_IOU) continue;
+            /* v2.1 判据：切分把一个人切成"同一竖向带内的左右两块"——两块共享同一条人形高度，
+               但框是相邻不重叠的，所以旧 IoU 判据实测 0/51 触发（等于合并从未生效）。
+               改用竖向带交叠比例；并肩两人通常纵向错开（一个近一个远），交叠比例上不去。 */
+            const int oy0 = a->y0 > b->y0 ? a->y0 : b->y0;
+            const int oy1 = a->y1 < b->y1 ? a->y1 : b->y1;
+            const int ha = (int)a->y1 - (int)a->y0 + 1;
+            const int hb = (int)b->y1 - (int)b->y0 + 1;
+            const int hmin = ha < hb ? ha : hb;
+            if (oy1 < oy0) continue;
+            if (hmin <= 0) continue;
+            if ((oy1 - oy0 + 1) * 100 < hmin * MOT_MERGE_Y_OVERLAP) continue;
 #ifdef MOT_TEST_DEBUG
             mot_dbg.t_iou++;
 #endif
@@ -751,14 +757,71 @@ static void mot_associate(mot_ctx_t* c)
    }
 }
 
-/* 当前在场的确认航迹数（丢失中的不算） */
+/* 当前在场的确认航迹数（丢失中的不算；整幅光照突变不算） */
 static int mot_active_confirmed(const mot_ctx_t* c)
 {
    int k, n = 0;
    for (k = 0; k < c->n_trk; ++k) {
-      if (c->trk[k].confirmed && c->trk[k].active) n++;
+      if (c->trk[k].confirmed && c->trk[k].active && !c->trk[k].full) n++;
    }
    return n;
+}
+
+/* v3.6 "画面里有几个人"。页面原来显示 n_trk（航迹表大小，含正在丢失的航迹和噪点），
+   所以会出现"一个人显示两个人""人走了还显示一个人"。这里只数：
+   - 本帧真的看到（misses==0，不是靠 coast 撑着）
+   - 框够大（面积 >=150 且高 >=12）
+   - 整幅框（>=80% 宽且 >=80% 高）需要 AI 判人有 或 红外热，否则按光照突变/自动曝光处理
+   - 同一个人的两块（谷切分、或一块被另一块包住）只算一个 */
+static int mot_fresh_confirmed(const mot_ctx_t* c)
+{
+   short bx0[MOT_MAX_TRK], by0[MOT_MAX_TRK], bx1[MOT_MAX_TRK], by1[MOT_MAX_TRK];
+   const int human = (c->ai_p >= 0) || (c->ir_cnt > 0);
+   int k, j, n = 0;
+   for (k = 0; k < c->n_trk; ++k) {
+      const mot_trk_t* t = &c->trk[k];
+      const int w = (int)t->x1 - (int)t->x0 + 1;
+      const int h = (int)t->y1 - (int)t->y0 + 1;
+      if (!t->confirmed || !t->active || t->misses != 0) continue;
+      if (w * h < MOT_MIN_PERSON_AREA || h < MOT_MIN_PERSON_H) continue;
+      if (w * 5 >= MOT_W * 4 && h * 5 >= MOT_H * 4 && !human) continue;
+      bx0[n] = t->x0; by0[n] = t->y0; bx1[n] = t->x1; by1[n] = t->y1; n++;
+      if (n >= MOT_MAX_TRK) break;
+   }
+   for (k = 0; k < n; ++k) {
+      for (j = k + 1; j < n; ++j) {
+         if (bx1[k] < 0 || bx1[j] < 0) continue;
+         {
+            const int hk = by1[k] - by0[k] + 1, hj = by1[j] - by0[j] + 1;
+            const int hm = hk < hj ? hk : hj;
+            const int oy0 = by0[k] > by0[j] ? by0[k] : by0[j];
+            const int oy1 = by1[k] < by1[j] ? by1[k] : by1[j];
+            const int oy = oy1 - oy0 + 1;
+            const int gap = (bx0[j] > bx1[k]) ? (bx0[j] - bx1[k] - 1)
+                           : ((bx0[k] > bx1[j]) ? (bx0[k] - bx1[j] - 1) : 0);
+            const int ix0 = bx0[k] > bx0[j] ? bx0[k] : bx0[j];
+            const int ix1 = bx1[k] < bx1[j] ? bx1[k] : bx1[j];
+            const int iy0 = by0[k] > by0[j] ? by0[k] : by0[j];
+            const int iy1 = by1[k] < by1[j] ? by1[k] : by1[j];
+            const int iw = ix1 - ix0 + 1, ih = iy1 - iy0 + 1;
+            const int ak = hk * (bx1[k] - bx0[k] + 1), aj = hj * (bx1[j] - bx0[j] + 1);
+            const int am = ak < aj ? ak : aj;
+            const int inter = (iw > 0 && ih > 0) ? iw * ih : 0;
+            const int adj  = (oy * 5 >= hm * 4 && gap <= 3);       /* 左右两半 */
+            const int cont = (am > 0 && inter * 20 >= am * 17);    /* 一块基本包住另一块（>=85%） */
+            if (adj || cont) {
+               bx1[k] = (short)(bx1[k] > bx1[j] ? bx1[k] : bx1[j]);
+               bx0[k] = (short)(bx0[k] < bx0[j] ? bx0[k] : bx0[j]);
+               by1[k] = (short)(by1[k] > by1[j] ? by1[k] : by1[j]);
+               by0[k] = (short)(by0[k] < by0[j] ? by0[k] : by0[j]);
+               bx1[j] = (short)-1;
+            }
+         }
+      }
+   }
+   j = 0;
+   for (k = 0; k < n; ++k) if (bx1[k] >= 0) j++;
+   return j;
 }
 
 /* 在动且已确认的航迹数（静止的箱子/家具不算"人体证据"） */
