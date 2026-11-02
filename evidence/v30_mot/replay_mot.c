@@ -45,6 +45,7 @@ int main(int argc, char** argv)
    fprintf(stderr, "DBG calls=%d area_rej=%d ghost_rej=%d dup=%d ok=%d last_mov=%d last_area=%d last_split=%d\n",
            mot_dbg.calls, mot_dbg.area_rej, mot_dbg.ghost_rej, mot_dbg.dup_rej, mot_dbg.ok,
            mot_dbg.last_mov, mot_dbg.last_area, mot_dbg.last_split);
+   fprintf(stderr, "DBG2 merged=%d pairs=%d dist_ok=%d area_ok=%d iou_ok=%d\n", mot_dbg.merged, mot_dbg.t_pair, mot_dbg.t_dist, mot_dbg.t_area, mot_dbg.t_iou);
 #endif
    fprintf(stderr, "replayed %d frames\n", idx);
    return 0;

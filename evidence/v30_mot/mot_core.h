@@ -32,6 +32,21 @@
 
 #define MOT_DIFF_THR     14      /* 与背景的差阈值（拉伸后画面） */
 #define MOT_MOTION_THR   10      /* 帧间差分阈值（鬼影剔除用） */
+#ifndef MOT_MERGE_PX
+#define MOT_MERGE_PX        14   /* v2.0：两条航迹质心距离 <= 该值（px）且面积相近 => 合并 */
+#endif
+#ifndef MOT_MERGE_IOU
+#define MOT_MERGE_IOU     300   /* 千分比：两框 IoU >= 0.30 才认为是同一目标被切开 */
+#endif
+#ifndef MOT_MERGE_AREA_HI
+#define MOT_MERGE_AREA_HI  170   /* v2.0：面积比上限（%） */
+#endif
+#ifndef MOT_SPLIT_MIN_SEP
+#define MOT_SPLIT_MIN_SEP    9   /* v2.0：切开后左右两半质心至少相距该值（px），否则不切 */
+#endif
+#ifndef MOT_SPLIT_HALF_H
+#define MOT_SPLIT_HALF_H    60   /* v2.0：切开后每一半高度 >= 整块高度的 60% 才认 */
+#endif
 #ifndef MOT_SPLIT_MIN_W
 #define MOT_SPLIT_MIN_W  20
 #endif      /* v1.9：宽度 >= 该值的连通域才尝试"两人粘连"切分 */
@@ -228,7 +243,7 @@ static int mot_hit_confirmed(const mot_ctx_t* c, int x0, int y0, int x1, int y1,
 
 /* ---------------- 4) 连通域 ---------------- */
 #ifdef MOT_TEST_DEBUG
-typedef struct { int calls, area_rej, ghost_rej, dup_rej, ok, last_mov, last_area, last_split; } mot_dbg_t;
+typedef struct { int calls, area_rej, ghost_rej, dup_rej, ok, last_mov, last_area, last_split, merged, t_pair, t_dist, t_area, t_iou; } mot_dbg_t;
 static mot_dbg_t mot_dbg;
 #endif
 static int mot_push_det(mot_ctx_t* c, int x0, int y0, int x1, int y1,
@@ -392,9 +407,16 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
             }
          }
          if (la >= MOT_MIN_AREA && lb >= MOT_MIN_AREA && lx1 >= lx0 && rx1 >= rx0) {
-            mot_push_det(c, lx0, ly0, lx1, ly1, (int)la, lax, lay, lav, lmov);
-            mot_push_det(c, rx0, ry0, rx1, ry1, (int)lb, lbx, lby, lbv, rmov);
-            continue;
+            /* v2.0：两半必须"够远、够高"才认是两个人，否则仍按一个人上报 */
+            const int sep_ok = (lax / la - lbx / lb) >= MOT_SPLIT_MIN_SEP ||
+                               (lbx / lb - lax / la) >= MOT_SPLIT_MIN_SEP;
+            const int h_ok = (ly1 - ly0 + 1) * 100 >= (y1 - y0 + 1) * MOT_SPLIT_HALF_H &&
+                             (ry1 - ry0 + 1) * 100 >= (y1 - y0 + 1) * MOT_SPLIT_HALF_H;
+            if (sep_ok && h_ok) {
+               mot_push_det(c, lx0, ly0, lx1, ly1, (int)la, lax, lay, lav, lmov);
+               mot_push_det(c, rx0, ry0, rx1, ry1, (int)lb, lbx, lby, lbv, rmov);
+               continue;
+            }
          }
       }
       mot_push_det(c, x0, y0, x1, y1, area, sx, sy, sumv, mov);
@@ -511,6 +533,67 @@ static int mot_iou4(const mot_det_t* d, const short* b4)
    return inter * 1000 / ua;
 }
 
+/* v2.0：一人多轨合并（防御性）。实测：切分产生的左右两半是"相邻"关系，IoU 常 <0.30，
+   本函数很少触发；真正把 ID 抖动压下来的是 mot_find_split 的两道门槛（最小间距/最低高度）。 */
+static void mot_merge_tracks(mot_ctx_t* c)
+{
+   int i, j;
+   for (i = 0; i < c->n_trk; ++i) {
+      mot_trk_t* a = &c->trk[i];
+      if (a->misses) continue;
+      for (j = i + 1; j < c->n_trk; ++j) {
+         mot_trk_t* b = &c->trk[j];
+         int dx, dy;
+         long ar, br;
+         mot_trk_t* keep;
+         mot_trk_t* drop;
+         if (b->misses) continue;
+         if (a->confirmed != b->confirmed) continue;
+#ifdef MOT_TEST_DEBUG
+         mot_dbg.t_pair++;
+#endif
+         dx = (int)a->cx - (int)b->cx;
+         dy = (int)a->cy - (int)b->cy;
+         if (dx * dx + dy * dy > MOT_MERGE_PX * MOT_MERGE_PX) continue;
+#ifdef MOT_TEST_DEBUG
+         mot_dbg.t_dist++;
+#endif
+         ar = (long)(a->x1 - a->x0 + 1) * (a->y1 - a->y0 + 1);
+         br = (long)(b->x1 - b->x0 + 1) * (b->y1 - b->y0 + 1);
+         if (ar <= 0 || br <= 0) continue;
+         if (br * 100 > ar * MOT_MERGE_AREA_HI || ar * 100 > br * MOT_MERGE_AREA_HI) continue;
+#ifdef MOT_TEST_DEBUG
+         mot_dbg.t_area++;
+#endif
+         {
+            /* 关键判据：两条航迹的框必须"重叠"（同一个人被切开时两块必然重叠），
+               并排站着的两个人框基本不重叠，从而不会被误并 */
+            const int ix0 = a->x0 > b->x0 ? a->x0 : b->x0;
+            const int iy0 = a->y0 > b->y0 ? a->y0 : b->y0;
+            const int ix1 = a->x1 < b->x1 ? a->x1 : b->x1;
+            const int iy1 = a->y1 < b->y1 ? a->y1 : b->y1;
+            long inter, uni;
+            if (ix1 < ix0 || iy1 < iy0) continue;
+            inter = (long)(ix1 - ix0 + 1) * (iy1 - iy0 + 1);
+            uni = ar + br - inter;
+            if (uni <= 0) continue;
+            if (inter * 1000 / uni < MOT_MERGE_IOU) continue;
+#ifdef MOT_TEST_DEBUG
+            mot_dbg.t_iou++;
+#endif
+         }
+         keep = (a->hits >= b->hits) ? a : b;
+         drop = (keep == a) ? b : a;
+#ifdef MOT_TEST_DEBUG
+         mot_dbg.merged++;
+#endif
+         keep->hits = (short)(keep->hits + drop->hits / 2);
+         if (keep->age < drop->age) keep->age = drop->age;
+         drop->misses = (short)(MOT_MAX_MISS + 1);   /* 交给后面的删除趟收走 */
+      }
+   }
+}
+
 static void mot_associate(mot_ctx_t* c)
 {
    static unsigned char det_used[MOT_MAX_DET];
@@ -625,6 +708,9 @@ static void mot_associate(mot_ctx_t* c)
       t->hits = 1; t->age = 1; t->traj_n = 1; t->active = 1; t->supported = 1; t->mean = c->det[i].mean;
       t->traj[0][0] = t->cx; t->traj[0][1] = t->cy;
    }
+
+   /* v2.0：先把"同一目标的多条航迹"合并，再执行删除 */
+   mot_merge_tracks(c);
 
    /* 删除丢失过久的航迹 */
    {
