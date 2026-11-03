@@ -38,6 +38,8 @@
 ## 4. 预测 —— 🟡 逻辑通了、可上报，缺真人触发
 
 - 数据驱动选了 1/2 阻尼速度（离线 37 条航迹：中位误差 5.00 px，全速 7.07，静止 6.00）；
+- ETA 逻辑用 `tools/eta_sim.py` 做了合成序列自检（站定 -1 / 慢走近 35 帧 / 快走近 2~4 帧），
+  并据此修掉三个实现问题（EMA 冷启动、阈值不一致、地平线太短）；
 - 预警触发时会额外发一个 **UDP type=2 (TREND)** 事件，页面能提前看到"正在靠近"；
 - 空场验证无虚假预警（`pre=0`）；真人靠近时的 `pre_eta` 数值需要现场确认。
 
@@ -52,5 +54,5 @@
 | `tools/web_monitor.py` + `tools/page.html` | PC 端监控（串口/UDP/HTTP） |
 | `tools/mot_analyze.py` `tools/pred_eval.py` `tools/mot_replay.py` `tools/cap.py` `tools/fake_board.py` | 离线分析与联调工具 |
 
-固件：`out_v30_e12` CRC32 **A1CD467E**（含实时画面 + TREND 事件）。
+固件：`out_v30_e13` CRC32 **76188F5F**（实时画面 + TREND 事件 + v17.2 ETA）；留档：e12 `A1CD467E`、e11 `B2F8AC11`、e9 `98AE9A19`、e7 `AA5188F9`。
 位流：`D:\eth_build\m17_ge\outflow\ti60f225_oob.bit` SHA256 `9A62F22A…8EF`。

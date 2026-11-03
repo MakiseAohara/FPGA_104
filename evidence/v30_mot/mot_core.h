@@ -104,7 +104,7 @@
 #define MOT_NEAR_PCT    55
 #endif
 #ifndef MOT_ARATE_MIN
-#define MOT_ARATE_MIN   6
+#define MOT_ARATE_MIN   4     /* v17.2：>=4%/帧才算"在靠近"（离线自检 tools/eta_sim.py 得出） */
 #endif
 /* v17.1（默认关闭，等有操作者的两次上板对比再开）：
    关联门限随目标尺寸放大 —— 整幅框(96 高)的人一步能跳出 MOT_GATE_PX=16，旧门限必然换号。
@@ -154,6 +154,7 @@ typedef struct {
    short area;               /* v3.11：上一帧面积（判"正在靠近"） */
    short grow;               /* v3.11：连续面积增长帧数 */
    short arate;              /* v17：面积增长率 EMA（%/帧），用于"还有几帧贴脸" */
+   short grow2;              /* v17.2：连续"在变大"（>=3%/帧）的帧数 */
    short full;               /* v3.6：整幅检测（>80% 宽且 >80% 高）——光照突变，不是人 */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short traj_n;
@@ -497,14 +498,15 @@ static int mot_eta_frames(const mot_trk_t* t)
    int best = -1;
    /* ① 靠近镜头：面积按 arate %/帧 增长 → 估算距离"近景阈值"还有几帧。
       人往镜头走时框一直在变大，这条比质心速度更早、更稳地给出提前量。 */
-   if (t->arate >= MOT_ARATE_MIN && t->area > 0) {
+   if (t->grow2 >= 2 && t->arate >= MOT_ARATE_MIN && t->area > 0) {
       const long tgt = (long)MOT_W * MOT_H * MOT_NEAR_PCT / 100;
       long a = t->area;
       int k;
-      for (k = 1; k <= 30; ++k) {
+      best = 60;                       /* 60 帧内到不了 = "还早"，比 -1 更好判断 */
+      for (k = 1; k <= 60; ++k) {
          a += a * t->arate / 100;
          if (a >= tgt) { best = k; break; }
-         if (a > (long)MOT_W * MOT_H) break;
+         if (a > (long)MOT_W * MOT_H) { best = k; break; }
       }
    }
    /* ② 位置：不在 ROI 里时，按速度外推看几帧后能进 ROI（横向跑进来的人） */
@@ -545,11 +547,14 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
       const int ar = (int)(d->x1 - d->x0 + 1) * (int)(d->y1 - d->y0 + 1);
       if (t->area > 0 && ar * 100 > (int)t->area * 108) { if (t->grow < 32000) t->grow++; }
       else if (t->area > 0 && ar * 100 < (int)t->area * 96) t->grow = 0;
-      if (t->area > 0) {                      /* v17：面积增长率 EMA（%/帧） */
+      if (t->area > 0) {                      /* v17.2：面积增长率 EMA（%/帧） */
          int r = (ar * 100) / (int)t->area - 100;
          if (r > 60) r = 60;
          if (r < -60) r = -60;
          t->arate = (short)(((int)t->arate * 3 + r) / 4);
+         if (r > 0 && (int)t->arate < r) t->arate = (short)r;   /* 变大立即跟上，变小慢慢降 */
+         if (r >= 3) { if (t->grow2 < 32000) t->grow2++; }
+         else if (r <= 0) t->grow2 = 0;
       }
       t->area = (short)(ar > 32767 ? 32767 : ar);
    }
