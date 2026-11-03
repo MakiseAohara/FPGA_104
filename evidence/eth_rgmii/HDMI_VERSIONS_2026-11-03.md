@@ -59,3 +59,34 @@ copy "C:\...\evidence\eth_rgmii\sdc_cdc_fix_2026-11-03.sdc" D:\eth_build\m17_ge\
 cd D:\eth_build\m17_ge
 & D:\Efinity\2026.1\bin\efx_run.bat ti60f225_oob.xml -f compile
 ```
+
+---
+
+# 板内网络打通记录（2026-11-04 00:15）
+
+## 结论：RX 通了，ping 已经由 FPGA 回包
+
+| 项 | 结果 |
+|---|---|
+| 位流 | EB5C9D43...(E52B)，MERGE17 源码 + GE + 自研 raw RX，2,851,020 B |
+| 固件 | e23 0490EDD4（非阻塞发送 / RX STATUS 位解析 / 广播目的 IP / 整帧补 FCS / 关掉大 dump） |
+| ARP | 通：板子回 ARP（rn=42），PC 缓存能解析 |
+| ICMP | 通：ping 169.254.47.62 有回包（2/4，138-425 ms） |
+| HTTP | 未通：curl 仍 000（TCP 握手没完成） |
+
+## 这一轮修掉的四个真问题（板内网页的必要条件）
+
+1. rx_dv 引脚被 DDIO 规则卡掉：GPIOL_N_08 是 EXT_CONFIG_CLK 复用脚，工具报 gpio_rule_cfg_input_ddio，
+   该脚从来没被分配（Missing Interface Pin rx_dv_HI）。改成普通输入（ddio_type=none、上升沿采样）后消失。
+2. RX 数据源接错模块：原设计把厂商 ge_udp_rx_bridge 接到 APB，它只搬 UDP 负载，帧头/ARP/TCP 全丢。
+   改成自研 ge_raw_rx（整帧进 BRAM）后，固件立刻收到 356 B 的帧。
+3. 收包带前导码且首字节常错：RGMII 采到 0x55 x7 + 0xD5 开头，固件按 0xD5 定位帧首（ge_rx_align）。
+4. 回包没有 FCS/没补最小帧：ge_send_raw 直接推原始帧，PC 当坏帧丢 —— 这就是"固件回了 42 B ARP
+   而 PC 侧 ARP 仍 Incomplete"的原因。补 60 B 与 CRC32 后 ping 立刻通。
+
+## HTTP 仍不通的原因
+
+主循环每圈要做一次 TFLite 推理（150-300 ms），期间不收包；1 Gbps 下 1 KB 帧只有 8 us，
+多数包在轮询空档被覆盖，丢包约 50%（与 ping 2/4 吻合）。TCP 需三方向都成功，握手成功率约 12%。
+
+下一步：RX 加多帧队列（RTL）或在推理等待里插 ge_http_service()（固件）。
