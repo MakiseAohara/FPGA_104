@@ -250,31 +250,33 @@ static int ge_send(const char* s, int len)
 {
    static unsigned char f[1200];
    int i, k, n, len4, guard = 200000;
-   int ip_len, udp_len;
+   int ip_len, udp_len, lenp;
    unsigned short c;
    if (len < 0 || len > 1100) return -1;
-   for (i = 0; i < 6; ++i) f[i] = 0xFF;            /* dst MAC: broadcast */
+   lenp = len;
+   if (lenp < 18) lenp = 18;
+   for (i = 0; i < 6; ++i) f[i] = 0xFF;
    f[6] = 0x00; f[7] = 0x0a; f[8] = 0x35; f[9] = 0x01; f[10] = 0xfe; f[11] = 0xc0;
-   f[12] = 0x08; f[13] = 0x00;                     /* IPv4 */
-   ip_len = 20 + 8 + len;
+   f[12] = 0x08; f[13] = 0x00;
+   ip_len = 20 + 8 + lenp;
    f[14] = 0x45; f[15] = 0x00;
    f[16] = (unsigned char)(ip_len >> 8); f[17] = (unsigned char)ip_len;
    f[18] = 0; f[19] = 0; f[20] = 0; f[21] = 0;
-   f[22] = 64; f[23] = 17;                         /* TTL / UDP */
-   f[24] = 0; f[25] = 0;                           /* ip checksum (later) */
+   f[22] = 64; f[23] = 17;
+   f[24] = 0; f[25] = 0;
    f[26] = 169; f[27] = 254; f[28] = 47; f[29] = 62;
    f[30] = 169; f[31] = 254; f[32] = 47; f[33] = 61;
    c = ge_ip_csum(f + 14, 20);
    f[24] = (unsigned char)(c >> 8); f[25] = (unsigned char)c;
-   udp_len = 8 + len;
+   udp_len = 8 + lenp;
    f[34] = (unsigned char)(8080 >> 8); f[35] = (unsigned char)8080;
    f[36] = (unsigned char)(8080 >> 8); f[37] = (unsigned char)8080;
    f[38] = (unsigned char)(udp_len >> 8); f[39] = (unsigned char)udp_len;
-   f[40] = 0; f[41] = 0;                           /* UDP 校验和 0（IPv4 允许） */
+   f[40] = 0; f[41] = 0;
    for (i = 0; i < len; ++i) f[42 + i] = (unsigned char)s[i];
-   n = 42 + len;
+   for (i = len; i < lenp; ++i) f[42 + i] = 0;
+   n = 42 + lenp;
    {
-      /* 以太网 FCS：CRC32（反射多项式），低位字节先发 */
       uint32_t crc = 0xFFFFFFFFu;
       int b, bit;
       for (b = 0; b < n; ++b) {
@@ -293,7 +295,7 @@ static int ge_send(const char* s, int len)
    for (i = n; i < len4; ++i) f[i] = 0;
    while (GE_BUSY() && --guard > 0) { }
    if (guard <= 0) return -2;
-   GE_CTRL = 2u;                                   /* 清发送指针 */
+   GE_CTRL = 2u;
    for (i = 0; i < len4; i += 4) {
       uint32_t w = 0;
       for (k = 0; k < 4; ++k) w |= (uint32_t)f[i + k] << (8 * k);
@@ -301,11 +303,9 @@ static int ge_send(const char* s, int len)
    }
    GE_TXLEN = (uint32_t)n;
    GE_CTRL = 0u;
-   GE_CTRL = 1u;                                   /* GO（电平触发） */
+   GE_CTRL = 1u;
    return 0;
 }
-
-
 
 /* ---------------- v5.0 事件上报（只用发送方向） ---------------- */
 #define EV_MAGIC0   0x4Du
@@ -314,7 +314,7 @@ static int ge_send(const char* s, int len)
 #define EV_T_EVENT  1u
 #define EV_T_HB     2u
 #define EV_T_THUMB  3u
-#define EV_THUMB_CHUNK 900
+#define EV_THUMB_CHUNK 1000
 
 static uint32_t g_ev_id = 0;
 static unsigned char g_thumb[96 * 96];   /* 96x96 灰度，报警时编 PNG 上报 */
@@ -345,40 +345,30 @@ static int ge_udp_pkt(unsigned char type, uint32_t evid, unsigned short seq,
 /* 报警事件：ev=1 开始 / 2 结束；body = ev,x,y,conf,obs,nd */
 static void ge_ev_alarm(int ev, int x, int y, int conf, int obs, int nd, uint32_t ms)
 {
-   unsigned char b[8];
-   b[0] = (unsigned char)ev;
+   unsigned char b[5];
+   (void)nd;
+   b[0] = (unsigned char)ev;                     /* 0=NORMAL 1=INTRUDE 2=TREND 3=PERSON 4=LOWPWR */
    b[1] = (unsigned char)(x & 0xFF);
    b[2] = (unsigned char)(y & 0xFF);
    b[3] = (unsigned char)(conf & 0xFF);
    b[4] = (unsigned char)(obs & 0xFF);
-   b[5] = (unsigned char)(nd & 0xFF);
-   b[6] = 0; b[7] = 0;
-   (void)ge_udp_pkt(EV_T_EVENT, g_ev_id, 0, 0, ms, b, 8);
+   (void)ge_udp_pkt(EV_T_EVENT, g_ev_id, 0, 1, ms, b, 5);
 }
 
 /* 心跳：obs,person,alarm,fps,area_lo,area_hi */
 static void ge_ev_hb(int obs, int person, int alarm, int fps, int area, uint32_t ms)
 {
-   unsigned char b[8];
-   b[0] = (unsigned char)(obs & 0xFF);
-   b[1] = (unsigned char)(person & 0xFF);
-   b[2] = (unsigned char)(alarm & 0xFF);
-   b[3] = (unsigned char)(fps & 0xFF);
-   b[4] = (unsigned char)(area & 0xFF);
-   b[5] = (unsigned char)((area >> 8) & 0xFF);
-   b[6] = 0; b[7] = 0;
-   (void)ge_udp_pkt(EV_T_HB, g_ev_id, 0, 0, ms, b, 8);
+   (void)obs; (void)person; (void)alarm; (void)fps; (void)area;
+   (void)ge_udp_pkt(EV_T_HB, 0u, 0, 1, ms, (const unsigned char*)0, 0);
 }
 
 /* 报警开始时准备缩略图（不在这里发，避免阻塞） */
 static void ge_thumb_prepare(void)
 {
-   int n = png_gray(g_thumb, 96, 96, g_evpng, (int)sizeof(g_evpng));
-   if (n <= 0) { g_evpng_len = 0; return; }
-   g_evpng_len = n;
+   g_evpng_len = 96 * 96;            /* 原始灰度像素，不编码 PNG（PC 端负责） */
    g_evpng_off = 0;
-   g_evpng_seq = 0;
-   g_evpng_total = (unsigned short)((n + EV_THUMB_CHUNK - 1) / EV_THUMB_CHUNK);
+   g_evpng_seq  = 1;                 /* 序号从 1 开始 */
+   g_evpng_total = (unsigned short)((g_evpng_len + EV_THUMB_CHUNK - 1) / EV_THUMB_CHUNK);
 }
 
 /* 每轮最多发一片，片间自然有主循环间隔 */
@@ -389,7 +379,7 @@ static void ge_thumb_pump(uint32_t ms)
    n = g_evpng_len - g_evpng_off;
    if (n > EV_THUMB_CHUNK) n = EV_THUMB_CHUNK;
    if (ge_udp_pkt(EV_T_THUMB, g_ev_id, g_evpng_seq, g_evpng_total,
-                  (uint32_t)0u, g_png + g_evpng_off, n) == 0) {
+                  ms, g_thumb + g_evpng_off, n) == 0) {
       g_evpng_off += n;
       g_evpng_seq++;
    } else {
@@ -930,7 +920,7 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
            bsp_printf("MMT_ALARM end ms=%d f=%d dur_ms=%d\n\r",
                       (int)now, (int)g_frame, (int)now - alarm_start_ms);
            alarm_on = 0;
-           ge_ev_alarm(2, 48, 48, 0, 0, (int)g_mot.n_det, (uint32_t)now);
+           ge_ev_alarm(0, 48, 48, 0, 0, (int)g_mot.n_det, (uint32_t)now);
            alarm_end_ms = now; alarm_cand_cnt = 0;   /* v2.6: 进入冷却 */
           ge_ev("ae", (int)now, (int)area, (int)ir_cnt15, 0, (int)g_mot.n_det, (int)g_track_conf, 0);
         }
@@ -938,7 +928,7 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
    if (low_pwr_now && alarm_on) {
       bsp_printf("MMT_ALARM end ms=%d f=%d dur_ms=%d reason=lowpwr\n\r",
                  (int)now, (int)g_frame, (int)now - alarm_start_ms);
-      ge_ev_alarm(2, 48, 48, 0, 0, (int)g_mot.n_det, (uint32_t)now);
+      ge_ev_alarm(0, 48, 48, 0, 0, (int)g_mot.n_det, (uint32_t)now);
       alarm_on = 0; rel_cnt = 0; alarm_end_ms = now; alarm_cand_cnt = 0;
    }
 
