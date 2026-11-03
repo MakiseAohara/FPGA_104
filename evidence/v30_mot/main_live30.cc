@@ -217,19 +217,43 @@ static const unsigned char ge_test_frame[110] = {
 };
 
 /* 只把现成的整帧推进发送器（不做任何组帧），用来分清"RTL 通道"和"C 组帧"哪个有问题 */
+/* v5.6：整帧发送要补齐到 60 B 并自己算 FCS。
+   之前这里直接把上层组好的帧（ARP 回包 42 B、TCP 回包等）原样推给 MAC，
+   既没有 FCS 也没有最小帧补齐 —— PC 网卡一律当坏帧丢弃，
+   于是"固件明明回了包（rn=42），PC 上 ARP 还是 Incomplete"。 */
 static int ge_send_raw(const unsigned char* f, int n)
 {
-   int i, k, guard = 200000;
-   while (GE_BUSY() && --guard > 0) { }
-   if (guard <= 0) return -2;
+   static unsigned char b[1600];
+   int i, k, n2, len4;
+   uint32_t crc;
+   if (n < 14 || n > 1500) return -1;
+   for (i = 0; i < n; ++i) b[i] = f[i];
+   n2 = n;
+   if (n2 < 60) { for (i = n2; i < 60; ++i) b[i] = 0; n2 = 60; }
+   crc = 0xFFFFFFFFu;
+   for (i = 0; i < n2; ++i) {
+      int bit;
+      crc ^= (uint32_t)b[i];
+      for (bit = 0; bit < 8; ++bit)
+         crc = (crc & 1u) ? ((crc >> 1) ^ 0xEDB88320u) : (crc >> 1);
+   }
+   crc = ~crc;
+   b[n2]     = (unsigned char)(crc & 0xFF);
+   b[n2 + 1] = (unsigned char)((crc >> 8) & 0xFF);
+   b[n2 + 2] = (unsigned char)((crc >> 16) & 0xFF);
+   b[n2 + 3] = (unsigned char)((crc >> 24) & 0xFF);
+   n2 += 4;
+   if (GE_BUSY()) return -3;          /* 忙就丢这一帧，由对端重传 */
    GE_CTRL = 2u;
-   for (i = 0; i < n; i += 4) {
+   len4 = (n2 + 3) & ~3;
+   for (i = n2; i < len4; ++i) b[i] = 0;
+   for (i = 0; i < len4; i += 4) {
       uint32_t w = 0;
-      for (k = 0; k < 4; ++k) w |= (uint32_t)(i + k < n ? f[i + k] : 0) << (8 * k);
+      for (k = 0; k < 4; ++k) w |= (uint32_t)b[i + k] << (8 * k);
       GE_TXDATA = w;
    }
-   GE_TXLEN = (uint32_t)n;
-   GE_CTRL = 0u;      /* 电平触发：先清零再拉高 */
+   GE_TXLEN = (uint32_t)n2;
+   GE_CTRL = 0u;
    GE_CTRL = 1u;
    return 0;
 }
@@ -265,7 +289,10 @@ static int ge_send(const char* s, int len)
    f[22] = 64; f[23] = 17;
    f[24] = 0; f[25] = 0;
    f[26] = 169; f[27] = 254; f[28] = 47; f[29] = 62;
-   f[30] = 169; f[31] = 254; f[32] = 47; f[33] = 61;
+   /* v5.5：目的 IP 改广播。PC 侧经常换网卡（网口坏了改用 USB-C 网卡），
+      IP 不再是 169.254.47.61；板子发到 255.255.255.255:8080 后，任何一块网卡上的 8080 监听都能收到。
+      帧的 MAC 本来就是广播，改成广播 IP 更一致。 */
+   f[30] = 255; f[31] = 255; f[32] = 255; f[33] = 255;
    c = ge_ip_csum(f + 14, 20);
    f[24] = (unsigned char)(c >> 8); f[25] = (unsigned char)c;
    udp_len = 8 + lenp;
@@ -293,8 +320,9 @@ static int ge_send(const char* s, int len)
    }
    len4 = (n + 3) & ~3;
    for (i = n; i < len4; ++i) f[i] = 0;
-   while (GE_BUSY() && --guard > 0) { }
-   if (guard <= 0) return -2;
+   /* v5.3：非阻塞——发送器忙就立刻返回 -3，由调用者下一圈再试，绝不 while 忙等（避免饿死 I2C/相机） */
+   if (GE_BUSY()) return -3;
+   (void)guard;
    GE_CTRL = 2u;
    for (i = 0; i < len4; i += 4) {
       uint32_t w = 0;
@@ -317,6 +345,9 @@ static int ge_send(const char* s, int len)
 #define EV_THUMB_CHUNK 1000
 #ifndef GE_RAW_TEST_FRAME
 #define GE_RAW_TEST_FRAME 0
+#endif
+#ifndef DBG_THUMB_DUMP
+#define DBG_THUMB_DUMP 0   /* 1=每帧打印 9216 B 十六进制（会拖慢主循环、影响板内 HTTP） */
 #endif
 
 static uint32_t g_ev_id = 0;
@@ -386,12 +417,17 @@ static void ge_thumb_pump(uint32_t ms)
    if (g_evpng_len <= 0 || g_evpng_off >= g_evpng_len) return;
    n = g_evpng_len - g_evpng_off;
    if (n > EV_THUMB_CHUNK) n = EV_THUMB_CHUNK;
-   if (ge_udp_pkt(EV_T_THUMB, g_th_eid, g_evpng_seq, g_evpng_total,
-                  ms, g_thumb + g_evpng_off, n) == 0) {
-      g_evpng_off += n;
-      g_evpng_seq++;
-   } else {
-      g_evpng_off = g_evpng_len;   /* 失败直接丢，不重试 */
+   {
+      const int rc = ge_udp_pkt(EV_T_THUMB, g_th_eid, g_evpng_seq, g_evpng_total,
+                                ms, g_thumb + g_evpng_off, n);
+      if (rc == 0) {
+         g_evpng_off += n;
+         g_evpng_seq++;
+      } else if (rc == -3) {
+         /* 发送器忙：本圈跳过，下一圈重试同一片（不丢片、不忙等） */
+      } else {
+         g_evpng_off = g_evpng_len;   /* 其它错误：丢弃 */
+      }
    }
 }
 
@@ -434,8 +470,11 @@ static int ge_rx_poll(void)
    uint32_t st;
    int words, i, n;
    st = R32(30);
-   if ((st & 0x7FFu) == 0) return 0;          /* 低 11 位=字数，非 0 表示有新帧 */
-   words = (int)(st & 0x7FFu);
+   /* v5.4：STATUS 位定义与 ge_raw_rx.v 对齐：bit[8:0]=字数, bit9=rx_dv, bit10=rx_ready,
+      bit[31:24]=rx_dv 上升沿计数（调试）。原来固件把低 11 位整体当字数，
+      ready/dv 位被算进长度 -> 读出脏数据，这是"RX 从来没通"的直接原因之一。 */
+   if ((st & 0x400u) == 0) return 0;          /* bit10 = rx_ready */
+   words = (int)(st & 0x1FFu);                /* bit[8:0] = 字数 */
    if (words <= 0) return 0;
    if (words > 400) words = 400;
    R32(29) = 4u;                          /* bit2：清读指针 */
@@ -487,12 +526,49 @@ static int  ge_send_raw(const unsigned char* f, int n);
 static char* ge_num(char* d, unsigned v);
 static char* ge_str(char* d, const char* s);
 
+/* RGMII 收包会带上以太网前导码（0x55 x7 + 0xD5），且第一个字节常被采样相位采坏。
+   这里用"0xD5 后面跟广播/本机 MAC 头"定位真正的帧起点。返回帧起始偏移，找不到返回 -1。 */
+static int ge_rx_align(const unsigned char* b, int n)
+{
+   int i, k;
+   for (i = 0; i + 8 <= n; ++i) {
+      if (b[i] != 0xD5) continue;
+      for (k = 1; k <= 6; ++k) {
+         const unsigned char c = b[i + k];
+         if (c != 0xFF && c != b[i + k]) break;
+      }
+      if (k > 6) return i + 1;
+      /* 退一步：只要求 0xD5 后面 6 字节大多数是 0xFF（ARP 广播） */
+      {
+         int ff = 0;
+         for (k = 1; k <= 6; ++k) if (b[i + k] == 0xFF) ff++;
+         if (ff >= 5) return i + 1;
+      }
+   }
+   return -1;
+}
+
 /* 板内 HTTP 服务：收帧 -> net_input -> 回包；顺便处理重传 */
 static void ge_http_service(int now)
 {
    int fn = ge_rx_poll();
    if (fn > 0) {
+      const int off = ge_rx_align(ge_rx, fn);
+      int off_used = off;
+      if (off > 0) { fn -= off; memmove(ge_rx, ge_rx + off, (size_t)fn); }
+      else off_used = -1;
       int rn = net_input(&g_net, ge_rx, fn, g_net_out, (int)sizeof(g_net_out), (uint32_t)now);
+      /* 临时诊断：看固件到底有没有收到帧、有没有回包 */
+      {
+         static int dbg_n = 0;
+         if ((dbg_n++ % 3) == 0) {
+            uint32_t w0 = (uint32_t)ge_rx[0] | ((uint32_t)ge_rx[1] << 8) | ((uint32_t)ge_rx[2] << 16) | ((uint32_t)ge_rx[3] << 24);
+            uint32_t w1 = (uint32_t)ge_rx[4] | ((uint32_t)ge_rx[5] << 8) | ((uint32_t)ge_rx[6] << 16) | ((uint32_t)ge_rx[7] << 24);
+            uint32_t w2 = (uint32_t)ge_rx[8] | ((uint32_t)ge_rx[9] << 8) | ((uint32_t)ge_rx[10] << 16) | ((uint32_t)ge_rx[11] << 24);
+            bsp_printf("MMT_RXDBG t=%d fn=%d off=%d rn=%d w0=%x w1=%x\n\r", (int)now, fn,
+                       (fn > 0) ? 0 : 0, rn, w0, w1);
+         }
+      }
       if (rn > 0) ge_send_raw(g_net_out, rn);
    }
    {
@@ -1167,8 +1243,12 @@ static void dump_thumb(const int8_t* img, uint32_t frame, int p)
       }
    }
    pixels[offset] = 0;
+#if DBG_THUMB_DUMP
    bsp_printf("MMT_THUMB t=%d f=%d alarm=%d p=%d %s\n\r",
               (int)g_dec_ms, (int)frame, alarm_on, p, pixels);
+#else
+   (void)pixels; (void)p;
+#endif
 }
 
 
