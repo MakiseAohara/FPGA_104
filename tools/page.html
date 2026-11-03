@@ -1,72 +1,59 @@
-<!doctype html><meta charset=utf-8><title>MMT 实时监控</title>
+<!doctype html>
+<meta charset="utf-8">
+<title>MMT 实时监控</title>
 <style>
-body{background:#111;color:#ddd;font:15px/1.6 "Microsoft YaHei",Consolas,monospace;margin:16px;max-width:560px}
-.box{border:1px solid #333;padding:12px;margin-bottom:10px;border-radius:8px}
-img{image-rendering:pixelated;border:1px solid #333;width:100%;max-width:512px;display:block;margin:0 auto 10px}
-#big{font-size:26px;font-weight:bold;text-align:center;padding:6px 0}
-#sum{text-align:center;color:#aaa;font-size:15px}
-.ok{color:#5f5}.warn{color:#f55}.idle{color:#fc5}.dim{color:#777}
-details summary{cursor:pointer;color:#8ab}
-td{padding:2px 12px;color:#bbb}
+body{background:#111;color:#ddd;font:14px/1.5 Consolas,monospace;margin:16px}
+.box{border:1px solid #333;padding:10px;margin-bottom:10px;border-radius:6px}
+img{image-rendering:pixelated;border:1px solid #333;width:384px}
+.alarm{color:#f55;font-weight:bold}.ok{color:#5f5}.lp{color:#fc5}
+table{border-collapse:collapse}td{padding:2px 10px}
+.ev{cursor:pointer;padding:2px 0}
+.ev:hover{color:#fff}
+.thumb{width:192px;margin-top:4px;display:none}
+.warn{color:#fc5}
+#modal{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center}
+#modal img{width:auto;max-width:80vw;max-height:80vh}
 </style>
 <body>
 <h2>MMT 多模态终端 · 实时监控</h2>
-<div class=box>
-  <img id=fr src=/frame.png>
-  <div id=imgage class=dim style="text-align:center;font-size:13px"></div>
-  <div id=big>连接中…</div>
-  <div id=sum></div>
-</div>
-<details class=box open><summary>画面里的目标</summary><div id=tgt class=dim>—</div></details>
-<details class=box><summary>技术细节（后台数值）</summary><div id=tech class=dim>—</div></details>
-<details class=box><summary>最近事件</summary><div id=ev class=dim>—</div></details>
+<div class="box"><img id="fr" src="/frame.png"><div id="st">...</div></div>
+<div class="box"><b>统计</b><div id="sm"></div></div>
+<div class="box"><b>最近事件</b>（点击展开缩略图）<div id="ev"></div></div>
+<div id="modal"><img id="mimg" src=""></div>
 <script>
-function h(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function openThumb(src){const m=document.getElementById('modal');document.getElementById('mimg').src=src;m.style.display='flex';}
+document.getElementById('modal').onclick=function(){this.style.display='none';};
+
 async function tick(){
  try{
-  const j=await (await fetch("/api/status")).json();
-  const age=(Date.now()/1000-j.last);
-  const big=document.getElementById("big"), sum=document.getElementById("sum");
-
-  const n=(typeof j.mot_obs==="number")?j.mot_obs:(j.mot_conf||0);
-  if(age>3){
-    big.className="warn"; big.textContent="数据中断 "+age.toFixed(1)+" 秒";
-    sum.textContent="下面的数字都是旧的，请检查串口/板子";
-  } else if(j.alarm){
-    big.className="warn"; big.textContent="⚠ 报警中";
-    sum.textContent="画面里 "+n+" 人 · 画面帧率 "+j.camfps;
-  } else {
-    const lp=(j.lowpwr||j.fw_lp);
-    if(n>0){ big.className="ok"; big.textContent="画面里 "+n+" 人"; }
-    else if(lp){ big.className="idle"; big.textContent="低功耗中 · 画面无人"; }
-    else { big.className="ok"; big.textContent="正常 · 画面无人"; }
-    sum.textContent="画面帧率 "+j.camfps+(lp?" · 推理已暂停":"");
-  }
-
+  const r=await fetch("/api/status");
+  const j=await r.json();
+  document.getElementById("st").innerHTML=
+   "帧 "+j.f+" · p="+j.p+" · person="+j.person+" · motion="+j.motion+" · area="+j.area+
+   "<br>ALARM "+(j.alarm?"<span class=alarm>ON</span>":"<span class=ok>off</span>")+
+   " · LOWPWR "+(j.lowpwr?"<span class=lp>ON</span>":"off")+
+   " · camfps="+j.camfps+" · inf_hz="+j.inf_hz+
+   "<br>温度 "+j.sht+" · 湿度 "+j.rh+" · 体表 "+j.body;
   document.getElementById("fr").src="/frame.png?t="+Date.now();
-  const ia=(j.thumb_ts>0)?(Date.now()/1000-j.thumb_ts):-1;
-  document.getElementById("imgage").textContent = ia<0 ? "" :
-    "画面为 "+ia.toFixed(1)+" 秒前（下面的数值是实时的）";
-  document.getElementById("tgt").innerHTML=
-    "画面里的人数：<b>"+n+"</b>　<span class=dim>只数本帧真的看到、框够大的</span><br>"+
-    "航迹表：<b>"+j.mot_nt+"</b> 条<span class=dim>（含正在丢失/噪点）</span>　检测框：<b>"+j.mot_nd+"</b><br>"+
-    "最近一次报警时的检测人数：<b>"+(j.alarm_nd>=0?j.alarm_nd:"—")+"</b>"+
-    (j.alarm_nt>=0?"（航迹 "+j.alarm_nt+"）":"");
-  document.getElementById("tech").innerHTML=
-    "<table><tr><td>AI 判人 / 画面人数</td><td>"+(j.person?"有人":"无人")+"　/　"+n+" 人</td></tr>"+
-    "<tr><td>AI 人体分 p</td><td>"+j.p+"　(≥0 判有人)</td></tr>"+
-    "<tr><td>运动 / 面积</td><td>"+(j.motion?"有":"无")+"　"+j.area+"</td></tr>"+
-    "<tr><td>红外热点(irhot)</td><td>"+(j.irhot?"有":"无")+"</td></tr>"+
-    "<tr><td>低功耗（固件/RTL）</td><td>"+(j.fw_lp?"开":"关")+"　/　"+(j.lowpwr?"开":"关")+"</td></tr>"+
-    "<tr><td>推理</td><td>"+(j.paused?"已暂停":"运行中")+"</td></tr>"+
-    "<tr><td>画面帧率 / 推理频率</td><td>"+j.camfps+"　/　"+j.inf_hz+" Hz</td></tr>"+
-    "<tr><td>温度 / 湿度 / 体表</td><td>"+j.sht+" °C　"+j.rh+" %　"+j.body+"</td></tr>"+
-    "<tr><td>数据延迟</td><td>"+age.toFixed(1)+" s</td></tr></table>";
+
+  const sm=await (await fetch("/api/summary")).json();
+  document.getElementById("sm").innerHTML="统计自 "+sm.started+"：帧 "+sm.frames+
+   " · 有人帧 "+sm.person+" ("+sm.person_pct+"%) · 运动帧 "+sm.motion+" ("+sm.motion_pct+"%)<br>报警起报 "+
+   sm.alarm_starts+" 次 · 低功耗帧 "+sm.lp+" ("+sm.lp_pct+"%)"+
+   (sm.udp_events!==undefined?" · UDP 事件 "+sm.udp_events+" 次 · 心跳 "+sm.udp_heartbeats+" 次":"")+
+   (sm.thumb_incomplete?" · <span class=warn>缺片事件 "+sm.thumb_incomplete+"</span>":"");
+
   const e=await (await fetch("/api/events")).json();
-  document.getElementById("ev").innerHTML=e.slice(-8).reverse()
-    .map(x=>x.ts.replace("T"," ")+"　"+x.kind).join("<br>")||"—";
+  document.getElementById("ev").innerHTML=e.slice(-12).reverse().map(function(x){
+    var t=(x.thumb?'<img class=thumb src="/thumb/'+esc(x.thumb)+'">':'');
+    var inc=x.thumb_incomplete?' <span class=warn>[缩略图不全]</span>':'';
+    var d=x.detail?(' <span style="color:#888">'+esc(JSON.stringify(x.detail))+'</span>'):'';
+    return '<div class=ev onclick="var i=this.querySelector(\'img.thumb\'); if(i) i.style.display=(i.style.display==\'block\'?\'none\':\'block\');">'+
+           esc(x.ts)+' '+esc(x.kind)+inc+d+t+'</div>';
+  }).join("");
  }catch(e){}
- setTimeout(tick,400);
+ setTimeout(tick,700);
 }
 tick();
 </script>

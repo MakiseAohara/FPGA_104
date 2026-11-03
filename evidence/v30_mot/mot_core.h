@@ -72,6 +72,24 @@
 #ifndef MOT_MAX_MISS
 #define MOT_MAX_MISS     6       /* v1.3 Bug3：已确认航迹丢失 6 帧内可复用 ID（2fps ≈3 s） */
 #endif
+/* ---------------- v16 两处小改动（默认关闭，不影响现有构建） ---------------- */
+#ifndef MOT_V16_GATE
+#define MOT_V16_GATE     0       /* 1=宽高均 >=0.9×画面且 AI 判无人的检测不建新航迹 */
+#endif
+#ifndef MOT_V16_KEEP
+#define MOT_V16_KEEP     0       /* 1=已确认航迹 miss 期间 AI 仍判有人时 MAX_MISS 放宽到 10 */
+#endif
+#ifndef MOT_MAX_MISS_KEEP
+#define MOT_MAX_MISS_KEEP 10
+#endif
+#ifndef MOT_V16_GATE_RATIO_N
+#define MOT_V16_GATE_RATIO_N 9   /* 0.9 */
+#endif
+#ifndef MOT_V16_GATE_RATIO_D
+#define MOT_V16_GATE_RATIO_D 10
+#endif
+#if 0
+#endif
 #ifndef MOT_REPORT_MISS
 #define MOT_REPORT_MISS  1       /* 丢失超过该帧数就不上报（仍留在表里等重连） */
 #endif
@@ -709,6 +727,15 @@ static void mot_associate(mot_ctx_t* c)
          if (mot_iou4(&c->det[i], b4) >= MOT_NEWTRK_IOU) { dup_of_trk = 1; break; }
       }
       if (dup_of_trk) continue;
+#if MOT_V16_GATE
+      {
+         const int bw = (int)c->det[i].x1 - (int)c->det[i].x0 + 1;
+         const int bh = (int)c->det[i].y1 - (int)c->det[i].y0 + 1;
+         if (bw * MOT_V16_GATE_RATIO_D >= MOT_W * MOT_V16_GATE_RATIO_N &&
+             bh * MOT_V16_GATE_RATIO_D >= MOT_H * MOT_V16_GATE_RATIO_N &&
+             c->ai_p < MOT_P_PERSON) continue;   /* 整幅大块且 AI 判无人：噪声/前景，不建轨 */
+      }
+#endif
       if (c->n_trk >= MOT_MAX_TRK) {
          int victim = -1, j;
          for (j = 0; j < c->n_trk; ++j) if (!c->trk[j].confirmed) { victim = j; break; }
@@ -733,7 +760,13 @@ static void mot_associate(mot_ctx_t* c)
    {
       int wr = 0;
       for (k = 0; k < c->n_trk; ++k) {
-         const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
+   #if MOT_V16_KEEP
+      const int miss_limit = c->trk[k].confirmed
+          ? ((c->ai_p >= MOT_P_PERSON) ? MOT_MAX_MISS_KEEP : MOT_MAX_MISS)
+          : MOT_MAX_MISS_UNCONF;
+#else
+      const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
+#endif
          if (c->trk[k].misses > miss_limit) continue;
          if (wr != k) c->trk[wr] = c->trk[k];
          wr++;
