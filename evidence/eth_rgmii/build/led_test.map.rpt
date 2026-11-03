@@ -1,0 +1,645 @@
+Efinity Synthesis report for project led_test
+Version: 2026.1.132
+Generated at: Nov 03, 2026 00:48:39
+Copyright (C) 2013 - 2026  All rights reserved.
+
+Top-level Entity Name : top
+
+family : Titanium
+device : Ti60F225
+project : led_test
+root : top
+binary-db : outflow\led_test.vdb
+insert-ios : 0
+insert-gclk : 0
+max-carry-cascade : 320
+max-dsp-cascade : 16
+max_mult : -1
+max_ram : -1
+mode : speed
+num_srl : -1
+mult-decomp-retime : 0
+output-dir : outflow
+proj_curr_path : D:\eth_build\ge
+project : led_test
+project-xml : D:\eth_build\ge\led_demo.xml
+retiming : 1
+root : top
+work-dir : work_syn
+write-efx-verilog : outflow\led_test.map.v
+
+File List:
+
+D:\eth_build\ge\rtl\top.v
+D:\eth_build\ge\rtl\heijin_test\ethernet_test.v
+D:\eth_build\ge\rtl\heijin_test\mac\crc.v
+D:\eth_build\ge\rtl\heijin_test\mac\arp_cache.v
+D:\eth_build\ge\rtl\heijin_test\mac\mac_top.v
+D:\eth_build\ge\rtl\heijin_test\mac\icmp_reply.v
+D:\eth_build\ge\rtl\heijin_test\mac\dpram.v
+D:\eth_build\ge\rtl\heijin_test\mac\mac_test.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\udp_tx.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\ip_tx.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\mac_tx.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\mac_tx_top.v
+D:\eth_build\ge\rtl\heijin_test\mac\rx\udp_rx.v
+D:\eth_build\ge\rtl\heijin_test\mac\rx\arp_rx.v
+D:\eth_build\ge\rtl\heijin_test\mac\rx\mac_rx.v
+D:\eth_build\ge\rtl\heijin_test\mac\rx\mac_rx_top.v
+D:\eth_build\ge\rtl\heijin_test\mac\rx\ip_rx.v
+D:\eth_build\ge\rtl\heijin_test\rgmii2gmii_altera\util_gmii_to_rgmii.v
+D:\eth_build\ge\rtl\heijin_test\arbi\gmii_arbi.v
+D:\eth_build\ge\rtl\heijin_test\arbi\gmii_tx_buffer.v
+D:\eth_build\ge\rtl\heijin_test\arbi\gmii_rx_buffer.v
+D:\eth_build\ge\rtl\heijin_test\mac\DC_FIFO.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\arp_tx.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\ip_tx_mode.v
+D:\eth_build\ge\rtl\heijin_test\mac\tx\mac_tx_mode.v
+D:\eth_build\ge\rtl\udp_test_top.v
+
+### ### Report Section Start ### ###
+
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14)
+"MEM|SYN-0677" : ... Memory 'FifoBuff' is not initialized, assuming empty initial contents. (D:\eth_build\ge\rtl\heijin_test\mac\DC_FIFO.v:208)
+"MEM|SYN-0690" : Inserted write-first bypass logic for memory block 'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/udp_send_ram/ram__D$2' (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14).
+"MEM|SYN-0690" : Inserted write-first bypass logic for memory block 'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/udp_send_ram/ram__D$1' (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14).
+"MEM|SYN-0690" : Inserted write-first bypass logic for memory block 'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_receive_ram/ram__D$1' (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14).
+"MEM|SYN-0690" : Inserted write-first bypass logic for memory block 'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_receive_ram/ram__D$2' (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14).
+"MEM|SYN-0690" : Inserted write-first bypass logic for memory block 'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_receive_ram/ram' (D:\eth_build\ge\rtl\heijin_test\mac\dpram.v:14).
+
+### ### EFX_FF CE enables (begin) ### ### ###
+
+Total number of enable signals: 119
+Total number of FFs with enable signals: 1631
++-----------------------------------------------------------------+------------------+
+|CE Signal                                                        |Number of FF loads|
++-----------------------------------------------------------------+------------------+
+|ceg_net17                                                        |              128 |
+|ceg_net9                                                         |               89 |
+|ceg_net32                                                        |               88 |
+|~u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/n95          |               80 |
+|u0_udp_test_top/mac_test0/arp_found                              |               80 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_tx0/crcen                 |               64 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/crcen                 |               64 |
+|ceg_net164                                                       |               34 |
+|ceg_net162                                                       |               32 |
+|ceg_net197                                                       |               32 |
+|ceg_net163                                                       |               32 |
+|ceg_net201                                                       |               24 |
+|ceg_net198                                                       |               24 |
+|ceg_net196                                                       |               24 |
+|ceg_net194                                                       |               24 |
+|ceg_net91                                                        |               18 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/equal_45/n21            |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/equal_22/n11      |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_tx_end             |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/equal_35/n13     |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/equal_21/n8       |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/equal_20/n9       |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/equal_43/n15     |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/equal_36/n15     |               16 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/equal_42/n21            |               16 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_fifo/ReadEn          |               13 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_fifo/FifoWrEn        |               13 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_len_fifo/FifoWrEn    |               13 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_len_fifo/ReadEn      |               13 |
+|ceg_net3                                                         |                9 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1955            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1931            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n2033            |                8 |
+|ceg_net67                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n2041            |                8 |
+|ceg_net65                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1971            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1963            |                8 |
+|ceg_net55                                                        |                8 |
+|ceg_net63                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/n493                    |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/n544                    |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/n469                    |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/n496                    |                8 |
+|ceg_net193                                                       |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n164             |                8 |
+|ceg_net61                                                        |                8 |
+|ceg_net200                                                       |                8 |
+|ceg_net199                                                       |                8 |
+|ceg_net139                                                       |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n110             |                8 |
+|ceg_net195                                                       |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n2049            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1929            |                8 |
+|ceg_net47                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/icmp0/n547                    |                8 |
+|ceg_net53                                                        |                8 |
+|ceg_net51                                                        |                8 |
+|ceg_net59                                                        |                8 |
+|ceg_net49                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1947            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n107             |                8 |
+|ceg_net57                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1939            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n541             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n540              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n411              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n414              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n384              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n529             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n333              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n397             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n535             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n406             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n546              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n158             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n532             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n771             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n538             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n170             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n167             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n768             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n526             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n173             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n408              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n1928            |                8 |
+|ceg_net23                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n765             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n161             |                8 |
+|ceg_net45                                                        |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n774             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n400             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n537              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n543              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/arp0/n403             |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n417              |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/mac0/n2064            |                8 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n336              |                8 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/equal_17/n5             |                7 |
+|ceg_net11                                                        |                5 |
+|ceg_net128                                                       |                4 |
+|ceg_net132                                                       |                4 |
+|ceg_net40                                                        |                4 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/ip0/n317              |                4 |
+|ceg_net131                                                       |                3 |
+|~u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/reduce_nor_44/n1|                1 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_len_fifo/WrAHighRise |                1 |
+|ceg_net75                                                        |                1 |
+|ceg_net73                                                        |                1 |
+|ceg_net180                                                       |                1 |
+|ceg_net178                                                       |                1 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_len_fifo/RdAHighRise |                1 |
+|ceg_net174                                                       |                1 |
+|u0_udp_test_top/mac_test0/equal_23/n17                           |                1 |
+|ceg_net176                                                       |                1 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_fifo/WrAHighRise     |                1 |
+|ceg_net43                                                        |                1 |
+|u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_fifo/RdAHighRise     |                1 |
+|ceg_net99                                                        |                1 |
++-----------------------------------------------------------------+------------------+
+
+### ### EFX_FF CE enables (end) ### ### ###
+
+### ### EFX_FF SR set/reset (begin) ### ### ###
+
+Total number of set/reset signals: 5
+Total number of FFs with set/reset signals: 2752
++---------------------------------------------------------+------------------+
+|SR Signal                                                |Number of FF loads|
++---------------------------------------------------------+------------------+
+|u0_udp_test_top/e_rst_n                                  |             2511 |
+|u0_udp_test_top/arbi_inst/tx_buffer_inst/rx_fifo/WrClkRst|              117 |
+|ge_0_gclk_pll_LOCKED                                     |               60 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_tx0/crcre         |               32 |
+|u0_udp_test_top/mac_test0/mac_top0/mac_rx0/crcre         |               32 |
++---------------------------------------------------------+------------------+
+
+### ### EFX_FF SR set/reset (end) ### ### ###
+
+### ### Sequential Elements/Signals Trimming Report (begin) ### ### ### 
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[0]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[0]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp4[16]' (rtl\heijin_test\mac\tx\udp_tx.v:319) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/check_out[19]' (rtl\heijin_test\mac\tx\ip_tx.v:216) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/check_out[18]' (rtl\heijin_test\mac\tx\ip_tx.v:216) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/check_out[17]' (rtl\heijin_test\mac\tx\ip_tx.v:216) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[0]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[16]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[2]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[3]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[4]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[5]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[6]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[7]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[8]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[9]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[10]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[11]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[12]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[13]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[14]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/arp_tx0/op[15]' (rtl\heijin_test\mac\tx\arp_tx.v:39) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/mac0/send_state[0]' (rtl\heijin_test\mac\tx\mac_tx.v:48) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_send_type[1]' (rtl\heijin_test\mac\tx\mac_tx_top.v:78) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_send_type[2]' (rtl\heijin_test\mac\tx\mac_tx_top.v:78) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_send_type[3]' (rtl\heijin_test\mac\tx\mac_tx_top.v:78) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_send_type[5]' (rtl\heijin_test\mac\tx\mac_tx_top.v:78) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_send_type[6]' (rtl\heijin_test\mac\tx\mac_tx_top.v:78) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip_send_type[7]' (rtl\heijin_test\mac\tx\mac_tx_top.v:78) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[31]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[30]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[29]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[28]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[27]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[26]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[25]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[24]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[23]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[22]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[21]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[20]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[19]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[18]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/check_out[17]' (rtl\heijin_test\mac\icmp_reply.v:325) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[17]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[18]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[19]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[20]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[21]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[22]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[23]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[24]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[25]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[26]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[27]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[28]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[29]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[30]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/reply_check_out[31]' (rtl\heijin_test\mac\icmp_reply.v:443) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/state[6]' (rtl\heijin_test\mac\icmp_reply.v:64) (optimized to 0)
+'u0_udp_test_top/mac_test0/ram_wr_data[7]' (rtl\heijin_test\mac\mac_test.v:38) (optimized to 0)
+'u0_udp_test_top/arbi_inst/speed_d0[0]' (rtl\heijin_test\arbi\gmii_arbi.v:32) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[0]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/speed_d1[0]' (rtl\heijin_test\arbi\gmii_arbi.v:33) (optimized to 0)
+'u0_udp_test_top/pack_total_len[0]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/rx_fifo/RdFirst' (rtl\heijin_test\mac\DC_FIFO.v:485) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/rx_len_fifo/RdFirst' (rtl\heijin_test\mac\DC_FIFO.v:485) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[9]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[10]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[11]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[12]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[13]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[14]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[15]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/pack_len[16]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:26) (optimized to 0)
+'u0_udp_test_top/arbi_inst/tx_buffer_inst/state[3]' (rtl\heijin_test\arbi\gmii_tx_buffer.v:54) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_fifo/RdFirst' (rtl\heijin_test\mac\DC_FIFO.v:485) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/rx_len_fifo/RdFirst' (rtl\heijin_test\mac\DC_FIFO.v:485) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[7]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[8]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[9]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[10]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[11]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[12]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[13]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[14]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/pack_len[15]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:35) (optimized to 0)
+'u0_udp_test_top/arbi_inst/rx_buffer_inst/state[3]' (rtl\heijin_test\arbi\gmii_rx_buffer.v:51) (optimized to 0)
+'u0_udp_test_top/pack_total_len[1]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[2]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[3]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[4]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[9]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[15]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[23]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[27]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[28]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[29]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[30]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/pack_total_len[31]' (rtl\udp_test_top.v:56) (optimized to 0)
+'u0_udp_test_top/util_gmii_to_rgmii_m0/gmii_tx_er_r' (rtl\heijin_test\rgmii2gmii_altera\util_gmii_to_rgmii.v:35) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[2]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[4]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[6]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[8]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[9]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[10]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[11]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[12]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[13]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[16]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[2]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[4]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[6]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[8]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[9]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[10]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[11]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[12]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[13]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[16]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[1]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[2]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[3]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[4]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[6]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[7]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[14]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[15]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[16]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[8]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[9]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[10]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[11]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[12]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[13]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[14]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[2]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[4]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[6]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[8]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[9]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[10]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[11]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[12]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[13]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[16]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[2]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[4]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[6]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[8]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[9]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[10]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[11]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[12]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[13]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[16]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (optimized to 0)
+'u0_udp_test_top/arbi_inst/speed_d2[0]' (rtl\heijin_test\arbi\gmii_arbi.v:34) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[1]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[2]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[3]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[5]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[6]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[7]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (optimized to 0)
+'u0_udp_test_top/arbi_inst/eth_100m_en' (rtl\heijin_test\arbi\gmii_arbi.v:30) (optimized to 0)
+'u0_udp_test_top/pack_total_len[19]' (rtl\udp_test_top.v:56) (optimized to 0)
+'cnt[0]' (rtl\top.v:39) (unreachable)
+'cnt[1]' (rtl\top.v:39) (unreachable)
+'cnt[2]' (rtl\top.v:39) (unreachable)
+'cnt[3]' (rtl\top.v:39) (unreachable)
+'cnt[4]' (rtl\top.v:39) (unreachable)
+'cnt[5]' (rtl\top.v:39) (unreachable)
+'cnt[6]' (rtl\top.v:39) (unreachable)
+'cnt[7]' (rtl\top.v:39) (unreachable)
+'cnt[8]' (rtl\top.v:39) (unreachable)
+'cnt[9]' (rtl\top.v:39) (unreachable)
+'cnt[10]' (rtl\top.v:39) (unreachable)
+'cnt[11]' (rtl\top.v:39) (unreachable)
+'cnt[12]' (rtl\top.v:39) (unreachable)
+'cnt[13]' (rtl\top.v:39) (unreachable)
+'cnt[14]' (rtl\top.v:39) (unreachable)
+'cnt[15]' (rtl\top.v:39) (unreachable)
+'cnt[16]' (rtl\top.v:39) (unreachable)
+'cnt[17]' (rtl\top.v:39) (unreachable)
+'cnt[18]' (rtl\top.v:39) (unreachable)
+'cnt[19]' (rtl\top.v:39) (unreachable)
+'cnt[20]' (rtl\top.v:39) (unreachable)
+'cnt[21]' (rtl\top.v:39) (unreachable)
+'cnt[22]' (rtl\top.v:39) (unreachable)
+'cnt[23]' (rtl\top.v:39) (unreachable)
+'cnt[24]' (rtl\top.v:39) (unreachable)
+'cnt[25]' (rtl\top.v:39) (unreachable)
+'u0_udp_test_top/arbi_inst/speed_d0[1]' (rtl\heijin_test\arbi\gmii_arbi.v:32) (merged to equivalence)
+'u0_udp_test_top/arbi_inst/link_d1' (rtl\heijin_test\arbi\gmii_arbi.v:36) (merged to equivalence)
+'u0_udp_test_top/arbi_inst/link_d2' (rtl\heijin_test\arbi\gmii_arbi.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[0]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[1]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[2]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[3]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[4]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[5]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[6]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/udp_rx_data_d0[7]' (rtl\heijin_test\mac\rx\udp_rx.v:37) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[26]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[25]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[24]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[22]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[20]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[16]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[14]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[13]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[12]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[11]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[10]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[8]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[7]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[6]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/pack_total_len[5]' (rtl\udp_test_top.v:56) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[0]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[1]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[2]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[3]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[4]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[5]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[6]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[7]' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[3]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[5]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[7]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[14]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp3[15]' (rtl\heijin_test\mac\tx\ip_tx.v:210) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp2[15]' (rtl\heijin_test\mac\tx\ip_tx.v:209) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[0]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[1]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[3]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[5]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[7]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[14]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp4[15]' (rtl\heijin_test\mac\tx\ip_tx.v:211) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[8]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[9]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[10]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[11]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[12]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp3[13]' (rtl\heijin_test\mac\tx\udp_tx.v:318) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[0]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[1]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[3]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[5]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[7]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[14]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp1[15]' (rtl\heijin_test\mac\tx\udp_tx.v:316) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[1]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[3]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[5]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[7]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[14]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp0[15]' (rtl\heijin_test\mac\tx\udp_tx.v:315) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[10]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[10]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[9]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[9]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[8]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[8]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[7]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[7]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[6]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[6]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[5]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[5]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[4]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[4]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[3]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[3]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[2]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[2]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[1]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[1]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_rx0/udp0/ram_write_addr[0]_q_2' (rtl\heijin_test\mac\rx\udp_rx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/udp_rec_ram_read_addr[0]_q_2' (rtl\heijin_test\mac\mac_test.v:51) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[0]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[2]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[1]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[10]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[10]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[9]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[9]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[8]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[8]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[7]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[7]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[6]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[6]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[5]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[5]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[4]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[4]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[3]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[3]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[2]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[2]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[1]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[1]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_write_addr[0]_q' (rtl\heijin_test\mac\tx\udp_tx.v:33) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/ram_read_addr[0]_q' (rtl\heijin_test\mac\tx\udp_tx.v:34) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[4]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[3]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[5]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[7]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/icmp0/icmp_rx_data_d0[6]_q' (rtl\heijin_test\mac\icmp_reply.v:47) (merged to equivalence)
+'tx_en_o_LO' (rtl\top.v:30) (merged to equivalence)
+'u0_udp_test_top/arbi_inst/e10_100_txd[7]' (rtl\heijin_test\arbi\gmii_arbi.v:40) (merged to equivalence)
+'u0_udp_test_top/arbi_inst/e10_100_txd[6]' (rtl\heijin_test\arbi\gmii_arbi.v:40) (merged to equivalence)
+'u0_udp_test_top/arbi_inst/e10_100_txd[5]' (rtl\heijin_test\arbi\gmii_arbi.v:40) (merged to equivalence)
+'u0_udp_test_top/arbi_inst/e10_100_txd[4]' (rtl\heijin_test\arbi\gmii_arbi.v:40) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[6]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[5]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[3]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[2]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[1]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[17]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[16]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[15]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[14]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[13]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[12]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[11]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[10]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[9]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[6]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[5]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[4]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[3]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[2]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[1]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[0]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[17]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[16]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[15]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[14]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[13]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[12]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[11]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[10]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[9]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (merged to equivalence)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/ip0/checksum_tmp6[8]' (rtl\heijin_test\mac\tx\ip_tx.v:213) (optimized to 0)
+'u0_udp_test_top/mac_test0/mac_top0/mac_tx0/udp0/checksum_tmp5[7]' (rtl\heijin_test\mac\tx\udp_tx.v:320) (optimized to 0)
+### ### Sequential Elements Trimming Report (end) ### ### ### 
+
+### ### Module Resource Usage Distribution Estimates (begin) ### ###
+
+**Note: some resources maybe grouped under different hierarchy due to optimization and LUT mapping
+
+Module                                                   FFs      SRLs       ADDs       LUTs    COMB4s      RAMs DSP/MULTs
+-------------------------------------------------        ---      ----       ----       ----      ----      ---- ---------
+top:top                                              2835(0)      0(0)    1073(0)    3127(0)      0(0)      7(0)      0(0)
+ +u0_udp_test_top:udp_test_top                       2835(4)      0(0)    1073(0)    3127(0)      0(0)      7(0)      0(0)
+  +mac_test0:mac_test                              2594(120)      0(0)   1038(41)  2938(205)      0(0)      5(0)      0(0)
+   +mac_top0:mac_top                                 2474(0)      0(0)     997(0)    2733(0)      0(0)      5(0)      0(0)
+    +mac_tx0:mac_tx_top                               918(0)      0(0)     456(0)    1326(0)      0(0)      2(0)      0(0)
+     +mac0:mac_tx                                     96(96)      0(0)     15(15)     90(90)      0(0)      0(0)      0(0)
+     +mode0:mac_tx_mode                               29(29)      0(0)     15(15)     40(40)      0(0)      0(0)      0(0)
+     +c0:crc                                          32(32)      0(0)       0(0)     47(47)      0(0)      0(0)      0(0)
+     +arp_tx0:arp_tx                                130(130)      0(0)     30(30)   246(246)      0(0)      0(0)      0(0)
+     +ip0:ip_tx                                     240(240)      0(0)   143(143)   395(395)      0(0)      0(0)      0(0)
+     +ipmode:ip_tx_mode                               35(35)      0(0)     31(31)     56(56)      0(0)      0(0)      0(0)
+     +udp0:udp_tx                                   356(356)      0(0)   222(222)   452(452)      0(0)      2(0)      0(0)
+      +udp_send_ram:dpram(DEPTH=11)                     0(0)      0(0)       0(0)       0(0)      0(0)      2(2)      0(0)
+    +mac_rx0:mac_rx_top                              1083(0)      0(0)     317(0)     891(1)      0(0)      2(0)      0(0)
+     +c0:crc                                          32(32)      0(0)       0(0)     47(47)      0(0)      0(0)      0(0)
+     +mac0:mac_rx                                   328(328)      0(0)     15(15)   198(198)      0(0)      0(0)      0(0)
+     +ip0:ip_rx                                     257(257)      0(0)     78(78)   183(183)      0(0)      0(0)      0(0)
+     +udp0:udp_rx                                   275(275)      0(0)   217(217)   374(374)      0(0)      2(0)      0(0)
+      +udp_receive_ram:dpram(DEPTH=11)                  0(0)      0(0)       0(0)       0(0)      0(0)      2(2)      0(0)
+     +arp0:arp_rx                                   191(191)      0(0)       7(7)     88(88)      0(0)      0(0)      0(0)
+    +icmp0:icmp_reply                               344(344)      0(0)   224(224)   441(441)      0(0)      1(0)      0(0)
+     +icmp_receive_ram:dpram(DEPTH=8)                   0(0)      0(0)       0(0)       0(0)      0(0)      1(1)      0(0)
+    +cache0:arp_cache                               129(129)      0(0)       0(0)     75(75)      0(0)      0(0)      0(0)
+  +arbi_inst:gmii_arbi                               210(33)      0(0)      35(7)    189(32)      0(0)      2(0)      0(0)
+   +tx_buffer_inst:gmii_tx_buffer                       1(0)      0(0)       0(0)       0(0)      0(0)      0(0)      0(0)
+    +rx_fifo:DC_FIFO(FIFO_DEPTH=32)                     1(1)      0(0)       0(0)       0(0)      0(0)      0(0)      0(0)
+   +rx_buffer_inst:gmii_rx_buffer                    176(57)      0(0)     28(17)    157(66)      0(0)      2(0)      0(0)
+    +rx_fifo:DC_FIFO(FIFO_DEPTH=32)                   58(32)      0(0)       0(0)     43(25)      0(0)      1(1)      0(0)
+     +U1_WrAddrCnt:FifoAddrCnt(CounterWidth_C=5)       13(7)      0(0)       0(0)       9(1)      0(0)      0(0)      0(0)
+      +U1_AddrCnt:GrayCnt(CounterWidth_C=5)             6(6)      0(0)       0(0)       8(8)      0(0)      0(0)      0(0)
+     +U2_RdAddrCnt:FifoAddrCnt(CounterWidth_C=5)       13(7)      0(0)       0(0)       9(1)      0(0)      0(0)      0(0)
+      +U1_AddrCnt:GrayCnt(CounterWidth_C=5)             6(6)      0(0)       0(0)       8(8)      0(0)      0(0)      0(0)
+    +rx_len_fifo:DC_FIFO(FIFO_DEPTH=32)               61(35)      0(0)     11(11)     48(26)      0(0)      1(1)      0(0)
+     +U1_WrAddrCnt:FifoAddrCnt(CounterWidth_C=5)       13(7)      0(0)       0(0)       9(1)      0(0)      0(0)      0(0)
+      +U1_AddrCnt:GrayCnt(CounterWidth_C=5)             6(6)      0(0)       0(0)       8(8)      0(0)      0(0)      0(0)
+     +U2_RdAddrCnt:FifoAddrCnt(CounterWidth_C=5)       13(7)      0(0)       0(0)       9(1)      0(0)      0(0)      0(0)
+      +U1_AddrCnt:GrayCnt(CounterWidth_C=5)             6(6)      0(0)       0(0)       8(8)      0(0)      0(0)      0(0)
+     +WWAGray2Hex:GrayDecode(DataWidht_C=5)             0(0)      0(0)       0(0)       4(4)      0(0)      0(0)      0(0)
+  +util_gmii_to_rgmii_m0:util_gmii_to_rgmii           27(27)      0(0)       0(0)       0(0)      0(0)      0(0)      0(0)
+
+### ### Module Resource Usage Distribution Estimates (end) ### ###
+
+
+### ### DSP Usage Report (begin) ### ### ### 
+
+ No DSP in design
+
+### ### Clock Load Distribution Report (begin) ### ###
+
++-----+----------+----------+------------+----------------+
+|Clock|Flip-Flops|Shift-Regs|Memory Ports|Multipliers/DSPs|
++-----+----------+----------+------------+----------------+
+|rxc  |     2835 |        0 |         14 |              0 |
++-----+----------+----------+------------+----------------+
+
+### ### Clock Load Distribution Report (end) ### ###
+
+### ### Resource Summary (begin) ### ### ### 
+
+INPUT  PORTS    : 	14
+OUTPUT PORTS    : 	19
+
+EFX_ADD                 : 	1073
+EFX_LUT4                : 	3127
+   1-2  Inputs          : 	1450
+   3    Inputs          : 	520
+   4    Inputs          : 	1157
+EFX_FF                  : 	2835
+EFX_RAM10               : 	7
+### ### Resource Summary (end) ### ### ###
+
+Plain synthesis (without verilog dump and post-map checks) time : 9s
+Elapsed synthesis time : 9s
