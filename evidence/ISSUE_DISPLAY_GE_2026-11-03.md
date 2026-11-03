@@ -136,3 +136,36 @@ py -3 evidence\eth_rgmii\frame_alive2.py
 - 顶层：`rtl/ti60f225_oob_top.v`（GE 实例化 1616 行、APB mux 955 行）
 - GE：`rtl/ge/ge_top_user.v`、`ge_raw_tx.v`、`ge_eth_apb.v`、`ge_raw_rx.v`、`ge_udp_rx_bridge.v`
 - 证据：`evidence/eth_rgmii/UDP_EVENT_2026-11-03.md`、`evidence/v30_mot/MOT_PRED_2026-11-03.md`
+
+
+---
+
+# 后续记录（2026-11-03 19:10）
+
+## 已逐项排除
+
+1. **网口引脚 IO 标准/银行电压**：14 根脚全部已分配（peri.xml 里 `comp_gpio name="rxd[0..3]"` / `txd[0..3]` 等，
+   `rxc=GPIOL_P_09`、`rx_dv=GPIOL_N_08`、`txc=GPIOL_P_07`、`tx_en=GPIOL_N_00`、`phy_rst_n=GPIOL_01`(3.3 V)）。
+   1A/1B 全 1.8 V，BL/BR/TL/TR 全 3.3 V，**没有同 bank 混压**；HDMI/TMDS 在 bank 3A（1.8 V），与网口不同 bank。
+2. **全局时钟**：GE 版 `place.rpt` 为 **GBUF 19/32、RBUF 1/32**，没到上限；XLR 71.5%、BRAM 77.3%，资源不紧张。
+3. **`hdmi_tx_slow_clk -> core_clk`**：发起/捕获是 `u_apb_ext` 的 `evt_q -> evt_c` / `env_q -> env_c`
+   （视频域采样、CPU 回读证据字），不是像素通路；MERGE17 自己 slack 更差（-0.984 ns）仍显示正常
+   —— **不是黑屏原因，不加同步器**。
+4. **v2/P1 的黑屏**：唯一变量是本次在 SDC 里加的 `set_false_path hdmi_tx_slow_clk -> core_clk`，已还原；
+   v2/P1 的黑屏不能用来判定"GE 破坏视频"。
+
+## 新发现（待验证）
+
+- GE_A（`3B8A2EAB`，GE + 原始 SDC）的 place.rpt 里有 **Missing Interface Pin: `rx_dv_HI`**
+  （peri 里该脚定义为 `comp_gpio name="rx_dv"`，与顶层端口名不一致）→ 只影响 RX，不影响 TX，但说明引脚表有瑕疵。
+- GE_A 上固件跑起来了（`MMT_GE ctrl=0x009E0001`，已发 158 帧），但 **网口收不到包、传感器 I2C 全灭**
+  （`sht=0 rh=0 body=0 sht_upd=0 ir_upd=0`、`infer=0`、`camfps=0`）。
+  这一组症状指向**板级状态被反复重配打坏**（I2C/PHY 停在半截），而不是 RTL：同一套输入在 14:33(v1) 与 18:47(GE_A)
+  两次构建，v1 网口正常、GE_A 全灭。
+- 需要一次**断电重启**再做同条件对照，避免把板级状态误判成设计问题。
+
+## 下一步
+
+1. 断电 10 s 重启 → 烧 `3B8A2EAB` + e15 → 看 HDMI 与网口心跳；
+2. 若显示仍不正常：编"GE 在但 `txd/txc/tx_en` 输出置 0、`rxc` 不接"的版本，切分"PHY/RGMII 活动"与"GE 逻辑"；
+3. 每步把位流名/哈希/固件/HDMI/网口/结论追加到本文件。
