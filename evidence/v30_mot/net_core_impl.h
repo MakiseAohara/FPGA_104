@@ -238,5 +238,21 @@ int net_input(net_t* n, const uint8_t* f, int len, uint8_t* out, int out_cap, ui
    if (f[23] == 6) return nc_tcp(n, f, len, out, out_cap, now_ms);
    return 0;
 }
-int net_tick(net_t* n, uint8_t* out, int out_cap, uint32_t now_ms);
+int net_tick(net_t* n, uint8_t* out, int out_cap, uint32_t now_ms)
+{
+   net_conn_t* c = &n->conn;
+   int off;
+   (void)out_cap;
+   if (!c->used || c->resp == 0) return 0;
+   if (c->snd_una == c->snd_nxt) return 0;
+   if (c->retx_ms == 0) { c->retx_ms = now_ms; return 0; }
+   if ((uint32_t)(now_ms - c->retx_ms) < 300u) return 0;
+   c->retx_ms = now_ms;
+   c->retx++;
+   if (c->retx > 6) { c->used = 0; c->state = 0; return 0; }
+   off = (int)(c->last_seq - (c->iss + 1u));
+   if (off < 0) off = 0;
+   if (off > c->resp_len) return 0;
+   return nc_tcp_send(n, out, c->last_seq, 0x18, c->resp + off, c->last_len);
+}
 #endif

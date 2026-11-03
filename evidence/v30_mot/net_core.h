@@ -8,8 +8,8 @@
  */
 #include <stdint.h>
 
-#define NET_MAX_FRAME   1536
-#define NET_MSS         1000     /* 单段 TCP 最大负载 */
+#define NET_MAX_FRAME   16384    /* resp 缓冲要放得下 PNG（约 9.4KB） */
+#define NET_MSS         1400     /* 单段 TCP 最大负载（RTL TX 缓冲 2KB） */
 #define NET_WIN         4096
 
 typedef struct {

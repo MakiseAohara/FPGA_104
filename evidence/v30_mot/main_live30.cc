@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // main_live30.cc — 固件 v30（基线：v29.2 DAY 定版 main_live292.cc）
 //   v30 新增（任务「多目标跟踪 + 行为预测」）：
 //     A) 多目标跟踪（IOU Tracker）：96x96 背景差分 → 膨胀 → 连通域 → IOU 贪心关联
@@ -187,6 +187,12 @@
 #define APB_WB_PIX    R32(25)
 #define APB_WB_SAT    R32(26)
 
+/* ---- v4.1 板内 HTTP：极简协议栈 + 页面/JSON/PNG ---- */
+#define HTTP_APP_IMPL
+#include "http_app.h"
+#include "net_core.h"
+#include "net_core_impl.h"
+
 /* ---- v3.9 千兆网口（GE）：27..31 ---- */
 #define GE_TXDATA     R32(27)
 #define GE_TXLEN      R32(28)
@@ -302,6 +308,37 @@ static int ge_send(const char* s, int len)
 /* ---- v4.0 网口收包：整帧抓进 RISC-V，自己解析（为 TCP/HTTP 铺路） ---- */
 static unsigned char ge_rx[1600];
 
+#define EPOCH_BASE  1793664000u   /* 烧录时刻（秒），仅用于页面显示"数据延迟" */
+
+static net_t   g_net;
+static unsigned char g_net_out[1600];
+static char    g_status_json[512];
+static unsigned char g_thumb[96 * 96];
+static http_state_t g_hstate;
+
+static int ge_http_init(void)
+{
+   net_cfg_t cfg;
+   int i;
+   for (i = 0; i < 6; ++i) cfg.mac[i] = 0;
+   cfg.mac[0] = 0x00; cfg.mac[1] = 0x0a; cfg.mac[2] = 0x35;
+   cfg.mac[3] = 0x01; cfg.mac[4] = 0xfe; cfg.mac[5] = 0xc0;
+   cfg.ip[0] = 169; cfg.ip[1] = 254; cfg.ip[2] = 47; cfg.ip[3] = 62;
+   cfg.port = 80;
+   {
+      static net_cb_t cb;
+      cb.get = http_get; cb.user = (void*)&g_hstate;
+      cfg.cb = &cb;
+   }
+   net_init(&g_net, &cfg);
+   g_hstate.status_json = g_status_json;
+   g_hstate.events_json = "[]";
+   g_hstate.thumb = g_thumb;
+   g_hstate.thumb_w = 96; g_hstate.thumb_h = 96;
+   http_set_state(&g_hstate);
+   return 0;
+}
+
 /* 返回帧字节数；0 = 没有新帧。帧内容在 ge_rx[] 里（以太网原始帧，不含 FCS） */
 static int ge_rx_poll(void)
 {
@@ -354,6 +391,27 @@ static void ge_rx_service(void)
       ge_send(rsp, plen);
    }
 }
+
+
+static int  ge_rx_poll(void);
+static int  ge_send_raw(const unsigned char* f, int n);
+static char* ge_num(char* d, unsigned v);
+static char* ge_str(char* d, const char* s);
+
+/* 板内 HTTP 服务：收帧 -> net_input -> 回包；顺便处理重传 */
+static void ge_http_service(int now)
+{
+   int fn = ge_rx_poll();
+   if (fn > 0) {
+      int rn = net_input(&g_net, ge_rx, fn, g_net_out, (int)sizeof(g_net_out), (uint32_t)now);
+      if (rn > 0) ge_send_raw(g_net_out, rn);
+   }
+   {
+      int tn = net_tick(&g_net, g_net_out, (int)sizeof(g_net_out), (uint32_t)now);
+      if (tn > 0) ge_send_raw(g_net_out, tn);
+   }
+}
+
 
 /* 极简 JSON 拼装：只用到十进制整数，避开 printf 依赖 */
 static char* ge_num(char* d, unsigned v)
@@ -667,6 +725,7 @@ static int      g_pre_on = 0;        /* 预警窗口是否打开 */
 static int      g_pre_id = 0, g_pre_eta = -1;
 static uint32_t g_pre_ms = 0, g_pre_lead_ms = 0;
 static int      g_track_conf = 0;    /* 本帧确认目标数 */
+static int      g_js_person = 0, g_js_p = -128;   /* 给网页查看的 AI 状态 */
 static int      g_last_ai_p = -128;  /* v1.3：上一帧 AI 分数（MOT 判定整幅前景用） */
 static uint32_t g_pre_cnt = 0, g_lead_cnt = 0;
 
@@ -796,14 +855,13 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
             if (g_mot.trk[k].active && g_mot.trk[k].confirmed) {
                gx = (int)g_mot.trk[k].cx; gy = (int)g_mot.trk[k].cy; break;
             }
-         ge_send_raw(ge_test_frame, 110);   /* 固定帧自检 */
          (void)gx; (void)gy;
-         bsp_printf("MMT_GE ctrl=%d status=%d\n\r", (int)GE_CTRL, (int)GE_STATUS);
          ge_hb_ms = now;
       }
    }
-
 #if FW_DECISION_ON
+   g_js_person = person ? 1 : 0;
+   g_js_p = (int)score;
    APB_DEC = (uint32_t)(alarm_on ? 1u : 0u) |
              ((uint32_t)(alarm_on ? 100 : (person ? 60 : 0)) << 8) |
              ((uint32_t)(dec_evt & 0xFF) << 16);
@@ -1294,8 +1352,63 @@ void tinyml_init()
                (int)model_input->bytes, (int)model_input->type);
 }
 
+
+static void ge_http_build_json(int now, int motion, int area, int irhot,
+                               int camfps, int inf_hz, int paused, int lowpwr,
+                               int sht10, int rh10, int body10)
+{
+   char* d = g_status_json;
+   d = ge_str(d, "{\"person\":");
+   d = ge_num(d, (unsigned)(g_js_person ? 1 : 0));
+   d = ge_str(d, ",\"p\":");
+   d = ge_num(d, (unsigned)(g_js_p & 0xFF));
+   d = ge_str(d, ",\"motion\":");
+   d = ge_num(d, (unsigned)motion);
+   d = ge_str(d, ",\"area\":");
+   d = ge_num(d, (unsigned)area);
+   d = ge_str(d, ",\"irhot\":");
+   d = ge_num(d, (unsigned)irhot);
+   d = ge_str(d, ",\"alarm\":");
+   d = ge_num(d, (unsigned)(alarm_on ? 1 : 0));
+   d = ge_str(d, ",\"fw_lp\":");
+   d = ge_num(d, (unsigned)(fw_lp ? 1 : 0));
+   d = ge_str(d, ",\"lowpwr\":");
+   d = ge_num(d, (unsigned)lowpwr);
+   d = ge_str(d, ",\"paused\":");
+   d = ge_num(d, (unsigned)paused);
+   d = ge_str(d, ",\"camfps\":");
+   d = ge_num(d, (unsigned)camfps);
+   d = ge_str(d, ",\"inf_hz\":");
+   d = ge_num(d, (unsigned)inf_hz);
+   d = ge_str(d, ",\"sht\":");
+   d = ge_num(d, (unsigned)(sht10 / 10));
+   d = ge_str(d, ",\"rh\":");
+   d = ge_num(d, (unsigned)(rh10 / 10));
+   d = ge_str(d, ",\"body\":");
+   d = ge_num(d, (unsigned)(body10 / 10));
+   d = ge_str(d, ",\"mot_nd\":");
+   d = ge_num(d, (unsigned)g_mot.n_det);
+   d = ge_str(d, ",\"mot_nt\":");
+   d = ge_num(d, (unsigned)g_mot.n_trk);
+   d = ge_str(d, ",\"mot_conf\":");
+   d = ge_num(d, (unsigned)g_track_conf);
+   d = ge_str(d, ",\"mot_obs\":");
+   d = ge_num(d, (unsigned)g_track_conf);
+   d = ge_str(d, ",\"alarm_nd\":");
+   d = ge_num(d, (unsigned)g_mot.n_det);
+   d = ge_str(d, ",\"alarm_nt\":");
+   d = ge_num(d, (unsigned)g_mot.n_trk);
+   d = ge_str(d, ",\"connected\":1,\"thumb_ts\":");
+   d = ge_num(d, (unsigned)(now / 1000));
+   d = ge_str(d, ",\"last\":");
+   d = ge_num(d, (unsigned)(EPOCH_BASE + now / 1000));
+   d = ge_str(d, "}");
+   *d = 0;
+}
+
 // ===========================================================================
 // 主函数
+
 // ===========================================================================
 extern "C" int main()
 {
@@ -1413,8 +1526,9 @@ extern "C" int main()
    lp_last_active_ms = now_ms();
    uint32_t lp_entry_cnt = 0, lp_exit_cnt = 0;
 
+   ge_http_init();
+
    while (1) {
-      ge_rx_service();          /* v4.0: 收 UDP 8080 并回 MMT-ECH...（低功耗里也跑） */
       if ((frame % 30) == 0 && bright_ready) bright_log("MMT_FIXED");
       /* ---------------- 读 RTL 证据（每轮都读） ---------------- */
       const uint32_t evt = APB_EVT;
@@ -1454,7 +1568,18 @@ extern "C" int main()
          vs_last = vs_cnt;
          ddr_win = 0; tinyml_win = 0; infer_win = 0;
          t_win = t_now;
+
+         /* v4.1: 每秒刷一次给网页的状态 + 缩略图，并处理 HTTP */
+         ge_http_build_json((int)t_now, motion, (int)area, ir_hot, (int)cam_fps,
+                            (int)infer_hz, infer_paused, low_pwr,
+                            (int)amb10, (int)rh10, (int)body10);
+         {
+            int q;
+            for (q = 0; q < IMG_N; ++q)
+               g_thumb[q] = (unsigned char)((int)input_snapshot[q] + 128);
+         }
       }
+      ge_http_service((int)t_now);
       {
          const uint32_t ar = R32(2);
          ddr_win += (ar - ddr_ar_last);

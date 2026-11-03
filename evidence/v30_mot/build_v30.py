@@ -28,7 +28,8 @@ stage.mkdir(exist_ok=True)
 main = stage / 'main_live30.cc'
 shutil.copy2(HERE / 'main_live30.cc', main)
 shutil.copy2(HERE / 'mot_core.h', stage / 'mot_core.h')
-for h in ('preprocess_core.h', 'ae_core.h', 'cam_ctrl_core.h', 'input_contract.h'):
+for h in ('preprocess_core.h', 'ae_core.h', 'cam_ctrl_core.h', 'input_contract.h',
+          'net_core.h', 'net_core_impl.h', 'http_app.h', 'page_html.h'):
     src_h = HERE / h
     if not src_h.exists():
         src_h = HERE.parent / 'v29_fw' / h
