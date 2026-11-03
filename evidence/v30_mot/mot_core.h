@@ -106,6 +106,12 @@
 #ifndef MOT_ARATE_MIN
 #define MOT_ARATE_MIN   6
 #endif
+/* v17.1（默认关闭，等有操作者的两次上板对比再开）：
+   关联门限随目标尺寸放大 —— 整幅框(96 高)的人一步能跳出 MOT_GATE_PX=16，旧门限必然换号。
+   MOT_GATE_SIZE_DIV = 3 表示 gate = max(MOT_GATE_PX, 框宽/3)。 */
+#ifndef MOT_GATE_SIZE_DIV
+#define MOT_GATE_SIZE_DIV 0
+#endif
 #ifndef MOT_PRED_DAMP_N
 #define MOT_PRED_DAMP_N 1     /* 预测速度阻尼 1/2：离线 37 条航迹实测，误差中位 5.0 px vs 静止 6.0 px */
 #endif
@@ -749,7 +755,14 @@ static void mot_associate(mot_ctx_t* c)
       {
          /* v1.3 Bug3：刚丢的已确认航迹用更大的重连半径（25 px），避免同一个人换号 */
          const int lost = c->trk[bt].misses;
-         const int gate = (c->trk[bt].confirmed && lost > 0) ? MOT_REID_PX : MOT_GATE_PX;
+         int gate = (c->trk[bt].confirmed && lost > 0) ? MOT_REID_PX : MOT_GATE_PX;
+#if MOT_GATE_SIZE_DIV > 0
+         {   /* v17.1：门限随框宽放大（大目标一步位移大，固定 16 px 必然换号） */
+            const int w = (int)c->trk[bt].x1 - (int)c->trk[bt].x0 + 1;
+            const int g2 = w / MOT_GATE_SIZE_DIV;
+            if (g2 > gate) gate = g2;
+         }
+#endif
          if (best > gate) break;
       }
       det_used[bd] = 1; trk_used[bt] = 1;

@@ -143,7 +143,7 @@ function render(st) {
   const link = st.link || (st.udp_events ? "UDP" : (st.frames ? "串口" : "无"));
   $("p-link").textContent = link;
   setPill("d-link", link, st.last && (Date.now()/1000 - st.last) < 5 ? "on" : "bad");
-  $("p-fps").textContent = fmt(st.camfps);
+  $("p-fps").textContent = (st.camfps ? st.camfps : (st.paused ? "暂停" : 0));
   $("p-inf").textContent = st.inf_hz ? st.inf_hz + " Hz" : "--";
   $("p-temp").textContent = (st.body !== undefined && st.body) ? (st.body/10).toFixed(1) + "°C" : "--";
   $("p-lp").textContent = st.lowpwr ? "是" : "否";
@@ -151,8 +151,8 @@ function render(st) {
 
   $("banner").className = st.alarm ? "show" : "";
   $("v-f").textContent = fmt(st.f);
-  $("v-p").textContent = fmt(st.p);
-  $("v-person").textContent = fmt(st.person);
+  $("v-p").textContent = (st.p <= -100) ? "--" : st.p;
+  $("v-person").textContent = st.person ? "有人" : "无人";
   $("v-motion").textContent = fmt(st.motion);
   $("v-ir").textContent = fmt(st.ir);
   $("v-upd").textContent = st.ts ? new Date(st.ts * 1000).toLocaleTimeString() : "--";
