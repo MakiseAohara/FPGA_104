@@ -189,6 +189,7 @@
 
 /* ---- v4.1 板内 HTTP：极简协议栈 + 页面/JSON/PNG ---- */
 #define HTTP_APP_IMPL
+#define HTTP_APP_IMPL
 #include "http_app.h"
 #include "net_core.h"
 #include "net_core_impl.h"
@@ -247,11 +248,11 @@ static unsigned short ge_ip_csum(const unsigned char* p, int n)
    帧结构：14B eth + 20B ip + 8B udp + payload（4 字节对齐） */
 static int ge_send(const char* s, int len)
 {
-   static unsigned char f[256];
+   static unsigned char f[1200];
    int i, k, n, len4, guard = 200000;
    int ip_len, udp_len;
    unsigned short c;
-   if (len < 0 || len > 180) return -1;
+   if (len < 0 || len > 1100) return -1;
    for (i = 0; i < 6; ++i) f[i] = 0xFF;            /* dst MAC: broadcast */
    f[6] = 0x00; f[7] = 0x0a; f[8] = 0x35; f[9] = 0x01; f[10] = 0xfe; f[11] = 0xc0;
    f[12] = 0x08; f[13] = 0x00;                     /* IPv4 */
@@ -305,7 +306,98 @@ static int ge_send(const char* s, int len)
 }
 
 
-/* ---- v4.0 网口收包：整帧抓进 RISC-V，自己解析（为 TCP/HTTP 铺路） ---- */
+
+/* ---------------- v5.0 事件上报（只用发送方向） ---------------- */
+#define EV_MAGIC0   0x4Du
+#define EV_MAGIC1   0x54u
+#define EV_VER      1u
+#define EV_T_EVENT  1u
+#define EV_T_HB     2u
+#define EV_T_THUMB  3u
+#define EV_THUMB_CHUNK 900
+
+static uint32_t g_ev_id = 0;
+static unsigned char g_thumb[96 * 96];   /* 96x96 灰度，报警时编 PNG 上报 */
+static unsigned char g_evpng[10000];
+static int g_evpng_len = 0, g_evpng_off = 0;
+static unsigned short g_evpng_seq = 0, g_evpng_total = 0;
+
+/* 组 16 字节包头 + body，交给 ge_send 组帧（以太/IP/UDP/FCS） */
+static int ge_udp_pkt(unsigned char type, uint32_t evid, unsigned short seq,
+                      unsigned short total, uint32_t ms,
+                      const unsigned char* body, int blen)
+{
+   char pkt[1120];
+   int n = 0, i;
+   if (blen < 0 || blen > 1100) return -1;
+   pkt[n++] = (char)EV_MAGIC0; pkt[n++] = (char)EV_MAGIC1;
+   pkt[n++] = (char)EV_VER;    pkt[n++] = (char)type;
+   pkt[n++] = (char)(evid >> 24); pkt[n++] = (char)(evid >> 16);
+   pkt[n++] = (char)(evid >> 8);  pkt[n++] = (char)evid;
+   pkt[n++] = (char)(seq >> 8);   pkt[n++] = (char)seq;
+   pkt[n++] = (char)(total >> 8); pkt[n++] = (char)total;
+   pkt[n++] = (char)(ms >> 24); pkt[n++] = (char)(ms >> 16);
+   pkt[n++] = (char)(ms >> 8);  pkt[n++] = (char)ms;
+   for (i = 0; i < blen; ++i) pkt[n++] = (char)body[i];
+   return ge_send(pkt, n);
+}
+
+/* 报警事件：ev=1 开始 / 2 结束；body = ev,x,y,conf,obs,nd */
+static void ge_ev_alarm(int ev, int x, int y, int conf, int obs, int nd, uint32_t ms)
+{
+   unsigned char b[8];
+   b[0] = (unsigned char)ev;
+   b[1] = (unsigned char)(x & 0xFF);
+   b[2] = (unsigned char)(y & 0xFF);
+   b[3] = (unsigned char)(conf & 0xFF);
+   b[4] = (unsigned char)(obs & 0xFF);
+   b[5] = (unsigned char)(nd & 0xFF);
+   b[6] = 0; b[7] = 0;
+   (void)ge_udp_pkt(EV_T_EVENT, g_ev_id, 0, 0, ms, b, 8);
+}
+
+/* 心跳：obs,person,alarm,fps,area_lo,area_hi */
+static void ge_ev_hb(int obs, int person, int alarm, int fps, int area, uint32_t ms)
+{
+   unsigned char b[8];
+   b[0] = (unsigned char)(obs & 0xFF);
+   b[1] = (unsigned char)(person & 0xFF);
+   b[2] = (unsigned char)(alarm & 0xFF);
+   b[3] = (unsigned char)(fps & 0xFF);
+   b[4] = (unsigned char)(area & 0xFF);
+   b[5] = (unsigned char)((area >> 8) & 0xFF);
+   b[6] = 0; b[7] = 0;
+   (void)ge_udp_pkt(EV_T_HB, g_ev_id, 0, 0, ms, b, 8);
+}
+
+/* 报警开始时准备缩略图（不在这里发，避免阻塞） */
+static void ge_thumb_prepare(void)
+{
+   int n = png_gray(g_thumb, 96, 96, g_evpng, (int)sizeof(g_evpng));
+   if (n <= 0) { g_evpng_len = 0; return; }
+   g_evpng_len = n;
+   g_evpng_off = 0;
+   g_evpng_seq = 0;
+   g_evpng_total = (unsigned short)((n + EV_THUMB_CHUNK - 1) / EV_THUMB_CHUNK);
+}
+
+/* 每轮最多发一片，片间自然有主循环间隔 */
+static void ge_thumb_pump(uint32_t ms)
+{
+   int n;
+   if (g_evpng_len <= 0 || g_evpng_off >= g_evpng_len) return;
+   n = g_evpng_len - g_evpng_off;
+   if (n > EV_THUMB_CHUNK) n = EV_THUMB_CHUNK;
+   if (ge_udp_pkt(EV_T_THUMB, g_ev_id, g_evpng_seq, g_evpng_total,
+                  (uint32_t)0u, g_png + g_evpng_off, n) == 0) {
+      g_evpng_off += n;
+      g_evpng_seq++;
+   } else {
+      g_evpng_off = g_evpng_len;   /* 失败直接丢，不重试 */
+   }
+}
+
+/* ---- v4.0 网口收包（保留但默认不用） ---- */
 static unsigned char ge_rx[1600];
 
 #define EPOCH_BASE  1793664000u   /* 烧录时刻（秒），仅用于页面显示"数据延迟" */
@@ -313,7 +405,6 @@ static unsigned char ge_rx[1600];
 static net_t   g_net;
 static unsigned char g_net_out[1600];
 static char    g_status_json[512];
-static unsigned char g_thumb[96 * 96];
 static http_state_t g_hstate;
 
 static int ge_http_init(void)
@@ -345,8 +436,8 @@ static int ge_rx_poll(void)
    uint32_t st;
    int words, i, n;
    st = R32(30);
-   if (!(st & 0x200u)) return 0;          /* bit9 = 有帧 */
-   words = (int)(st & 0x1FFu);            /* bit8..0 = 字数 */
+   if ((st & 0x7FFu) == 0) return 0;          /* 低 11 位=字数，非 0 表示有新帧 */
+   words = (int)(st & 0x7FFu);
    if (words <= 0) return 0;
    if (words > 400) words = 400;
    R32(29) = 4u;                          /* bit2：清读指针 */
@@ -812,6 +903,14 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
       if ((fusion || solo) && alarm_cand_cnt >= ALARM_START_FRAMES && since_end >= ALARM_COOLDOWN_MS) {
          alarm_on = 1; alarm_frames = 0; alarm_cand_cnt = 0;
          alarm_start_ms = (int)now;
+         g_ev_id++;
+         {   int ex = 48, ey = 48, k2;
+             for (k2 = 0; k2 < g_mot.n_trk; ++k2)
+                if (g_mot.trk[k2].active && g_mot.trk[k2].confirmed) {
+                   ex = (int)g_mot.trk[k2].cx; ey = (int)g_mot.trk[k2].cy; break; }
+             ge_ev_alarm(1, ex, ey, person ? 100 : 60, (int)g_track_conf, (int)g_mot.n_det, (uint32_t)now);
+             ge_thumb_prepare();
+         }
          ge_ev("as", (int)now, (int)area, (int)ir_cnt10, (int)(person ? 100 : 60),
                (int)g_mot.n_det, (int)g_track_conf, 1);
          bsp_printf("MMT_ALARM start ms=%d f=%d person=%d motion=%d area=%d cause=%s "
@@ -831,6 +930,7 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
            bsp_printf("MMT_ALARM end ms=%d f=%d dur_ms=%d\n\r",
                       (int)now, (int)g_frame, (int)now - alarm_start_ms);
            alarm_on = 0;
+           ge_ev_alarm(2, 48, 48, 0, 0, (int)g_mot.n_det, (uint32_t)now);
            alarm_end_ms = now; alarm_cand_cnt = 0;   /* v2.6: 进入冷却 */
           ge_ev("ae", (int)now, (int)area, (int)ir_cnt15, 0, (int)g_mot.n_det, (int)g_track_conf, 0);
         }
@@ -838,6 +938,7 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
    if (low_pwr_now && alarm_on) {
       bsp_printf("MMT_ALARM end ms=%d f=%d dur_ms=%d reason=lowpwr\n\r",
                  (int)now, (int)g_frame, (int)now - alarm_start_ms);
+      ge_ev_alarm(2, 48, 48, 0, 0, (int)g_mot.n_det, (uint32_t)now);
       alarm_on = 0; rel_cnt = 0; alarm_end_ms = now; alarm_cand_cnt = 0;
    }
 
@@ -856,6 +957,10 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
                gx = (int)g_mot.trk[k].cx; gy = (int)g_mot.trk[k].cy; break;
             }
          (void)gx; (void)gy;
+         ge_send_raw(ge_test_frame, 110);   /* 每 2 s 发一帧固定帧，验证 TX */
+         ge_ev_hb((int)g_track_conf, person ? 1 : 0, alarm_on ? 1 : 0, 0, (int)area, (uint32_t)now);
+         bsp_printf("MMT_GE ctrl=%d status=%d rx=%d\n\r",
+                    (int)GE_CTRL, (int)GE_STATUS, (int)R32(30));
          ge_hb_ms = now;
       }
    }
@@ -1267,7 +1372,7 @@ static void bright_initialize(void)
 #define WB_G             0x118    /* 1.094x，G 作为基准不随标定改变 */
 #endif
 #ifndef WB_B
-#define WB_B             0x1A4    /* 1.640625x（v29.2 本轮默认值） */
+#define WB_B             0x170    /* 1.640625x（v29.2 本轮默认值） */
 #endif
 #ifndef WB_CAL
 #define WB_CAL           0        /* 1=开机标定一次（上板 a 步），0=使用宏内固定增益 */
@@ -1513,7 +1618,6 @@ extern "C" int main()
    }
 #else
    (void)g_lp_ready;
-#endif
 
    uint32_t frame = 0;
    uint32_t infer_total = 0, infer_win = 0;
@@ -1527,6 +1631,8 @@ extern "C" int main()
    uint32_t lp_entry_cnt = 0, lp_exit_cnt = 0;
 
    ge_http_init();
+   bsp_printf("MMT_APB27 %d %d %d %d %d\n\r",
+              (int)R32(27), (int)R32(28), (int)R32(29), (int)R32(30), (int)R32(31));
 
    while (1) {
       if ((frame % 30) == 0 && bright_ready) bright_log("MMT_FIXED");
@@ -1579,7 +1685,8 @@ extern "C" int main()
                g_thumb[q] = (unsigned char)((int)input_snapshot[q] + 128);
          }
       }
-      ge_http_service((int)t_now);
+   ge_http_service((int)t_now);
+#endif
       {
          const uint32_t ar = R32(2);
          ddr_win += (ar - ddr_ar_last);
