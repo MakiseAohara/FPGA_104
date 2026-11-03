@@ -1,0 +1,241 @@
+Efinity Synthesis report for project ti60f225_oob
+Version: 2026.1.132
+Generated at: Nov 03, 2026 18:45:59
+Copyright (C) 2013 - 2026  All rights reserved.
+
+Top-level Entity Name : ti60f225_oob_top
+
+family : Titanium
+device : Ti60F225
+project : ti60f225_oob
+root : ti60f225_oob_top
+I,include : source/tinyml
+I,include : source/tinyml
+binary-db : outflow\ti60f225_oob.vdb
+insert-ios : 0
+insert-gclk : 0
+max-carry-cascade : 320
+max-dsp-cascade : 16
+max_mult : -1
+max_ram : -1
+mode : speed
+num_srl : -1
+mult-decomp-retime : 0
+output-dir : outflow
+proj_curr_path : D:\eth_build\m17_ge
+project : ti60f225_oob
+project-xml : D:\eth_build\m17_ge\ti60f225_oob.xml
+retiming : 0
+root : ti60f225_oob_top
+seq_opt : 0
+work-dir : work_syn
+write-efx-verilog : outflow\ti60f225_oob.map.v
+
+File List:
+
+D:\eth_build\m17_ge\source\axi\axi_full_to_half_duplex.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\arbiter.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\axi_interconnect_beta.sv
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\axi_rdata_sfifo.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\axi_wdata_sfifo.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\crossbar.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\fixed_priority_arbiter.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\lb_to_axi.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\master_coupler.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\round_robin_priority_arbiter.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\slave_coupler.v
+D:\eth_build\m17_ge\source\axi\axi_interconnect_beta\slave_coupler_wrapper.v
+D:\eth_build\m17_ge\source\common\common_apb3.v
+D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v
+D:\eth_build\m17_ge\source\common\common_shift_reg.v
+D:\eth_build\m17_ge\source\common\common_simple_dual_port_ram.v
+D:\eth_build\m17_ge\source\common\common_true_dual_port_ram.v
+D:\eth_build\m17_ge\source\tinyml\tinyml_top.v
+D:\eth_build\m17_ge\source\tinyml\tinyml_accelerator_channels.v
+D:\eth_build\m17_ge\source\tinyml\tinyml_accelerator.v
+D:\eth_build\m17_ge\rtl\SapphireSoc.v
+D:\eth_build\m17_ge\rtl\mmt_ai_mem_bridge3.v
+D:\eth_build\m17_ge\rtl\ti60f225_oob_top.v
+D:\eth_build\m17_ge\rtl\user_dual_port_ram.v
+D:\eth_build\m17_ge\rtl\dual_clock_fifo.v
+D:\eth_build\m17_ge\rtl\true_dual_port_ram.v
+D:\eth_build\m17_ge\rtl\reset.v
+D:\eth_build\m17_ge\rtl\simple_dual_port_ram.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\ddr3_top.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\axi4_bus_ctl\axi4_bus_ctl.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\local_bus_ctl\local_bus_ctl.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\memory_bus_ctl\memory_bus_ctl.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\ddr_phy_wrlvl.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\ddr_phy_rdlvl_dqs.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\ddr_phy_wrcal.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\ddr_calibration_ini.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\ddr_phy_if.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\phy_ctl.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\phy_ctl\ddr_mpr_rdlvl.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\ddr3_parameter.vh
+D:\eth_build\m17_ge\rtl\ddr3_controller\lb2_axi_clk.v
+D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v
+D:\eth_build\m17_ge\rtl\debayer\line_buffer.v
+D:\eth_build\m17_ge\rtl\debayer\debayer_top_2to1.v
+D:\eth_build\m17_ge\rtl\debayer\raw_to_rgb.v
+D:\eth_build\m17_ge\rtl\mipi_config\panel_config.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c_master\i2c_master_byte_ctrl.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c_master\i2c_master_top.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c_master\i2c_master_bit_ctrl.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c_master\oc_i2c_master.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c\i2c_16addr_8data.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c\i2c_master_reg_rom.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c\i2c_master_reg_set.v
+D:\eth_build\m17_ge\rtl\cam_i2c_ctrl\i2c\i2c_master_ctrl_top.v
+D:\eth_build\m17_ge\rtl\dvi_tx\ecc_calc_v1.v
+D:\eth_build\m17_ge\rtl\dvi_tx\audio_clock_regeneration_packet.sv
+D:\eth_build\m17_ge\rtl\dvi_tx\audio_packet.sv
+D:\eth_build\m17_ge\rtl\dvi_tx\auxiliary_video_information_info_frame.sv
+D:\eth_build\m17_ge\rtl\dvi_tx\audio_infoframe_packet.sv
+D:\eth_build\m17_ge\rtl\dvi_tx\efx_fifo.v
+D:\eth_build\m17_ge\rtl\dvi_tx\Sc_Fifo_Slr8.v
+D:\eth_build\m17_ge\rtl\dvi_tx\packet_assembler.sv
+D:\eth_build\m17_ge\rtl\dvi_tx\encode.v_encrypted.v
+D:\eth_build\m17_ge\rtl\dvi_tx\tx_aux.v_encrypted.v
+D:\eth_build\m17_ge\rtl\dvi_tx\dvi_encoder.v_encrypted.v
+D:\eth_build\m17_ge\rtl\gamma_conrrection\gamma_correction.v
+D:\eth_build\m17_ge\debug_top.v
+D:\eth_build\m17_ge\rtl\debayer\rgb_gain_v1.v
+D:\eth_build\m17_ge\rtl\csi_rx_controller.sv
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\bank_switch.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\rst_n_piple.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\vid_par2ser.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\frame_info_det.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\ddr_buffer.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\par2ser.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\ddr_rd_buffer.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\ddr_wr_buffer.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\ser2par_v1.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\ser2par.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\frame_buffer.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\DC_FIFO.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\vid_rx_align_v1.v
+D:\eth_build\m17_ge\rtl\frame_buffer_V4\ddr_wr_buffer_v1.v
+D:\eth_build\m17_ge\rtl\user_cvo_axi_v2\cvo_axi_v2.v
+D:\eth_build\m17_ge\rtl\mmt\osd\mmt_osd_overlay.v
+D:\eth_build\m17_ge\rtl\mmt\osd\mmt_osd_demo.v
+D:\eth_build\m17_ge\rtl\v7\audio\v7_audio_tone.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_mmt_core.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_txt_fmt.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_pwr_ctl.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_sns_filter.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_ts_align.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_i2c_probe.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_apb_ext.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_alarm_sel.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_alarm_gate.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_bin2bcd.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_frame_diff.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_ir_proc.v
+D:\eth_build\m17_ge\rtl\v7\mmt\v7_freeze_ctl.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_dpram.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_i2c_hub.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_i2c_master.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_mlx90640_ctrl.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_sensor_subsystem.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_sht30_ctrl.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_fusion_vote.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_alarm_ctrl.v
+D:\eth_build\m17_ge\rtl\v7\mmt\mmt_video_downscale.v
+D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_top.v
+D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_overlay.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\arbi\gmii_arbi.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\arbi\gmii_rx_buffer.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\arbi\gmii_tx_buffer.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\debouce\ax_debounce.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\DC_FIFO.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\arp_cache.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\crc.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\dpram.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\icmp_reply.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\mac_test.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\mac_top.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\rx\arp_rx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\rx\ip_rx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\rx\mac_rx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\rx\mac_rx_top.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\rx\udp_rx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\arp_tx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\ip_tx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\ip_tx_mode.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\mac_tx.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\mac_tx_mode.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\mac_tx_top.v
+D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\tx\udp_tx.v
+D:\eth_build\m17_ge\rtl\ge\udp_test_top.v
+D:\eth_build\m17_ge\rtl\ge\util_gmii_to_rgmii.v
+D:\eth_build\m17_ge\rtl\ge\ge_eth_apb.v
+D:\eth_build\m17_ge\rtl\ge\ge_top_user.v
+D:\eth_build\m17_ge\rtl\ge\ge_raw_tx.v
+D:\eth_build\m17_ge\rtl\ge\ge_raw_rx.v
+D:\eth_build\m17_ge\rtl\ge\ge_udp_rx_bridge.v
+
+### ### Report Section Start ### ###
+
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\csi_rx_controller.sv:7848)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\csi_rx_controller.sv:7848)
+"MEM|SYN-0677" : ... Memory 'FifoBuff' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\frame_buffer_V4\DC_FIFO.v:211)
+"MEM|SYN-0677" : ... Memory 'FifoBuff' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\frame_buffer_V4\DC_FIFO.v:211)
+"MEM|SYN-0677" : ... Memory 'FifoBuff' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\frame_buffer_V4\DC_FIFO.v:211)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_simple_dual_port_ram.v:24)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_efx_fifo_wrapper.v:767)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\source\common\common_simple_dual_port_ram.v:24)
+"MEM|SYN-0677" : ... Memory 'banks_0' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:22726)
+"MEM|SYN-0677" : ... Memory 'ways_0_tags' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:22727)
+"MEM|SYN-0677" : ... Memory 'ways_0_tags' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21980)
+"MEM|SYN-0677" : ... Memory 'ways_0_data_symbol0' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21981)
+"MEM|SYN-0677" : ... Memory 'ways_0_data_symbol1' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21982)
+"MEM|SYN-0677" : ... Memory 'ways_0_data_symbol2' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21983)
+"MEM|SYN-0677" : ... Memory 'ways_0_data_symbol3' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21984)
+"MEM|SYN-0677" : ... Memory 'RegFilePlugin_regFile' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:14184)
+"MEM|SYN-0677" : ... Memory 'logic_progbufX_mem' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:11905)
+"MEM|SYN-0677" : ... Memory 'logic_ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21381)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:21163)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:20912)
+"MEM|SYN-0677" : ... Memory 'logic_ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:20601)
+"MEM|SYN-0677" : ... Memory 'logic_ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:19986)
+"MEM|SYN-0677" : ... Memory 'logic_ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:19169)
+"MEM|SYN-0677" : ... Memory 'logic_ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\SapphireSoc.v:18998)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ddr3_controller\common\efx_fifo_v2.3\efx_fifo_wrapper.v:800)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\true_dual_port_ram.v:35)
+"MEM|SYN-0677" : ... Memory 'mem' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\mmt\mmt_dpram.v:36)
+"MEM|SYN-0677" : ... Memory 'mem' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\mmt\mmt_dpram.v:36)
+"MEM|SYN-0677" : ... Memory 'win' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\mmt\v7_sns_filter.v:22)
+"MEM|SYN-0677" : ... Memory 'win' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\mmt\v7_sns_filter.v:22)
+"MEM|SYN-0677" : ... Memory 'mem' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\mmt\mmt_dpram.v:36)
+"MEM|SYN-0677" : ... Memory 'txt_ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_top.v:25)
+"MEM|SYN-0677" : ... Memory 'th_ram0' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_top.v:31)
+"MEM|SYN-0677" : ... Memory 'th_ram1' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_top.v:31)
+"MEM|SYN-0677" : ... Memory 'th_ram2' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_top.v:31)
+"MEM|SYN-0677" : ... Memory 'th_ram3' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\v7\osd\v7_osd_top.v:31)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\simple_dual_port_ram.v:32)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\debug_top.v:2052)
+"MEM|SYN-0677" : ... Memory 'mem' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ge\ge_eth_apb.v:19)
+"MEM|SYN-0677" : ... Memory 'FifoBuff' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\DC_FIFO.v:208)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\dpram.v:14)
+"MEM|SYN-0677" : ... Memory 'ram' is not initialized, assuming empty initial contents. (D:\eth_build\m17_ge\rtl\ge\heijin_test\mac\dpram.v:14)
