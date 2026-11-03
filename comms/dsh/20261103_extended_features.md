@@ -29,8 +29,9 @@
   预测从未生效（`pre_eta=-1` 恒成立）；
 - 已改：面积增长率 EMA → `mot_eta_frames` 两路取最小（靠近镜头给 3~10 帧提前量），
   `mot_predict_box` 用 1/2 阻尼速度；
-- `MOT_V16_GATE/KEEP` 与新的 `MOT_GATE_SIZE_DIV` **保持默认关闭**：现有日志里带检测框的帧
-  只有 6/5/14 帧，三种配置回放结果完全一致，不足以判定，按"不要默认打开"执行；
+- **GATE 已按数据打开**：18 份日志 96 个航迹框里，整幅(≥90%)框占 15.6%，且 15/15 全部落在
+  AI 判"无人"的帧上 → 整幅块不是人，不建航迹（`MOT_V16_GATE=1`）；
+- KEEP 与 `MOT_GATE_SIZE_DIV` 仍关闭（日志里航迹几乎不 miss，无数据支撑）；
 - 需要的下一步（只能人来做）：`py -3 tools\capture_mot.py --port COM15 --out out\mot_A`
   跑一遍基线固件（`out_v30_e7`, AA5188F9），再用当前固件跑一遍 `out\mot_B`，
   然后 `py -3 tools\mot_analyze.py out\mot_A\serial.log out\mot_B\serial.log --md out\mot_cmp.md`。
@@ -54,5 +55,5 @@
 | `tools/web_monitor.py` + `tools/page.html` | PC 端监控（串口/UDP/HTTP） |
 | `tools/mot_analyze.py` `tools/pred_eval.py` `tools/mot_replay.py` `tools/cap.py` `tools/fake_board.py` | 离线分析与联调工具 |
 
-固件：`out_v30_e13` CRC32 **76188F5F**（实时画面 + TREND 事件 + v17.2 ETA）；留档：e12 `A1CD467E`、e11 `B2F8AC11`、e9 `98AE9A19`、e7 `AA5188F9`。
+固件：`out_v30_e15` CRC32 **0987B11B**（实时画面 + TREND 事件 + v17.2 ETA + v16 GATE）；留档：e13 `76188F5F`、e12 `A1CD467E`、e11 `B2F8AC11`、e9 `98AE9A19`、e7 `AA5188F9`。
 位流：`D:\eth_build\m17_ge\outflow\ti60f225_oob.bit` SHA256 `9A62F22A…8EF`。
