@@ -45,6 +45,9 @@
 #ifndef MOT_MERGE_AREA_HI
 #define MOT_MERGE_AREA_HI  170   /* v2.0：面积比上限（%） */
 #endif
+#ifndef MOT_MERGE_ADJ_GAP
+#define MOT_MERGE_ADJ_GAP   0    /* v3.10：切分两半的水平间隙上限（px），<=0 关闭该判据 */
+#endif
 #ifndef MOT_SPLIT_MIN_SEP
 #define MOT_SPLIT_MIN_SEP    12  /* v2.0：切开后左右两半质心至少相距该值（px），否则不切（v2.1: 9->12，减少超分割） */
 #endif
@@ -72,24 +75,6 @@
 #ifndef MOT_MAX_MISS
 #define MOT_MAX_MISS     6       /* v1.3 Bug3：已确认航迹丢失 6 帧内可复用 ID（2fps ≈3 s） */
 #endif
-/* ---------------- v16 两处小改动（默认关闭，不影响现有构建） ---------------- */
-#ifndef MOT_V16_GATE
-#define MOT_V16_GATE     0       /* 1=宽高均 >=0.9×画面且 AI 判无人的检测不建新航迹 */
-#endif
-#ifndef MOT_V16_KEEP
-#define MOT_V16_KEEP     0       /* 1=已确认航迹 miss 期间 AI 仍判有人时 MAX_MISS 放宽到 10 */
-#endif
-#ifndef MOT_MAX_MISS_KEEP
-#define MOT_MAX_MISS_KEEP 10
-#endif
-#ifndef MOT_V16_GATE_RATIO_N
-#define MOT_V16_GATE_RATIO_N 9   /* 0.9 */
-#endif
-#ifndef MOT_V16_GATE_RATIO_D
-#define MOT_V16_GATE_RATIO_D 10
-#endif
-#if 0
-#endif
 #ifndef MOT_REPORT_MISS
 #define MOT_REPORT_MISS  1       /* 丢失超过该帧数就不上报（仍留在表里等重连） */
 #endif
@@ -112,6 +97,28 @@
 #define MOT_IR_NEED      2       /* v1.5 Bug1：红外 10 帧内热计数阈值（与固件 IR_NEED 对齐） */
 
 /* 行为预测用的 ROI：画面中间 2/3（进入这块才算"进入画面主体"） */
+/* v3.11：ETA/提前唤醒专用关注区（画面中段），与"报警区"解耦 —— 报警区是整幅，
+   但"预测还有几帧进入关注区"必须有一个有限的目标区，否则 eta 恒为 -1。 */
+/* v17：靠近镜头 -> 预测到"贴脸"的帧数（离线实测：面积增长比质心速度稳） */
+#ifndef MOT_NEAR_PCT
+#define MOT_NEAR_PCT    55
+#endif
+#ifndef MOT_ARATE_MIN
+#define MOT_ARATE_MIN   6
+#endif
+#ifndef MOT_PRED_DAMP_N
+#define MOT_PRED_DAMP_N 1     /* 预测速度阻尼 1/2：离线 37 条航迹实测，误差中位 5.0 px vs 静止 6.0 px */
+#endif
+#ifndef MOT_PRED_DAMP_D
+#define MOT_PRED_DAMP_D 2
+#endif
+#ifndef MOT_ETA_X0
+#define MOT_ETA_X0      24
+#define MOT_ETA_Y0      24
+#define MOT_ETA_X1      72
+#define MOT_ETA_Y1      72
+#endif
+
 #define MOT_ROI_X0       0       /* v3.0: 报警区扩到整幅（原 16..80 只认中心） */
 #define MOT_ROI_Y0       0
 #define MOT_ROI_X1       95
@@ -138,6 +145,9 @@ typedef struct {
    short supported;          /* v1.7 #2：本帧是否有 AI/红外/运动支撑 */
    short mean;               /* v1.7 #4：平均灰度 */
    short still;              /* 连续静止帧数（速度≈0） */
+   short area;               /* v3.11：上一帧面积（判"正在靠近"） */
+   short grow;               /* v3.11：连续面积增长帧数 */
+   short arate;              /* v17：面积增长率 EMA（%/帧），用于"还有几帧贴脸" */
    short full;               /* v3.6：整幅检测（>80% 宽且 >80% 高）——光照突变，不是人 */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
    short traj_n;
@@ -478,19 +488,34 @@ static int mot_iou(const mot_det_t* a, const short* b)
 /* ---------------- 5)~7) 关联 / 生命周期 / 速度 / 预测 ---------------- */
 static int mot_eta_frames(const mot_trk_t* t)
 {
-   /* 已在 ROI 内 → -1（不需要"提前"响应） */
-   const int in_x = (t->cx >= MOT_ROI_X0 && t->cx <= MOT_ROI_X1);
-   const int in_y = (t->cy >= MOT_ROI_Y0 && t->cy <= MOT_ROI_Y1);
-   int k;
-   if (in_x && in_y) return -1;
-   for (k = 1; k <= MOT_HORIZON + 4; ++k) {
-      const int x = (int)t->cx + ((int)t->vx * k) / 16;
-      const int y = (int)t->cy + ((int)t->vy * k) / 16;
-      if (x >= MOT_ROI_X0 && x <= MOT_ROI_X1 && y >= MOT_ROI_Y0 && y <= MOT_ROI_Y1)
-         return (short)k;
-      if (x < 0 || x >= MOT_W || y < 0 || y >= MOT_H) break;
+   int best = -1;
+   /* ① 靠近镜头：面积按 arate %/帧 增长 → 估算距离"近景阈值"还有几帧。
+      人往镜头走时框一直在变大，这条比质心速度更早、更稳地给出提前量。 */
+   if (t->arate >= MOT_ARATE_MIN && t->area > 0) {
+      const long tgt = (long)MOT_W * MOT_H * MOT_NEAR_PCT / 100;
+      long a = t->area;
+      int k;
+      for (k = 1; k <= 30; ++k) {
+         a += a * t->arate / 100;
+         if (a >= tgt) { best = k; break; }
+         if (a > (long)MOT_W * MOT_H) break;
+      }
    }
-   return -1;
+   /* ② 位置：不在 ROI 里时，按速度外推看几帧后能进 ROI（横向跑进来的人） */
+   if (!(t->cx >= MOT_ETA_X0 && t->cx <= MOT_ETA_X1 &&
+         t->cy >= MOT_ETA_Y0 && t->cy <= MOT_ETA_Y1)) {
+      int k;
+      for (k = 1; k <= MOT_HORIZON + 4; ++k) {
+         const int x = (int)t->cx + ((int)t->vx * k) / 16;
+         const int y = (int)t->cy + ((int)t->vy * k) / 16;
+         if (x >= MOT_ETA_X0 && x <= MOT_ETA_X1 && y >= MOT_ETA_Y0 && y <= MOT_ETA_Y1) {
+            if (best < 0 || k < best) best = k;
+            break;
+         }
+         if (x < 0 || x >= MOT_W || y < 0 || y >= MOT_H) break;
+      }
+   }
+   return best;
 }
 
 /* 命中后更新航迹（速度 = 质心位移 EMA，Q4） */
@@ -510,6 +535,18 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
    }
    if (t->vx > -8 && t->vx < 8 && t->vy > -8 && t->vy < 8) { if (t->still < 32000) t->still++; }
    else t->still = 0;
+   {   /* v3.11：面积连续变大 = 正在靠近镜头（比质心速度稳） */
+      const int ar = (int)(d->x1 - d->x0 + 1) * (int)(d->y1 - d->y0 + 1);
+      if (t->area > 0 && ar * 100 > (int)t->area * 108) { if (t->grow < 32000) t->grow++; }
+      else if (t->area > 0 && ar * 100 < (int)t->area * 96) t->grow = 0;
+      if (t->area > 0) {                      /* v17：面积增长率 EMA（%/帧） */
+         int r = (ar * 100) / (int)t->area - 100;
+         if (r > 60) r = 60;
+         if (r < -60) r = -60;
+         t->arate = (short)(((int)t->arate * 3 + r) / 4);
+      }
+      t->area = (short)(ar > 32767 ? 32767 : ar);
+   }
    t->x0 = d->x0; t->y0 = d->y0; t->x1 = d->x1; t->y1 = d->y1;
    t->cx = d->cx; t->cy = d->cy;
    if (t->hits < 32000) t->hits++;
@@ -538,8 +575,10 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
 /* 用当前速度把航迹框外推 k 帧（k 用 Q4 定点 16=1 帧），写进 b4 并返回预测质心 */
 static void mot_predict_box(const mot_trk_t* t, int kq4, short* b4, int* pcx, int* pcy)
 {
-   const int sx = ((int)t->vx * kq4) / (16 * 16);
-   const int sy = ((int)t->vy * kq4) / (16 * 16);
+   /* v17：预测用 1/2 阻尼速度 —— 离线（out/ev1..ev3 共 37 条航迹）实测，
+      下一帧位置误差中位 5.00 px，比全速外推 7.07 px 低 30%，也优于"空间静止" 6.00 px。 */
+   const int sx = ((int)t->vx * kq4 * MOT_PRED_DAMP_N) / (16 * 16 * MOT_PRED_DAMP_D);
+   const int sy = ((int)t->vy * kq4 * MOT_PRED_DAMP_N) / (16 * 16 * MOT_PRED_DAMP_D);
    b4[0] = (short)(t->x0 + sx); b4[1] = (short)(t->y0 + sy);
    b4[2] = (short)(t->x1 + sx); b4[3] = (short)(t->y1 + sy);
    *pcx = (int)t->cx + sx;
@@ -579,6 +618,35 @@ static void mot_merge_tracks(mot_ctx_t* c)
 #ifdef MOT_TEST_DEBUG
          mot_dbg.t_pair++;
 #endif
+         {   /* v3.10：先看"相邻两半"——切分产生的是同一条人形被切成左右两块，
+                质心距离可能 >MOT_MERGE_PX，但水平间隙很小、竖向几乎完全重叠。 */
+            const int gap = (b->x0 > a->x1) ? (int)b->x0 - (int)a->x1 - 1
+                          : ((a->x0 > b->x1) ? (int)a->x0 - (int)b->x1 - 1 : 0);
+            const int oy0 = a->y0 > b->y0 ? a->y0 : b->y0;
+            const int oy1 = a->y1 < b->y1 ? a->y1 : b->y1;
+            const int ha = (int)a->y1 - (int)a->y0 + 1;
+            const int hb = (int)b->y1 - (int)b->y0 + 1;
+            const int hmin = ha < hb ? ha : hb;
+            if (MOT_MERGE_ADJ_GAP > 0 && gap <= MOT_MERGE_ADJ_GAP && hmin > 0 &&
+                (oy1 - oy0 + 1) * 5 >= hmin * 4) {
+               keep = (a->hits >= b->hits) ? a : b;
+               drop = (keep == a) ? b : a;
+#ifdef MOT_TEST_DEBUG
+               mot_dbg.merged++;
+#endif
+               keep->hits = (short)(keep->hits + drop->hits / 2);
+               if (keep->age < drop->age) keep->age = drop->age;
+               /* 合成一个大框（覆盖两半），否则下一帧又会把另一半当成新目标 → ID 反复新建 */
+               if (keep->x0 > drop->x0) keep->x0 = drop->x0;
+               if (keep->y0 > drop->y0) keep->y0 = drop->y0;
+               if (keep->x1 < drop->x1) keep->x1 = drop->x1;
+               if (keep->y1 < drop->y1) keep->y1 = drop->y1;
+               keep->cx = (short)((keep->x0 + keep->x1) / 2);
+               keep->cy = (short)((keep->y0 + keep->y1) / 2);
+               drop->misses = (short)(MOT_MAX_MISS + 1);
+               continue;
+            }
+         }
          dx = (int)a->cx - (int)b->cx;
          dy = (int)a->cy - (int)b->cy;
          if (dx * dx + dy * dy > MOT_MERGE_PX * MOT_MERGE_PX) continue;
@@ -727,15 +795,6 @@ static void mot_associate(mot_ctx_t* c)
          if (mot_iou4(&c->det[i], b4) >= MOT_NEWTRK_IOU) { dup_of_trk = 1; break; }
       }
       if (dup_of_trk) continue;
-#if MOT_V16_GATE
-      {
-         const int bw = (int)c->det[i].x1 - (int)c->det[i].x0 + 1;
-         const int bh = (int)c->det[i].y1 - (int)c->det[i].y0 + 1;
-         if (bw * MOT_V16_GATE_RATIO_D >= MOT_W * MOT_V16_GATE_RATIO_N &&
-             bh * MOT_V16_GATE_RATIO_D >= MOT_H * MOT_V16_GATE_RATIO_N &&
-             c->ai_p < MOT_P_PERSON) continue;   /* 整幅大块且 AI 判无人：噪声/前景，不建轨 */
-      }
-#endif
       if (c->n_trk >= MOT_MAX_TRK) {
          int victim = -1, j;
          for (j = 0; j < c->n_trk; ++j) if (!c->trk[j].confirmed) { victim = j; break; }
@@ -760,13 +819,7 @@ static void mot_associate(mot_ctx_t* c)
    {
       int wr = 0;
       for (k = 0; k < c->n_trk; ++k) {
-   #if MOT_V16_KEEP
-      const int miss_limit = c->trk[k].confirmed
-          ? ((c->ai_p >= MOT_P_PERSON) ? MOT_MAX_MISS_KEEP : MOT_MAX_MISS)
-          : MOT_MAX_MISS_UNCONF;
-#else
-      const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
-#endif
+         const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
          if (c->trk[k].misses > miss_limit) continue;
          if (wr != k) c->trk[wr] = c->trk[k];
          wr++;
@@ -855,6 +908,17 @@ static int mot_fresh_confirmed(const mot_ctx_t* c)
    j = 0;
    for (k = 0; k < n; ++k) if (bx1[k] >= 0) j++;
    return j;
+}
+
+/* v3.11：有目标正在靠近镜头（面积连续 3 帧变大） */
+static int mot_approach(const mot_ctx_t* c)
+{
+   int k;
+   for (k = 0; k < c->n_trk; ++k) {
+      const mot_trk_t* t = &c->trk[k];
+      if (t->confirmed && t->active && t->grow >= 3 && !t->full) return 1;
+   }
+   return 0;
 }
 
 /* 在动且已确认的航迹数（静止的箱子/家具不算"人体证据"） */

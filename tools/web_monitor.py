@@ -27,7 +27,8 @@ stats = dict(frames=0, person=0, motion=0, lp=0, alarm_starts=0,
              udp_events=0, udp_heartbeats=0, thumb_incomplete=0,
              started=time.strftime("%Y-%m-%dT%H:%M:%S"))
 state = dict(t=0, f=0, p=-128, person=0, motion=0, area=0, ir=0, alarm=0, lowpwr=0, paused=0,
-             camfps=0, inf_hz=0, sht=0, rh=0, body=0, events=[], frame_png=None, last=0)
+             camfps=0, inf_hz=0, sht=0, rh=0, body=0, nt=0, obs=0, nd=0,
+             events=[], frame_png=None, last=0, ts=0, series=[], link="")
 events = []
 frame_png = [None]
 lock = threading.Lock()
@@ -80,9 +81,9 @@ def save_thumb(eid):
     if len(buf) < THUMB_W * THUMB_H:
         return None, False
     data = png_gray(buf[:THUMB_W * THUMB_H], THUMB_W, THUMB_H, 2)
-    p = THUMB_DIR / ("thumb_%d.png" % eid)
+    p = THUMB_DIR / ("%s_thumb_%d.png" % (time.strftime("%Y%m%d_%H%M%S"), eid))
     p.write_bytes(data)
-    return str(p.as_posix()), True
+    return p.name, True
 
 def udp_handle(data):
     h = parse_hdr(data)
@@ -143,8 +144,13 @@ def add_event(kind, detail, eid=None, thumb=None, incomplete=False):
         p = THUMB_DIR / ("%s_%s.png" % (ts_name, kind))
         p.write_bytes(frame_png[0])
         th = p.name
+    if th and "/" in th:
+        th = th.rsplit("/", 1)[1]
     ev = dict(kind=kind, ts=time.strftime("%Y-%m-%dT%H:%M:%S"), wall=time.time(),
-              detail=detail, thumb=th)
+              time=time.strftime("%H:%M:%S"), detail=detail, thumb=th)
+    for k in ("x", "y", "conf", "obs"):
+        if k in detail:
+            ev[k] = detail[k]
     if eid is not None:
         ev["id"] = eid
     if incomplete:
@@ -189,6 +195,7 @@ def reader():
                 handle(s)
 
 def handle(s):
+    state["ts"] = time.time()
     m = re.search(r"MMT_DEC t=(\d+) f=(\d+).*?motion=(\d) irhot=(\d) area=(\d+).*?person=(\d) ir_cnt=(\d+)", s)
     if m:
         state.update(t=int(m.group(1)), f=int(m.group(2)), motion=int(m.group(3)),
@@ -198,6 +205,18 @@ def handle(s):
         if state["person"]: stats["person"] += 1
         if state["motion"]: stats["motion"] += 1
         if state["lowpwr"]: stats["lp"] += 1
+        return
+    m = re.search(r"MMT_MOT f=(\d+) nd=(\d+) nt=(\d+)", s)
+    if m:
+        state.update(nd=int(m.group(2)), nt=int(m.group(3)))
+        state["series"].append(dict(f=int(m.group(1)), n=int(m.group(2)), nt=int(m.group(3)), obs=state["obs"]))
+        del state["series"][:-600]
+        return
+    m = re.search(r"MMT_MOT f=\d+ .*? obs=(-?\d+)", s)
+    if m:
+        state["obs"] = int(m.group(1))
+        if state["series"]:
+            state["series"][-1]["obs"] = state["obs"]
         return
     m = re.search(r"MMT_AI f=\d+ p=(-?\d+)", s)
     if m:
@@ -240,6 +259,21 @@ class H(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
     def do_GET(self):
+        if self.path.startswith("/api/state"):
+            with lock:
+                ev = events[-60:]
+                ser = state["series"][-240:]
+            body = json.dumps(dict(
+                f=state["f"], p=state["p"], person=state["person"], motion=state["motion"],
+                area=state["area"], ir=state["ir"], alarm=state["alarm"], lowpwr=state["lowpwr"],
+                paused=state["paused"], camfps=state["camfps"], inf_hz=state["inf_hz"],
+                sht=state["sht"], rh=state["rh"], body=state["body"], nt=state["nt"], obs=state["obs"],
+                nd=state["nd"], last=state["last"], ts=state["ts"], link=state["link"],
+                frames=stats["frames"], alarm_starts=stats["alarm_starts"],
+                udp_events=stats["udp_events"], udp_heartbeats=stats["udp_heartbeats"],
+                thumb_incomplete=stats["thumb_incomplete"],
+                events=ev, series=ser), ensure_ascii=False).encode()
+            self._send(body); return
         if self.path.startswith("/api/status"):
             body = json.dumps({k: v for k, v in state.items() if k not in ("events", "frame_png")}, ensure_ascii=False).encode()
             self._send(body); return
@@ -256,7 +290,7 @@ class H(BaseHTTPRequestHandler):
             data = frame_png[0] or b""
             self._send(data, "image/png", 200 if data else 404); return
         if self.path.startswith("/thumb/"):
-            name = self.path.split("/thumb/", 1)[1].split("?")[0]
+            name = self.path.split("/thumb/", 1)[1].split("?")[0].rsplit("/", 1)[-1]
             p = (THUMB_DIR / name)
             if p.exists():
                 self._send(p.read_bytes(), "image/png"); return
@@ -269,6 +303,8 @@ if a.udp:
     threading.Thread(target=udp_loop, daemon=True).start()
 threading.Thread(target=finalize_stale_thumbs, daemon=True).start()
 
+state["link"] = ("串口+UDP" if (a.port and a.udp) else ("串口" if a.port else "UDP"))
+state["ts"] = time.time()
 print("HTTP http://127.0.0.1:%d/  串口 %s  UDP %s  事件日志 %s"
       % (a.http, a.port or "-", a.udp or "-", a.out / "events.jsonl"), flush=True)
 ThreadingHTTPServer(("0.0.0.0", a.http), H).serve_forever()

@@ -315,6 +315,9 @@ static int ge_send(const char* s, int len)
 #define EV_T_HB     2u
 #define EV_T_THUMB  3u
 #define EV_THUMB_CHUNK 1000
+#ifndef GE_RAW_TEST_FRAME
+#define GE_RAW_TEST_FRAME 0
+#endif
 
 static uint32_t g_ev_id = 0;
 static unsigned char g_thumb[96 * 96];   /* 96x96 灰度，报警时编 PNG 上报 */
@@ -937,6 +940,9 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
    else if (low_pwr_now) dec_evt = 4;
    else dec_evt = 0;
 
+   /* v5.1：缩略图分片（报警时准备，每轮主循环至多一片，失败即丢） */
+   ge_thumb_pump((uint32_t)now);
+
    /* v3.9: 每 2 s 往 PC 发一个心跳 JSON（网口自检 + 链路判活） */
    {
       static uint64_t ge_hb_ms = 0;
@@ -947,7 +953,9 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
                gx = (int)g_mot.trk[k].cx; gy = (int)g_mot.trk[k].cy; break;
             }
          (void)gx; (void)gy;
-         ge_send_raw(ge_test_frame, 110);   /* 每 2 s 发一帧固定帧，验证 TX */
+#if GE_RAW_TEST_FRAME
+         ge_send_raw(ge_test_frame, 110);   /* 仅在排查 TX 通道时打开（会污染事件流） */
+#endif
          ge_ev_hb((int)g_track_conf, person ? 1 : 0, alarm_on ? 1 : 0, 0, (int)area, (uint32_t)now);
          bsp_printf("MMT_GE ctrl=%d status=%d rx=%d\n\r",
                     (int)GE_CTRL, (int)GE_STATUS, (int)R32(30));
