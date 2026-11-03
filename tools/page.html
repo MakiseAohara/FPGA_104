@@ -158,7 +158,7 @@ function render(st) {
   $("v-upd").textContent = st.ts ? new Date(st.ts * 1000).toLocaleTimeString() : "--";
 
   const fr = $("frame");
-  if (fr.style.display !== "none") fr.src = "/frame.png?t=" + (st.f || 0);
+  if (fr.style.display !== "none") fr.src = "/frame.png?t=" + Date.now();
 
   const ev = st.events || [];
   $("c-ev").textContent = st.udp_events ?? ev.length;

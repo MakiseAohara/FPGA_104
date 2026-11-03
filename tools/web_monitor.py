@@ -56,6 +56,7 @@ THUMB_DIR.mkdir(parents=True, exist_ok=True)
 MAGIC = b"MT"
 KIND = {0: "NORMAL", 1: "INTRUDE", 2: "TREND", 3: "PERSON", 4: "LOWPWR"}
 PKT_EVENT, PKT_HEARTBEAT, PKT_THUMB = 1, 2, 3
+LIVE_ID = 0xFFFF0001   # 固件 500 ms 推送的实时画面（不进事件列表）
 THUMB_W, THUMB_H = 96, 96
 thumbs = {}   # id -> {"total":N, "parts":{seq:bytes}, "ts":ms, "last":time.time()}
 
@@ -111,6 +112,18 @@ def udp_handle(data):
         t["total"] = h["total"]
         t["last"] = time.time()
         t["parts"][h["seq"]] = h["payload"][:1000]
+        if eid == LIVE_ID and len(t["parts"]) == t["total"]:
+            try:
+                buf = b"".join(t["parts"][i] for i in range(1, t["total"] + 1))
+            except KeyError:
+                return
+            if len(buf) >= THUMB_W * THUMB_H:
+                frame_png[0] = png_gray(buf[:THUMB_W * THUMB_H], THUMB_W, THUMB_H, 2)
+                (THUMB_DIR / "live.png").write_bytes(frame_png[0])
+                state["live_ts"] = time.time()
+                state["last"] = time.time()
+            thumbs.pop(eid, None)
+            return
         thumb, complete = save_thumb(eid)
         if complete:
             for ev in events:
@@ -168,6 +181,10 @@ def finalize_stale_thumbs():
         time.sleep(1)
         now = time.time()
         for eid, t in list(thumbs.items()):
+            if eid == LIVE_ID:          # 实时画面丢片很正常，不计入事件/统计
+                if now - t["last"] > 3:
+                    thumbs.pop(eid, None)
+                continue
             if now - t["last"] > 3:
                 stats["thumb_incomplete"] += 1
                 for ev in events:
@@ -272,7 +289,7 @@ class H(BaseHTTPRequestHandler):
                 frames=stats["frames"], alarm_starts=stats["alarm_starts"],
                 udp_events=stats["udp_events"], udp_heartbeats=stats["udp_heartbeats"],
                 thumb_incomplete=stats["thumb_incomplete"],
-                events=ev, series=ser), ensure_ascii=False).encode()
+                events=ev, series=ser, live_ts=state.get("live_ts", 0)), ensure_ascii=False).encode()
             self._send(body); return
         if self.path.startswith("/api/status"):
             body = json.dumps({k: v for k, v in state.items() if k not in ("events", "frame_png")}, ensure_ascii=False).encode()

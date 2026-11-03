@@ -324,6 +324,8 @@ static unsigned char g_thumb[96 * 96];   /* 96x96 灰度，报警时编 PNG 上�
 static unsigned char g_evpng[10000];
 static int g_evpng_len = 0, g_evpng_off = 0;
 static unsigned short g_evpng_seq = 0, g_evpng_total = 0;
+static uint32_t g_th_eid = 0;
+#define EV_LIVE_ID 0xFFFF0001u     /* 低功耗/空场时的"实时画面"帧，PC 只刷新预览，不进事件列表 */
 
 /* 组 16 字节包头 + body，交给 ge_send 组帧（以太/IP/UDP/FCS） */
 static int ge_udp_pkt(unsigned char type, uint32_t evid, unsigned short seq,
@@ -366,13 +368,16 @@ static void ge_ev_hb(int obs, int person, int alarm, int fps, int area, uint32_t
 }
 
 /* 报警开始时准备缩略图（不在这里发，避免阻塞） */
-static void ge_thumb_prepare(void)
+static void ge_thumb_prepare_id(uint32_t eid)
 {
+   g_th_eid = eid;
    g_evpng_len = 96 * 96;            /* 原始灰度像素，不编码 PNG（PC 端负责） */
    g_evpng_off = 0;
    g_evpng_seq  = 1;                 /* 序号从 1 开始 */
    g_evpng_total = (unsigned short)((g_evpng_len + EV_THUMB_CHUNK - 1) / EV_THUMB_CHUNK);
 }
+static void ge_thumb_prepare(void) { ge_thumb_prepare_id(g_ev_id); }
+static int  ge_thumb_idle(void) { return (g_evpng_len <= 0) || (g_evpng_off >= g_evpng_len); }
 
 /* 每轮最多发一片，片间自然有主循环间隔 */
 static void ge_thumb_pump(uint32_t ms)
@@ -381,7 +386,7 @@ static void ge_thumb_pump(uint32_t ms)
    if (g_evpng_len <= 0 || g_evpng_off >= g_evpng_len) return;
    n = g_evpng_len - g_evpng_off;
    if (n > EV_THUMB_CHUNK) n = EV_THUMB_CHUNK;
-   if (ge_udp_pkt(EV_T_THUMB, g_ev_id, g_evpng_seq, g_evpng_total,
+   if (ge_udp_pkt(EV_T_THUMB, g_th_eid, g_evpng_seq, g_evpng_total,
                   ms, g_thumb + g_evpng_off, n) == 0) {
       g_evpng_off += n;
       g_evpng_seq++;
@@ -940,6 +945,12 @@ static int dec_update(int32_t score, int motion, int ir_hot, int infer_ran,
    else if (low_pwr_now) dec_evt = 4;
    else dec_evt = 0;
 
+   /* v5.2：空场/低功耗时每 500 ms 推一帧"实时画面"（type=3, eid=0xFFFF0001），
+      让纯网口模式下的 PC 页面也能看到画面；报警缩略图优先，未传完时不插入。 */
+   if (!alarm_on && ge_thumb_idle()) {
+      static uint64_t live_ms = 0;
+      if ((now - live_ms) >= 500) { ge_thumb_prepare_id(EV_LIVE_ID); live_ms = now; }
+   }
    /* v5.1：缩略图分片（报警时准备，每轮主循环至多一片，失败即丢） */
    ge_thumb_pump((uint32_t)now);
 
@@ -1033,6 +1044,13 @@ static void mot_track_frame(uint32_t frame)
 #if MOT_PRE_ON
    if (pre && !g_pre_on) {
       g_pre_on = 1; g_pre_id = id; g_pre_eta = eta; g_pre_ms = (uint32_t)now_ms();
+      {   /* v17：预警同时上报 UDP 事件 type=2(TREND)，PC 页面能提前看到"正在靠近" */
+         int ex = 48, ey = 48, k2;
+         for (k2 = 0; k2 < g_mot.n_trk; ++k2)
+            if (g_mot.trk[k2].active && g_mot.trk[k2].confirmed) {
+               ex = (int)g_mot.trk[k2].cx; ey = (int)g_mot.trk[k2].cy; break; }
+         ge_ev_alarm(2, ex, ey, (int)g_pre_eta, (int)g_track_conf, (int)g_mot.n_det, (uint32_t)now_ms());
+      }
       g_pre_cnt++;
       bsp_printf("MMT_PREWARN f=%d id=%d eta=%d ms=%d fw_lp=%d\n\r",
                  (int)frame, id, eta, (int)g_pre_ms, fw_lp);
