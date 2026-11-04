@@ -1,4 +1,8 @@
-﻿# firmware — 固件源码与构建
+﻿> **历史快照（v29.2 / 早期 v30）**：下文“最终跑”“未编译”等描述保留原记录时点，不代表现版。当前应用为 CRC32 **B42CC161**，见 [当前固件](../../firmware/README.md)、[现场验收](../../docs/review/ACCEPTANCE.md) 和 [构建与运行](../../docs/review/REPRODUCE.md)。
+
+---
+
+# firmware — 固件源码与构建
 
 ## v29_2（定版）
 

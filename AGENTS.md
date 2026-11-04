@@ -2,6 +2,8 @@
 
 先读 `docs/HANDOFF_2026-11-04.md`，以当前用户任务为准。10/27的旧实测安排保存在 `docs/history/AGENTS_2026-10-27.md`，不能当作当前板卡状态或默认执行步骤。
 
+评审入口为根README及 `docs/review/`。完整当前硬件源与软件依赖已收录到 `project/current/`，现版应用仍在 `evidence/v30_mot/`；`tools/verify_delivery.py` 可离线核对交付物，不连接板卡。当前 `LP_CAMFPS_ON=0`，不能把历史降帧实验当成本版已实现摄像头降帧。
+
 - 当前活动应用：`firmware/tinyml_pdti8.bin`，CRC32 `B42CC161`；源码入口 `evidence/v30_mot/main_live30.cc`、`build_v30.py`。
 - 活动网络位流：`firmware/netfix04_rxq2_seed1.bit`，SHA256 `865458AB2AF51C366AAA2C22DCFA3312F4AB104E90680185BC90F58BDF0E69F5`。
 - PC 169.254.47.62:8090；板内169.254.47.63:80。共享网页是 `tools/page.html`；改动后运行 `tools/embed_page.py` 并重编应用，两端一起验证。

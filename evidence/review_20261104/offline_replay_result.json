@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "checks": [
+    "same shared HTML",
+    "offline state",
+    "PNG frame",
+    "pause and seek"
+  ],
+  "board_or_serial_access": false,
+  "scenario_count": 9
+}

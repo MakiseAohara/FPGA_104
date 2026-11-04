@@ -1,70 +1,75 @@
-# FPGA_104 — 多模态 AI 入侵检测智能终端（整理版）
+# Ti60F225 多模态 AI 智能终端
 
-> **当前版本：2026-11-04**。本轮网口、共享网页、多目标跟踪、画面提速和左右拼接修复已整合。应用CRC **B42CC161**，实测PC新画面 **2.2FPS**、板内 **2.0FPS**。白平衡和红外校准问题仍未完成。
->
-> 从 [当前交接说明](docs/HANDOFF_2026-11-04.md) 与 [最新更新说明](docs/PREVIEW_FPS_FIX_2026-11-04.md) 开始；[完整交付包](deliverables/20261104/preview_fps_fix_20261104.zip)、[当前固件](firmware/firmware_identity.json)、[三阶段快照](deliverables/20261104/) 均已保存。下文旧版“定版/当前状态”描述按历史资料阅读。
+易灵思赛道 · 赛题三 · **入侵检测与轨迹预警场景**。在 FPGA 上完成摄像头采集、TinyML 硬件推理和 RISC-V 决策。HDMI 展示实时画面与 OSD，两种 Web 入口展示监控画面、目标轨迹和传感器状态。
 
-本仓库是一套基于 **Ti60F225 FPGA** 的边缘智能终端工程：摄像头采集 + 红外/温湿度多模态传感 + 轻量神经网络人体检测 + 加权融合判决 + 低功耗场景管理，并提供完整的离线评估数据与证据链。
+## 评委从这里开始
 
-## 1 作品简介
+| 阅读顺序 | 入口 | 内容 |
+|---|---|---|
+| 1 | [演示与验收](docs/review/ACCEPTANCE.md) | 5–10 分钟演示步骤、两端网页、观察项与记录方式 |
+| 2 | [赛题功能对照](docs/review/FEATURES.md) | 基础任务、七项拓展、实现程度和验收边界 |
+| 3 | [证据与结果](docs/review/EVIDENCE.md) | 当前实测数据、截图、测试报告；历史记录分列 |
+| 4 | [构建与运行](docs/review/REPRODUCE.md) | 从仓库源码构建、JTAG/UART 加载及 PC 网页启动 |
 
-- **视觉通路**：MIPI 摄像头 1080p → 去马赛克 → 白平衡 → DDR3 帧缓存 → OSD 叠加 → HDMI（60 fps）。
-- **传感器通路**：MLX90640（32×24 红外）+ SHT30（温湿度）挂在同一组 I2C，由 RISC-V 软核调度。
-- **AI**：96×96 单通道 INT8 人体检测网络（5 卷积 + GAP + 2 FC，95,922 参数），跑在 TinyML 加速器上。
-- **判决**：RTL 按 60/25/15 加权投票（Q8 定点 154/64/38，阈值 0.60），RISC-V 固件做多帧投票、红外确认与安静释放。
-- **低功耗**：无人时降摄像头 VTS 并暂停推理，检出即恢复。
-- **定版**：固件 CRC32 `C15D47FD`（306,194 B），位流 MERGE17 SHA256 `3A69AAFB…887CF`。
+本轮整理日期为 **2026-11-04**；运行基线来自同日已保存的上板记录。本轮整理不新增现场验收结论。源码与依赖集中在 [project/current](project/current/README.md)，当前可用二进制在 [firmware](firmware/README.md)。
 
-## 2 目录结构（二级）
+## 系统组成
 
-```
-FPGA_104/
-├── submission/                 提交用整理目录
-│   ├── data/                   原始采集数据（每项一个文件夹）
-│   │   ├── proto7/             七阶段带标签采集（340 s）
-│   │   ├── empty30/            30 分钟空场
-│   │   ├── short5_fp/          5 分钟场景
-│   │   ├── long30/             30 分钟自由行走（低功耗记录）
-│   │   ├── lp7/                低功耗专项（A/B/C 三段）
-│   │   ├── mot_offline/        v30 MOT 离线日志（A–E / D,E）
-│   │   └── mot_board/          v30 MOT 上板日志（board_v30f、run1–3）
-│   ├── firmware/               v29_2 定版、v30_mot
-│   ├── rtl/                    merge17（定版）、merge16
-│   ├── model/v29_model/        训练/量化/评估
-│   ├── tools/                  采集/评估/查看脚本
-│   ├── NUMBERS_SOURCE.md       技术文档数字出处核对表
-│   └── OSD_AUDIT.md            OSD 三行调研
-├── evidence/                   历史证据（早期版本 + 已迁移项留在 MOVED.md）
-├── docs/                       技术文档、设计文档、提交材料
-├── comms/                      协作交接记录
-├── sw/ rtl/ sim/ tools/ constr/  源码与约束
-├── INDEX_DRAFT.md              整理前目录盘点
-└── README.md
+```mermaid
+flowchart LR
+  CAM[SC431HAI 摄像头] --> VIDEO[MIPI / 图像处理 / DDR]
+  VIDEO --> HDMI[HDMI 画面与叠加]
+  VIDEO --> AI[TinyML INT8 硬件推理]
+  SENS[MLX90640 / SHT30] --> CPU[RISC-V 决策 / 跟踪 / 位置预测 / HTTP]
+  AI --> CPU
+  CPU --> ETH[RGMII / 以太网 PHY]
+  ETH --> PC[PC 监控页 .62:8090]
+  ETH --> BOARD[FPGA 内 HTTP .63:80]
 ```
 
-## 3 如何复现
+人体检测使用 96×96 灰度 INT8 模型；轨迹候选由背景差分与连通域产生，RISC-V 完成关联、速度估计和位置外推。网页中的人数是算法估计，预测点表示外推结果。
 
-1. **烧位流**：`tools/flash_vendor.ps1 -Bit <v7_MERGE17.bit> -Sha256 3A69AAFB…887CF`（JTAG，只烧 .bit）。
-2. **下载固件**：`tools/load_v30.ps1`（v30）或串口 UART 上传（v29.2，见 `submission/firmware/v29_2/FINAL.md`）。
-3. **采集**：`submission/tools/capture_mot.py`（MOT）或串口直接记录（v29.2 日志带毫秒时间戳）。
-4. **评估**：`submission/tools/pred_eval.py`、`align_eval.py`（MOT 预测/预警）、`submission/model/v29_model/` 内脚本（模型）。
+## 当前版本与结果
 
-## 4 数据索引
+| 项目 | 当前值 / 证据 |
+|---|---|
+| 板卡 / 摄像头 | Ti60F225 DemoBoard V4 / SC431HAI |
+| 当前应用 | [tinyml_pdti8.bin](firmware/tinyml_pdti8.bin)，438,506 字节，CRC32 **B42CC161**；[完整标识](firmware/firmware_identity.json) |
+| 当前位流 | [netfix04_rxq2_seed1.bit](firmware/netfix04_rxq2_seed1.bit)，SHA256 **865458AB…DF0E69F5** |
+| 网页入口 | PC：`http://169.254.47.62:8090/`；板内：`http://169.254.47.63/`，需连接演示局域网 |
+| 双端网页 | 同源 [page.html](tools/page.html)，显示人数、ID、轨迹、速度、400ms 预测和传感状态 |
+| 实际新画面刷新率 | PC **2.20 FPS**（44 张 / 20.01s）；板内 **2.00 FPS**（20 张 / 10.01s）；[原始测量](evidence/preview_fps_20261104/measurements/after_fw2/measurement.json) |
+| 取像修复 | 固定左右拼接偏移已修复；帧地址回归 1080 行通过；[地址审计](evidence/preview_fps_20261104/FRAME_LAYOUT_AUDIT.md) |
+| 多目标与预测 | 最多 **2 个目标**，按实际采样间隔估速、外推 400ms；[实现与限制](docs/review/FEATURES.md) |
+| 工具环境 | 本机实际 Efinity **2026.1.132**，RISC-V GCC **15.2.0-1**；尚未验证 Efinity 2025.1 重建 |
 
-| 项目 | 文件夹 | 固件/位流 | 结论一句话 |
-|---|---|---|---|
-| 七阶段带标签采集 | `submission/data/proto7` | `C15D47FD` / MERGE17 | 空场 0 次可见报警；站定/慢走可触发；离开 4–7 s 解除 |
-| 30 分钟空场 | `submission/data/empty30` | `C15D47FD` / MERGE17 | 触发 21 次（9 真人 / 11 红外强确认 / 1 未归类）；低功耗未进入 |
-| 5 分钟场景 | `submission/data/short5_fp` | `3D334E58` | 170 缩略图；AE/GAIN 零异常 |
-| 30 分钟自由行走 | `submission/data/long30` | `3D334E58` | 低功耗 21 次进入/恢复；camfps 仍 59–60 |
-| 低功耗专项 | `submission/data/lp7` | `C15D47FD` / MERGE17 | 状态机走通（17 s 进入、VTS×3），摄像头帧率未真正下降 |
-| MOT 离线 | `submission/data/mot_offline` | `E6535D37` | 基线：下一帧 3.87/23.41 px，ROI 47 进 6 中 |
-| MOT 上板 | `submission/data/mot_board` | `E6535D37` | 七段验收日志（PREP…EXIT） |
-| 模型 | `submission/model/v29_model` | — | 95,922 参数 INT8；F 段 98.1%、白天 94.6%、COCO 70.0% |
-| 定版 RTL | `submission/rtl/merge17` | `3A69AAFB…887CF` | XLR 70.49%、setup −0.984 ns、hold 7 条 |
-| v30 MOT | `submission/firmware/v30_mot` | `E6535D37` | 第二轮基线 + 第三轮离线改动（宏开关） |
+刷新率按浏览器绘制的新 capture ID 计数，重复显示缓存图不计入；测量窗口、场景与功耗状态影响结果，不能当成固定视频帧率或 HDMI 帧率。当前预览原始分辨率为 96×96 灰度，按 16:9 场景比例显示。
 
-## 5 说明
+![当前 PC 网页实拍快照](evidence/preview_fps_20261104/measurements/after_fw2/pc_preview.png)
 
-- 本仓库只做整理，未改动任何固件/RTL/模型逻辑与数值；`evidence/` 中早期版本目录原样保留。
-- 迁移过的目录在原位置留有 `MOVED.md` 指向新位置。
+*2026-11-04 板端实拍快照，此时为空场、人数为 0；截图瞬时 FPS 不代表上表窗口统计。轨迹显示示例与合成测试见[证据索引](docs/review/EVIDENCE.md)。*
+
+## 验收范围
+
+- 已保存摄像头/HDMI、网口与双端网页、算法回归和画面刷新率记录。完整对应关系见[赛题对照](docs/review/FEATURES.md)。
+- 多目标实拍历史数据缺少人工框和 ID 真值，尚未完成真人交叉遮挡现场验收；合成数据指标单独列出。
+- 红外为相对热变化与估算温度，尚未完成 EEPROM 温度校准。白平衡仍需优化。
+- 低功耗具有暂停推理等逻辑，摄像头降帧在当前配置中关闭；SPI 语音播报未完成，板内事件历史未完成。
+- 当前位流 setup 余量 **−1.103ns**，尚未闭合；固定 bank 尚未加入完成帧读锁。当前采用临时 JTAG 位流与 UART RAM 应用，断电需重载。
+
+## 源码与资料位置
+
+| 位置 | 用途 |
+|---|---|
+| [project/current/](project/current/README.md) | 当前完整 Efinity 工程、官方软件依赖与来源清单 |
+| [evidence/v30_mot/](evidence/v30_mot/) | 当前 RISC-V 应用、IoU 跟踪、预测与 HTTP/TCP 源码，路径为历史沿用 |
+| [tools/](tools/) / [sw/tinyml_live/](sw/tinyml_live/) | 同源网页、PC 服务、加载工具及固件构建脚本 |
+| [firmware/](firmware/README.md) | 当前应用、位流及回退应用 |
+| [submission/model/v29_model/](submission/model/v29_model/README.md) | 模型、生成数据与历史训练/评估资料 |
+| [evidence/](evidence/README.md) | 最新三阶段验证记录与历史实验 |
+| [deliverables/20261104/](deliverables/20261104/) | 三阶段冻结交付 ZIP，按包内时间点使用 |
+| [submission/](submission/README.md) / [docs/](docs/README.md) | 历史提交归档、技术资料及评审导航 |
+
+旧版首页完整保存在[历史首页](docs/history/README_before_review_2026-11-04.md)；维护人员可继续读[当前交接说明](docs/HANDOFF_2026-11-04.md)。历史文档中的“定版”“当前”按其记录日期理解。
+
+厂商 IP、BSP 和开源组件保留原版权与许可说明，来源见 [第三方说明](project/current/THIRD_PARTY.md)。

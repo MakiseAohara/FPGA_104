@@ -1,4 +1,8 @@
-﻿# rtl — MERGE16 / MERGE17 源码与时序资源
+﻿> **历史快照（MERGE16/17）**：下文“定版”描述属于对应历史阶段。当前硬件工程见 [project/current](../../project/current/README.md)，当前位流及校验值见 [firmware](../../firmware/README.md)，评委构建入口见 [构建与运行](../../docs/review/REPRODUCE.md)。
+
+---
+
+# rtl — MERGE16 / MERGE17 源码与时序资源
 
 ## merge17（定版）
 

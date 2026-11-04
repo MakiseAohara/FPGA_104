@@ -42,3 +42,7 @@ tools/baseline/*.postsyn.v
 
 code_package.zip
 code_package.rar
+
+# 当前工程构建与 Python 缓存
+__pycache__/
+evidence/v30_mot/_stage/

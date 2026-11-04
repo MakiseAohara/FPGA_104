@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "source_files_verified": 1275,
+  "efinity_references_verified": 142,
+  "application_crc32": "B42CC161",
+  "checks": "File integrity and project references; no hardware or algorithm accuracy test"
+}

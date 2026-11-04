@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-04",
+  "new_board_test": false,
+  "active_application_unchanged": {
+    "bytes": 438506,
+    "crc32": "B42CC161"
+  },
+  "rebuild_only": {
+    "bytes": 438666,
+    "crc32": "924F203D",
+    "sha256": "3EBECCDB37B51A62EC3AEBF9EEEE0D8FE1FCD0D8C839AA12AB06891EA6F3F365",
+    "compiled_sources": 113,
+    "ram_bytes": 3014880,
+    "loaded_on_board": false,
+    "path_strings_changed": true
+  },
+  "relative_links": {
+    "documents": 14,
+    "relative_links_checked": 206,
+    "broken": []
+  }
+}
