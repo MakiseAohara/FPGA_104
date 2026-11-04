@@ -11,9 +11,9 @@
  *   2) 前景：mask = |cur-bg| >= MOT_DIFF_THR，再做 3x3 膨胀把人体合成整块
  *   3) 鬼影剔除：连通域内"当前帧差分"像素太少 ⇒ 是背景残留（人走了），丢弃
  *   4) 连通域：4 邻域 flood fill（栈式，无递归），按面积降序取前 MOT_MAX_DET 个
- *   5) 关联：检测框 ∩ 航迹框 IOU 贪心匹配（阈值 MOT_IOU_THR 千分比）
+ *   5) 关联：正确框 IoU + 运动/外观门控，全局枚举两目标匹配
  *   6) 速度：质心位移的 EMA（Q4 定点，16 = 1 px/帧）
- *   7) 预测：pred = 质心 + v*MOT_HORIZON（默认 2 帧 ≈ 1 s @2fps）
+ *   7) 预测：统一物理时间模型，默认前视 400ms（legacy名义步200ms）
  *
  * 单位：坐标/面积是 96x96 网格上的像素；速度 Q4（右移 4 位得 px/帧）。
  *============================================================================*/
@@ -21,6 +21,13 @@
 #define MOT_CORE_H
 
 #include <string.h>
+#include <stdint.h>
+
+#define MOT_HAS_TIMED_API 1
+#define MOT_HAS_GROUP_OCCLUSION 1
+#define MOT_TIME_STEP_MS 200
+#define MOT_MAX_TIME_GAP_MS 5000
+#define MOT_MAX_OCCLUSION_MS 4000
 
 #define MOT_W            96
 #define MOT_H            96
@@ -101,7 +108,7 @@
 #define MOT_REPORT_MISS  1       /* 丢失超过该帧数就不上报（仍留在表里等重连） */
 #endif
 #define MOT_CONFIRM_HITS 2       /* 连续命中多少帧算确认目标 */
-#define MOT_HORIZON      2       /* 预测前视帧数（2fps → 1 s） */
+#define MOT_HORIZON      2       /* nominal 200ms steps: default horizon 400ms */
 #define MOT_GATE_PX      16      /* 二级关联：质心距离门限（IOU 全丢失时按速度外推后仍可续轨） */
 #define MOT_BG_SHIFT     5       /* 背景更新 α = 1/(1<<5) */
 #define MOT_GHOST_DIV    8       /* 连通域内运动像素 < 面积/该值 ⇒ 判鬼影（要求 ≥12.5% 像素在动） */
@@ -135,10 +142,10 @@
 #define MOT_GATE_SIZE_DIV 0
 #endif
 #ifndef MOT_PRED_DAMP_N
-#define MOT_PRED_DAMP_N 1     /* 预测速度阻尼 1/2：离线 37 条航迹实测，误差中位 5.0 px vs 静止 6.0 px */
+#define MOT_PRED_DAMP_N 1     /* shared prediction scale; no hidden half-speed display */
 #endif
 #ifndef MOT_PRED_DAMP_D
-#define MOT_PRED_DAMP_D 2
+#define MOT_PRED_DAMP_D 1
 #endif
 #ifndef MOT_ETA_X0
 #define MOT_ETA_X0      24
@@ -179,6 +186,10 @@ typedef struct {
    short grow2;              /* v17.2：连续"在变大"（>=3%/帧）的帧数 */
    short full;               /* v3.6：整幅检测（>80% 宽且 >80% 高）——光照突变，不是人 */
    short eta;              /* 预计还有几帧进入 ROI；-1=不会进/已在 ROI */
+   short occluded;          /* ambiguous merged observation, never reported as measured */
+   short obs_cx, obs_cy;    /* last measured center, never overwritten by coast */
+   unsigned short obs_elapsed_ms;
+   unsigned short sample_ms; /* interval of the current update */
    short traj_n;
    short traj[MOT_TRAJ_LEN][2];
 } mot_trk_t;
@@ -198,7 +209,11 @@ typedef struct {
    mot_trk_t trk[MOT_MAX_TRK];
    int next_id;
    int frame;
+   unsigned int dt_ms;
+   uint32_t timestamp_ms;
+   unsigned char time_valid, timed_call;
    int last_area;
+   unsigned short bg_q8[MOT_N]; /* fractional background, symmetric updates */
    unsigned char bg[MOT_N];          /* 背景模型 */
    unsigned char prev[MOT_N];        /* 上一帧（鬼影剔除用） */
    int have_prev;
@@ -207,16 +222,22 @@ typedef struct {
 typedef struct {
    unsigned char mask[MOT_N];
    unsigned char dmask[MOT_N];
-   unsigned char lab[MOT_N];
+   unsigned short lab[MOT_N];
    short stack[MOT_N];
 } mot_work_t;
 
 static void mot_reset(mot_ctx_t* c)
 {
    if (!c) return;
-   c->n_det = 0; c->n_trk = 0; c->next_id = 1; c->frame = 0;
-   c->last_area = 0; c->have_prev = 0;
-   memset(c->trk, 0, sizeof(c->trk));
+   memset(c, 0, sizeof(*c));
+   c->next_id = 1;
+   c->dt_ms = MOT_TIME_STEP_MS;
+}
+
+static void mot_set_background(mot_ctx_t* c,const unsigned char* cur)
+{
+   int i;memcpy(c->bg,cur,MOT_N);
+   for(i=0;i<MOT_N;i++)c->bg_q8[i]=(unsigned short)((unsigned int)cur[i]*256u);
 }
 
 /* ---------------- 1)+2) 背景差分 → 前景 mask ---------------- */
@@ -263,10 +284,15 @@ static void mot_bg_update(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur)
 {
    int i;
    for (i = 0; i < MOT_N; ++i) {
-      const int b = (int)c->bg[i];
-      const int d = (int)cur[i] - b;
+      const int b = (int)c->bg_q8[i];
+      const int d = (int)cur[i]*256 - b;
       const int sh = w->mask[i] ? (MOT_BG_SHIFT + 2) : MOT_BG_SHIFT;
-      c->bg[i] = (unsigned char)(b + (d >> sh));
+      /* A supported foreground is the target, not a slowly changing wall.
+         Learning it creates a trail behind moving people and drags centroids.
+         Unsupported stationary changes still adapt using the slower rate. */
+      if(w->mask[i] && (c->ai_p>=MOT_P_PERSON || c->ir_cnt>=MOT_IR_NEED))continue;
+      c->bg_q8[i]=(unsigned short)(b+d/(1<<sh));
+      c->bg[i]=(unsigned char)(((unsigned int)c->bg_q8[i]+128u)/256u);
    }
    memcpy(c->prev, cur, MOT_N);
    c->have_prev = 1;
@@ -368,7 +394,7 @@ static int mot_push_det(mot_ctx_t* c, int x0, int y0, int x1, int y1,
 
 /* v1.9 ④：两个人挨着走时前景会粘成一个连通域，检测层就只剩 1 个目标。
    这里看列投影：在中间 1/3 里找"谷"，够深就沿该列切成左右两块分别上报。 */
-static int mot_find_split(const mot_work_t* w, unsigned char id,
+static int mot_find_split(const mot_work_t* w, unsigned short id,
                           int x0, int y0, int x1, int y1, int area)
 {
    short col[MOT_W];
@@ -407,10 +433,10 @@ static int mot_label(mot_work_t* w, mot_ctx_t* c)
       int sp = 0, area = 0, mov = 0;
       long sumv = 0, sx = 0, sy = 0;
       int x0 = MOT_W, y0 = MOT_H, x1 = -1, y1 = -1;
-      unsigned char id;
+      unsigned short id;
       int xs;
       if (!w->mask[i] || w->lab[i]) continue;
-      id = (unsigned char)(++n_id);
+      id = (unsigned short)(++n_id);
       w->lab[i] = id;
       w->stack[sp++] = (short)i;
       while (sp > 0) {
@@ -509,9 +535,19 @@ static int mot_iou(const mot_det_t* a, const short* b)
    int inter, ua;
    if (ix1 < ix0 || iy1 < iy0) return 0;
    inter = (ix1 - ix0 + 1) * (iy1 - iy0 + 1);
-   ua = (int)a->area + (b[2] - b[0] + 1) * (b[3] - b[1] + 1) - inter;
+   ua = (int)(a->x1-a->x0+1)*(a->y1-a->y0+1)
+      + (b[2]-b[0]+1)*(b[3]-b[1]+1) - inter;
    if (ua <= 0) return 0;
    return inter * 1000 / ua;
+}
+
+/* vx/vy remain Q4 pixels per nominal 200 ms, including timed updates.
+   Prediction is in wall time; all consumers use this one motion model. */
+static void mot_predict_position_ms(const mot_trk_t* t, unsigned int ms, int* x, int* y)
+{
+   int64_t sx=(int64_t)t->vx*(int64_t)ms*MOT_PRED_DAMP_N/(16L*MOT_TIME_STEP_MS*MOT_PRED_DAMP_D);
+   int64_t sy=(int64_t)t->vy*(int64_t)ms*MOT_PRED_DAMP_N/(16L*MOT_TIME_STEP_MS*MOT_PRED_DAMP_D);
+   *x=(int)t->cx+(int)sx; *y=(int)t->cy+(int)sy;
 }
 
 /* ---------------- 5)~7) 关联 / 生命周期 / 速度 / 预测 ---------------- */
@@ -536,8 +572,8 @@ static int mot_eta_frames(const mot_trk_t* t)
          t->cy >= MOT_ETA_Y0 && t->cy <= MOT_ETA_Y1)) {
       int k;
       for (k = 1; k <= MOT_HORIZON + 4; ++k) {
-         const int x = (int)t->cx + ((int)t->vx * k) / 16;
-         const int y = (int)t->cy + ((int)t->vy * k) / 16;
+         int x,y;
+         mot_predict_position_ms(t,(unsigned int)k*MOT_TIME_STEP_MS,&x,&y);
          if (x >= MOT_ETA_X0 && x <= MOT_ETA_X1 && y >= MOT_ETA_Y0 && y <= MOT_ETA_Y1) {
             if (best < 0 || k < best) best = k;
             break;
@@ -553,10 +589,16 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
 {
    mot_trk_t* t = &c->trk[bt];
    const mot_det_t* d = &c->det[bd];
-   const int dx = (int)d->cx - (int)t->cx;
-   const int dy = (int)d->cy - (int)t->cy;
-   t->vx = (short)(((int)t->vx * 3 + dx * 16) / 4);
-   t->vy = (short)(((int)t->vy * 3 + dy * 16) / 4);
+   const int dx = (int)d->cx - (int)t->obs_cx;
+   const int dy = (int)d->cy - (int)t->obs_cy;
+   const unsigned int elapsed=t->obs_elapsed_ms ? t->obs_elapsed_ms : MOT_TIME_STEP_MS;
+   int mx=(int)((int64_t)dx*16*MOT_TIME_STEP_MS/(int64_t)elapsed);
+   int my=(int)((int64_t)dy*16*MOT_TIME_STEP_MS/(int64_t)elapsed);
+   if(mx>16*MOT_W)mx=16*MOT_W;if(mx< -16*MOT_W)mx= -16*MOT_W;
+   if(my>16*MOT_H)my=16*MOT_H;if(my< -16*MOT_H)my= -16*MOT_H;
+   if(t->hits<=1 || t->misses>0) { t->vx=(short)mx;t->vy=(short)my; }
+   else { t->vx=(short)(((int)t->vx+mx)/2);t->vy=(short)(((int)t->vy+my)/2); }
+   t->obs_cx=d->cx;t->obs_cy=d->cy;t->obs_elapsed_ms=0;t->occluded=0;
    /* 整幅检测（人贴近镜头）不参与速度更新，否则质心跳变会算出几百 px/帧 的假速度 */
    t->full = ((int)(d->x1 - d->x0 + 1) > MOT_W * 4 / 5 &&
               (int)(d->y1 - d->y0 + 1) > MOT_H * 4 / 5) ? 1 : 0;
@@ -608,14 +650,14 @@ static void mot_update_track(mot_ctx_t* c, int bt, int bd)
 /* 用当前速度把航迹框外推 k 帧（k 用 Q4 定点 16=1 帧），写进 b4 并返回预测质心 */
 static void mot_predict_box(const mot_trk_t* t, int kq4, short* b4, int* pcx, int* pcy)
 {
-   /* v17：预测用 1/2 阻尼速度 —— 离线（out/ev1..ev3 共 37 条航迹）实测，
-      下一帧位置误差中位 5.00 px，比全速外推 7.07 px 低 30%，也优于"空间静止" 6.00 px。 */
-   const int sx = ((int)t->vx * kq4 * MOT_PRED_DAMP_N) / (16 * 16 * MOT_PRED_DAMP_D);
-   const int sy = ((int)t->vy * kq4 * MOT_PRED_DAMP_N) / (16 * 16 * MOT_PRED_DAMP_D);
-   b4[0] = (short)(t->x0 + sx); b4[1] = (short)(t->y0 + sy);
-   b4[2] = (short)(t->x1 + sx); b4[3] = (short)(t->y1 + sy);
-   *pcx = (int)t->cx + sx;
-   *pcy = (int)t->cy + sy;
+   int x,y;
+   unsigned int step=t->sample_ms ? t->sample_ms : MOT_TIME_STEP_MS;
+   unsigned int ms=(unsigned int)((long)step*kq4/16);
+   int sx,sy;
+   mot_predict_position_ms(t,ms,&x,&y);sx=x-t->cx;sy=y-t->cy;
+   b4[0]=(short)(t->x0+sx);b4[1]=(short)(t->y0+sy);
+   b4[2]=(short)(t->x1+sx);b4[3]=(short)(t->y1+sy);
+   *pcx=x;*pcy=y;
 }
 
 static int mot_iou4(const mot_det_t* d, const short* b4)
@@ -627,7 +669,8 @@ static int mot_iou4(const mot_det_t* d, const short* b4)
    int inter, ua;
    if (ix1 < ix0 || iy1 < iy0) return 0;
    inter = (ix1 - ix0 + 1) * (iy1 - iy0 + 1);
-   ua = inter + (int)d->area + (b4[2] - b4[0] + 1) * (b4[3] - b4[1] + 1) - inter;
+   ua = (int)(d->x1-d->x0+1)*(d->y1-d->y0+1)
+      + (b4[2]-b4[0]+1)*(b4[3]-b4[1]+1) - inter;
    if (ua <= 0) return 0;
    return inter * 1000 / ua;
 }
@@ -636,166 +679,97 @@ static int mot_iou4(const mot_det_t* d, const short* b4)
    本函数很少触发；真正把 ID 抖动压下来的是 mot_find_split 的两道门槛（最小间距/最低高度）。 */
 static void mot_merge_tracks(mot_ctx_t* c)
 {
-   int i, j;
-   for (i = 0; i < c->n_trk; ++i) {
-      mot_trk_t* a = &c->trk[i];
-      if (a->misses) continue;
-      for (j = i + 1; j < c->n_trk; ++j) {
-         mot_trk_t* b = &c->trk[j];
-         int dx, dy;
-         long ar, br;
-         mot_trk_t* keep;
-         mot_trk_t* drop;
-         if (b->misses) continue;
-         if (a->confirmed != b->confirmed) continue;
-#ifdef MOT_TEST_DEBUG
-         mot_dbg.t_pair++;
-#endif
-         {   /* v3.10：先看"相邻两半"——切分产生的是同一条人形被切成左右两块，
-                质心距离可能 >MOT_MERGE_PX，但水平间隙很小、竖向几乎完全重叠。 */
-            const int gap = (b->x0 > a->x1) ? (int)b->x0 - (int)a->x1 - 1
-                          : ((a->x0 > b->x1) ? (int)a->x0 - (int)b->x1 - 1 : 0);
-            const int oy0 = a->y0 > b->y0 ? a->y0 : b->y0;
-            const int oy1 = a->y1 < b->y1 ? a->y1 : b->y1;
-            const int ha = (int)a->y1 - (int)a->y0 + 1;
-            const int hb = (int)b->y1 - (int)b->y0 + 1;
-            const int hmin = ha < hb ? ha : hb;
-            if (MOT_MERGE_ADJ_GAP > 0 && gap <= MOT_MERGE_ADJ_GAP && hmin > 0 &&
-                (oy1 - oy0 + 1) * 5 >= hmin * 4) {
-               keep = (a->hits >= b->hits) ? a : b;
-               drop = (keep == a) ? b : a;
-#ifdef MOT_TEST_DEBUG
-               mot_dbg.merged++;
-#endif
-               keep->hits = (short)(keep->hits + drop->hits / 2);
-               if (keep->age < drop->age) keep->age = drop->age;
-               /* 合成一个大框（覆盖两半），否则下一帧又会把另一半当成新目标 → ID 反复新建 */
-               if (keep->x0 > drop->x0) keep->x0 = drop->x0;
-               if (keep->y0 > drop->y0) keep->y0 = drop->y0;
-               if (keep->x1 < drop->x1) keep->x1 = drop->x1;
-               if (keep->y1 < drop->y1) keep->y1 = drop->y1;
-               keep->cx = (short)((keep->x0 + keep->x1) / 2);
-               keep->cy = (short)((keep->y0 + keep->y1) / 2);
-               drop->misses = (short)(MOT_MAX_MISS + 1);
-               continue;
-            }
-         }
-         dx = (int)a->cx - (int)b->cx;
-         dy = (int)a->cy - (int)b->cy;
-         if (dx * dx + dy * dy > MOT_MERGE_PX * MOT_MERGE_PX) continue;
-#ifdef MOT_TEST_DEBUG
-         mot_dbg.t_dist++;
-#endif
-         ar = (long)(a->x1 - a->x0 + 1) * (a->y1 - a->y0 + 1);
-         br = (long)(b->x1 - b->x0 + 1) * (b->y1 - b->y0 + 1);
-         if (ar <= 0 || br <= 0) continue;
-         if (br * 100 > ar * MOT_MERGE_AREA_HI || ar * 100 > br * MOT_MERGE_AREA_HI) continue;
-#ifdef MOT_TEST_DEBUG
-         mot_dbg.t_area++;
-#endif
-         if (MOT_MERGE_IOU > 1000) continue;   /* -DMOT_MERGE_IOU=2001 = 整体关闭合并（A/B 用） */
-         {
-            /* v2.1 判据：切分把一个人切成"同一竖向带内的左右两块"——两块共享同一条人形高度，
-               但框是相邻不重叠的，所以旧 IoU 判据实测 0/51 触发（等于合并从未生效）。
-               改用竖向带交叠比例；并肩两人通常纵向错开（一个近一个远），交叠比例上不去。 */
-            const int oy0 = a->y0 > b->y0 ? a->y0 : b->y0;
-            const int oy1 = a->y1 < b->y1 ? a->y1 : b->y1;
-            const int ha = (int)a->y1 - (int)a->y0 + 1;
-            const int hb = (int)b->y1 - (int)b->y0 + 1;
-            const int hmin = ha < hb ? ha : hb;
-            if (oy1 < oy0) continue;
-            if (hmin <= 0) continue;
-            if ((oy1 - oy0 + 1) * 100 < hmin * MOT_MERGE_Y_OVERLAP) continue;
-#ifdef MOT_TEST_DEBUG
-            mot_dbg.t_iou++;
-#endif
-         }
-         keep = (a->hits >= b->hits) ? a : b;
-         drop = (keep == a) ? b : a;
-#ifdef MOT_TEST_DEBUG
-         mot_dbg.merged++;
-#endif
-         keep->hits = (short)(keep->hits + drop->hits / 2);
-         if (keep->age < drop->age) keep->age = drop->age;
-         drop->misses = (short)(MOT_MAX_MISS + 1);   /* 交给后面的删除趟收走 */
+   int i,j;
+   for(i=0;i<c->n_trk;i++)for(j=i+1;j<c->n_trk;j++) {
+      mot_trk_t* a=&c->trk[i];mot_trk_t* b=&c->trk[j];
+      mot_det_t d;short box[4];
+      /* Established independent tracks keep their IDs through close passes.
+         Only nearly identical unconfirmed observations can be duplicate births. */
+      if(a->confirmed || b->confirmed || a->misses || b->misses)continue;
+      memset(&d,0,sizeof(d));d.x0=a->x0;d.y0=a->y0;d.x1=a->x1;d.y1=a->y1;
+      box[0]=b->x0;box[1]=b->y0;box[2]=b->x1;box[3]=b->y1;
+      if(mot_iou4(&d,box)>=850) {
+         if(a->hits>=b->hits)b->misses=MOT_MAX_MISS+1;
+         else a->misses=MOT_MAX_MISS+1;
       }
    }
+}
+
+/* Pair-level gates apply before optimization, including high-IoU pairs. */
+static int mot_pair_cost(const mot_ctx_t* c,int track,int det)
+{
+   const mot_trk_t* t=&c->trk[track];const mot_det_t* d=&c->det[det];
+   short box[4];int x,y,dx,dy,dist,gate,area0,area1,ratio,gray,iou;
+   mot_predict_box(t,16,box,&x,&y);
+   dx=d->cx-x;if(dx<0)dx=-dx;dy=d->cy-y;if(dy<0)dy=-dy;
+   dist=(dx>dy?dx:dy)+((dx+dy)>>2);
+   area0=(t->x1-t->x0+1)*(t->y1-t->y0+1);
+   area1=(d->x1-d->x0+1)*(d->y1-d->y0+1);
+   if(area0<=0 || area1<=0)return -1;
+   ratio=(int)((long)area1*100/area0);
+   gray=d->mean-t->mean;if(gray<0)gray=-gray;
+   if(ratio<MOT_AREA_LO || ratio>MOT_AREA_HI || gray>MOT_GRAY_TOL)return -1;
+   gate=(t->confirmed && t->misses>0)?MOT_REID_PX:MOT_GATE_PX;
+   if(c->dt_ms>MOT_TIME_STEP_MS)gate+=(int)(c->dt_ms/MOT_TIME_STEP_MS)-1;
+   if(gate>48)gate=48;
+   iou=mot_iou4(d,box);
+   if(dist>gate)return -1;
+   if(iou<MOT_IOU_THR && dist>gate*3/4)return -1;
+   return 1000-iou+dist*25+gray*6+(ratio>100?ratio-100:100-ratio)*3;
 }
 
 static void mot_associate(mot_ctx_t* c)
 {
    static unsigned char det_used[MOT_MAX_DET];
    static unsigned char trk_used[MOT_MAX_TRK];
-   int i, k, pass;
+   int i, k;
 
    for (i = 0; i < c->n_det; ++i) det_used[i] = 0;
    for (i = 0; i < c->n_trk; ++i) trk_used[i] = 0;
 
-   /* ---- 一级：与"按速度外推一帧"的框算 IOU，贪心取最大 ---- */
-   for (pass = 0; pass < MOT_MAX_DET * MOT_MAX_TRK; ++pass) {
-      int best = -1, bd = -1, bt = -1;
-      for (k = 0; k < c->n_trk; ++k) {
-         short b4[4]; int pcx, pcy;
-         if (trk_used[k]) continue;
-         mot_predict_box(&c->trk[k], 16, b4, &pcx, &pcy);   /* 外推 1 帧 */
-         for (i = 0; i < c->n_det; ++i) {
-            int v;
-            if (det_used[i]) continue;
-            v = mot_iou4(&c->det[i], b4);
-            if (v > best) { best = v; bd = i; bt = k; }
-         }
-      }
-      if (best < MOT_IOU_THR) break;
-      det_used[bd] = 1; trk_used[bt] = 1;
-      mot_update_track(c, bt, bd);
+   /* Accumulate elapsed time since the last measurement before association. */
+   for(k=0;k<c->n_trk;k++) {
+      unsigned int dt=c->dt_ms ? c->dt_ms : MOT_TIME_STEP_MS;
+      unsigned int elapsed=c->trk[k].obs_elapsed_ms+dt;
+      c->trk[k].obs_elapsed_ms=(unsigned short)(elapsed>60000?60000:elapsed);
+      c->trk[k].sample_ms=(unsigned short)dt;
    }
-
-   /* ---- 二级（v1.2）：IOU 全丢（人走得太快/帧间隔太大）时，按"预测质心距离"续轨 ---- */
-   for (pass = 0; pass < MOT_MAX_DET * MOT_MAX_TRK; ++pass) {
-      int best = 1 << 20, bd = -1, bt = -1;
-      for (k = 0; k < c->n_trk; ++k) {
-         short b4[4]; int pcx, pcy;
-         if (trk_used[k]) continue;
-         mot_predict_box(&c->trk[k], 16, b4, &pcx, &pcy);
-         for (i = 0; i < c->n_det; ++i) {
-            int dx, dy, d;
-            if (det_used[i]) continue;
-            dx = (int)c->det[i].cx - pcx;
-            dy = (int)c->det[i].cy - pcy;
-            if (dx < 0) dx = -dx;
-            if (dy < 0) dy = -dy;
-            d = (dx > dy ? dx : dy) + ((dx + dy) >> 2);       /* 近似欧氏距离 */
-            {
-               /* v1.7 #4：位置之外再比"大小"和"平均灰度"，减少同一人换号 */
-               const int an = (int)(c->det[i].x1 - c->det[i].x0 + 1) * (int)(c->det[i].y1 - c->det[i].y0 + 1);
-               const int ao = (int)(c->trk[k].x1 - c->trk[k].x0 + 1) * (int)(c->trk[k].y1 - c->trk[k].y0 + 1);
-               const long ratio = (long)an * 100 / (ao > 0 ? ao : 1);
-               const int dg = (int)c->det[i].mean - (int)c->trk[k].mean;
-               const int dga = dg < 0 ? -dg : dg;
-               if (ratio < MOT_AREA_LO || ratio > MOT_AREA_HI) continue;
-               if (dga > MOT_GRAY_TOL) continue;
-            }
-            if (d < best) { best = d; bd = i; bt = k; }
+   /* A single blob spanning two established predictions is not a measurement
+      of either person's center. Preserve both motion states through that finite
+      ambiguity, and let global assignment reconnect them after separation. */
+   if(c->n_trk==2 && c->n_det==1 && c->trk[0].confirmed && c->trk[1].confirmed) {
+      int ax,ay,bx,by;short box[4];
+      mot_predict_box(&c->trk[0],16,box,&ax,&ay);
+      mot_predict_box(&c->trk[1],16,box,&bx,&by);
+      for(i=0;i<c->n_det;i++) {
+         mot_det_t* d=&c->det[i];
+         int aw=c->trk[0].x1-c->trk[0].x0+1,bw=c->trk[1].x1-c->trk[1].x0+1;
+         int wide=d->x1-d->x0+1;
+         int established_merge=c->trk[0].occluded && c->trk[1].occluded;
+         if(ax>=d->x0 && ax<=d->x1 && ay>=d->y0 && ay<=d->y1 &&
+            bx>=d->x0 && bx<=d->x1 && by>=d->y0 && by<=d->y1 &&
+            (established_merge || (wide*10>(aw>bw?aw:bw)*13))) {
+            det_used[i]=1;c->trk[0].occluded=1;c->trk[1].occluded=1;
          }
       }
-      if (bd < 0) break;
-      {
-         /* v1.3 Bug3：刚丢的已确认航迹用更大的重连半径（25 px），避免同一个人换号 */
-         const int lost = c->trk[bt].misses;
-         int gate = (c->trk[bt].confirmed && lost > 0) ? MOT_REID_PX : MOT_GATE_PX;
-#if MOT_GATE_SIZE_DIV > 0
-         {   /* v17.1：门限随框宽放大（大目标一步位移大，固定 16 px 必然换号） */
-            const int w = (int)c->trk[bt].x1 - (int)c->trk[bt].x0 + 1;
-            const int g2 = w / MOT_GATE_SIZE_DIV;
-            if (g2 > gate) gate = g2;
-         }
-#endif
-         if (best > gate) break;
-      }
-      det_used[bd] = 1; trk_used[bt] = 1;
-      mot_update_track(c, bt, bd);
    }
-
+   /* With two tracks at most, exhaustive assignment is small (<=49 choices).
+      Optimize cardinality first and the joint motion/IoU/appearance cost next. */
+   if(c->n_trk<=2) {
+      int a,b,besta=-1,bestb=-1,bestn=-1,bestcost=0x7fffffff;
+      int cost[MOT_MAX_TRK][MOT_MAX_DET];
+      for(k=0;k<c->n_trk;k++)for(i=0;i<c->n_det;i++)cost[k][i]=det_used[i] ? -1 : mot_pair_cost(c,k,i);
+      for(a=-1;a<c->n_det;a++)for(b=-1;b<c->n_det;b++) {
+         int n=0,sum=0;
+         if(c->n_trk==0 && (a!=-1 || b!=-1))continue;
+         if(c->n_trk==1 && b!=-1)continue;
+         if(a>=0) {if(cost[0][a]<0)continue;n++;sum+=cost[0][a];}
+         if(b>=0) {if(b==a || cost[1][b]<0)continue;n++;sum+=cost[1][b];}
+         if(n>bestn || (n==bestn && sum<bestcost)) {bestn=n;bestcost=sum;besta=a;bestb=b;}
+      }
+      if(besta>=0) {det_used[besta]=1;trk_used[0]=1;mot_update_track(c,0,besta);}
+      if(bestb>=0) {det_used[bestb]=1;trk_used[1]=1;mot_update_track(c,1,bestb);}
+   }
    /* 未匹配航迹：丢失 + 按速度外推（人走两步再回来仍保留 ID） */
    /* 未匹配航迹：丢失 + 按速度外推（人走两步再回来仍保留 ID） */
    for (k = 0; k < c->n_trk; ++k) {
@@ -808,8 +782,8 @@ static void mot_associate(mot_ctx_t* c)
       else if (t->sup < 32000) t->sup++;
       t->supported = (t->sup <= MOT_SUP_MAX) ? 1 : 0;
       {
-         const int dcx = (int)t->cx + (int)t->vx / 16;
-         const int dcy = (int)t->cy + (int)t->vy / 16;
+         int dcx,dcy;
+         mot_predict_position_ms(t,t->sample_ms,&dcx,&dcy);
          const int px = dcx - (t->x0 + t->x1) / 2;
          const int py = dcy - (t->y0 + t->y1) / 2;
          t->x0 = (short)(t->x0 + px); t->x1 = (short)(t->x1 + px);
@@ -857,6 +831,9 @@ static void mot_associate(mot_ctx_t* c)
       t->x0 = c->det[i].x0; t->y0 = c->det[i].y0;
       t->x1 = c->det[i].x1; t->y1 = c->det[i].y1;
       t->cx = c->det[i].cx; t->cy = c->det[i].cy;
+      t->obs_cx=t->cx;t->obs_cy=t->cy;t->obs_elapsed_ms=0;
+      t->sample_ms=(unsigned short)(c->dt_ms ? c->dt_ms : MOT_TIME_STEP_MS);
+      t->area=(short)((t->x1-t->x0+1)*(t->y1-t->y0+1));
       t->hits = 1; t->age = 1; t->traj_n = 1; t->active = 1; t->supported = 1; t->mean = c->det[i].mean;
       t->traj[0][0] = t->cx; t->traj[0][1] = t->cy;
    }
@@ -873,7 +850,8 @@ static void mot_associate(mot_ctx_t* c)
              ? ((c->ai_p >= MOT_P_PERSON) ? MOT_MAX_MISS_KEEP : MOT_MAX_MISS)
              : MOT_MAX_MISS_UNCONF;
 #else
-         const int miss_limit = c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF;
+         const int miss_limit = (c->trk[k].occluded && c->trk[k].obs_elapsed_ms<=MOT_MAX_OCCLUSION_MS)
+             ? 32000 : (c->trk[k].confirmed ? MOT_MAX_MISS : MOT_MAX_MISS_UNCONF);
 #endif
          if (c->trk[k].misses > miss_limit) continue;
          if (wr != k) c->trk[wr] = c->trk[k];
@@ -886,8 +864,9 @@ static void mot_associate(mot_ctx_t* c)
    for (k = 0; k < c->n_trk; ++k) {
       mot_trk_t* t = &c->trk[k];
       const int ax = (int)t->vx, ay = (int)t->vy;
-      t->px = (short)((int)t->cx + (ax * MOT_HORIZON) / 16);
-      t->py = (short)((int)t->cy + (ay * MOT_HORIZON) / 16);
+      int px,py;
+      mot_predict_position_ms(t,MOT_HORIZON*MOT_TIME_STEP_MS,&px,&py);
+      t->px=(short)px;t->py=(short)py;
       if (ax > -8 && ax < 8 && ay > -8 && ay < 8) t->dir = 0;
       else if ((ax >= 8 || ax <= -8) && (ay >= 8 || ay <= -8)) t->dir = 5;
       else if (ax >= 8) t->dir = 2;
@@ -948,9 +927,9 @@ static int mot_fresh_confirmed(const mot_ctx_t* c)
             const int ak = hk * (bx1[k] - bx0[k] + 1), aj = hj * (bx1[j] - bx0[j] + 1);
             const int am = ak < aj ? ak : aj;
             const int inter = (iw > 0 && ih > 0) ? iw * ih : 0;
-            const int adj  = (oy * 5 >= hm * 4 && gap <= 3);       /* 左右两半 */
+            /* Adjacency alone is not identity evidence: two people can be close. */
             const int cont = (am > 0 && inter * 20 >= am * 17);    /* 一块基本包住另一块（>=85%） */
-            if (adj || cont) {
+            if (cont) { /* Disjoint adjacent detections may be two real people. */
                bx1[k] = (short)(bx1[k] > bx1[j] ? bx1[k] : bx1[j]);
                bx0[k] = (short)(bx0[k] < bx0[j] ? bx0[k] : bx0[j]);
                by1[k] = (short)(by1[k] > by1[j] ? by1[k] : by1[j]);
@@ -992,9 +971,10 @@ static int mot_moving_confirmed(const mot_ctx_t* c)
 static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int ai_p, int ir_cnt)
 {
    if (!c || !w || !cur) return 0;
+   if(!c->timed_call)c->dt_ms=MOT_TIME_STEP_MS;
    if (!c->have_prev && c->frame == 0) {
       /* 第一帧：只建背景 */
-      memcpy(c->bg, cur, MOT_N);
+      mot_set_background(c,cur);
       memcpy(c->prev, cur, MOT_N);
       c->have_prev = 1;
       c->frame++;
@@ -1028,7 +1008,7 @@ static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int a
       c->last_area = 0;
       c->big_full = 1;
       if (ai_p < 0 && ir_cnt < MOT_IR_NEED) {
-         memcpy(c->bg, cur, MOT_N);
+         mot_set_background(c,cur);
          memcpy(c->prev, cur, MOT_N);
          c->have_prev = 1;
          c->big_reset = 1;
@@ -1044,6 +1024,24 @@ static int mot_step(mot_ctx_t* c, mot_work_t* w, const unsigned char* cur, int a
    mot_associate(c);
    c->frame++;
    return c->n_trk;
+}
+
+/* New callers supply capture time; legacy mot_step retains a fixed 200 ms step.
+   Duplicate or backwards timestamps do not advance state. A long discontinuity
+   starts a fresh background/track segment instead of inventing huge velocities. */
+static int mot_step_timed(mot_ctx_t* c,mot_work_t* w,const unsigned char* cur,
+                          int ai_p,int ir_cnt,uint32_t timestamp_ms)
+{
+   unsigned int dt=MOT_TIME_STEP_MS;int n;
+   if(!c || !w || !cur)return 0;
+   if(c->time_valid) {
+      int32_t signed_dt=(int32_t)(timestamp_ms-c->timestamp_ms);
+      if(signed_dt<=0)return c->n_trk;
+      dt=(unsigned int)signed_dt;
+      if(dt>MOT_MAX_TIME_GAP_MS) {int next=c->next_id;mot_reset(c);c->next_id=next;dt=MOT_TIME_STEP_MS;}
+   }
+   c->time_valid=1;c->timestamp_ms=timestamp_ms;c->dt_ms=dt;c->timed_call=1;
+   n=mot_step(c,w,cur,ai_p,ir_cnt);c->timed_call=0;return n;
 }
 
 #endif /* MOT_CORE_H */

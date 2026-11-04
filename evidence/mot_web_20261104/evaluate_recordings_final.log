@@ -1,0 +1,7 @@
+recorded_scene 329 {'median_ms': 3260.0, 'min_ms': 2802, 'max_ms': 9802, 'nominal_400ms_future_pairs': 0}
+recorded_walk 79 {'median_ms': 1777.5, 'min_ms': 1378, 'max_ms': 3607, 'nominal_400ms_future_pairs': 0}
+recorded_two_person 93 {'median_ms': 1659.5, 'min_ms': 1367, 'max_ms': 3377, 'nominal_400ms_future_pairs': 0}
+REPORT D:\FPGA\motweb04\evidence\mot_web_20261104\recordings_report.json
+recorded_scene {'baseline': {'ids': 5, 'coverage_pct': 49.848, 'two_tracks': 6}, 'optimized': {'ids': 5, 'coverage_pct': 33.435, 'two_tracks': 1}}
+recorded_walk {'baseline': {'ids': 4, 'coverage_pct': 48.101, 'two_tracks': 14}, 'optimized': {'ids': 6, 'coverage_pct': 24.051, 'two_tracks': 2}}
+recorded_two_person {'baseline': {'ids': 3, 'coverage_pct': 80.645, 'two_tracks': 35}, 'optimized': {'ids': 5, 'coverage_pct': 59.14, 'two_tracks': 8}}

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "actual C replay yields two people and independent IDs",
+    "visible baseline/current metrics",
+    "real occlusion excludes coasting from count",
+    "recording provenance and accuracy limitation",
+    "no browser errors"
+  ]
+}

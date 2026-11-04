@@ -2,12 +2,15 @@
 #define HTTP_APP_H
 /* http_app.h - firmware HTTP responses: page / status JSON / 96x96 PNG */
 #include <stdint.h>
+#include <string.h>
 
 typedef struct {
    const char* status_json;
    const char* events_json;
    const uint8_t* thumb;
    int thumb_w, thumb_h;
+   const char* tracking_json;
+   uint32_t frame_id;
 } http_state_t;
 
 int http_get(void* user, const char* path, const uint8_t** body, int* blen, const char** ctype);
@@ -16,9 +19,31 @@ void http_set_state(const http_state_t* st);
 
 #ifdef HTTP_APP_IMPL
 #include "page_html.h"
+#include "preview_packet.h"
 
 static http_state_t g_http;
 static uint8_t g_png[16384];
+#define HTTP_SNAPSHOT_SLOTS 8
+static uint8_t g_view_pixels[HTTP_SNAPSHOT_SLOTS][96*96];
+static int g_view_valid=0;
+static uint32_t g_view_seq[HTTP_SNAPSHOT_SLOTS];
+static int g_view_slot=0;
+static char g_view_state[12288];
+static char g_snapshot_info[128];
+static uint8_t g_preview_packet[32768];
+
+static uint32_t http_frame_id(const char* json) {
+   const char* p=json?strstr(json,"\"frame_id\":"):0;uint32_t n=0;
+   if(!p)return 0;p+=11;
+   while(*p==' ')p++;
+   while(*p>='0' && *p<='9')n=n*10u+(uint32_t)(*p++-'0');
+   return n;
+}
+static char* http_uint(char* p,uint32_t n) {
+   char digits[10];int count=0;
+   do{digits[count++]=(char)('0'+n%10u);n/=10u;}while(n);
+   while(count)*p++=digits[--count];return p;
+}
 
 void http_set_state(const http_state_t* st) { g_http = *st; }
 
@@ -95,15 +120,57 @@ int http_get(void* user, const char* path, const uint8_t** body, int* blen, cons
    int i = 0;
    if (path[0] != 0x2F) return 0;
    if (path[1] == 0) { *body = page_html; *blen = PAGE_HTML_LEN; *ctype = "text/html; charset=utf-8"; return 1; }
-   if (path[1] == 0x61 && path[2] == 0x70 && path[3] == 0x69) {
-      const char* s = (path[5] == 0x65 && path[6] == 0x76) ? st->events_json : st->status_json;
+   if(!strcmp(path,"/api/preview")) {
+      const uint8_t* json;const char* json_type;int json_len,n;
+      if(!http_get(user,"/api/state",&json,&json_len,&json_type) || !g_view_valid)return 0;
+      n=preview_packet_write((const char*)json,json_len,g_view_pixels[g_view_slot],96,96,
+                             g_view_seq[g_view_slot],g_preview_packet,(int)sizeof(g_preview_packet));
+      if(!n)return 0;
+      *body=g_preview_packet;*blen=n;*ctype="application/x-mmt-preview";return 1;
+   }
+   if (!strcmp(path,"/api/state") || !strcmp(path,"/api/status") || !strcmp(path,"/api/events")) {
+      const char* s = !strcmp(path,"/api/events") ? st->events_json : st->status_json;
       if (!s) return 0;
       while (s[i]) i++;
+      if (strcmp(path,"/api/events") && st->tracking_json && st->tracking_json[0]=='{' && i>0 && s[i-1]=='}') {
+         int n=(int)strlen(st->tracking_json);
+         if(i+n+13>=(int)sizeof(g_view_state))return 0;
+         memcpy(g_view_state,s,i-1);
+         memcpy(g_view_state+i-1,",\"tracking\":",12);
+         memcpy(g_view_state+i+11,st->tracking_json,n);
+         g_view_state[i+11+n]='}';g_view_state[i+12+n]=0;
+         s=g_view_state;i=i+12+n;
+      }
+      // Retain eight immutable images: PC mirroring and a board browser may
+      // interleave their state/image requests while the MOT frame advances.
+      if(strcmp(path,"/api/events") && st->thumb && st->thumb_w==96 && st->thumb_h==96) {
+         uint32_t seq=http_frame_id(st->tracking_json);int slot=-1,k;
+         for(k=0;k<g_view_valid;k++)if(g_view_seq[k]==seq)slot=k;
+         if(slot<0){slot=g_view_valid<HTTP_SNAPSHOT_SLOTS?g_view_valid++:(g_view_slot+1)%HTTP_SNAPSHOT_SLOTS;
+            memcpy(g_view_pixels[slot],st->thumb,sizeof(g_view_pixels[slot]));g_view_seq[slot]=seq;}
+         g_view_slot=slot;
+      }
       *body = (const uint8_t*)s; *blen = i; *ctype = "application/json; charset=utf-8";
       return 1;
    }
-   if (path[1] == 0x66 && path[2] == 0x72) {
-      int n = png_gray(st->thumb, st->thumb_w, st->thumb_h, g_png, (int)sizeof(g_png));
+   if(!strcmp(path,"/api/snapshot")) {
+      char* p=g_snapshot_info;
+      memcpy(p,"{\"frame_id\":",12);p+=12;p=http_uint(p,g_view_seq[g_view_slot]);
+      memcpy(p,",\"current\":",11);p+=11;p=http_uint(p,st->frame_id);
+      memcpy(p,",\"valid\":",9);p+=9;*p++=g_view_valid?'1':'0';*p++='}';*p=0;
+      *body=(const uint8_t*)g_snapshot_info;*blen=(int)(p-g_snapshot_info);*ctype="application/json";return 1;
+   }
+   if (!strcmp(path,"/frame.png") || !strncmp(path,"/frame.png?",11)) {
+      int slot=g_view_slot;
+      if(!strncmp(path,"/frame.png?seq=",15)) {
+         const char* p=path+15;uint32_t seq=0;
+         if(!*p)return 0;
+         while(*p) {if(*p<'0'||*p>'9')return 0;seq=seq*10+(unsigned)(*p++-'0');}
+         int k;slot=-1;
+         for(k=0;k<g_view_valid;k++)if(seq==g_view_seq[k])slot=k;
+         if(slot<0)return 0;
+      }
+      int n = png_gray(g_view_valid ? g_view_pixels[slot] : st->thumb, st->thumb_w, st->thumb_h, g_png, (int)sizeof(g_png));
       if (n <= 0) return 0;
       *body = g_png; *blen = n; *ctype = "image/png";
       return 1;

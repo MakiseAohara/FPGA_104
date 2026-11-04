@@ -1,0 +1,28 @@
+[
+  {
+    "stage": "1-map",
+    "argv": [
+      "D:\\Efinity\\2026.1\\bin\\efx_map.exe",
+      "--project-xml",
+      "D:\\eth_build\\netfix04_rxq1\\ti60f225_oob.xml",
+      "--project",
+      "ti60f225_oob",
+      "--root",
+      "ti60f225_oob_top",
+      "--device",
+      "Ti60F225",
+      "--family",
+      "Titanium",
+      "--veri_option",
+      "verilog_mode=sv_09,vhdl_mode=vhdl_2008",
+      "--work-dir",
+      "D:\\eth_build\\netfix04_rxq1\\work_syn",
+      "--output-dir",
+      "D:\\eth_build\\netfix04_rxq1\\out",
+      "--I",
+      "D:\\eth_build\\netfix04_rxq1",
+      "--I",
+      "D:\\eth_build\\netfix04_rxq1\\source\\tinyml"
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "all 256 legacy grayscale levels recovered exactly",
+    "new firmware raw pixels unchanged",
+    "384x216 physical aspect",
+    "PNG CRC and every decoded preview pixel",
+    "PC uses authoritative board people count",
+    "matched image token and pixels",
+    "browser mutations cannot corrupt cached snapshot",
+    "bounded cache expires old images rather than substituting latest frame",
+    "stale upstream explicitly disconnected"
+  ]
+}

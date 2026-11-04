@@ -1,0 +1,20 @@
+PASS bbox IoU identical is 1000 despite sparse foreground
+PASS bbox IoU half-overlap uses union
+PASS global assignment preserves both feasible matches
+PASS independent close people are counted separately
+PASS appearance gate also protects high-IoU pairing
+PASS gap velocity comes from last real observations
+PASS velocity invariant under 100/300ms sample intervals
+PASS negative x/y velocity at variable dt has signed arithmetic
+PASS left/up prediction remains left/up on 32-bit-long hosts
+PASS negative coast cannot jump to opposite edge
+PASS published prediction uses same 400ms motion model
+PASS ROI ETA uses same physical velocity
+PASS merged observation preserves two IDs beyond normal miss limit
+PASS separated observations recover original crossing identities
+PASS merged-track retention is bounded by four seconds
+PASS duplicate/backward timestamp cannot advance state
+PASS long recording discontinuity resets unobserved tracks
+PASS fractional background follows small positive and negative changes symmetrically
+PASS 256 components cannot wrap the visited label to zero
+ALG_REGRESSIONS passed=19 failed=0 sizeof_ctx=37272 sizeof_work=55296

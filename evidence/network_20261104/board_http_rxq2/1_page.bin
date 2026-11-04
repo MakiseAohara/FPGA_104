@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Ti60 人体检测 · 实时监控</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#131a22; --panel2:#0f151c; --line:#22303d;
+    --txt:#dfe9f3; --dim:#7f96ab; --acc:#38bdf8; --ok:#33d17a; --warn:#f5a524; --bad:#f4485d;
+    --mono:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 15% -10%,#16222e 0%,var(--bg) 55%);
+       color:var(--txt);font:14px/1.5 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+  header{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line);
+         background:rgba(11,15,20,.85);position:sticky;top:0;z-index:9;backdrop-filter:blur(8px)}
+  header h1{font-size:16px;margin:0;font-weight:600;letter-spacing:.5px}
+  header h1 span{color:var(--acc)}
+  .pills{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--line);
+        border-radius:999px;background:var(--panel2);font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .pill b{color:var(--txt);font-weight:600}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--dim)}
+  .dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  .dot.bad{background:var(--bad);box-shadow:0 0 8px var(--bad)}
+  main{padding:18px 20px 40px;display:grid;gap:16px;grid-template-columns:minmax(320px,1.1fr) minmax(360px,1.6fr)}
+  @media (max-width:1000px){main{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .card h2{font-size:12px;margin:0 0 12px;color:var(--dim);letter-spacing:1.4px;text-transform:uppercase;font-weight:600}
+  #banner{grid-column:1/-1;display:none;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;
+          border:1px solid var(--bad);background:linear-gradient(90deg,#3a0f16,#1b0b0f);color:#ffd7dd;font-weight:600}
+  #banner.show{display:flex;animation:pulse 1.4s infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 3px rgba(244,72,93,.15)}}
+  .view{display:flex;gap:14px;align-items:flex-start}
+  .frame-box{position:relative;background:#05080b;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:0 0 auto}
+  #frame{image-rendering:pixelated;display:block;width:100%;height:auto}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-family:var(--mono);font-size:13px}
+  .kv .k{color:var(--dim)}
+  .kv .v{text-align:right;color:var(--txt)}
+  .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .stat .n{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--acc)}
+  .stat .l{font-size:11px;color:var(--dim);letter-spacing:.6px;text-transform:uppercase}
+  table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+  th{text-align:left;color:var(--dim);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+  td{padding:6px 8px;border-bottom:1px solid #1a2530}
+  tr:hover td{background:#16202a}
+  .tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;border:1px solid}
+  .t-INTRUDE{color:#ffb4bf;border-color:#5e2029;background:#2a0f13}
+  .t-NORMAL{color:#9fe8c4;border-color:#1d4a36;background:#0d2419}
+  .t-TREND{color:#ffd9a0;border-color:#5a4420;background:#241a0b}
+  .t-PERSON{color:#a9d8ff;border-color:#1e3d5c;background:#0b1c2a}
+  .t-LOWPWR{color:#c9b3ff;border-color:#3b2f5e;background:#17102a}
+  .t-HB{color:var(--dim);border-color:var(--line);background:var(--panel2)}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;max-height:280px;overflow:auto}
+  .gal figure{margin:0;position:relative;cursor:zoom-in}
+  .gal img{width:100%;image-rendering:pixelated;border-radius:8px;border:1px solid var(--line);background:#05080b;display:block}
+  .gal figcaption{font-size:10px;color:var(--dim);font-family:var(--mono);text-align:center;padding-top:3px}
+  #chart{width:100%;height:130px;display:block}
+  .scroller{max-height:300px;overflow:auto}
+  .muted{color:var(--dim)}
+  #modal{position:fixed;inset:0;background:rgba(3,6,10,.92);display:none;place-items:center;z-index:50}
+  #modal.show{display:grid}
+  #modal img{max-width:min(90vw,720px);image-rendering:pixelated;border:1px solid var(--line);border-radius:12px}
+  footer{padding:0 20px 24px;color:var(--dim);font-size:12px;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ti60F225 · <span>人体检测事件监控</span></h1>
+  <div class="pills">
+    <div class="pill"><i class="dot" id="d-link"></i><span>链路</span><b id="p-link">--</b></div>
+    <div class="pill"><span>帧率</span><b id="p-fps">--</b></div>
+    <div class="pill"><span>推理</span><b id="p-inf">--</b></div>
+    <div class="pill"><span>温度</span><b id="p-temp">--</b></div>
+    <div class="pill"><i class="dot" id="d-lp"></i><span>低功耗</span><b id="p-lp">--</b></div>
+  </div>
+</header>
+<main>
+  <div id="banner">⚠ 检测到人员入侵 — 事件已上报</div>
+
+  <section class="card">
+    <h2>实时画面 / 传感器</h2>
+    <div class="view">
+      <div class="frame-box" style="width:200px">
+        <img id="frame" alt="frame" onerror="this.style.display='none';document.getElementById('nofr').style.display='flex'">
+        <div id="nofr" style="display:none;width:200px;height:200px;align-items:center;justify-content:center;color:#5b6f80;font-size:12px;text-align:center;padding:10px">暂无灰度帧<br>（UDP 纯网口模式）</div>
+      </div>
+      <div style="flex:1">
+        <div class="kv">
+          <div class="k">帧号</div><div class="v" id="v-f">--</div>
+          <div class="k">平均亮度</div><div class="v" id="v-p">--</div>
+          <div class="k">人体得分</div><div class="v" id="v-person">--</div>
+          <div class="k">运动像素</div><div class="v" id="v-motion">--</div>
+          <div class="k">红外温度</div><div class="v" id="v-ir">--</div>
+          <div class="k">更新</div><div class="v" id="v-upd">--</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid-cards" style="margin-top:14px">
+      <div class="stat"><div class="n" id="c-ev">0</div><div class="l">事件总数</div></div>
+      <div class="stat"><div class="n" id="c-alarm">0</div><div class="l">报警次数</div></div>
+      <div class="stat"><div class="n" id="c-hb">0</div><div class="l">心跳</div></div>
+      <div class="stat"><div class="n" id="c-thumb">0</div><div class="l">缩略图</div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>事件时间线</h2>
+    <div class="scroller">
+      <table>
+        <thead><tr><th>时间</th><th>类型</th><th>位置</th><th>置信度</th><th>obs</th><th>缩略图</th></tr></thead>
+        <tbody id="rows"><tr><td colspan="6" class="muted">等待事件…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>缩略图（96×96 原始灰度重组）</h2>
+    <div class="gal" id="gal"><span class="muted">暂无</span></div>
+  </section>
+
+  <section class="card">
+    <h2>nt / obs 走势</h2>
+    <canvas id="chart" width="900" height="130"></canvas>
+  </section>
+</main>
+<footer id="foot">轮询 /api/state · 1 Hz</footer>
+<div id="modal"><img alt="thumb"></div>
+<script>
+const $ = id => document.getElementById(id);
+let lastEventCount = -1, chartData = [];
+const fmt = v => (v === undefined || v === null) ? "--" : v;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function setPill(dot, val, cls) {
+  const d = $(dot); if (!d) return;
+  d.className = "dot" + (cls ? " " + cls : "");
+}
+
+function render(st) {
+  const link = st.link || (st.connected ? "板卡直连" : (st.udp_events ? "UDP" : (st.frames ? "串口" : "无")));
+  $("p-link").textContent = link;
+  setPill("d-link", link, (st.connected || (st.last && (Date.now()/1000 - st.last) < 5)) ? "on" : "bad");
+  $("p-fps").textContent = (st.camfps ? st.camfps : (st.paused ? "暂停" : 0));
+  $("p-inf").textContent = st.inf_hz ? st.inf_hz + " Hz" : "--";
+  $("p-temp").textContent = (st.body !== undefined && st.body) ? (st.body/10).toFixed(1) + "°C" : "--";
+  $("p-lp").textContent = st.lowpwr ? "是" : "否";
+  setPill("d-lp", st.lowpwr, st.lowpwr ? "on" : "");
+
+  $("banner").className = st.alarm ? "show" : "";
+  $("v-f").textContent = fmt(st.f);
+  $("v-p").textContent = (st.p <= -100) ? "--" : st.p;
+  $("v-person").textContent = st.person ? "有人" : "无人";
+  $("v-motion").textContent = fmt(st.motion);
+  $("v-ir").textContent = fmt(st.ir);
+  $("v-upd").textContent = st.ts ? new Date(st.ts * 1000).toLocaleTimeString() : (st.uptime_ms !== undefined ? "运行 " + Math.floor(st.uptime_ms/1000) + " 秒" : "--");
+
+  const fr = $("frame");
+  if (fr.style.display !== "none") fr.src = "/frame.png?t=" + Date.now();
+
+  const ev = st.events || [];
+  $("c-ev").textContent = st.udp_events ?? ev.length;
+  $("c-alarm").textContent = st.alarm_starts ?? ev.filter(e => e.kind === "INTRUDE").length;
+  $("c-hb").textContent = st.udp_heartbeats ?? 0;
+  $("c-thumb").textContent = ev.filter(e => e.thumb).length;
+
+  if (ev.length) {
+    const rows = ev.slice().reverse().map(e => {
+      const th = e.thumb ? `<a href="/thumb/${encodeURIComponent(e.thumb)}" target="_blank">查看</a>` : '<span class="muted">-</span>';
+      return `<tr><td>${esc(e.time || "")}</td><td><span class="tag t-${esc(e.kind||"HB")}">${esc(e.kind||"")}</span></td>
+        <td>${e.x ?? "-"},${e.y ?? "-"}</td><td>${e.conf ?? "-"}</td><td>${e.obs ?? "-"}</td><td>${th}</td></tr>`;
+    }).join("");
+    $("rows").innerHTML = rows;
+    const gal = ev.filter(e => e.thumb).slice(-24).reverse()
+      .map(e => `<figure onclick="zoom('${esc(e.thumb)}')"><img src="/thumb/${encodeURIComponent(e.thumb)}" loading="lazy"><figcaption>${esc(e.kind)} ${esc(e.time||"")}</figcaption></figure>`).join("");
+    $("gal").innerHTML = gal || '<span class="muted">暂无</span>';
+  }
+
+  const s = st.series || [];
+  chartData = s;
+  draw(s);
+  $("foot").textContent = "轮询 /api/state · 1 Hz · " + new Date().toLocaleTimeString();
+}
+
+function draw(s) {
+  const c = $("chart"), ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.strokeStyle = "#22303d"; ctx.lineWidth = 1;
+  for (let i = 1; i < 4; i++) { const y = H*i/4; ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  if (!s.length) return;
+  const max = Math.max(2, ...s.map(d => Math.max(d.nt||0, d.obs||0)));
+  const px = i => i * W / Math.max(1, s.length - 1);
+  const py = v => H - (v / max) * (H - 10) - 4;
+  const line = (key, color) => {
+    ctx.beginPath(); ctx.strokeStyle = color; ctx.lineWidth = 2;
+    s.forEach((d, i) => { const x = px(i), y = py(d[key]||0); i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); });
+    ctx.stroke();
+  };
+  line("nt", "#38bdf8"); line("obs", "#f5a524");
+  ctx.fillStyle = "#7f96ab"; ctx.font = "11px monospace";
+  ctx.fillText("nt", 6, 12); ctx.fillStyle = "#38bdf8"; ctx.fillRect(20, 4, 10, 3);
+  ctx.fillStyle = "#7f96ab"; ctx.fillText("obs", 44, 12); ctx.fillStyle = "#f5a524"; ctx.fillRect(68, 4, 10, 3);
+  ctx.fillStyle = "#7f96ab"; ctx.fillText("max " + max, W - 54, 12);
+}
+
+function zoom(name) {
+  const m = $("modal");
+  m.querySelector("img").src = "/thumb/" + encodeURIComponent(name);
+  m.className = "show";
+}
+$("modal").onclick = () => $("modal").className = "";
+
+let polling = false;
+async function tick() {
+  if (polling) return;
+  polling = true;
+  try {
+    const r = await fetch("/api/state", { cache: "no-store", signal: AbortSignal.timeout(15000) });
+    render(await r.json());
+  } catch (e) {
+    $("p-link").textContent = "断连";
+    setPill("d-link", "", "bad");
+  } finally {
+    polling = false;
+  }
+}
+tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>

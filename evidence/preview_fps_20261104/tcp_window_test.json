@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "checks": [
+    "two segments emitted before ACK; complete patterned body with cumulative ACK",
+    "loss of first segment recovers without moving snd_nxt back",
+    "loss of second segment recovers without moving snd_nxt back",
+    "partial cumulative ACK retransmits exact oldest unacknowledged byte range",
+    "duplicate, future, stale and foreign-connection ACKs cannot release bytes or expand window",
+    "small and zero peer windows bounded; only one-byte retransmit probe during zero window",
+    "initial zero window acknowledges request and resumes on window update",
+    "SYN and FIN loss recover; FIN emitted only after all body bytes acknowledged",
+    "second segment sent at 499 ms does not postpone oldest retransmission",
+    "corrupted checksum and truncated packets rejected",
+    "response and cumulative ACK across 32-bit sequence wrap",
+    "NET_TX_SEGMENTS=1 fallback preserves full response and stop-and-wait",
+    "immediate per-packet ACK cannot repeatedly subdivide the short tail",
+    "controlled 200 ms delayed-ACK model: two-packet flight and paired tail remove per-segment stalls"
+  ],
+  "receiver_model": {
+    "ack_after_packets": 2,
+    "delayed_ack_ms": 200,
+    "service_tick_ms": 2,
+    "real_hardware_measurement": false
+  },
+  "latency_model": {
+    "stop_and_wait": {
+      "elapsed_ms": 1400,
+      "data_packets": 7
+    },
+    "two_packet_window": {
+      "elapsed_ms": 8,
+      "data_packets": 8
+    },
+    "two_packet_window_without_tail_pair": {
+      "elapsed_ms": 206,
+      "data_packets": 7
+    }
+  }
+}

@@ -3,14 +3,29 @@
 /*
  * net_core.h - 极简 IPv4/ARP/ICMP/UDP/TCP + HTTP，给 RISC-V 固件和 PC 上跑同一个实现
  *   - 无动态内存、无 libc 依赖（只需要 <stdint.h>）
- *   - 单 TCP 连接（HTTP 用），足够一个浏览器反复刷新
+ *   - 有界 TCP 连接槽：PC 镜像与板端浏览器可同时取帧
  *   - 帧的以太头/IP 头/TCP 头都在这里组，FCS 由调用方（或这里）拼
  */
 #include <stdint.h>
 
-#define NET_MAX_FRAME   16384    /* resp 缓冲要放得下 PNG（约 9.4KB） */
+#define NET_MAX_FRAME   32768    /* complete dashboard and bounded track snapshots */
 #define NET_MSS         1400     /* 单段 TCP 最大负载（RTL TX 缓冲 2KB） */
 #define NET_WIN         4096
+#ifndef NET_TX_SEGMENTS
+#define NET_TX_SEGMENTS 2       /* bounded response flight; 1 restores stop-and-wait */
+#endif
+#if NET_TX_SEGMENTS < 1 || NET_TX_SEGMENTS > 4
+#error NET_TX_SEGMENTS must be between 1 and 4
+#endif
+#ifndef NET_PAIR_TAIL
+#define NET_PAIR_TAIL   1       /* two short tail packets avoid delayed-ACK latency */
+#endif
+#ifndef NET_CONN_COUNT
+#define NET_CONN_COUNT  2       /* PC mirror plus a board browser; 1 is rollback */
+#endif
+#if NET_CONN_COUNT < 1 || NET_CONN_COUNT > 4
+#error NET_CONN_COUNT must be between 1 and 4
+#endif
 
 typedef struct {
    /* 给上层取 HTTP 内容；返回 0 表示 404 */
@@ -35,14 +50,19 @@ typedef struct {
    uint32_t snd_una;
    uint32_t snd_nxt;
    uint32_t rcv_nxt;
+   uint16_t peer_window;     /* unscaled: this endpoint never negotiates window scaling */
    const uint8_t* resp;      /* 待发响应体（含 HTTP 头）*/
    int      resp_len;
    int      resp_off;
+   int      tail_paired;     /* at most one short-tail split per response */
    uint32_t last_ms;
    uint32_t retx_ms;
    int      retx;
    uint32_t last_seq;        /* 最近一段的起点，用于重传 */
    int      last_len;
+   uint8_t  last_flags;
+   int      request_len;
+   char     request[1024];
 } net_conn_t;
 
 typedef struct {
@@ -50,6 +70,12 @@ typedef struct {
    net_conn_t  conn;
    uint8_t     rbuf[NET_MAX_FRAME];
    uint8_t     ctype[32];
+#if NET_CONN_COUNT > 1
+   net_conn_t  extra_conn[NET_CONN_COUNT-1];
+   uint8_t     extra_rbuf[NET_CONN_COUNT-1][NET_MAX_FRAME];
+#endif
+   unsigned    active_slot;   /* callback/TX context, not a copied connection */
+   unsigned    tick_slot;     /* next periodic service candidate */
 } net_t;
 
 void net_init(net_t* n, const net_cfg_t* cfg);

@@ -1,0 +1,456 @@
+{
+  "start_ms": 48,
+  "end_ms": 20067.60000000894,
+  "displays": [
+    {
+      "now_ms": 65.90000000596046,
+      "frame_id": "25631",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "stamp": "快照 25631 · 15169.0 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 1079.7000000029802,
+      "frame_id": "25631",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "stamp": "快照 25631 · 15169.0 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 2098.2999999970198,
+      "frame_id": "25631",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "stamp": "快照 25631 · 15169.0 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 3114.4000000059605,
+      "frame_id": "25631",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "stamp": "快照 25631 · 15169.0 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 4129.79999999702,
+      "frame_id": "25631",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "stamp": "快照 25631 · 15169.0 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 5135.600000008941,
+      "frame_id": "25631",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "stamp": "快照 25631 · 15169.0 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 6157.20000000298,
+      "frame_id": "25679",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25679",
+      "stamp": "快照 25679 · 15182.9 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 7166.4000000059605,
+      "frame_id": "25679",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25679",
+      "stamp": "快照 25679 · 15182.9 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 8180.70000000298,
+      "frame_id": "25679",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25679",
+      "stamp": "快照 25679 · 15182.9 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 9196.60000000894,
+      "frame_id": "25679",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25679",
+      "stamp": "快照 25679 · 15182.9 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 10213.20000000298,
+      "frame_id": "25679",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25679",
+      "stamp": "快照 25679 · 15182.9 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 11222.60000000894,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 12237.5,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 13255.29999999702,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 14274.40000000596,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 15289.5,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 16308.5,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 17325.90000000596,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 18343.20000000298,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 19359.5,
+      "frame_id": "25690",
+      "image_url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "stamp": "快照 25690 · 15185.8 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764944402,
+      "bytes": 14821,
+      "total_ms": 2.411,
+      "snapshot_age_ms": 6102,
+      "frame_id": 25631,
+      "timestamp_ms": 15168967,
+      "sample_ms": 470,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25631",
+      "kind": "image",
+      "status": 200,
+      "seen_node_ms": 1793764944415,
+      "bytes": 9380,
+      "total_ms": 1.883,
+      "sha256": "93be59d6a9bc6706cc0055eb6b2889fbd69914809fb9484f0430ab93c38319e8"
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764945442,
+      "bytes": 14821,
+      "total_ms": 2.499,
+      "snapshot_age_ms": 7169,
+      "frame_id": 25631,
+      "timestamp_ms": 15168967,
+      "sample_ms": 470,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764946460,
+      "bytes": 14785,
+      "total_ms": 2.365,
+      "snapshot_age_ms": 8187,
+      "frame_id": 25631,
+      "timestamp_ms": 15168967,
+      "sample_ms": 470,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764947476,
+      "bytes": 14785,
+      "total_ms": 2.928,
+      "snapshot_age_ms": 9203,
+      "frame_id": 25631,
+      "timestamp_ms": 15168967,
+      "sample_ms": 470,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764948492,
+      "bytes": 14787,
+      "total_ms": 1.865,
+      "snapshot_age_ms": 10219,
+      "frame_id": 25631,
+      "timestamp_ms": 15168967,
+      "sample_ms": 470,
+      "connected": false
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764949497,
+      "bytes": 14793,
+      "total_ms": 2.527,
+      "snapshot_age_ms": 11224,
+      "frame_id": 25631,
+      "timestamp_ms": 15168967,
+      "sample_ms": 470,
+      "connected": false
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764950516,
+      "bytes": 14747,
+      "total_ms": 3.904,
+      "snapshot_age_ms": 292,
+      "frame_id": 25679,
+      "timestamp_ms": 15182918,
+      "sample_ms": 475,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25679",
+      "kind": "image",
+      "status": 200,
+      "seen_node_ms": 1793764950519,
+      "bytes": 9380,
+      "total_ms": 2.202,
+      "sha256": "91b825021ca9b13c238f96c80f8f5263ec4b2c2028397dc4514b5e08ca691562"
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764951528,
+      "bytes": 14748,
+      "total_ms": 3.322,
+      "snapshot_age_ms": 1305,
+      "frame_id": 25679,
+      "timestamp_ms": 15182918,
+      "sample_ms": 475,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764952543,
+      "bytes": 14748,
+      "total_ms": 3.846,
+      "snapshot_age_ms": 2319,
+      "frame_id": 25679,
+      "timestamp_ms": 15182918,
+      "sample_ms": 475,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764953558,
+      "bytes": 14748,
+      "total_ms": 3.899,
+      "snapshot_age_ms": 3335,
+      "frame_id": 25679,
+      "timestamp_ms": 15182918,
+      "sample_ms": 475,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764954575,
+      "bytes": 14748,
+      "total_ms": 2.636,
+      "snapshot_age_ms": 4353,
+      "frame_id": 25679,
+      "timestamp_ms": 15182918,
+      "sample_ms": 475,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764955583,
+      "bytes": 15151,
+      "total_ms": 4.016,
+      "snapshot_age_ms": 206,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/snapshot/frame.png?seq=25690",
+      "kind": "image",
+      "status": 200,
+      "seen_node_ms": 1793764955585,
+      "bytes": 9380,
+      "total_ms": 1.402,
+      "sha256": "447d9fe2ea84c225582f192c489a2b4398d1c76340dc053287d05e4625803aed"
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764956599,
+      "bytes": 15152,
+      "total_ms": 3.842,
+      "snapshot_age_ms": 1222,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764957617,
+      "bytes": 15152,
+      "total_ms": 2.527,
+      "snapshot_age_ms": 2241,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764958636,
+      "bytes": 15154,
+      "total_ms": 3.889,
+      "snapshot_age_ms": 3259,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764959651,
+      "bytes": 15154,
+      "total_ms": 3.695,
+      "snapshot_age_ms": 4274,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764960670,
+      "bytes": 15179,
+      "total_ms": 3.704,
+      "snapshot_age_ms": 5293,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764961688,
+      "bytes": 15179,
+      "total_ms": 3.219,
+      "snapshot_age_ms": 6310,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764962705,
+      "bytes": 15179,
+      "total_ms": 3.914,
+      "snapshot_age_ms": 7328,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    },
+    {
+      "url": "http://169.254.47.62:8090/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764963721,
+      "bytes": 15179,
+      "total_ms": 3.354,
+      "snapshot_age_ms": 8344,
+      "frame_id": 25690,
+      "timestamp_ms": 15185809,
+      "sample_ms": 168,
+      "connected": true
+    }
+  ],
+  "errors": []
+}

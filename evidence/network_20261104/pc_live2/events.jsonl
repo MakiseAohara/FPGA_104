@@ -1,0 +1,32 @@
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:47:19", "wall": 1793724439.4692447, "time": "00:47:19", "detail": {"f": 0}, "thumb": null}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:47:24", "wall": 1793724444.684513, "time": "00:47:24", "detail": {"f": 302}, "thumb": null}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:48:07", "wall": 1793724487.3544385, "time": "00:48:07", "detail": {"f": 367}, "thumb": "20261104_004807_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:48:23", "wall": 1793724503.6729903, "time": "00:48:23", "detail": {"f": 392}, "thumb": "20261104_004823_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:48:42", "wall": 1793724522.5115361, "time": "00:48:42", "detail": {"f": 421}, "thumb": "20261104_004842_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:49:30", "wall": 1793724570.53095, "time": "00:49:30", "detail": {"f": 495}, "thumb": "20261104_004930_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:49:54", "wall": 1793724594.4171598, "time": "00:49:54", "detail": {"f": 526}, "thumb": "20261104_004954_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:50:10", "wall": 1793724610.3516672, "time": "00:50:10", "detail": {"f": 551}, "thumb": "20261104_005010_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T00:50:54", "wall": 1793724654.9825916, "time": "00:50:54", "detail": {"x": 48, "y": 48, "conf": 60, "obs": 0, "ts_ms": 524913}, "thumb": "20261104_005054_INTRUDE.png", "x": 48, "y": 48, "conf": 60, "obs": 0, "id": 3}
+{"kind": "alarm_start", "ts": "2026-11-04T00:50:55", "wall": 1793724655.0038936, "time": "00:50:55", "detail": {"f": 604, "person": 0, "p": -46}, "thumb": "20261104_005055_alarm_start.png"}
+{"kind": "THUMB", "ts": "2026-11-04T00:51:01", "wall": 1793724661.5768864, "time": "00:51:01", "detail": {"ts_ms": 531506, "complete": true}, "thumb": "20261104_005101_thumb_3.png", "id": 3}
+{"kind": "NORMAL", "ts": "2026-11-04T00:51:24", "wall": 1793724684.488826, "time": "00:51:24", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 554416}, "thumb": "20261104_005124_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 3}
+{"kind": "alarm_end", "ts": "2026-11-04T00:51:24", "wall": 1793724684.50516, "time": "00:51:24", "detail": {"f": 640, "person": 0, "p": -18}, "thumb": "20261104_005124_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:51:24", "wall": 1793724684.521002, "time": "00:51:24", "detail": {"f": 640}, "thumb": "20261104_005124_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:52:00", "wall": 1793724720.374354, "time": "00:52:00", "detail": {"f": 695}, "thumb": "20261104_005200_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:52:16", "wall": 1793724736.0214448, "time": "00:52:16", "detail": {"f": 719}, "thumb": "20261104_005216_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:52:48", "wall": 1793724768.5784652, "time": "00:52:48", "detail": {"f": 769}, "thumb": "20261104_005248_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T00:52:52", "wall": 1793724772.1379688, "time": "00:52:52", "detail": {"x": 66, "y": 61, "conf": 60, "obs": 0, "ts_ms": 642061}, "thumb": "20261104_005252_INTRUDE.png", "x": 66, "y": 61, "conf": 60, "obs": 0, "id": 4}
+{"kind": "alarm_start", "ts": "2026-11-04T00:52:52", "wall": 1793724772.1467652, "time": "00:52:52", "detail": {"f": 774, "person": 0, "p": -9}, "thumb": "20261104_005252_alarm_start.png"}
+{"kind": "THUMB", "ts": "2026-11-04T00:53:00", "wall": 1793724780.4884968, "time": "00:53:00", "detail": {"ts_ms": 650420, "complete": true}, "thumb": "20261104_005300_thumb_4.png", "id": 4}
+{"kind": "NORMAL", "ts": "2026-11-04T00:53:08", "wall": 1793724788.277806, "time": "00:53:08", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 658211}, "thumb": "20261104_005308_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 4}
+{"kind": "alarm_end", "ts": "2026-11-04T00:53:08", "wall": 1793724788.288809, "time": "00:53:08", "detail": {"f": 794, "person": 0, "p": -11}, "thumb": "20261104_005308_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:53:08", "wall": 1793724788.3048973, "time": "00:53:08", "detail": {"f": 794}, "thumb": "20261104_005308_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:53:10", "wall": 1793724790.6085227, "time": "00:53:10", "detail": {"f": 798}, "thumb": "20261104_005310_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T00:53:15", "wall": 1793724795.2541025, "time": "00:53:15", "detail": {"x": 39, "y": 92, "conf": 100, "obs": 0, "ts_ms": 665187}, "thumb": "20261104_005315_INTRUDE.png", "x": 39, "y": 92, "conf": 100, "obs": 0, "id": 5}
+{"kind": "alarm_start", "ts": "2026-11-04T00:53:15", "wall": 1793724795.2801695, "time": "00:53:15", "detail": {"f": 801, "person": 1, "p": 72}, "thumb": "20261104_005315_alarm_start.png"}
+{"kind": "THUMB", "ts": "2026-11-04T00:53:22", "wall": 1793724802.2280788, "time": "00:53:22", "detail": {"ts_ms": 672151, "complete": true}, "thumb": "20261104_005322_thumb_5.png", "id": 5}
+{"kind": "TREND", "ts": "2026-11-04T00:53:32", "wall": 1793724812.5320122, "time": "00:53:32", "detail": {"x": 56, "y": 56, "conf": 1, "obs": 1, "ts_ms": 682466}, "thumb": "20261104_005332_TREND.png", "x": 56, "y": 56, "conf": 1, "obs": 1, "id": 5}
+{"kind": "NORMAL", "ts": "2026-11-04T00:53:48", "wall": 1793724828.2225888, "time": "00:53:48", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 698157}, "thumb": "20261104_005348_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 5}
+{"kind": "alarm_end", "ts": "2026-11-04T00:53:48", "wall": 1793724828.2369049, "time": "00:53:48", "detail": {"f": 841, "person": 1, "p": 14}, "thumb": "20261104_005348_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:53:48", "wall": 1793724828.2528384, "time": "00:53:48", "detail": {"f": 841}, "thumb": "20261104_005348_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:53:49", "wall": 1793724829.2452838, "time": "00:53:49", "detail": {"f": 843}, "thumb": "20261104_005349_lowpwr_exit.png"}

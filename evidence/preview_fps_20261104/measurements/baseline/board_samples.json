@@ -1,0 +1,96 @@
+{
+  "start_ms": 1688.5,
+  "end_ms": 11691.5,
+  "displays": [
+    {
+      "now_ms": 3552,
+      "frame_id": "25741",
+      "image_url": "http://169.254.47.63/frame.png?seq=25741",
+      "stamp": "快照 25741 · 15200.5 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 6274.5,
+      "frame_id": "25756",
+      "image_url": "http://169.254.47.63/frame.png?seq=25756",
+      "stamp": "快照 25756 · 15204.4 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    },
+    {
+      "now_ms": 10982.90000000596,
+      "frame_id": "25764",
+      "image_url": "http://169.254.47.63/frame.png?seq=25764",
+      "stamp": "快照 25764 · 15206.5 秒",
+      "natural_width": 96,
+      "natural_height": 96
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://169.254.47.63/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764966387,
+      "bytes": 1120,
+      "total_ms": 11.35,
+      "frame_id": 25741,
+      "timestamp_ms": 15200548,
+      "sample_ms": 133,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/frame.png?seq=25741",
+      "kind": "image",
+      "status": 200,
+      "seen_node_ms": 1793764967871,
+      "bytes": 9380,
+      "total_ms": 1857.707,
+      "sha256": "61265f4304b132904fca8b19d060b600bbc316b1f7c130b10e8c06e98c322a47"
+    },
+    {
+      "url": "http://169.254.47.63/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764970267,
+      "bytes": 1072,
+      "total_ms": 1011.535,
+      "frame_id": 25756,
+      "timestamp_ms": 15204398,
+      "sample_ms": 125,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/frame.png?seq=25756",
+      "kind": "image",
+      "status": 200,
+      "seen_node_ms": 1793764970295,
+      "bytes": 9380,
+      "total_ms": 703.736,
+      "sha256": "6c126d311e3f45a25dd006f9185b98614d3bc94226ab75d1ddf60b90222e73e1"
+    },
+    {
+      "url": "http://169.254.47.63/api/state",
+      "kind": "state",
+      "status": 200,
+      "seen_node_ms": 1793764972027,
+      "bytes": 1120,
+      "total_ms": 38.727,
+      "frame_id": 25764,
+      "timestamp_ms": 15206497,
+      "sample_ms": 171,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/frame.png?seq=25764",
+      "kind": "image",
+      "status": 200,
+      "seen_node_ms": 1793764975070,
+      "bytes": 9380,
+      "total_ms": 3650.993,
+      "sha256": "5845e8c66fbd5d6a270f0a27f5c97b70f1975ca90eeb2bbb08f84ff560535c8c"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,400 @@
+{
+  "start_ms": 47.5,
+  "end_ms": 10057.29999999702,
+  "displays": [
+    {
+      "now_ms": 70.79999999701977,
+      "frame_id": "589",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 589 · 272.2 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "7bdb8fa5"
+    },
+    {
+      "now_ms": 318.29999999701977,
+      "frame_id": "589",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 589 · 272.2 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "7bdb8fa5"
+    },
+    {
+      "now_ms": 511,
+      "frame_id": "590",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 590 · 272.8 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "7a804808"
+    },
+    {
+      "now_ms": 686.0999999940395,
+      "frame_id": "590",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 590 · 272.8 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "7a804808"
+    },
+    {
+      "now_ms": 900.9000000059605,
+      "frame_id": "590",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 590 · 272.8 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "7a804808"
+    },
+    {
+      "now_ms": 6123.79999999702,
+      "frame_id": "599",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 599 · 278.4 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "43e66a3d"
+    },
+    {
+      "now_ms": 7085.9000000059605,
+      "frame_id": "600",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 600 · 279.0 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "230f41d1"
+    },
+    {
+      "now_ms": 9352.90000000596,
+      "frame_id": "604",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 604 · 281.4 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "4fa0e3b7"
+    },
+    {
+      "now_ms": 9396,
+      "frame_id": "604",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 604 · 281.4 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "4fa0e3b7"
+    },
+    {
+      "now_ms": 9600.90000000596,
+      "frame_id": "604",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 604 · 281.4 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "4fa0e3b7"
+    },
+    {
+      "now_ms": 9816.79999999702,
+      "frame_id": "605",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 605 · 282.1 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "10dc4f47"
+    },
+    {
+      "now_ms": 10018.79999999702,
+      "frame_id": "605",
+      "frame_id_source": "stamp",
+      "image_url": null,
+      "stamp": "快照 605 · 282.1 秒",
+      "source_type": "HTMLCanvasElement",
+      "natural_width": 96,
+      "natural_height": 96,
+      "geometry": [
+        0,
+        0,
+        960,
+        540
+      ],
+      "source_rgba_fnv1a32": "10dc4f47"
+    }
+  ],
+  "responses": [
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765918840,
+      "bytes": 10000,
+      "total_ms": 27.228,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "ff1019dd7468dc095ea4e1b3257ac89316c02f09d7b04446217ad95bf4a91322",
+      "frame_id": 589,
+      "timestamp_ms": 272191,
+      "sample_ms": 634,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765919089,
+      "bytes": 10000,
+      "total_ms": 67.355,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "ff1019dd7468dc095ea4e1b3257ac89316c02f09d7b04446217ad95bf4a91322",
+      "frame_id": 589,
+      "timestamp_ms": 272191,
+      "sample_ms": 634,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765919282,
+      "bytes": 10000,
+      "total_ms": 45.343,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "2aa1e50f491bcdb6fcd4fce7a67073e881ce0e304edf7fed2acfaa3da0c211f5",
+      "frame_id": 590,
+      "timestamp_ms": 272807,
+      "sample_ms": 616,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765919457,
+      "bytes": 10000,
+      "total_ms": 20.515,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "2aa1e50f491bcdb6fcd4fce7a67073e881ce0e304edf7fed2acfaa3da0c211f5",
+      "frame_id": 590,
+      "timestamp_ms": 272807,
+      "sample_ms": 616,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765919672,
+      "bytes": 10000,
+      "total_ms": 20.538,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "2aa1e50f491bcdb6fcd4fce7a67073e881ce0e304edf7fed2acfaa3da0c211f5",
+      "frame_id": 590,
+      "timestamp_ms": 272807,
+      "sample_ms": 616,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765924895,
+      "bytes": 10000,
+      "total_ms": 21.202,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "38b6539a6f472a31344dff27ac68788c673b17f2f125eede6084697829d168eb",
+      "frame_id": 599,
+      "timestamp_ms": 278353,
+      "sample_ms": 615,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765925857,
+      "bytes": 10000,
+      "total_ms": 773.354,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "cbcb4c0809f71436f72259f64192a896fd51de57b793541c85864f94d8f4cee8",
+      "frame_id": 600,
+      "timestamp_ms": 278972,
+      "sample_ms": 619,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765928124,
+      "bytes": 10000,
+      "total_ms": 2245.56,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "aee0300627a56ff26b322ae720ac24efc9da96f132dd113bd08c320e0ad17145",
+      "frame_id": 604,
+      "timestamp_ms": 281437,
+      "sample_ms": 619,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765928167,
+      "bytes": 10000,
+      "total_ms": 21.628,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "aee0300627a56ff26b322ae720ac24efc9da96f132dd113bd08c320e0ad17145",
+      "frame_id": 604,
+      "timestamp_ms": 281437,
+      "sample_ms": 619,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765928372,
+      "bytes": 10000,
+      "total_ms": 20.938,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "aee0300627a56ff26b322ae720ac24efc9da96f132dd113bd08c320e0ad17145",
+      "frame_id": 604,
+      "timestamp_ms": 281437,
+      "sample_ms": 619,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765928588,
+      "bytes": 9999,
+      "total_ms": 21.959,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "7ce1fc1fc40ddb65cd4ac6ce8150fafe85ac1669f70ab63b2580ff498a260282",
+      "frame_id": 605,
+      "timestamp_ms": 282051,
+      "sample_ms": 614,
+      "connected": 1
+    },
+    {
+      "url": "http://169.254.47.63/api/preview",
+      "kind": "preview",
+      "status": 200,
+      "seen_node_ms": 1793765928790,
+      "bytes": 9999,
+      "total_ms": 23.098,
+      "width": 96,
+      "height": 96,
+      "pixel_sha256": "7ce1fc1fc40ddb65cd4ac6ce8150fafe85ac1669f70ab63b2580ff498a260282",
+      "frame_id": 605,
+      "timestamp_ms": 282051,
+      "sample_ms": 614,
+      "connected": 1
+    }
+  ],
+  "errors": [
+    {
+      "request": "http://169.254.47.63/api/preview",
+      "failure": {
+        "errorText": "net::ERR_ABORTED"
+      }
+    }
+  ]
+}

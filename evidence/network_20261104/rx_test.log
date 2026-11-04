@@ -1,0 +1,2 @@
+PASS RX: four slots, full drop, tails 0/1/2/3, minimum IFG, 16 pointer wraps, 1500 bytes, reset
+D:\FPGA\netfix04\evidence\network_20261104\tb_rx.v:49: $finish called at 88360000 (1ps)

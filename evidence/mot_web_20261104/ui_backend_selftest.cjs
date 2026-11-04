@@ -1,0 +1,21 @@
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const {chromium}=require('C:/Users/Makise Aohara/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+(async()=>{
+ const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+ const page=await browser.newPage({viewport:{width:1450,height:1100}});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ await page.request.post('http://127.0.0.1:8092/api/replay',{data:{scenario:'crossing',playing:false,index:20}});
+ await page.goto('http://127.0.0.1:8092/');await page.waitForFunction(()=>document.getElementById('position').textContent==='21 / 96');
+ assert.equal(await page.locator('#observed').innerText(),'2');assert.equal(await page.locator('#tracks tr[data-id]').count(),2);
+ assert.match(await page.locator('#metric-summary').innerText(),/61.4% → 85.2%/);
+ await page.screenshot({path:path.join(__dirname,'actual_backend_crossing.png'),fullPage:true});
+ await page.request.post('http://127.0.0.1:8092/api/replay',{data:{scenario:'occlusion',playing:false,index:35}});
+ await page.waitForFunction(()=>document.getElementById('scenario').value==='occlusion'&&document.getElementById('position').textContent==='36 / 96');
+ assert.equal(await page.locator('#observed').innerText(),'0');assert.equal(await page.locator('#coasting').innerText(),'1');
+ assert((await page.request.post('http://127.0.0.1:8092/api/replay',{data:{scenario:'recorded_two_person',playing:false,index:20}})).ok());
+ await page.waitForFunction(()=>document.getElementById('source').textContent.includes('已录制'));
+ assert.match(await page.locator('#metric-summary').innerText(),/未标注真人真值/);
+ await page.screenshot({path:path.join(__dirname,'actual_backend_recording.png'),fullPage:true});
+ assert.deepStrictEqual(errors,[]);
+ const result={passed:true,checks:['actual C replay yields two people and independent IDs','visible baseline/current metrics','real occlusion excludes coasting from count','recording provenance and accuracy limitation','no browser errors']};
+ fs.writeFileSync(path.join(__dirname,'ui_backend_selftest.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

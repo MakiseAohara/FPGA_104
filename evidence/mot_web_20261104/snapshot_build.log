@@ -1,0 +1,3 @@
+net_test_api.c
+D:\FPGA\motweb04\evidence\mot_web_20261104\../v30_mot/net_core_impl.h(28): warning C4244: “=”: 从“uint16_t”转换到“uint8_t”，可能丢失数据
+  正在创建库 net_test.lib 和对象 net_test.exp

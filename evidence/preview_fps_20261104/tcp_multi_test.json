@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "checks": [
+    "two simultaneous SYNs accepted; duplicate SYN uses its existing slot",
+    "periodic service fairly fills both two-MSS flights without ACKs",
+    "concurrent complete HTML/binary responses own immutable copies of a shared callback buffer",
+    "one unacknowledged client cannot block another; its oldest packet retransmits independently",
+    "simultaneous retransmission deadlines are served in round-robin order",
+    "third SYN at capacity cannot overwrite either live connection or response",
+    "RST closes only its own slot; freed slot is reusable without changing the surviving response",
+    "lost FIN ACK remains isolated while the other HTML transfer finishes",
+    "SYN-ACK retransmission for a half-open slot does not block the other client",
+    "receive windows and cumulative ACK progress are independent for each connection",
+    "same source port on different client IPs selects distinct connection slots",
+    "expired idle slot is reusable while another live slot is preserved",
+    "NET_CONN_COUNT=1 rollback retains single-slot isolation and reuse"
+  ],
+  "native_size_bytes": {
+    "1": 33944,
+    "2": 67824
+  },
+  "hardware_measurement": false
+}

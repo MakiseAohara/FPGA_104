@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "manual_picture_confirmation": false,
+  "samples": [
+    {
+      "endpoint": "pc",
+      "frame_id": 327,
+      "timestamp_ms": 239475,
+      "sample_ms": 293,
+      "people_count": 0,
+      "packet_bytes": 10112,
+      "transfer_ms": 14.5,
+      "age_ms": 68,
+      "attempt": 1
+    },
+    {
+      "endpoint": "pc",
+      "frame_id": 327,
+      "timestamp_ms": 239475,
+      "sample_ms": 293,
+      "people_count": 0,
+      "packet_bytes": 10113,
+      "transfer_ms": 25.67,
+      "age_ms": 345,
+      "attempt": 1
+    },
+    {
+      "endpoint": "pc",
+      "frame_id": 328,
+      "timestamp_ms": 239872,
+      "sample_ms": 397,
+      "people_count": 0,
+      "packet_bytes": 10112,
+      "transfer_ms": 1.26,
+      "age_ms": 41,
+      "attempt": 1
+    },
+    {
+      "endpoint": "pc",
+      "frame_id": 329,
+      "timestamp_ms": 240431,
+      "sample_ms": 559,
+      "people_count": 0,
+      "packet_bytes": 10111,
+      "transfer_ms": 20.56,
+      "age_ms": 6,
+      "attempt": 1
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 333,
+      "timestamp_ms": 242029,
+      "sample_ms": 332,
+      "people_count": 0,
+      "packet_bytes": 9998,
+      "transfer_ms": 1044.26,
+      "age_ms": null,
+      "attempt": 1
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 333,
+      "timestamp_ms": 242029,
+      "sample_ms": 332,
+      "people_count": 0,
+      "packet_bytes": 9998,
+      "transfer_ms": 28.85,
+      "age_ms": null,
+      "attempt": 1
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 336,
+      "timestamp_ms": 243340,
+      "sample_ms": 331,
+      "people_count": 0,
+      "packet_bytes": 9998,
+      "transfer_ms": 1045.03,
+      "age_ms": null,
+      "attempt": 1
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 339,
+      "timestamp_ms": 244582,
+      "sample_ms": 289,
+      "people_count": 0,
+      "packet_bytes": 9998,
+      "transfer_ms": 1038.23,
+      "age_ms": null,
+      "attempt": 1
+    }
+  ],
+  "checks": [
+    "pc: same shared HTML 46c1b4324ade55e258f5d69cd2b9a62b341781b6fc02f77077424840053d7f2c",
+    "pc: four valid lossless state/image pairs; unique captures 3",
+    "board: same shared HTML 46c1b4324ade55e258f5d69cd2b9a62b341781b6fc02f77077424840053d7f2c",
+    "board: four valid lossless state/image pairs; unique captures 3"
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "method": "Edge canvas drawImage completion (Image or Canvas source); unique DOM snapshot IDs, not page timers",
+  "captured_at": "2026-11-04T04:18:18.300Z",
+  "pages": [
+    {
+      "name": "pc",
+      "measurement_seconds": 20.014700000002982,
+      "wall_ms": 20023,
+      "draw_completions": 97,
+      "unique_frame_ids": 24,
+      "repeated_draws": 73,
+      "unidentified_draws": 0,
+      "repeat_fraction": 0.7525773195876289,
+      "unique_frames_per_window_second": 1.1991186477936928,
+      "steady_unique_fps": 1.1859093346538487,
+      "unique_frame_ids_displayed": [
+        "554",
+        "559",
+        "560",
+        "561",
+        "566",
+        "567",
+        "569",
+        "570",
+        "571",
+        "573",
+        "574",
+        "576",
+        "577",
+        "578",
+        "579",
+        "580",
+        "581",
+        "582",
+        "583",
+        "584",
+        "585",
+        "586",
+        "587",
+        "588"
+      ],
+      "unique_image_contents": 24,
+      "canvas_source_draws": 97,
+      "image_source_draws": 0,
+      "packed_requests": 98,
+      "image_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "state_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "preview_total_ms": {
+        "median": 1.678,
+        "p95": 2.061
+      },
+      "inter_unique_frame_ms": {
+        "median": 616.7000000029802,
+        "p95": 1837
+      },
+      "errors": [],
+      "responses_failed": 0
+    },
+    {
+      "name": "board",
+      "measurement_seconds": 10.00979999999702,
+      "wall_ms": 10010,
+      "draw_completions": 12,
+      "unique_frame_ids": 6,
+      "repeated_draws": 6,
+      "unidentified_draws": 0,
+      "repeat_fraction": 0.5,
+      "unique_frames_per_window_second": 0.5994125756760161,
+      "steady_unique_fps": 0.5130309870716191,
+      "unique_frame_ids_displayed": [
+        "589",
+        "590",
+        "599",
+        "600",
+        "604",
+        "605"
+      ],
+      "unique_image_contents": 6,
+      "canvas_source_draws": 12,
+      "image_source_draws": 0,
+      "packed_requests": 12,
+      "image_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "state_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "preview_total_ms": {
+        "median": 23.098,
+        "p95": 2245.56
+      },
+      "inter_unique_frame_ms": {
+        "median": 962.1000000089407,
+        "p95": 5612.79999999702
+      },
+      "errors": [
+        {
+          "request": "http://169.254.47.63/api/preview",
+          "failure": {
+            "errorText": "net::ERR_ABORTED"
+          }
+        }
+      ],
+      "responses_failed": 0
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+PASS complete 11860-byte page, segmented GET, SYN/data/FIN loss, ACK and connection isolation
+PASS status JSON
+PASS complete PNG, cache-busting query, all chunk CRCs and decompressed pixels
+PASS 404, corrupted checksum and truncated packet rejection

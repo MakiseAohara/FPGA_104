@@ -1,0 +1,65 @@
+[
+  {
+    "id": "parallel",
+    "name": "双人并行",
+    "source": "offline_synthetic",
+    "frames": 96,
+    "notes": "合成矩形目标；不是现场人体精度"
+  },
+  {
+    "id": "crossing",
+    "name": "双人交会",
+    "source": "offline_synthetic",
+    "frames": 96,
+    "notes": "合成矩形目标；不是现场人体精度"
+  },
+  {
+    "id": "occlusion",
+    "name": "短时遮挡",
+    "source": "offline_synthetic",
+    "frames": 96,
+    "notes": "合成矩形目标；不是现场人体精度"
+  },
+  {
+    "id": "stop_turn",
+    "name": "停止与折返",
+    "source": "offline_synthetic",
+    "frames": 96,
+    "notes": "合成矩形目标；不是现场人体精度"
+  },
+  {
+    "id": "variable",
+    "name": "不均匀采样",
+    "source": "offline_synthetic",
+    "frames": 96,
+    "notes": "合成矩形目标；不是现场人体精度"
+  },
+  {
+    "id": "lighting",
+    "name": "光照变化空场",
+    "source": "offline_synthetic",
+    "frames": 96,
+    "notes": "合成矩形目标；不是现场人体精度"
+  },
+  {
+    "id": "recorded_scene",
+    "name": "历史实拍：六段场景（稀疏）",
+    "source": "offline_recording",
+    "frames": 329,
+    "notes": "真实 96×96 设备记录，约 3.26 秒转储一帧，含阶段间断。AI 分数是模型输出，-128 可能为暂停推理哨兵，均非人工真值。无逐帧人工框/身份标签，红外未随像素保存；旧 ai.txt/ir.txt 的 90/3 是脚本固定输入，已弃用。不能用于 400ms 预测精度结论。"
+  },
+  {
+    "id": "recorded_walk",
+    "name": "历史实拍：单人走动（缩略图）",
+    "source": "offline_recording",
+    "frames": 79,
+    "notes": "历史板端 48×48 缩略图 ×2 最近邻放大，约 1.6–1.9 秒转储一帧。名称来自操作记录，不是逐帧人体身份或框真值。AI 输出不是人工标签，红外缺失；旧固定 90/3 输入弃用。不能用于 400ms 预测精度结论。"
+  },
+  {
+    "id": "recorded_two_person",
+    "name": "历史实拍：双人片段（缩略图）",
+    "source": "offline_recording",
+    "frames": 93,
+    "notes": "历史板端 48×48 缩略图 ×2 最近邻放大，约 1.6–1.9 秒转储一帧。名称来自操作记录，不是逐帧人体身份或框真值。AI 输出不是人工标签，红外缺失；旧固定 90/3 输入弃用。不能用于 400ms 预测精度结论。"
+  }
+]

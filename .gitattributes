@@ -1,1 +1,7 @@
 ﻿*.bit binary
+*.bin binary
+*.elf binary
+*.zip binary
+*.png binary
+tools/page.html text eol=lf
+evidence/v30_mot/page_html.h text eol=lf

@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "fixture_sha256": "b689b9d46a971d0352a3dd47ccc54575b4e4ef97484aff44877184383611becc",
+  "fixture_bytes": 9332,
+  "checked_pixels": 9216,
+  "packed_requests": 15,
+  "state_requests_in_packed_mode": 0,
+  "separate_images_in_packed_mode": 0,
+  "checks": [
+    "real C fixture is consumed by the browser in one response",
+    "all 9216 rendered Gray8 pixels and alpha match the C fixture exactly",
+    "square fixture has correct 960x540 letterbox geometry",
+    "repeated packed responses repaint but are excluded from unique capture FPS",
+    "physical 16:9 aspect is restored from packed metadata",
+    "packed mode does not request a second state or PNG",
+    "new capture IDs increase measured unique frame FPS",
+    "mismatched packet/JSON capture IDs and truncated payload are rejected",
+    "malformed packet never replaces the last complete displayed image",
+    "legacy 404 probes packed support once then displays state/PNG normally",
+    "no uncaught JavaScript errors"
+  ]
+}

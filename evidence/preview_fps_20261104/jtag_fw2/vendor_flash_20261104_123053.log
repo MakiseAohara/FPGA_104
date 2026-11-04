@@ -1,0 +1,17 @@
+Using board profile: 'Generic Board Profile Using FT4232H' for pinout connection
+Connecting to JTAG_TAP: efx_ti
+jtag programming started!
+JTAG Programming on hiftdi://0x0403:0x6011/1
+Programming 'D:\FPGA\netfix04\evidence\network_20261104\builds\netfix04_rxq2\netfix04_rxq2_seed1.bit' via JTAG at freq 6.0 MHz
+Device ID read from JTAG: 0x10660A79
+... finished with JTAG programming
+file   : D:\FPGA\netfix04\evidence\network_20261104\builds\netfix04_rxq2\netfix04_rxq2_seed1.bit
+size   : 2858286
+mtime  : 11/04/2026 00:53:30
+sha256 : 865458AB2AF51C366AAA2C22DCFA3312F4AB104E90680185BC90F58BDF0E69F5
+mode   : jtag (JTAG 临时加载，未写 SPI 闪存)
+board  : Generic Board Profile Using FT4232H
+usb    : hiftdi://0x0403:0x6011/1
+expect : Device ID read from JTAG: 0x10660A79 + finished with JTAG programming
+nativeExit: 0
+ts     : 20261104_123053

@@ -1,0 +1,13 @@
+{
+  "EfxSapphireSoc.v_toplevel_system_ramA_logic_ram_symbol0.bin": "3a02062157e45e60826e8bbe7845918d9d2035d7a625f3e67b7f2f26a6662574",
+  "EfxSapphireSoc.v_toplevel_system_ramA_logic_ram_symbol1.bin": "565c9453bce9dfbb1ee3e2883872d6908f7787b5a7dfe73ef095e2a05e5b31d7",
+  "EfxSapphireSoc.v_toplevel_system_ramA_logic_ram_symbol2.bin": "6b57710bf2a32ce149c8170d60bb116a41808eddb02cdbec0a38308f06969c4f",
+  "EfxSapphireSoc.v_toplevel_system_ramA_logic_ram_symbol3.bin": "d755171c6ce0b74340a4cbf3e07d5624d5f3dbdeb86728ccdee74497d4462453",
+  "font8x16.hex": "356658e2d36037b0456f6e22ee3999151100094cd898e398a784c61760cd4f58",
+  "osd_demo_text.hex": "7ddbe25cd033bbaf708d0f7308a5f78d85a8124387f4fd12f7d20fe5b693eb74",
+  "Panel_1080p_reg.mem": "1b192b20b57bda019d39b24126789c582ae5da0b9df5395152854a8c2c4576b7",
+  "ti60f225_oob.peri.xml": "f7a03c225a2c39330cfef8f581293a6840fa3fb65df65ad2a0368710556d98b6",
+  "ti60f225_oob.sdc": "a0e67b081ed99f3893f451beb30fc9388f81d8f93ebf1ecd98311f5fb2ac5106",
+  "ti60f225_oob.xml": "b11e3c5545279e59264ca0b7a827eb48d3847341499a46011fad9e09fc385a8f",
+  "v7_font8x16.hex": "dbf48a788166882997b78b93e7398578847fa461c20c8a9d6dd71f5ced524957"
+}

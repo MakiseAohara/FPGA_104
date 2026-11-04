@@ -1,19 +1,14 @@
-# 先读这个（给 Codex）—— 10/27 更新（Claude / Kevin）
+# 当前工程入口（2026-11-04）
 
-## 现在要做的(按顺序)
-按 comms/STATUS.md 最后一行和 10/27 总任务执行:
-1. 烧录 evidence/v27_rtl_ir/v7_MERGE15.bit(SHA256 74E205F8…13AF40),再加载 v26 固件(CRC32 B7CCB8D0)。
-2. 冒烟测试四条:HDMI/OSD 正常;人入画报警、离开释放;串口 MMT_DEC 持续且帧率约 60;空场 30 秒无报警。
-   任何一条不过,立刻刷回 v7_MERGE14.bit(SHA256 E399F990…A8B41FE8)并在 comms/codex/ 报告。
-3. 用 1512f07 的操作者面板做有真值重测(操作者点开始、按键标注),数据放 evidence/v27_gate/。
-4. 顺带记录红外:空场/有人时 irhot 的值,手机录 HDMI 红外热力图小窗,含手靠近 20 cm 的 10 秒。
-5. 在 comms/codex/ 写说明:冒烟是否通过、标注是否齐全、红外观察、异常。判定留给 Claude。
+先读 `docs/HANDOFF_2026-11-04.md`，以当前用户任务为准。10/27的旧实测安排保存在 `docs/history/AGENTS_2026-10-27.md`，不能当作当前板卡状态或默认执行步骤。
 
-## 不做
-VIO/LA/白平衡/曝光/AE;不改固件;不重新编译 RTL;不自行调红外参数。
+- 当前活动应用：`firmware/tinyml_pdti8.bin`，CRC32 `B42CC161`；源码入口 `evidence/v30_mot/main_live30.cc`、`build_v30.py`。
+- 活动网络位流：`firmware/netfix04_rxq2_seed1.bit`，SHA256 `865458AB2AF51C366AAA2C22DCFA3312F4AB104E90680185BC90F58BDF0E69F5`。
+- PC 169.254.47.62:8090；板内169.254.47.63:80。共享网页是 `tools/page.html`；改动后运行 `tools/embed_page.py` 并重编应用，两端一起验证。
+- 真正的源帧率按新capture ID及像素内容统计，重复刷新缓存图不算新帧。合成算法指标与无人工真值的历史实拍回归须分别报告。
+- 白平衡仍为344/280/368；红外是未完成校准的相对热变化/估算温度，45℃为限幅。不能声称这些问题已修好。
+- 固定左右拼接已修正，读图基址为0x017E9200，行距1920，bank间距8294912。勿沿用旧的半跨度计算。
+- 实际Efinity工程上下文见 `evidence/network_20261104/project_settings/`；位流来自seed1补跑，命令与日志见对应builds/reproduction目录。根目录历史工程不自动等同当前已加载工程。
+- 本轮使用JTAG临时加载和UART RAM应用，未写SPI。旧版本与回退包均保留。避免占用正在运行的串口；串口协议没有块序号，丢ACK时不能盲目重发已发送块。
 
-## 卡住时
-单个障碍超过 15 分钟:在 comms/codex/ 写清做了什么、卡在哪、需要谁回答什么,然后做下一项,不要等。
-
-## 约定
-证据只放 evidence/,判断与建议只放 comms/。
+证据放在 `evidence/`，结论与交接说明放在 `comms/` 或 `docs/`。先核对实际文件哈希及运行记录，再开展当前用户授权的工作。

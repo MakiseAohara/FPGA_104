@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "page_bytes": 24179,
+  "checks": [
+    "authoritative 2-person count",
+    "stale count withheld",
+    "16:9 camera coordinate mapping",
+    "fullscreen",
+    "observed/coasting separated",
+    "velocity uses canonical time step",
+    "square/wide image contain mapping",
+    "offline provenance and simulated action",
+    "ID selection",
+    "pause/scenario/seek controls",
+    "metrics endpoint",
+    "mobile overflow",
+    "legacy firmware without invented tracks",
+    "no JavaScript errors"
+  ],
+  "requests": 4,
+  "posts": [
+    {
+      "playing": false
+    },
+    {
+      "scenario": "occlusion",
+      "index": 0
+    },
+    {
+      "playing": false,
+      "index": 12
+    }
+  ]
+}

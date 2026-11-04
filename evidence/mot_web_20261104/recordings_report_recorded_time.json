@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "evaluation_mode": "recorded_sparse_time",
+  "header_sha256": {
+    "baseline": "0eed2661aa455b4a6cbc3c086f503f8a539e654f7ee589e67b08b000b817fcaa",
+    "optimized": "3ef1cb2c3968a888239ec31aa4e6ff63ad213e510b445c5e13850f1b239adc5a"
+  },
+  "source_index": "D:\\FPGA\\motweb04\\evidence\\mot_web_20261104\\recordings_index.json",
+  "physical_400ms_accuracy_measurable": false,
+  "datasets": [
+    {
+      "id": "recorded_scene",
+      "input_frames": 329,
+      "sampling": {
+        "median_ms": 3260.0,
+        "min_ms": 2802,
+        "max_ms": 9802,
+        "nominal_400ms_future_pairs": 0
+      },
+      "source": "offline_recording",
+      "human_box_or_id_ground_truth": false,
+      "evidence_input": "observed classifier scores, unknown IR=0; no inferred person labels",
+      "variants": {
+        "baseline": {
+          "frames": 329,
+          "confirmed_ids": 5,
+          "confirmed_track_frames": 203,
+          "frames_with_observed_confirmed_track": 164,
+          "output_coverage_pct": 49.848,
+          "personlike_output_coverage_pct": 25.836,
+          "frames_with_two_personlike_outputs": 2,
+          "frames_with_two_confirmed_tracks": 6,
+          "average_observed_tracks": 0.5076,
+          "average_detection_count": 0.6444,
+          "prediction_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "stationary_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "lookahead_replay_samples": null,
+          "caveat": "Output-coverage/ID counts are regression proxies, not recall/ID switches. Same-ID future observation is tracker-derived, not independent ground truth; pair sets differ across variants."
+        },
+        "optimized": {
+          "frames": 329,
+          "confirmed_ids": 13,
+          "confirmed_track_frames": 142,
+          "frames_with_observed_confirmed_track": 99,
+          "output_coverage_pct": 30.091,
+          "personlike_output_coverage_pct": 20.669,
+          "frames_with_two_personlike_outputs": 3,
+          "frames_with_two_confirmed_tracks": 8,
+          "average_observed_tracks": 0.31,
+          "average_detection_count": 0.9422,
+          "prediction_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "stationary_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "lookahead_replay_samples": null,
+          "caveat": "Output-coverage/ID counts are regression proxies, not recall/ID switches. Same-ID future observation is tracker-derived, not independent ground truth; pair sets differ across variants."
+        }
+      }
+    },
+    {
+      "id": "recorded_walk",
+      "input_frames": 79,
+      "sampling": {
+        "median_ms": 1777.5,
+        "min_ms": 1378,
+        "max_ms": 3607,
+        "nominal_400ms_future_pairs": 0
+      },
+      "source": "offline_recording",
+      "human_box_or_id_ground_truth": false,
+      "evidence_input": "observed classifier scores, unknown IR=0; no inferred person labels",
+      "variants": {
+        "baseline": {
+          "frames": 79,
+          "confirmed_ids": 4,
+          "confirmed_track_frames": 59,
+          "frames_with_observed_confirmed_track": 38,
+          "output_coverage_pct": 48.101,
+          "personlike_output_coverage_pct": 24.051,
+          "frames_with_two_personlike_outputs": 3,
+          "frames_with_two_confirmed_tracks": 14,
+          "average_observed_tracks": 0.5823,
+          "average_detection_count": 0.9747,
+          "prediction_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "stationary_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "lookahead_replay_samples": null,
+          "caveat": "Output-coverage/ID counts are regression proxies, not recall/ID switches. Same-ID future observation is tracker-derived, not independent ground truth; pair sets differ across variants."
+        },
+        "optimized": {
+          "frames": 79,
+          "confirmed_ids": 6,
+          "confirmed_track_frames": 35,
+          "frames_with_observed_confirmed_track": 22,
+          "output_coverage_pct": 27.848,
+          "personlike_output_coverage_pct": 13.924,
+          "frames_with_two_personlike_outputs": 2,
+          "frames_with_two_confirmed_tracks": 4,
+          "average_observed_tracks": 0.3038,
+          "average_detection_count": 1.038,
+          "prediction_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "stationary_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "lookahead_replay_samples": null,
+          "caveat": "Output-coverage/ID counts are regression proxies, not recall/ID switches. Same-ID future observation is tracker-derived, not independent ground truth; pair sets differ across variants."
+        }
+      }
+    },
+    {
+      "id": "recorded_two_person",
+      "input_frames": 93,
+      "sampling": {
+        "median_ms": 1659.5,
+        "min_ms": 1367,
+        "max_ms": 3377,
+        "nominal_400ms_future_pairs": 0
+      },
+      "source": "offline_recording",
+      "human_box_or_id_ground_truth": false,
+      "evidence_input": "observed classifier scores, unknown IR=0; no inferred person labels",
+      "variants": {
+        "baseline": {
+          "frames": 93,
+          "confirmed_ids": 3,
+          "confirmed_track_frames": 123,
+          "frames_with_observed_confirmed_track": 75,
+          "output_coverage_pct": 80.645,
+          "personlike_output_coverage_pct": 46.237,
+          "frames_with_two_personlike_outputs": 2,
+          "frames_with_two_confirmed_tracks": 35,
+          "average_observed_tracks": 1.043,
+          "average_detection_count": 1.4086,
+          "prediction_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "stationary_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "lookahead_replay_samples": null,
+          "caveat": "Output-coverage/ID counts are regression proxies, not recall/ID switches. Same-ID future observation is tracker-derived, not independent ground truth; pair sets differ across variants."
+        },
+        "optimized": {
+          "frames": 93,
+          "confirmed_ids": 5,
+          "confirmed_track_frames": 87,
+          "frames_with_observed_confirmed_track": 62,
+          "output_coverage_pct": 66.667,
+          "personlike_output_coverage_pct": 60.215,
+          "frames_with_two_personlike_outputs": 0,
+          "frames_with_two_confirmed_tracks": 10,
+          "average_observed_tracks": 0.6882,
+          "average_detection_count": 1.129,
+          "prediction_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "stationary_to_same_track_future_observation": {
+            "pairs": 0,
+            "median_px": null,
+            "mean_px": null
+          },
+          "lookahead_replay_samples": null,
+          "caveat": "Output-coverage/ID counts are regression proxies, not recall/ID switches. Same-ID future observation is tracker-derived, not independent ground truth; pair sets differ across variants."
+        }
+      }
+    }
+  ],
+  "notes": [
+    "No manually annotated boxes or person identities were found. Names/prompts do not prove per-frame labels.",
+    "Recordings are sparse (1.6–3.3s), not 200ms video. Normalized 200ms mode is a controlled algorithm regression and cannot claim real-world 400ms accuracy.",
+    "Old constant ai=90/ir=3 files are excluded. Actual classifier scores were recovered; IR is unknown and disabled.",
+    "Physical-time mode omits future-position error because no approximately 400ms target observation exists.",
+    "ID count reductions can hide tracking loss; always inspect output coverage alongside fragmentation proxies.",
+    "Do not claim MOTA, IDF1, ID-switch accuracy or real-person forecast accuracy from this report."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "method": "Edge canvas drawImage completion; unique snapshot IDs, not page timers",
+  "captured_at": "2026-11-04T04:02:24.221Z",
+  "pages": [
+    {
+      "name": "pc",
+      "measurement_seconds": 20.01960000000894,
+      "wall_ms": 20018,
+      "draw_completions": 20,
+      "unique_frame_ids": 3,
+      "repeated_draws": 17,
+      "repeat_fraction": 0.85,
+      "unique_frames_per_window_second": 0.1498531439188925,
+      "steady_unique_fps": 0.17926447784734426,
+      "unique_frame_ids_displayed": [
+        "25631",
+        "25679",
+        "25690"
+      ],
+      "unique_png_contents": 3,
+      "image_total_ms": {
+        "median": 1.883,
+        "p95": 2.202
+      },
+      "state_total_ms": {
+        "median": 3.354,
+        "p95": 4.016
+      },
+      "inter_unique_frame_ms": {
+        "median": 6091.29999999702,
+        "p95": 6091.29999999702
+      },
+      "errors": [],
+      "responses_failed": 0
+    },
+    {
+      "name": "board",
+      "measurement_seconds": 10.003,
+      "wall_ms": 10005,
+      "draw_completions": 3,
+      "unique_frame_ids": 3,
+      "repeated_draws": 0,
+      "repeat_fraction": 0,
+      "unique_frames_per_window_second": 0.29991002699190245,
+      "steady_unique_fps": 0.2691464021852529,
+      "unique_frame_ids_displayed": [
+        "25741",
+        "25756",
+        "25764"
+      ],
+      "unique_png_contents": 3,
+      "image_total_ms": {
+        "median": 1857.707,
+        "p95": 3650.993
+      },
+      "state_total_ms": {
+        "median": 38.727,
+        "p95": 1011.535
+      },
+      "inter_unique_frame_ms": {
+        "median": 4708.4000000059605,
+        "p95": 4708.4000000059605
+      },
+      "errors": [],
+      "responses_failed": 0
+    }
+  ]
+}

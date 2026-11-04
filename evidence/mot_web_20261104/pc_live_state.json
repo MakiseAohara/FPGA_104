@@ -1,0 +1,83 @@
+{
+  "person": 0,
+  "p": 61,
+  "f": 0,
+  "motion": 0,
+  "area": 1,
+  "irhot": 0,
+  "alarm": 0,
+  "fw_lp": 0,
+  "lowpwr": 1,
+  "paused": 1,
+  "camfps": 60,
+  "inf_hz": 0,
+  "sht": 234,
+  "rh": 650,
+  "body": 237,
+  "mot_nd": 0,
+  "mot_nt": 0,
+  "mot_conf": 0,
+  "mot_obs": 0,
+  "alarm_nd": 0,
+  "alarm_nt": 0,
+  "nt": 0,
+  "nd": 0,
+  "obs": 0,
+  "ir": 0,
+  "link": "板端 HTTP 同步",
+  "connected": true,
+  "thumb_ts": 137,
+  "uptime_ms": 137540,
+  "tracking": {
+    "schema": 1,
+    "source": "board_telemetry",
+    "frame_id": 45,
+    "timestamp_ms": 137635,
+    "sample_ms": 644,
+    "time_step_ms": 200,
+    "width": 96,
+    "height": 96,
+    "aspect_width": 1920,
+    "aspect_height": 1080,
+    "people_count": 0,
+    "capacity": 2,
+    "frame_aligned": true,
+    "frame_url": "/snapshot/frame.png?seq=45",
+    "horizon_steps": 2,
+    "horizon_ms": 400,
+    "roi": [
+      24,
+      24,
+      72,
+      72
+    ],
+    "tracks": [],
+    "prewarn": {
+      "active": false,
+      "id": 0,
+      "eta_steps": -1,
+      "action": "none"
+    },
+    "metrics": {
+      "observed": 0,
+      "retained": 0
+    }
+  },
+  "snapshot_transport": "board_http",
+  "snapshot_age_ms": 109,
+  "snapshot_error": "",
+  "events": [
+    {
+      "kind": "lowpwr_enter",
+      "ts": "2026-11-04T07:51:43",
+      "wall": 1793749903.9736407,
+      "time": "07:51:43",
+      "detail": {
+        "f": 0
+      },
+      "thumb": null
+    }
+  ],
+  "udp_events": 0,
+  "udp_heartbeats": 0
+}

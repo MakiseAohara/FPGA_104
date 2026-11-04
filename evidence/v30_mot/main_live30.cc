@@ -158,10 +158,11 @@
 #define LP_POLL_MS       500
 
 // ======================= 帧缓冲几何（v14/v15 原样） =======================
-#define FB_BASE      0x01000000u
-#define FB_FRAME_LEN (960u * 1080u * 4u + 0x200u)
-#define LIVE_BANK    2
-#define FB_ROW_BYTES 1920u
+#include "frame_layout.h"
+#define FB_BASE      MMT_FB_DDR_BASE
+#define FB_FRAME_LEN MMT_FB_BANK_STRIDE_BYTES
+#define LIVE_BANK    MMT_FB_CAPTURE_BANK
+#define FB_ROW_BYTES MMT_FB_ROW_BYTES
 
 // ======================= APB map（MERGE10/11） =======================
 #define APB_BASE      0xF8100000u
@@ -188,6 +189,9 @@
 #define APB_WB_SAT    R32(26)
 
 /* ---- v4.1 板内 HTTP：极简协议栈 + 页面/JSON/PNG ---- */
+#define MW_VIEW_WIDTH ((CROP_MODE==1)?1080:((CROP_MODE==2)?1620:1920))
+#define MW_VIEW_HEIGHT 1080
+#include "mot_web_state.h"
 #define HTTP_APP_IMPL
 #define HTTP_APP_IMPL
 #include "http_app.h"
@@ -288,7 +292,7 @@ static int ge_send(const char* s, int len)
    f[18] = 0; f[19] = 0; f[20] = 0; f[21] = 0;
    f[22] = 64; f[23] = 17;
    f[24] = 0; f[25] = 0;
-   f[26] = 169; f[27] = 254; f[28] = 47; f[29] = 62;
+   f[26] = 169; f[27] = 254; f[28] = 47; f[29] = 63;
    /* v5.5：目的 IP 改广播。PC 侧经常换网卡（网口坏了改用 USB-C 网卡），
       IP 不再是 169.254.47.61；板子发到 255.255.255.255:8080 后，任何一块网卡上的 8080 监听都能收到。
       帧的 MAC 本来就是广播，改成广播 IP 更一致。 */
@@ -348,6 +352,12 @@ static int ge_send(const char* s, int len)
 #endif
 #ifndef DBG_THUMB_DUMP
 #define DBG_THUMB_DUMP 0   /* 1=每帧打印 9216 B 十六进制（会拖慢主循环、影响板内 HTTP） */
+#endif
+#ifndef DBG_IMAGE_DUMP
+#define DBG_IMAGE_DUMP 0   /* Enable only for explicit serial image diagnostics. */
+#endif
+#ifndef DBG_NET_RX
+#define DBG_NET_RX 0       /* Per-packet UART output blocks image transport. */
 #endif
 
 static uint32_t g_ev_id = 0;
@@ -439,7 +449,10 @@ static unsigned char ge_rx[1600];
 static net_t   g_net;
 static unsigned char g_net_out[1600];
 static char    g_status_json[512];
+static char    g_tracking_json[8192];
+static uint32_t g_mot_stamp_ms=0;
 static http_state_t g_hstate;
+static int g_http_ready=0;
 
 static int ge_http_init(void)
 {
@@ -448,7 +461,7 @@ static int ge_http_init(void)
    for (i = 0; i < 6; ++i) cfg.mac[i] = 0;
    cfg.mac[0] = 0x00; cfg.mac[1] = 0x0a; cfg.mac[2] = 0x35;
    cfg.mac[3] = 0x01; cfg.mac[4] = 0xfe; cfg.mac[5] = 0xc0;
-   cfg.ip[0] = 169; cfg.ip[1] = 254; cfg.ip[2] = 47; cfg.ip[3] = 62;
+   cfg.ip[0] = 169; cfg.ip[1] = 254; cfg.ip[2] = 47; cfg.ip[3] = 63;
    cfg.port = 80;
    {
       static net_cb_t cb;
@@ -460,7 +473,9 @@ static int ge_http_init(void)
    g_hstate.events_json = "[]";
    g_hstate.thumb = g_thumb;
    g_hstate.thumb_w = 96; g_hstate.thumb_h = 96;
+   g_hstate.tracking_json=g_tracking_json;
    http_set_state(&g_hstate);
+   g_http_ready=1;
    return 0;
 }
 
@@ -486,6 +501,7 @@ static int ge_rx_poll(void)
       ge_rx[n + 2] = (unsigned char)((w >> 16) & 0xFF);
       ge_rx[n + 3] = (unsigned char)((w >> 24) & 0xFF);
    }
+   R32(29) = 8u;  /* release queue head only after reading every word */
    return words * 4;
 }
 
@@ -535,7 +551,7 @@ static int ge_rx_align(const unsigned char* b, int n)
       if (b[i] != 0xD5) continue;
       for (k = 1; k <= 6; ++k) {
          const unsigned char c = b[i + k];
-         if (c != 0xFF && c != b[i + k]) break;
+         if (c != 0xFF && c != g_net.cfg.mac[k - 1]) break;
       }
       if (k > 6) return i + 1;
       /* 退一步：只要求 0xD5 后面 6 字节大多数是 0xFF（ARP 广播） */
@@ -551,6 +567,7 @@ static int ge_rx_align(const unsigned char* b, int n)
 /* 板内 HTTP 服务：收帧 -> net_input -> 回包；顺便处理重传 */
 static void ge_http_service(int now)
 {
+   if (GE_BUSY()) return;
    int fn = ge_rx_poll();
    if (fn > 0) {
       const int off = ge_rx_align(ge_rx, fn);
@@ -558,7 +575,8 @@ static void ge_http_service(int now)
       if (off > 0) { fn -= off; memmove(ge_rx, ge_rx + off, (size_t)fn); }
       else off_used = -1;
       int rn = net_input(&g_net, ge_rx, fn, g_net_out, (int)sizeof(g_net_out), (uint32_t)now);
-      /* 临时诊断：看固件到底有没有收到帧、有没有回包 */
+      /* Explicit diagnostics only: normal preview must not block on UART. */
+#if DBG_NET_RX
       {
          static int dbg_n = 0;
          if ((dbg_n++ % 3) == 0) {
@@ -569,7 +587,8 @@ static void ge_http_service(int now)
                        (fn > 0) ? 0 : 0, rn, w0, w1);
          }
       }
-      if (rn > 0) ge_send_raw(g_net_out, rn);
+#endif
+      if (rn > 0) { ge_send_raw(g_net_out, rn); return; }
    }
    {
       int tn = net_tick(&g_net, g_net_out, (int)sizeof(g_net_out), (uint32_t)now);
@@ -665,7 +684,11 @@ static uint64_t now_ms(void)
 static void delay_ms(uint32_t ms)
 {
    const uint64_t t0 = now_ms();
-   while ((now_ms() - t0) < (uint64_t)ms) { }
+   uint64_t polled=t0;
+   while ((now_ms() - t0) < (uint64_t)ms) {
+      uint64_t t=now_ms();
+      if(g_http_ready && t-polled>=2) {ge_http_service((int)t);polled=t;}
+   }
 }
 
 // ===========================================================================
@@ -783,6 +806,12 @@ static uint32_t g_fb_base;
 static unsigned char fb_get(void* ctx, int x, int y)
 {
    (void)ctx;
+   /* DDR sampling performs >300k byte reads. Service TCP between small
+    * batches so picture acquisition cannot hold ACKs or fill the RX queue.
+    * HTTP serves the previous fully published g_thumb/MOT snapshot here;
+    * mot_img/model_input are scratch buffers until mot_track_frame commits. */
+   static uint32_t sampled_reads=0;
+   if(g_http_ready && ((++sampled_reads & 4095u)==0u))ge_http_service((int)now_ms());
    return *((const volatile unsigned char*)(g_fb_base + (uint32_t)y * FB_ROW_BYTES + (uint32_t)x));
 }
 
@@ -1086,7 +1115,14 @@ static void mot_track_frame(uint32_t frame)
 {
 #if MOT_ON
    int k, pre = 0, eta = -1, id = 0, nconf = 0;
-   mot_step(&g_mot, &g_motw, (const unsigned char*)mot_img, g_last_ai_p, ir_cnt10);
+   const uint32_t timestamp=(uint32_t)now_ms();
+   const uint32_t sample_ms=g_mot_stamp_ms ? timestamp-g_mot_stamp_ms : MOT_TIME_STEP_MS;
+   g_mot_stamp_ms=timestamp;
+   mot_step_timed(&g_mot, &g_motw, (const unsigned char*)mot_img, g_last_ai_p, ir_cnt10,timestamp);
+   memcpy(g_thumb,mot_img,IMG_N);
+   mot_web_write(&g_mot,"board_telemetry",g_mot.frame,timestamp,(int)sample_ms,
+                 g_tracking_json,(int)sizeof(g_tracking_json));
+   g_hstate.frame_id=(uint32_t)g_mot.frame;
 
    for (k = 0; k < g_mot.n_trk; ++k) {
       const mot_trk_t* t = &g_mot.trk[k];
@@ -1095,13 +1131,13 @@ static void mot_track_frame(uint32_t frame)
       if (!t->supported) continue;      /* v1.8 #2：无支撑（sup>3 / hits<3 / 面积<80）的航迹不输出 */
       if (t->confirmed) nconf++;
       bsp_printf("MMT_TRK f=%d id=%d c=%d,%d b=%d,%d,%d,%d v16=%d,%d dir=%d "
-                 "hit=%d miss=%d conf=%d pred=%d,%d eta=%d\n\r",
+                 "hit=%d miss=%d conf=%d pred=%d,%d eta=%d seq=%d t=%d dt=%d step_ms=200 algorithm=timed_v1\n\r",
                  (int)frame, (int)t->id, (int)t->cx, (int)t->cy,
                  (int)t->x0, (int)t->y0, (int)t->x1, (int)t->y1,
                  (int)t->vx, (int)t->vy, (int)t->dir,
                  (int)t->hits, (int)t->misses, (int)t->confirmed,
-                 (int)t->px, (int)t->py, (int)t->eta);
-      if (t->supported && t->hits >= 1 && t->eta >= 0 && t->eta <= (MOT_HORIZON + 3) && !g_mot.shaking) {
+                 (int)t->px, (int)t->py, (int)t->eta,g_mot.frame,(int)timestamp,(int)sample_ms);
+      if (t->supported && !t->misses && t->eta > 0 && t->eta <= 3 && !g_mot.shaking) {
          pre = 1;
          if (eta < 0 || (int)t->eta < eta) { eta = (int)t->eta; id = (int)t->id; }
       }
@@ -1112,9 +1148,9 @@ static void mot_track_frame(uint32_t frame)
          "一个人显示两个人 / 人走了还显示一个人"。 */
       const int n_fresh = mot_fresh_confirmed(&g_mot);
       g_track_conf = n_fresh;
-      bsp_printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d raw=%d pre=%d pre_eta=%d obs=%d\n\r",
+      bsp_printf("MMT_MOT f=%d nd=%d nt=%d conf=%d area=%d raw=%d pre=%d pre_eta=%d obs=%d seq=%d t=%d dt=%d step_ms=200 algorithm=timed_v1\n\r",
                  (int)frame, g_mot.n_det, g_mot.n_trk, nconf, g_mot.last_area,
-                 g_mot.raw_area, pre, eta, n_fresh);
+                 g_mot.raw_area, pre, eta, n_fresh,g_mot.frame,(int)timestamp,(int)sample_ms);
    }
 
 #if MOT_PRE_ON
@@ -1179,6 +1215,7 @@ static void dec_log(uint32_t frame, int32_t score, int motion, int ir_hot,
 
 static void dump_image(const int8_t* img, uint32_t frame, int p)
 {
+#if DBG_IMAGE_DUMP
    int mn = 127, mx = -128;
    long sum = 0;
    for (int i = 0; i < IMG_N; ++i) {
@@ -1205,10 +1242,14 @@ static void dump_image(const int8_t* img, uint32_t frame, int p)
       line[11 + 192] = 0;
       bsp_printf("%s\n\r", line);
    }
+#else
+   (void)img;(void)frame;(void)p;
+#endif
 }
 
 static void dump_thumb(const int8_t* img, uint32_t frame, int p)
 {
+#if DBG_THUMB_DUMP
    static int8_t full[IMG_N];
    static char pixels[THUMB_W * THUMB_H * 2 + 1];
    static int  geo_done = 0;
@@ -1248,6 +1289,9 @@ static void dump_thumb(const int8_t* img, uint32_t frame, int p)
               (int)g_dec_ms, (int)frame, alarm_on, p, pixels);
 #else
    (void)pixels; (void)p;
+#endif
+#else
+   (void)img;(void)frame;(void)p;
 #endif
 }
 
@@ -1562,7 +1606,9 @@ static void ge_http_build_json(int now, int motion, int area, int irhot,
    d = ge_str(d, "{\"person\":");
    d = ge_num(d, (unsigned)(g_js_person ? 1 : 0));
    d = ge_str(d, ",\"p\":");
-   d = ge_num(d, (unsigned)(g_js_p & 0xFF));
+   if(g_js_p<0) { *d++='-'; d=ge_num(d,(unsigned)(-g_js_p)); }
+   else d=ge_num(d,(unsigned)g_js_p);
+   d = ge_str(d, ",\"f\":");d=ge_num(d,(unsigned)g_frame);
    d = ge_str(d, ",\"motion\":");
    d = ge_num(d, (unsigned)motion);
    d = ge_str(d, ",\"area\":");
@@ -1582,11 +1628,11 @@ static void ge_http_build_json(int now, int motion, int area, int irhot,
    d = ge_str(d, ",\"inf_hz\":");
    d = ge_num(d, (unsigned)inf_hz);
    d = ge_str(d, ",\"sht\":");
-   d = ge_num(d, (unsigned)(sht10 / 10));
+   d = ge_num(d, (unsigned)sht10);
    d = ge_str(d, ",\"rh\":");
-   d = ge_num(d, (unsigned)(rh10 / 10));
+   d = ge_num(d, (unsigned)rh10);
    d = ge_str(d, ",\"body\":");
-   d = ge_num(d, (unsigned)(body10 / 10));
+   d = ge_num(d, (unsigned)body10);
    d = ge_str(d, ",\"mot_nd\":");
    d = ge_num(d, (unsigned)g_mot.n_det);
    d = ge_str(d, ",\"mot_nt\":");
@@ -1599,10 +1645,14 @@ static void ge_http_build_json(int now, int motion, int area, int irhot,
    d = ge_num(d, (unsigned)g_mot.n_det);
    d = ge_str(d, ",\"alarm_nt\":");
    d = ge_num(d, (unsigned)g_mot.n_trk);
-   d = ge_str(d, ",\"connected\":1,\"thumb_ts\":");
+   d = ge_str(d, ",\"nt\":");d=ge_num(d,(unsigned)g_mot.n_trk);
+   d = ge_str(d, ",\"nd\":");d=ge_num(d,(unsigned)g_mot.n_det);
+   d = ge_str(d, ",\"obs\":");d=ge_num(d,(unsigned)g_track_conf);
+   d = ge_str(d, ",\"ir\":");d=ge_num(d,(unsigned)irhot);
+   d = ge_str(d, ",\"link\":\"FPGA\",\"connected\":1,\"thumb_ts\":");
    d = ge_num(d, (unsigned)(now / 1000));
-   d = ge_str(d, ",\"last\":");
-   d = ge_num(d, (unsigned)(EPOCH_BASE + now / 1000));
+   d = ge_str(d, ",\"uptime_ms\":");
+   d = ge_num(d, (unsigned)now);
    d = ge_str(d, "}");
    *d = 0;
 }
@@ -1648,6 +1698,8 @@ extern "C" int main()
    APB_CTRL = 0;
 
    g_fb_base = FB_BASE + (uint32_t)LIVE_BANK * FB_FRAME_LEN;
+   bsp_printf("MMT_FB_LAYOUT base=0x%x stride=%d row=%d bank=%d\n\r",(unsigned)g_fb_base,
+              (int)FB_FRAME_LEN,(int)FB_ROW_BYTES,(int)LIVE_BANK);
 
    /* v15 兼容：只读一次 VTS（MMT_CAM_VTS 行保持不变） */
    int      vts_ok = 0;
@@ -1775,11 +1827,7 @@ extern "C" int main()
          ge_http_build_json((int)t_now, motion, (int)area, ir_hot, (int)cam_fps,
                             (int)infer_hz, infer_paused, low_pwr,
                             (int)amb10, (int)rh10, (int)body10);
-         {
-            int q;
-            for (q = 0; q < IMG_N; ++q)
-               g_thumb[q] = (unsigned char)((int)input_snapshot[q] + 128);
-         }
+         /* g_thumb is captured with the MOT snapshot in mot_track_frame(). */
       }
    ge_http_service((int)t_now);
 #endif
@@ -1903,7 +1951,9 @@ extern "C" int main()
 
       const uint32_t ci0 = R32(6);
       const uint64_t t0 = clint_getTime(BSP_CLINT);
+      ge_http_service((int)now_ms());
       interpreter->Invoke();
+      ge_http_service((int)now_ms());
       const uint64_t t1 = clint_getTime(BSP_CLINT);
       const int p = interpreter->output(0)->data.int8[kPersonIndex];
       const int a = interpreter->output(0)->data.int8[kNotAPersonIndex];

@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "source": "synthetic exact row/column labels; shared C header addresses",
+  "rtl_bank_stride_bytes": 8294912,
+  "image_row_bytes": 1920,
+  "old_capture_base": "0x17e9400",
+  "correct_capture_base": "0x17e9200",
+  "old_bias_bytes": 512,
+  "legacy_join_x": 1408,
+  "legacy_join_width_fraction": 0.7333333333333333,
+  "legacy_rows_failing_full_row_oracle": 1080,
+  "correct_rows_failing_full_row_oracle": 0,
+  "before_join_cell": [
+    479,
+    31
+  ],
+  "after_join_cell": [
+    0,
+    32
+  ],
+  "manual_picture_confirmation": false
+}

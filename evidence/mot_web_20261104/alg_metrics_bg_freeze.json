@@ -1,0 +1,179 @@
+{
+  "source": "offline",
+  "scenarios": [
+    {
+      "id": "parallel",
+      "name": "双人并行",
+      "source": "offline_synthetic",
+      "baseline": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 171,
+        "truth_observations": 176,
+        "observed_recall": 0.9716,
+        "prediction_samples": 167,
+        "prediction_mae_px": 2.1719,
+        "prediction_p95_px": 3.1623,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      },
+      "optimized": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 171,
+        "truth_observations": 176,
+        "observed_recall": 0.9716,
+        "prediction_samples": 167,
+        "prediction_mae_px": 0.6766,
+        "prediction_p95_px": 1.0,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      }
+    },
+    {
+      "id": "crossing",
+      "name": "双人交会",
+      "source": "offline_synthetic",
+      "baseline": {
+        "id_switches": 1,
+        "false_tracks": 1,
+        "matched_observations": 108,
+        "truth_observations": 176,
+        "observed_recall": 0.6136,
+        "prediction_samples": 106,
+        "prediction_mae_px": 3.2264,
+        "prediction_p95_px": 11.0,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      },
+      "optimized": {
+        "id_switches": 2,
+        "false_tracks": 0,
+        "matched_observations": 161,
+        "truth_observations": 176,
+        "observed_recall": 0.9148,
+        "prediction_samples": 157,
+        "prediction_mae_px": 0.7834,
+        "prediction_p95_px": 3.0,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      }
+    },
+    {
+      "id": "occlusion",
+      "name": "短时遮挡",
+      "source": "offline_synthetic",
+      "baseline": {
+        "id_switches": 1,
+        "false_tracks": 3,
+        "matched_observations": 83,
+        "truth_observations": 85,
+        "observed_recall": 0.9765,
+        "prediction_samples": 79,
+        "prediction_mae_px": 2.3021,
+        "prediction_p95_px": 5.099,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      },
+      "optimized": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 84,
+        "truth_observations": 85,
+        "observed_recall": 0.9882,
+        "prediction_samples": 80,
+        "prediction_mae_px": 0.6125,
+        "prediction_p95_px": 2.0,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      }
+    },
+    {
+      "id": "stop_turn",
+      "name": "停止与折返",
+      "source": "offline_synthetic",
+      "baseline": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 87,
+        "truth_observations": 88,
+        "observed_recall": 0.9886,
+        "prediction_samples": 85,
+        "prediction_mae_px": 1.5722,
+        "prediction_p95_px": 4.1231,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      },
+      "optimized": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 87,
+        "truth_observations": 88,
+        "observed_recall": 0.9886,
+        "prediction_samples": 85,
+        "prediction_mae_px": 0.3647,
+        "prediction_p95_px": 2.0,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      }
+    },
+    {
+      "id": "variable",
+      "name": "不均匀采样",
+      "source": "offline_synthetic",
+      "baseline": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 87,
+        "truth_observations": 88,
+        "observed_recall": 0.9886,
+        "prediction_samples": 85,
+        "prediction_mae_px": 0.5528,
+        "prediction_p95_px": 2.0,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      },
+      "optimized": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 87,
+        "truth_observations": 88,
+        "observed_recall": 0.9886,
+        "prediction_samples": 85,
+        "prediction_mae_px": 0.4279,
+        "prediction_p95_px": 1.5714,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      }
+    },
+    {
+      "id": "lighting",
+      "name": "光照变化空场",
+      "source": "offline_synthetic",
+      "baseline": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 0,
+        "truth_observations": 0,
+        "observed_recall": null,
+        "prediction_samples": 0,
+        "prediction_mae_px": null,
+        "prediction_p95_px": null,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      },
+      "optimized": {
+        "id_switches": 0,
+        "false_tracks": 0,
+        "matched_observations": 0,
+        "truth_observations": 0,
+        "observed_recall": null,
+        "prediction_samples": 0,
+        "prediction_mae_px": null,
+        "prediction_p95_px": null,
+        "truth": "exact_synthetic",
+        "horizon_ms": 400
+      }
+    }
+  ]
+}

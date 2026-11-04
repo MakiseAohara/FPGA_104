@@ -1,75 +1,83 @@
-`timescale 1 ns / 1 ns
-module ge_raw_rx #(parameter AW = 9) (
-   input                 clk,
-   input      [31:0]     paddr,
-   input                 psel,
-   input                 penable,
-   input                 pwrite,
-   input      [31:0]     pwdata,
-   output reg [31:0]     prdata,
-   input                 rx_clk,
-   input                 rx_dv,
-   input      [7:0]      rxd
+`timescale 1ns/1ps
+// Four immutable frame slots; single writer per pointer, Gray CDC ownership.
+module ge_raw_rx #(parameter AW=9)(
+ input clk, rst_n,
+ input [31:0] paddr, input psel,penable,pwrite,
+ input [31:0] pwdata, output reg [31:0] prdata,
+ input rx_clk,rx_dv,input [7:0] rxd
 );
-   reg  [1:0]    bsel;
-   reg  [31:0]   wbuf;
-   reg  [AW-1:0] waddr;
-   reg           wr_en;
-   reg  [31:0]   wr_data;
-   reg  [AW-1:0] rd_addr;
-   wire [31:0]   rd_data;
-   reg           dv_d;
-   reg  [AW-1:0] last_words;
-   reg           rx_tgl;
-
-   ge_dpram32 #(.AW(AW)) u_rxbuf (
-      .wr_clk(rx_clk), .wr_en(wr_en), .wr_addr(waddr), .wr_data(wr_data),
-      .rd_clk(clk), .rd_addr(rd_addr), .rd_data(rd_data));
-
-   always @(posedge rx_clk) begin
-      dv_d       <= rx_dv;
-      wr_en      <= 1'b0;
-      rx_tgl     <= rx_tgl;
-      if (rx_dv && !dv_d) begin
-         bsel       <= 2'd0;
-         waddr      <= 0;
-         last_words <= 0;
-      end else if (rx_dv) begin
-         case (bsel)
-            2'd0: wbuf[7:0]   <= rxd;
-            2'd1: wbuf[15:8]  <= rxd;
-            2'd2: wbuf[23:16] <= rxd;
-            default: wbuf[31:24] <= rxd;
-         endcase
-         if (bsel == 2'd3) begin
-            wr_en   <= 1'b1;
-            wr_data <= {rxd, wbuf[23:0]};
-            waddr   <= waddr + 1'b1;
-         end
-         bsel <= bsel + 1'b1;
-      end else if (dv_d && !rx_dv) begin
-         last_words <= waddr + ((bsel == 2'd0) ? 1'b0 : 1'b1);
-         rx_tgl     <= ~rx_tgl;
+ reg [2:0] wp=0,wg=0,rp=0,rg=0;
+ (* async_reg="true" *) reg [2:0] rg1=0,rg2=0,wg1=0,wg2=0;
+ wire full=(wg=={~rg2[2:1],rg2[0]});
+ wire ready=(rg!=wg2);
+ reg [AW-1:0] length[0:3];
+ reg [AW-1:0] rdptr=0;
+ wire [31:0] rddata;
+ reg active=0,taking=0,overflow=0;
+ reg [AW+2:0] count=0;
+ reg [31:0] packed_word=0;
+ reg wen=0;
+ reg [AW+1:0] waddr=0;
+ reg [31:0] wdata=0;
+ reg [7:0] frames=0,drops=0;
+ wire wr=psel && penable && pwrite;
+ wire rd=psel && penable && !pwrite;
+ wire [4:0] index=paddr[6:2];
+ ge_dpram32 #(.AW(AW+2)) ram(
+ .wr_clk(rx_clk),.wr_en(wen),.wr_addr(waddr),.wr_data(wdata),
+ .rd_clk(clk),.rd_addr({rp[1:0],rdptr}),.rd_data(rddata));
+ always @(posedge rx_clk or negedge rst_n) begin
+  if(!rst_n) begin
+   wp<=0;wg<=0;rg1<=0;rg2<=0;active<=0;taking<=0;overflow<=0;
+   count<=0;packed_word<=0;wen<=0;waddr<=0;wdata<=0;frames<=0;drops<=0;
+  end else begin
+   rg1<=rg;rg2<=rg1;wen<=0;
+   if(rx_dv) begin
+    if(!active) begin
+     active<=1;taking<=!full;overflow<=0;count<=1;
+     packed_word<={24'b0,rxd};
+     if(frames!=255)frames<=frames+1'b1;
+    end else begin
+     count<=count+1'b1;
+     case(count[1:0])
+      0:packed_word<={24'b0,rxd};
+      1:packed_word[15:8]<=rxd;
+      2:packed_word[23:16]<=rxd;
+      3:if(taking && !overflow) begin
+       wen<=1;waddr<={wp[1:0],count[AW+1:2]};wdata<={rxd,packed_word[23:0]};
       end
+     endcase
+     if(count>=(1<<(AW+2))-5)overflow<=1;
+    end
+   end else if(active) begin
+    active<=0;
+    if(taking && !overflow) begin
+     // Flush final bytes immediately; no extra frame gap is required.
+     if(count[1:0]!=0)begin
+      wen<=1;waddr<={wp[1:0],count[AW+1:2]};wdata<=packed_word;
+     end
+     length[wp[1:0]]<=(count+3)>>2;
+     wp<=wp+1'b1;wg<=((wp+1'b1)>>1)^(wp+1'b1);
+    end else if(drops!=255)drops<=drops+1'b1;
    end
-
-   reg  [1:0]    valid_s;
-   reg  [AW-1:0] rx_words;
-   wire wr = psel && penable && pwrite;
-   wire rd = psel && penable && !pwrite;
-   wire [4:0] widx = paddr[6:2];
-   always @(posedge clk) begin
-      valid_s <= {valid_s[0], rx_tgl};
-      if (valid_s[1] != valid_s[0]) rx_words <= last_words;
-      if (wr && widx == 5'd29 && pwdata[2]) rd_addr <= 0;
-      if (rd && widx == 5'd31) rd_addr <= rd_addr + 1'b1;
+  end
+ end
+ always @(posedge clk or negedge rst_n) begin
+  if(!rst_n)begin rp<=0;rg<=0;wg1<=0;wg2<=0;rdptr<=0;end
+  else begin
+   wg1<=wg;wg2<=wg1;
+   if(wr && index==29 && pwdata[2])rdptr<=0; // rewind
+   if(rd && index==31 && ready)rdptr<=rdptr+1'b1;
+   if(wr && index==29 && pwdata[3] && ready)begin // release after reading
+    rp<=rp+1'b1;rg<=((rp+1'b1)>>1)^(rp+1'b1);rdptr<=0;
    end
-
-   always @(*) begin
-      case (widx)
-         5'd30: prdata = {19'd0, valid_s[1], rx_words};
-         5'd31: prdata = rd_data;
-         default: prdata = 32'd0;
-      endcase
-   end
+  end
+ end
+ always @* begin
+  case(index)
+   30:prdata={frames,drops,5'b0,ready,1'b0,(ready?length[rp[1:0]]:{AW{1'b0}})};
+   31:prdata=rddata;
+   default:prdata=0;
+  endcase
+ end
 endmodule

@@ -1,0 +1,142 @@
+{
+  "method": "Edge canvas drawImage completion (Image or Canvas source); unique DOM snapshot IDs, not page timers",
+  "captured_at": "2026-11-04T04:35:07.490Z",
+  "pages": [
+    {
+      "name": "pc",
+      "measurement_seconds": 20.00520000000298,
+      "wall_ms": 20016,
+      "draw_completions": 98,
+      "unique_frame_ids": 44,
+      "repeated_draws": 54,
+      "unidentified_draws": 0,
+      "repeat_fraction": 0.5510204081632653,
+      "unique_frames_per_window_second": 2.199428148681015,
+      "steady_unique_fps": 2.1865036789202246,
+      "unique_frame_ids_displayed": [
+        "342",
+        "343",
+        "344",
+        "345",
+        "346",
+        "347",
+        "348",
+        "350",
+        "351",
+        "352",
+        "353",
+        "354",
+        "355",
+        "356",
+        "357",
+        "358",
+        "359",
+        "360",
+        "361",
+        "362",
+        "363",
+        "364",
+        "365",
+        "366",
+        "367",
+        "368",
+        "369",
+        "370",
+        "371",
+        "372",
+        "373",
+        "374",
+        "375",
+        "376",
+        "377",
+        "378",
+        "379",
+        "380",
+        "381",
+        "382",
+        "383",
+        "384",
+        "385",
+        "386"
+      ],
+      "unique_image_contents": 45,
+      "canvas_source_draws": 98,
+      "image_source_draws": 0,
+      "packed_requests": 99,
+      "image_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "state_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "preview_total_ms": {
+        "median": 2.334,
+        "p95": 3.371
+      },
+      "inter_unique_frame_ms": {
+        "median": 415.8999999910593,
+        "p95": 1018.5
+      },
+      "errors": [],
+      "responses_failed": 0
+    },
+    {
+      "name": "board",
+      "measurement_seconds": 10.005099999994039,
+      "wall_ms": 10016,
+      "draw_completions": 36,
+      "unique_frame_ids": 20,
+      "repeated_draws": 16,
+      "unidentified_draws": 0,
+      "repeat_fraction": 0.4444444444444444,
+      "unique_frames_per_window_second": 1.9989805199360242,
+      "steady_unique_fps": 2.0724032242211003,
+      "unique_frame_ids_displayed": [
+        "388",
+        "391",
+        "392",
+        "395",
+        "396",
+        "397",
+        "398",
+        "399",
+        "400",
+        "401",
+        "402",
+        "403",
+        "404",
+        "405",
+        "406",
+        "407",
+        "408",
+        "409",
+        "410",
+        "411"
+      ],
+      "unique_image_contents": 21,
+      "canvas_source_draws": 36,
+      "image_source_draws": 0,
+      "packed_requests": 37,
+      "image_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "state_total_ms": {
+        "median": null,
+        "p95": null
+      },
+      "preview_total_ms": {
+        "median": 46.726,
+        "p95": 1010.248
+      },
+      "inter_unique_frame_ms": {
+        "median": 426.79999999701977,
+        "p95": 1401.699999988079
+      },
+      "errors": [],
+      "responses_failed": 0
+    }
+  ]
+}

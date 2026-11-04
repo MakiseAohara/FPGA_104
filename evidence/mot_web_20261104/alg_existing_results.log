@@ -1,0 +1,22 @@
+S0 static: no det              PASS 
+S1 two targets: count          PASS trk=2 idA=1 idB=2 vA16=32 vB16=48
+S1 two targets: id stable      PASS 
+S1 vel A ~2px/f                PASS 
+S1 vel B ~3px/f                PASS 
+S2 vertical: dir=down          PASS 
+S2 pred 2-frame ahead          PASS 
+S3 track exists                PASS 
+S3 no ghost detection          PASS 
+S3 deleted after MAX_MISS      PASS 
+S4 crossing survives           PASS 
+S5 global change rejected      PASS 
+S6 static target kept          PASS 
+S7 full-frame reset recovers <=3f PASS 
+S8 same ID after 5-frame gap   PASS 
+S9 unsupported flagged         PASS 
+S10 shake: no new track        PASS 
+S11 split: bridged pair        PASS xs=32
+S11 split: solid wide          PASS xs=-1
+S13 separated pair: 2 dets     PASS 
+
+MOT_TESTS PASS (fails=0)

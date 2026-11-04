@@ -1,0 +1,500 @@
+{"kind": "NORMAL", "ts": "2026-11-04T00:58:35", "wall": 1793725115.5140567, "time": "00:58:35", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 268469}, "thumb": null, "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 2}
+{"kind": "alarm_end", "ts": "2026-11-04T00:58:35", "wall": 1793725115.5299747, "time": "00:58:35", "detail": {"f": 200, "person": 0, "p": -83}, "thumb": null}
+{"kind": "THUMB", "ts": "2026-11-04T00:58:39", "wall": 1793725119.8045275, "time": "00:58:39", "detail": {"ts_ms": 262135, "got": 8, "total": 10}, "thumb": null, "id": 2, "thumb_incomplete": true}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:58:46", "wall": 1793725126.9380765, "time": "00:58:46", "detail": {"f": 216}, "thumb": "20261104_005846_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:59:00", "wall": 1793725140.9060025, "time": "00:59:00", "detail": {"f": 238}, "thumb": "20261104_005900_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:59:15", "wall": 1793725155.7925081, "time": "00:59:15", "detail": {"f": 257}, "thumb": "20261104_005915_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:59:19", "wall": 1793725159.0326037, "time": "00:59:19", "detail": {"f": 262}, "thumb": "20261104_005919_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:59:38", "wall": 1793725178.9817052, "time": "00:59:38", "detail": {"f": 287}, "thumb": "20261104_005938_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T00:59:41", "wall": 1793725181.2537246, "time": "00:59:41", "detail": {"f": 291}, "thumb": "20261104_005941_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T00:59:56", "wall": 1793725196.0533037, "time": "00:59:56", "detail": {"f": 309}, "thumb": "20261104_005956_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:00:31", "wall": 1793725231.1055756, "time": "01:00:31", "detail": {"f": 363}, "thumb": "20261104_010031_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:00:55", "wall": 1793725255.663797, "time": "01:00:55", "detail": {"f": 396}, "thumb": "20261104_010055_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:01:41", "wall": 1793725301.4674845, "time": "01:01:41", "detail": {"f": 468}, "thumb": "20261104_010141_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:01:56", "wall": 1793725316.7474675, "time": "01:01:56", "detail": {"f": 492}, "thumb": "20261104_010156_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:02:09", "wall": 1793725329.465498, "time": "01:02:09", "detail": {"f": 512}, "thumb": "20261104_010209_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:02:32", "wall": 1793725352.9992416, "time": "01:02:32", "detail": {"f": 549}, "thumb": "20261104_010232_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:04:41", "wall": 1793725481.4838066, "time": "01:04:41", "detail": {"f": 751}, "thumb": "20261104_010441_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T01:04:43", "wall": 1793725483.0340736, "time": "01:04:43", "detail": {"x": 20, "y": 81, "conf": 60, "obs": 1, "ts_ms": 635995}, "thumb": "20261104_010443_INTRUDE.png", "x": 20, "y": 81, "conf": 60, "obs": 1, "id": 3}
+{"kind": "alarm_start", "ts": "2026-11-04T01:04:43", "wall": 1793725483.0600314, "time": "01:04:43", "detail": {"f": 753, "person": 0, "p": -82}, "thumb": "20261104_010443_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T01:04:45", "wall": 1793725485.8188672, "time": "01:04:45", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 638779}, "thumb": "20261104_010445_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 3}
+{"kind": "alarm_end", "ts": "2026-11-04T01:04:45", "wall": 1793725485.8359315, "time": "01:04:45", "detail": {"f": 757, "person": 0, "p": -84}, "thumb": "20261104_010445_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T01:04:50", "wall": 1793725490.9734483, "time": "01:04:50", "detail": {"ts_ms": 643932, "complete": true}, "thumb": "20261104_010450_thumb_3.png", "id": 3}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:05:01", "wall": 1793725501.0504813, "time": "01:05:01", "detail": {"f": 777}, "thumb": "20261104_010501_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:05:41", "wall": 1793725541.767309, "time": "01:05:41", "detail": {"f": 841}, "thumb": "20261104_010541_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:06:01", "wall": 1793725561.4931595, "time": "01:06:01", "detail": {"f": 872}, "thumb": "20261104_010601_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:10:55", "wall": 1793725855.3409102, "time": "01:10:55", "detail": {"f": 1334}, "thumb": "20261104_011055_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:11:10", "wall": 1793725870.6050234, "time": "01:11:10", "detail": {"f": 1358}, "thumb": "20261104_011110_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:11:48", "wall": 1793725908.7760696, "time": "01:11:48", "detail": {"f": 1418}, "thumb": "20261104_011148_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:12:04", "wall": 1793725924.03872, "time": "01:12:04", "detail": {"f": 1442}, "thumb": "20261104_011204_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:13:03", "wall": 1793725983.2020528, "time": "01:13:03", "detail": {"f": 1535}, "thumb": "20261104_011303_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:13:19", "wall": 1793725999.1044688, "time": "01:13:19", "detail": {"f": 1560}, "thumb": "20261104_011319_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:13:24", "wall": 1793726004.8160117, "time": "01:13:24", "detail": {"f": 1569}, "thumb": "20261104_011324_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:13:40", "wall": 1793726020.0946846, "time": "01:13:40", "detail": {"f": 1593}, "thumb": "20261104_011340_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:14:25", "wall": 1793726065.2586634, "time": "01:14:25", "detail": {"f": 1664}, "thumb": "20261104_011425_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:14:40", "wall": 1793726080.5213618, "time": "01:14:40", "detail": {"f": 1688}, "thumb": "20261104_011440_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:17:20", "wall": 1793726240.2040222, "time": "01:17:20", "detail": {"f": 1939}, "thumb": "20261104_011720_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:17:36", "wall": 1793726256.106878, "time": "01:17:36", "detail": {"f": 1964}, "thumb": "20261104_011736_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:18:32", "wall": 1793726312.102057, "time": "01:18:32", "detail": {"f": 2052}, "thumb": "20261104_011832_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:18:47", "wall": 1793726327.380804, "time": "01:18:47", "detail": {"f": 2076}, "thumb": "20261104_011847_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:20:34", "wall": 1793726434.8915937, "time": "01:20:34", "detail": {"f": 2245}, "thumb": "20261104_012034_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:21:01", "wall": 1793726461.625367, "time": "01:21:01", "detail": {"f": 2287}, "thumb": "20261104_012101_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:21:03", "wall": 1793726463.5294805, "time": "01:21:03", "detail": {"f": 2290}, "thumb": "20261104_012103_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:21:18", "wall": 1793726478.807981, "time": "01:21:18", "detail": {"f": 2314}, "thumb": "20261104_012118_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:22:33", "wall": 1793726553.2336562, "time": "01:22:33", "detail": {"f": 2431}, "thumb": "20261104_012233_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:22:48", "wall": 1793726568.496917, "time": "01:22:48", "detail": {"f": 2455}, "thumb": "20261104_012248_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:24:18", "wall": 1793726658.2011504, "time": "01:24:18", "detail": {"f": 2596}, "thumb": "20261104_012418_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:24:33", "wall": 1793726673.4632912, "time": "01:24:33", "detail": {"f": 2620}, "thumb": "20261104_012433_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:25:42", "wall": 1793726742.1781275, "time": "01:25:42", "detail": {"f": 2728}, "thumb": "20261104_012542_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:25:57", "wall": 1793726757.4563935, "time": "01:25:57", "detail": {"f": 2752}, "thumb": "20261104_012557_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:26:49", "wall": 1793726809.0053644, "time": "01:26:49", "detail": {"f": 2833}, "thumb": "20261104_012649_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:27:04", "wall": 1793726824.2830405, "time": "01:27:04", "detail": {"f": 2857}, "thumb": "20261104_012704_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:27:27", "wall": 1793726847.833622, "time": "01:27:27", "detail": {"f": 2894}, "thumb": "20261104_012727_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:27:43", "wall": 1793726863.1116672, "time": "01:27:43", "detail": {"f": 2918}, "thumb": "20261104_012743_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:27:43", "wall": 1793726863.7600393, "time": "01:27:43", "detail": {"f": 2919}, "thumb": "20261104_012743_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:28:08", "wall": 1793726888.5496974, "time": "01:28:08", "detail": {"f": 2958}, "thumb": "20261104_012808_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:30:01", "wall": 1793727001.1796844, "time": "01:30:01", "detail": {"f": 3135}, "thumb": "20261104_013001_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:30:16", "wall": 1793727016.4591174, "time": "01:30:16", "detail": {"f": 3159}, "thumb": "20261104_013016_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:32:36", "wall": 1793727156.4312606, "time": "01:32:36", "detail": {"f": 3379}, "thumb": "20261104_013236_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:32:51", "wall": 1793727171.053583, "time": "01:32:51", "detail": {"f": 3402}, "thumb": "20261104_013251_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:35:37", "wall": 1793727337.7277102, "time": "01:35:37", "detail": {"f": 3664}, "thumb": "20261104_013537_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:35:52", "wall": 1793727352.3346, "time": "01:35:52", "detail": {"f": 3687}, "thumb": "20261104_013552_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:36:01", "wall": 1793727361.885165, "time": "01:36:01", "detail": {"f": 3702}, "thumb": "20261104_013601_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:36:17", "wall": 1793727377.1639593, "time": "01:36:17", "detail": {"f": 3726}, "thumb": "20261104_013617_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:37:39", "wall": 1793727459.2215364, "time": "01:37:39", "detail": {"f": 3855}, "thumb": "20261104_013739_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:37:54", "wall": 1793727474.4842231, "time": "01:37:54", "detail": {"f": 3879}, "thumb": "20261104_013754_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:38:49", "wall": 1793727529.2003448, "time": "01:38:49", "detail": {"f": 3965}, "thumb": "20261104_013849_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:39:04", "wall": 1793727544.4779108, "time": "01:39:04", "detail": {"f": 3989}, "thumb": "20261104_013904_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:42:50", "wall": 1793727770.9311726, "time": "01:42:50", "detail": {"f": 4345}, "thumb": "20261104_014250_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:43:06", "wall": 1793727786.2018304, "time": "01:43:06", "detail": {"f": 4369}, "thumb": "20261104_014306_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:43:25", "wall": 1793727805.9121914, "time": "01:43:25", "detail": {"f": 4400}, "thumb": "20261104_014325_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:43:41", "wall": 1793727821.1906445, "time": "01:43:41", "detail": {"f": 4424}, "thumb": "20261104_014341_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:45:42", "wall": 1793727942.0763695, "time": "01:45:42", "detail": {"f": 4614}, "thumb": "20261104_014542_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:45:57", "wall": 1793727957.339654, "time": "01:45:57", "detail": {"f": 4638}, "thumb": "20261104_014557_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:48:41", "wall": 1793728121.48533, "time": "01:48:41", "detail": {"f": 4896}, "thumb": "20261104_014841_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:49:01", "wall": 1793728141.8517756, "time": "01:49:01", "detail": {"f": 4928}, "thumb": "20261104_014901_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:49:40", "wall": 1793728180.84135, "time": "01:49:40", "detail": {"f": 4989}, "thumb": "20261104_014940_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:49:55", "wall": 1793728195.926972, "time": "01:49:55", "detail": {"f": 5013}, "thumb": "20261104_014955_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:51:20", "wall": 1793728280.5598738, "time": "01:51:20", "detail": {"f": 5146}, "thumb": "20261104_015120_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:51:35", "wall": 1793728295.8226094, "time": "01:51:35", "detail": {"f": 5170}, "thumb": "20261104_015135_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:51:47", "wall": 1793728307.262226, "time": "01:51:47", "detail": {"f": 5188}, "thumb": "20261104_015147_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:52:02", "wall": 1793728322.5240629, "time": "01:52:02", "detail": {"f": 5212}, "thumb": "20261104_015202_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:53:11", "wall": 1793728391.887088, "time": "01:53:11", "detail": {"f": 5321}, "thumb": "20261104_015311_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:53:39", "wall": 1793728419.2203822, "time": "01:53:39", "detail": {"f": 5364}, "thumb": "20261104_015339_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:55:57", "wall": 1793728557.9286273, "time": "01:55:57", "detail": {"f": 5582}, "thumb": "20261104_015557_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:56:13", "wall": 1793728573.191582, "time": "01:56:13", "detail": {"f": 5606}, "thumb": "20261104_015613_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T01:58:35", "wall": 1793728715.099087, "time": "01:58:35", "detail": {"f": 5829}, "thumb": "20261104_015835_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T01:58:50", "wall": 1793728730.3778238, "time": "01:58:50", "detail": {"f": 5853}, "thumb": "20261104_015850_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:00:48", "wall": 1793728848.0799398, "time": "02:00:48", "detail": {"f": 6038}, "thumb": "20261104_020048_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:01:03", "wall": 1793728863.358424, "time": "02:01:03", "detail": {"f": 6062}, "thumb": "20261104_020103_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:07:53", "wall": 1793729273.6759865, "time": "02:07:53", "detail": {"f": 6707}, "thumb": "20261104_020753_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:08:08", "wall": 1793729288.314723, "time": "02:08:08", "detail": {"f": 6730}, "thumb": "20261104_020808_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:11:57", "wall": 1793729517.9753926, "time": "02:11:57", "detail": {"f": 7091}, "thumb": "20261104_021157_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:12:13", "wall": 1793729533.2380693, "time": "02:12:13", "detail": {"f": 7115}, "thumb": "20261104_021213_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:12:20", "wall": 1793729540.2295635, "time": "02:12:20", "detail": {"f": 7126}, "thumb": "20261104_021220_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:12:35", "wall": 1793729555.5079935, "time": "02:12:35", "detail": {"f": 7150}, "thumb": "20261104_021235_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:15:03", "wall": 1793729703.1363137, "time": "02:15:03", "detail": {"f": 7382}, "thumb": "20261104_021503_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:15:17", "wall": 1793729717.750485, "time": "02:15:17", "detail": {"f": 7405}, "thumb": "20261104_021517_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:15:45", "wall": 1793729745.7481935, "time": "02:15:45", "detail": {"f": 7449}, "thumb": "20261104_021545_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:16:01", "wall": 1793729761.0268993, "time": "02:16:01", "detail": {"f": 7473}, "thumb": "20261104_021601_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:19:58", "wall": 1793729998.974841, "time": "02:19:58", "detail": {"f": 7847}, "thumb": "20261104_021958_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:20:14", "wall": 1793730014.2378848, "time": "02:20:14", "detail": {"f": 7871}, "thumb": "20261104_022014_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:21:35", "wall": 1793730095.6552813, "time": "02:21:35", "detail": {"f": 7999}, "thumb": "20261104_022135_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:21:59", "wall": 1793730119.829206, "time": "02:21:59", "detail": {"f": 8037}, "thumb": "20261104_022159_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:23:36", "wall": 1793730216.5414898, "time": "02:23:36", "detail": {"f": 8189}, "thumb": "20261104_022336_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:24:05", "wall": 1793730245.8033245, "time": "02:24:05", "detail": {"f": 8235}, "thumb": "20261104_022405_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:26:02", "wall": 1793730362.849429, "time": "02:26:02", "detail": {"f": 8419}, "thumb": "20261104_022602_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:26:17", "wall": 1793730377.471379, "time": "02:26:17", "detail": {"f": 8442}, "thumb": "20261104_022617_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:28:22", "wall": 1793730502.804684, "time": "02:28:22", "detail": {"f": 8639}, "thumb": "20261104_022822_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:28:38", "wall": 1793730518.0509007, "time": "02:28:38", "detail": {"f": 8663}, "thumb": "20261104_022838_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:31:00", "wall": 1793730660.5515978, "time": "02:31:00", "detail": {"f": 8887}, "thumb": "20261104_023100_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:31:15", "wall": 1793730675.8305044, "time": "02:31:15", "detail": {"f": 8911}, "thumb": "20261104_023115_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:32:13", "wall": 1793730733.714087, "time": "02:32:13", "detail": {"f": 9002}, "thumb": "20261104_023213_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:32:28", "wall": 1793730748.9610884, "time": "02:32:28", "detail": {"f": 9026}, "thumb": "20261104_023228_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:33:03", "wall": 1793730783.9494154, "time": "02:33:03", "detail": {"f": 9081}, "thumb": "20261104_023303_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:33:19", "wall": 1793730799.2114732, "time": "02:33:19", "detail": {"f": 9105}, "thumb": "20261104_023319_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:37:24", "wall": 1793731044.1194732, "time": "02:37:24", "detail": {"f": 9490}, "thumb": "20261104_023724_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:37:39", "wall": 1793731059.3979633, "time": "02:37:39", "detail": {"f": 9514}, "thumb": "20261104_023739_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:38:07", "wall": 1793731087.378987, "time": "02:38:07", "detail": {"f": 9558}, "thumb": "20261104_023807_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:38:22", "wall": 1793731102.641534, "time": "02:38:22", "detail": {"f": 9582}, "thumb": "20261104_023822_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:39:59", "wall": 1793731199.3377333, "time": "02:39:59", "detail": {"f": 9734}, "thumb": "20261104_023959_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:40:14", "wall": 1793731214.601565, "time": "02:40:14", "detail": {"f": 9758}, "thumb": "20261104_024014_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:43:01", "wall": 1793731381.2755153, "time": "02:43:01", "detail": {"f": 10020}, "thumb": "20261104_024301_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:43:40", "wall": 1793731420.0881515, "time": "02:43:40", "detail": {"f": 10081}, "thumb": "20261104_024340_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:44:04", "wall": 1793731444.2623541, "time": "02:44:04", "detail": {"f": 10119}, "thumb": "20261104_024404_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:44:23", "wall": 1793731463.9880092, "time": "02:44:23", "detail": {"f": 10150}, "thumb": "20261104_024423_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:45:41", "wall": 1793731541.613018, "time": "02:45:41", "detail": {"f": 10272}, "thumb": "20261104_024541_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:45:56", "wall": 1793731556.2527716, "time": "02:45:56", "detail": {"f": 10295}, "thumb": "20261104_024556_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:46:22", "wall": 1793731582.9541183, "time": "02:46:22", "detail": {"f": 10337}, "thumb": "20261104_024622_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:46:38", "wall": 1793731598.2328885, "time": "02:46:38", "detail": {"f": 10361}, "thumb": "20261104_024638_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:47:20", "wall": 1793731640.869761, "time": "02:47:20", "detail": {"f": 10428}, "thumb": "20261104_024720_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:47:36", "wall": 1793731656.1475475, "time": "02:47:36", "detail": {"f": 10452}, "thumb": "20261104_024736_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:47:46", "wall": 1793731666.9628644, "time": "02:47:46", "detail": {"f": 10469}, "thumb": "20261104_024746_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:48:02", "wall": 1793731682.2259505, "time": "02:48:02", "detail": {"f": 10493}, "thumb": "20261104_024802_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:48:17", "wall": 1793731697.5208235, "time": "02:48:17", "detail": {"f": 10517}, "thumb": "20261104_024817_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:48:32", "wall": 1793731712.7996364, "time": "02:48:32", "detail": {"f": 10541}, "thumb": "20261104_024832_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:53:43", "wall": 1793732023.31699, "time": "02:53:43", "detail": {"f": 11029}, "thumb": "20261104_025343_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:53:58", "wall": 1793732038.5956314, "time": "02:53:58", "detail": {"f": 11053}, "thumb": "20261104_025358_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:54:46", "wall": 1793732086.3186197, "time": "02:54:46", "detail": {"f": 11128}, "thumb": "20261104_025446_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:55:01", "wall": 1793732101.598347, "time": "02:55:01", "detail": {"f": 11152}, "thumb": "20261104_025501_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:57:08", "wall": 1793732228.2120821, "time": "02:57:08", "detail": {"f": 11351}, "thumb": "20261104_025708_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:57:23", "wall": 1793732243.4908936, "time": "02:57:23", "detail": {"f": 11375}, "thumb": "20261104_025723_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:57:29", "wall": 1793732249.842617, "time": "02:57:29", "detail": {"f": 11385}, "thumb": "20261104_025729_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:57:45", "wall": 1793732265.120798, "time": "02:57:45", "detail": {"f": 11409}, "thumb": "20261104_025745_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:58:53", "wall": 1793732333.834798, "time": "02:58:53", "detail": {"f": 11517}, "thumb": "20261104_025853_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:59:09", "wall": 1793732349.1134257, "time": "02:59:09", "detail": {"f": 11541}, "thumb": "20261104_025909_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T02:59:09", "wall": 1793732349.7371693, "time": "02:59:09", "detail": {"f": 11542}, "thumb": "20261104_025909_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T02:59:25", "wall": 1793732365.016314, "time": "02:59:25", "detail": {"f": 11566}, "thumb": "20261104_025925_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:01:04", "wall": 1793732464.272563, "time": "03:01:04", "detail": {"f": 11722}, "thumb": "20261104_030104_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:01:19", "wall": 1793732479.550412, "time": "03:01:19", "detail": {"f": 11746}, "thumb": "20261104_030119_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:02:24", "wall": 1793732544.4416502, "time": "03:02:24", "detail": {"f": 11848}, "thumb": "20261104_030224_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:02:39", "wall": 1793732559.7189615, "time": "03:02:39", "detail": {"f": 11872}, "thumb": "20261104_030239_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:05:43", "wall": 1793732743.62468, "time": "03:05:43", "detail": {"f": 12161}, "thumb": "20261104_030543_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:05:58", "wall": 1793732758.8875551, "time": "03:05:58", "detail": {"f": 12185}, "thumb": "20261104_030558_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:08:48", "wall": 1793732928.1521394, "time": "03:08:48", "detail": {"f": 12451}, "thumb": "20261104_030848_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:09:03", "wall": 1793732943.4155364, "time": "03:09:03", "detail": {"f": 12475}, "thumb": "20261104_030903_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:10:49", "wall": 1793733049.6786776, "time": "03:10:49", "detail": {"f": 12642}, "thumb": "20261104_031049_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:11:04", "wall": 1793733064.9560754, "time": "03:11:04", "detail": {"f": 12666}, "thumb": "20261104_031104_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:12:29", "wall": 1793733149.5746644, "time": "03:12:29", "detail": {"f": 12799}, "thumb": "20261104_031229_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:12:44", "wall": 1793733164.8527682, "time": "03:12:44", "detail": {"f": 12823}, "thumb": "20261104_031244_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:14:02", "wall": 1793733242.4778686, "time": "03:14:02", "detail": {"f": 12945}, "thumb": "20261104_031402_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:14:27", "wall": 1793733267.2789085, "time": "03:14:27", "detail": {"f": 12984}, "thumb": "20261104_031427_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:20:05", "wall": 1793733605.888199, "time": "03:20:05", "detail": {"f": 13516}, "thumb": "20261104_032005_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:20:21", "wall": 1793733621.1667197, "time": "03:20:21", "detail": {"f": 13540}, "thumb": "20261104_032021_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:23:22", "wall": 1793733802.558229, "time": "03:23:22", "detail": {"f": 13825}, "thumb": "20261104_032322_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:23:37", "wall": 1793733817.8534923, "time": "03:23:37", "detail": {"f": 13849}, "thumb": "20261104_032337_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:29:37", "wall": 1793734177.471953, "time": "03:29:37", "detail": {"f": 14414}, "thumb": "20261104_032937_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:29:52", "wall": 1793734192.1099405, "time": "03:29:52", "detail": {"f": 14437}, "thumb": "20261104_032952_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:30:37", "wall": 1793734237.9467614, "time": "03:30:37", "detail": {"f": 14509}, "thumb": "20261104_033037_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:30:53", "wall": 1793734253.2256763, "time": "03:30:53", "detail": {"f": 14533}, "thumb": "20261104_033053_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:32:49", "wall": 1793734369.0550048, "time": "03:32:49", "detail": {"f": 14715}, "thumb": "20261104_033249_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:33:04", "wall": 1793734384.3496356, "time": "03:33:04", "detail": {"f": 14739}, "thumb": "20261104_033304_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:33:06", "wall": 1793734386.8931613, "time": "03:33:06", "detail": {"f": 14743}, "thumb": "20261104_033306_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:33:21", "wall": 1793734401.548726, "time": "03:33:21", "detail": {"f": 14766}, "thumb": "20261104_033321_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:35:30", "wall": 1793734530.753604, "time": "03:35:30", "detail": {"f": 14969}, "thumb": "20261104_033530_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:35:59", "wall": 1793734559.3911557, "time": "03:35:59", "detail": {"f": 15014}, "thumb": "20261104_033559_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:36:46", "wall": 1793734606.4904263, "time": "03:36:46", "detail": {"f": 15088}, "thumb": "20261104_033646_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:37:15", "wall": 1793734635.1596715, "time": "03:37:15", "detail": {"f": 15133}, "thumb": "20261104_033715_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:38:51", "wall": 1793734731.9210067, "time": "03:38:51", "detail": {"f": 15285}, "thumb": "20261104_033851_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:39:07", "wall": 1793734747.1993387, "time": "03:39:07", "detail": {"f": 15309}, "thumb": "20261104_033907_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:41:48", "wall": 1793734908.8820293, "time": "03:41:48", "detail": {"f": 15563}, "thumb": "20261104_034148_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:42:04", "wall": 1793734924.1600275, "time": "03:42:04", "detail": {"f": 15587}, "thumb": "20261104_034204_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:49:24", "wall": 1793735364.1068625, "time": "03:49:24", "detail": {"f": 16278}, "thumb": "20261104_034924_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:49:39", "wall": 1793735379.3851037, "time": "03:49:39", "detail": {"f": 16302}, "thumb": "20261104_034939_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:53:55", "wall": 1793735635.3165054, "time": "03:53:55", "detail": {"f": 16704}, "thumb": "20261104_035355_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:54:10", "wall": 1793735650.5956118, "time": "03:54:10", "detail": {"f": 16728}, "thumb": "20261104_035410_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:56:32", "wall": 1793735792.583732, "time": "03:56:32", "detail": {"f": 16951}, "thumb": "20261104_035632_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:56:51", "wall": 1793735811.6851096, "time": "03:56:51", "detail": {"f": 16981}, "thumb": "20261104_035651_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T03:59:11", "wall": 1793735951.1293645, "time": "03:59:11", "detail": {"f": 17200}, "thumb": "20261104_035911_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T03:59:25", "wall": 1793735965.7832642, "time": "03:59:25", "detail": {"f": 17223}, "thumb": "20261104_035925_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:01:19", "wall": 1793736079.7424717, "time": "04:01:19", "detail": {"f": 17402}, "thumb": "20261104_040119_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:01:34", "wall": 1793736094.3650558, "time": "04:01:34", "detail": {"f": 17425}, "thumb": "20261104_040134_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:01:50", "wall": 1793736110.922756, "time": "04:01:50", "detail": {"f": 17451}, "thumb": "20261104_040150_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:02:06", "wall": 1793736126.8419454, "time": "04:02:06", "detail": {"f": 17476}, "thumb": "20261104_040206_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:07:24", "wall": 1793736444.5597453, "time": "04:07:24", "detail": {"f": 17975}, "thumb": "20261104_040724_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:07:39", "wall": 1793736459.854576, "time": "04:07:39", "detail": {"f": 17999}, "thumb": "20261104_040739_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:13:18", "wall": 1793736798.0183687, "time": "04:13:18", "detail": {"f": 18530}, "thumb": "20261104_041318_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:13:33", "wall": 1793736813.3125598, "time": "04:13:33", "detail": {"f": 18554}, "thumb": "20261104_041333_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:13:35", "wall": 1793736815.2161849, "time": "04:13:35", "detail": {"f": 18557}, "thumb": "20261104_041335_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:13:50", "wall": 1793736830.5113838, "time": "04:13:50", "detail": {"f": 18581}, "thumb": "20261104_041350_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:13:52", "wall": 1793736832.4147449, "time": "04:13:52", "detail": {"f": 18584}, "thumb": "20261104_041352_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:14:07", "wall": 1793736847.710238, "time": "04:14:07", "detail": {"f": 18608}, "thumb": "20261104_041407_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:15:46", "wall": 1793736946.4213166, "time": "04:15:46", "detail": {"f": 18763}, "thumb": "20261104_041546_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:16:08", "wall": 1793736968.066887, "time": "04:16:08", "detail": {"f": 18797}, "thumb": "20261104_041608_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:17:30", "wall": 1793737050.2210007, "time": "04:17:30", "detail": {"f": 18926}, "thumb": "20261104_041730_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:17:45", "wall": 1793737065.5158508, "time": "04:17:45", "detail": {"f": 18950}, "thumb": "20261104_041745_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:19:38", "wall": 1793737178.880779, "time": "04:19:38", "detail": {"f": 19128}, "thumb": "20261104_041938_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:19:54", "wall": 1793737194.1767488, "time": "04:19:54", "detail": {"f": 19152}, "thumb": "20261104_041954_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:20:24", "wall": 1793737224.750275, "time": "04:20:24", "detail": {"f": 19200}, "thumb": "20261104_042024_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:20:40", "wall": 1793737240.0131886, "time": "04:20:40", "detail": {"f": 19224}, "thumb": "20261104_042040_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:21:43", "wall": 1793737303.0797203, "time": "04:21:43", "detail": {"f": 19323}, "thumb": "20261104_042143_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:21:58", "wall": 1793737318.9809172, "time": "04:21:58", "detail": {"f": 19348}, "thumb": "20261104_042158_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:23:12", "wall": 1793737392.87961, "time": "04:23:12", "detail": {"f": 19464}, "thumb": "20261104_042312_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:23:28", "wall": 1793737408.158304, "time": "04:23:28", "detail": {"f": 19488}, "thumb": "20261104_042328_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:24:19", "wall": 1793737459.7372704, "time": "04:24:19", "detail": {"f": 19569}, "thumb": "20261104_042419_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:24:49", "wall": 1793737489.6721585, "time": "04:24:49", "detail": {"f": 19616}, "thumb": "20261104_042449_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:25:01", "wall": 1793737501.7822928, "time": "04:25:01", "detail": {"f": 19635}, "thumb": "20261104_042501_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:25:17", "wall": 1793737517.0613248, "time": "04:25:17", "detail": {"f": 19659}, "thumb": "20261104_042517_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:25:28", "wall": 1793737528.516699, "time": "04:25:28", "detail": {"f": 19677}, "thumb": "20261104_042528_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:25:43", "wall": 1793737543.8112512, "time": "04:25:43", "detail": {"f": 19701}, "thumb": "20261104_042543_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:28:36", "wall": 1793737716.4034376, "time": "04:28:36", "detail": {"f": 19972}, "thumb": "20261104_042836_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:28:51", "wall": 1793737731.059762, "time": "04:28:51", "detail": {"f": 19995}, "thumb": "20261104_042851_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:29:38", "wall": 1793737778.1912382, "time": "04:29:38", "detail": {"f": 20069}, "thumb": "20261104_042938_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:29:53", "wall": 1793737793.4537735, "time": "04:29:53", "detail": {"f": 20093}, "thumb": "20261104_042953_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:30:42", "wall": 1793737842.5057082, "time": "04:30:42", "detail": {"f": 20170}, "thumb": "20261104_043042_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:30:57", "wall": 1793737857.7840087, "time": "04:30:57", "detail": {"f": 20194}, "thumb": "20261104_043057_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:36:47", "wall": 1793738207.4192493, "time": "04:36:47", "detail": {"f": 20743}, "thumb": "20261104_043647_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:37:02", "wall": 1793738222.7136629, "time": "04:37:02", "detail": {"f": 20767}, "thumb": "20261104_043702_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:38:44", "wall": 1793738324.5924368, "time": "04:38:44", "detail": {"f": 20927}, "thumb": "20261104_043844_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:38:59", "wall": 1793738339.889387, "time": "04:38:59", "detail": {"f": 20951}, "thumb": "20261104_043859_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:42:13", "wall": 1793738533.4863598, "time": "04:42:13", "detail": {"f": 21255}, "thumb": "20261104_044213_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:42:28", "wall": 1793738548.7809722, "time": "04:42:28", "detail": {"f": 21279}, "thumb": "20261104_044228_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:44:17", "wall": 1793738657.6852438, "time": "04:44:17", "detail": {"f": 21450}, "thumb": "20261104_044417_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:44:32", "wall": 1793738672.9475534, "time": "04:44:32", "detail": {"f": 21474}, "thumb": "20261104_044432_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:44:55", "wall": 1793738695.2493389, "time": "04:44:55", "detail": {"f": 21509}, "thumb": "20261104_044455_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:45:10", "wall": 1793738710.527415, "time": "04:45:10", "detail": {"f": 21533}, "thumb": "20261104_044510_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:47:17", "wall": 1793738837.8942266, "time": "04:47:17", "detail": {"f": 21733}, "thumb": "20261104_044717_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:47:33", "wall": 1793738853.1889098, "time": "04:47:33", "detail": {"f": 21757}, "thumb": "20261104_044733_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:52:33", "wall": 1793739153.1308498, "time": "04:52:33", "detail": {"f": 22228}, "thumb": "20261104_045233_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:52:48", "wall": 1793739168.425008, "time": "04:52:48", "detail": {"f": 22252}, "thumb": "20261104_045248_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T04:57:12", "wall": 1793739432.7223804, "time": "04:57:12", "detail": {"f": 22667}, "thumb": "20261104_045712_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T04:57:28", "wall": 1793739448.0025663, "time": "04:57:28", "detail": {"f": 22691}, "thumb": "20261104_045728_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:02:25", "wall": 1793739745.4007177, "time": "05:02:25", "detail": {"f": 23158}, "thumb": "20261104_050225_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:02:40", "wall": 1793739760.69483, "time": "05:02:40", "detail": {"f": 23182}, "thumb": "20261104_050240_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:07:07", "wall": 1793740027.52146, "time": "05:07:07", "detail": {"f": 23601}, "thumb": "20261104_050707_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:07:22", "wall": 1793740042.8163095, "time": "05:07:22", "detail": {"f": 23625}, "thumb": "20261104_050722_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:11:34", "wall": 1793740294.361652, "time": "05:11:34", "detail": {"f": 24020}, "thumb": "20261104_051134_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:11:49", "wall": 1793740309.6564205, "time": "05:11:49", "detail": {"f": 24044}, "thumb": "20261104_051149_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:13:21", "wall": 1793740401.3779685, "time": "05:13:21", "detail": {"f": 24188}, "thumb": "20261104_051321_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:13:36", "wall": 1793740416.6554737, "time": "05:13:36", "detail": {"f": 24212}, "thumb": "20261104_051336_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:14:35", "wall": 1793740475.8829525, "time": "05:14:35", "detail": {"f": 24305}, "thumb": "20261104_051435_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:14:51", "wall": 1793740491.1777387, "time": "05:14:51", "detail": {"f": 24329}, "thumb": "20261104_051451_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:19:41", "wall": 1793740781.568415, "time": "05:19:41", "detail": {"f": 24785}, "thumb": "20261104_051941_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:19:56", "wall": 1793740796.8632631, "time": "05:19:56", "detail": {"f": 24809}, "thumb": "20261104_051956_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:22:02", "wall": 1793740922.3094294, "time": "05:22:02", "detail": {"f": 25006}, "thumb": "20261104_052202_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:22:17", "wall": 1793740937.5882142, "time": "05:22:17", "detail": {"f": 25030}, "thumb": "20261104_052217_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:24:09", "wall": 1793741049.0499816, "time": "05:24:09", "detail": {"f": 25205}, "thumb": "20261104_052409_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:24:24", "wall": 1793741064.9699724, "time": "05:24:24", "detail": {"f": 25230}, "thumb": "20261104_052424_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:24:55", "wall": 1793741095.5264995, "time": "05:24:55", "detail": {"f": 25278}, "thumb": "20261104_052455_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:25:10", "wall": 1793741110.8207834, "time": "05:25:10", "detail": {"f": 25302}, "thumb": "20261104_052510_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:26:11", "wall": 1793741171.9530702, "time": "05:26:11", "detail": {"f": 25398}, "thumb": "20261104_052611_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:26:27", "wall": 1793741187.2461338, "time": "05:26:27", "detail": {"f": 25422}, "thumb": "20261104_052627_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:33:19", "wall": 1793741599.9482381, "time": "05:33:19", "detail": {"f": 26070}, "thumb": "20261104_053319_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:33:35", "wall": 1793741615.211321, "time": "05:33:35", "detail": {"f": 26094}, "thumb": "20261104_053335_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:33:46", "wall": 1793741626.057281, "time": "05:33:46", "detail": {"f": 26111}, "thumb": "20261104_053346_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:34:01", "wall": 1793741641.3517628, "time": "05:34:01", "detail": {"f": 26135}, "thumb": "20261104_053401_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:34:41", "wall": 1793741681.4618647, "time": "05:34:41", "detail": {"f": 26198}, "thumb": "20261104_053441_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:34:56", "wall": 1793741696.755127, "time": "05:34:56", "detail": {"f": 26222}, "thumb": "20261104_053456_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:39:00", "wall": 1793741940.0305731, "time": "05:39:00", "detail": {"f": 26604}, "thumb": "20261104_053900_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:39:15", "wall": 1793741955.324961, "time": "05:39:15", "detail": {"f": 26628}, "thumb": "20261104_053915_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:43:25", "wall": 1793742205.608959, "time": "05:43:25", "detail": {"f": 27021}, "thumb": "20261104_054325_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:43:40", "wall": 1793742220.2632756, "time": "05:43:40", "detail": {"f": 27044}, "thumb": "20261104_054340_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:43:40", "wall": 1793742220.9029174, "time": "05:43:40", "detail": {"f": 27045}, "thumb": "20261104_054340_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:44:03", "wall": 1793742243.1893306, "time": "05:44:03", "detail": {"f": 27080}, "thumb": "20261104_054403_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:44:12", "wall": 1793742252.7574036, "time": "05:44:12", "detail": {"f": 27095}, "thumb": "20261104_054412_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:44:28", "wall": 1793742268.050857, "time": "05:44:28", "detail": {"f": 27119}, "thumb": "20261104_054428_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:44:29", "wall": 1793742269.3156087, "time": "05:44:29", "detail": {"f": 27121}, "thumb": "20261104_054429_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:44:44", "wall": 1793742284.5948062, "time": "05:44:44", "detail": {"f": 27145}, "thumb": "20261104_054444_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:49:03", "wall": 1793742543.8053367, "time": "05:49:03", "detail": {"f": 27552}, "thumb": "20261104_054903_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:49:19", "wall": 1793742559.0990713, "time": "05:49:19", "detail": {"f": 27576}, "thumb": "20261104_054919_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:49:42", "wall": 1793742582.0083294, "time": "05:49:42", "detail": {"f": 27612}, "thumb": "20261104_054942_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:49:57", "wall": 1793742597.304178, "time": "05:49:57", "detail": {"f": 27636}, "thumb": "20261104_054957_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T05:55:42", "wall": 1793742942.4898834, "time": "05:55:42", "detail": {"f": 28178}, "thumb": "20261104_055542_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T05:55:57", "wall": 1793742957.7689006, "time": "05:55:57", "detail": {"f": 28202}, "thumb": "20261104_055557_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:01:07", "wall": 1793743267.2954292, "time": "06:01:07", "detail": {"f": 28688}, "thumb": "20261104_060107_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:01:22", "wall": 1793743282.5735028, "time": "06:01:22", "detail": {"f": 28712}, "thumb": "20261104_060122_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:03:37", "wall": 1793743417.5855927, "time": "06:03:37", "detail": {"f": 28924}, "thumb": "20261104_060337_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:03:52", "wall": 1793743432.864369, "time": "06:03:52", "detail": {"f": 28948}, "thumb": "20261104_060352_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:04:33", "wall": 1793743473.0060835, "time": "06:04:33", "detail": {"f": 29011}, "thumb": "20261104_060433_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:04:48", "wall": 1793743488.2675877, "time": "06:04:48", "detail": {"f": 29035}, "thumb": "20261104_060448_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:05:46", "wall": 1793743546.2324152, "time": "06:05:46", "detail": {"f": 29126}, "thumb": "20261104_060546_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:06:01", "wall": 1793743561.5100212, "time": "06:06:01", "detail": {"f": 29150}, "thumb": "20261104_060601_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:07:38", "wall": 1793743658.9582572, "time": "06:07:38", "detail": {"f": 29303}, "thumb": "20261104_060738_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:08:18", "wall": 1793743698.442866, "time": "06:08:18", "detail": {"f": 29365}, "thumb": "20261104_060818_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:08:23", "wall": 1793743703.545913, "time": "06:08:23", "detail": {"f": 29373}, "thumb": "20261104_060823_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:08:38", "wall": 1793743718.8097873, "time": "06:08:38", "detail": {"f": 29397}, "thumb": "20261104_060838_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:13:34", "wall": 1793744014.9758499, "time": "06:13:34", "detail": {"f": 29862}, "thumb": "20261104_061334_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:13:50", "wall": 1793744030.255243, "time": "06:13:50", "detail": {"f": 29886}, "thumb": "20261104_061350_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:14:07", "wall": 1793744047.4692984, "time": "06:14:07", "detail": {"f": 29913}, "thumb": "20261104_061407_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:14:22", "wall": 1793744062.7320306, "time": "06:14:22", "detail": {"f": 29937}, "thumb": "20261104_061422_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:18:58", "wall": 1793744338.5013769, "time": "06:18:58", "detail": {"f": 30370}, "thumb": "20261104_061858_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:19:13", "wall": 1793744353.7786293, "time": "06:19:13", "detail": {"f": 30394}, "thumb": "20261104_061913_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:20:22", "wall": 1793744422.55723, "time": "06:20:22", "detail": {"f": 30502}, "thumb": "20261104_062022_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:20:37", "wall": 1793744437.8525589, "time": "06:20:37", "detail": {"f": 30526}, "thumb": "20261104_062037_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:25:00", "wall": 1793744700.2133975, "time": "06:25:00", "detail": {"f": 30938}, "thumb": "20261104_062500_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:25:15", "wall": 1793744715.4921868, "time": "06:25:15", "detail": {"f": 30962}, "thumb": "20261104_062515_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:28:51", "wall": 1793744931.3633182, "time": "06:28:51", "detail": {"f": 31301}, "thumb": "20261104_062851_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:29:06", "wall": 1793744946.6418757, "time": "06:29:06", "detail": {"f": 31325}, "thumb": "20261104_062906_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:32:41", "wall": 1793745161.870477, "time": "06:32:41", "detail": {"f": 31663}, "thumb": "20261104_063241_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:32:57", "wall": 1793745177.16504, "time": "06:32:57", "detail": {"f": 31687}, "thumb": "20261104_063257_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:34:06", "wall": 1793745246.5512493, "time": "06:34:06", "detail": {"f": 31796}, "thumb": "20261104_063406_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:34:21", "wall": 1793745261.846817, "time": "06:34:21", "detail": {"f": 31820}, "thumb": "20261104_063421_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:34:31", "wall": 1793745271.4132385, "time": "06:34:31", "detail": {"f": 31835}, "thumb": "20261104_063431_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:34:46", "wall": 1793745286.6928506, "time": "06:34:46", "detail": {"f": 31859}, "thumb": "20261104_063446_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:35:47", "wall": 1793745347.82393, "time": "06:35:47", "detail": {"f": 31955}, "thumb": "20261104_063547_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:36:03", "wall": 1793745363.1027927, "time": "06:36:03", "detail": {"f": 31979}, "thumb": "20261104_063603_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:38:18", "wall": 1793745498.7545013, "time": "06:38:18", "detail": {"f": 32192}, "thumb": "20261104_063818_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:38:46", "wall": 1793745526.7682254, "time": "06:38:46", "detail": {"f": 32236}, "thumb": "20261104_063846_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:41:42", "wall": 1793745702.4969082, "time": "06:41:42", "detail": {"f": 32512}, "thumb": "20261104_064142_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:41:57", "wall": 1793745717.775862, "time": "06:41:57", "detail": {"f": 32536}, "thumb": "20261104_064157_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:43:13", "wall": 1793745793.5625782, "time": "06:43:13", "detail": {"f": 32655}, "thumb": "20261104_064313_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:43:28", "wall": 1793745808.8411415, "time": "06:43:28", "detail": {"f": 32679}, "thumb": "20261104_064328_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:45:07", "wall": 1793745907.5355864, "time": "06:45:07", "detail": {"f": 32834}, "thumb": "20261104_064507_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:45:22", "wall": 1793745922.8151147, "time": "06:45:22", "detail": {"f": 32858}, "thumb": "20261104_064522_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:47:49", "wall": 1793746069.9058564, "time": "06:47:49", "detail": {"f": 33089}, "thumb": "20261104_064749_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:48:19", "wall": 1793746099.8231866, "time": "06:48:19", "detail": {"f": 33136}, "thumb": "20261104_064819_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:48:40", "wall": 1793746120.1908057, "time": "06:48:40", "detail": {"f": 33168}, "thumb": "20261104_064840_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:48:55", "wall": 1793746135.468377, "time": "06:48:55", "detail": {"f": 33192}, "thumb": "20261104_064855_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:49:01", "wall": 1793746141.1969779, "time": "06:49:01", "detail": {"f": 33201}, "thumb": "20261104_064901_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:49:16", "wall": 1793746156.4754088, "time": "06:49:16", "detail": {"f": 33225}, "thumb": "20261104_064916_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:51:13", "wall": 1793746273.664855, "time": "06:51:13", "detail": {"f": 33409}, "thumb": "20261104_065113_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:51:28", "wall": 1793746288.9604893, "time": "06:51:28", "detail": {"f": 33433}, "thumb": "20261104_065128_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:51:32", "wall": 1793746292.1439059, "time": "06:51:32", "detail": {"f": 33438}, "thumb": "20261104_065132_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:51:47", "wall": 1793746307.4385164, "time": "06:51:47", "detail": {"f": 33462}, "thumb": "20261104_065147_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:51:50", "wall": 1793746310.6218739, "time": "06:51:50", "detail": {"f": 33467}, "thumb": "20261104_065150_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:52:05", "wall": 1793746325.9174426, "time": "06:52:05", "detail": {"f": 33491}, "thumb": "20261104_065205_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:53:40", "wall": 1793746420.1973321, "time": "06:53:40", "detail": {"f": 33639}, "thumb": "20261104_065340_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:53:55", "wall": 1793746435.492204, "time": "06:53:55", "detail": {"f": 33663}, "thumb": "20261104_065355_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:58:00", "wall": 1793746680.7346506, "time": "06:58:00", "detail": {"f": 34048}, "thumb": "20261104_065800_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:58:28", "wall": 1793746708.7969334, "time": "06:58:28", "detail": {"f": 34092}, "thumb": "20261104_065828_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T06:58:44", "wall": 1793746724.0922415, "time": "06:58:44", "detail": {"f": 34116}, "thumb": "20261104_065844_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T06:58:59", "wall": 1793746739.4024796, "time": "06:58:59", "detail": {"f": 34140}, "thumb": "20261104_065859_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:02:08", "wall": 1793746928.7623944, "time": "07:02:08", "detail": {"f": 34437}, "thumb": "20261104_070208_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:02:35", "wall": 1793746955.5279899, "time": "07:02:35", "detail": {"f": 34479}, "thumb": "20261104_070235_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:03:27", "wall": 1793747007.7793884, "time": "07:03:27", "detail": {"f": 34561}, "thumb": "20261104_070327_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:03:42", "wall": 1793747022.43461, "time": "07:03:42", "detail": {"f": 34584}, "thumb": "20261104_070342_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:05:02", "wall": 1793747102.7160327, "time": "07:05:02", "detail": {"f": 34710}, "thumb": "20261104_070502_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:05:17", "wall": 1793747117.9785054, "time": "07:05:17", "detail": {"f": 34734}, "thumb": "20261104_070517_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:05:53", "wall": 1793747153.6552842, "time": "07:05:53", "detail": {"f": 34790}, "thumb": "20261104_070553_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:06:08", "wall": 1793747168.9495225, "time": "07:06:08", "detail": {"f": 34814}, "thumb": "20261104_070608_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:10:02", "wall": 1793747402.658115, "time": "07:10:02", "detail": {"f": 35181}, "thumb": "20261104_071002_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:10:17", "wall": 1793747417.9368868, "time": "07:10:17", "detail": {"f": 35205}, "thumb": "20261104_071017_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:11:20", "wall": 1793747480.3474457, "time": "07:11:20", "detail": {"f": 35303}, "thumb": "20261104_071120_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:11:35", "wall": 1793747495.6425056, "time": "07:11:35", "detail": {"f": 35327}, "thumb": "20261104_071135_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:12:28", "wall": 1793747548.5664601, "time": "07:12:28", "detail": {"f": 35410}, "thumb": "20261104_071228_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:12:54", "wall": 1793747574.7074854, "time": "07:12:54", "detail": {"f": 35451}, "thumb": "20261104_071254_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:18:07", "wall": 1793747887.3528883, "time": "07:18:07", "detail": {"f": 35941}, "thumb": "20261104_071807_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:18:22", "wall": 1793747902.6479123, "time": "07:18:22", "detail": {"f": 35965}, "thumb": "20261104_071822_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:19:41", "wall": 1793747981.0569248, "time": "07:19:41", "detail": {"f": 36088}, "thumb": "20261104_071941_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:20:05", "wall": 1793748005.9184709, "time": "07:20:05", "detail": {"f": 36127}, "thumb": "20261104_072005_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:22:35", "wall": 1793748155.858081, "time": "07:22:35", "detail": {"f": 36362}, "thumb": "20261104_072235_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:22:36", "wall": 1793748156.780747, "time": "07:22:36", "detail": {"x": 48, "y": 48, "conf": 60, "obs": 0, "ts_ms": 23310173}, "thumb": "20261104_072236_INTRUDE.png", "x": 48, "y": 48, "conf": 60, "obs": 0, "id": 4}
+{"kind": "alarm_start", "ts": "2026-11-04T07:22:36", "wall": 1793748156.8013935, "time": "07:22:36", "detail": {"f": 36363, "person": 0, "p": -72}, "thumb": "20261104_072236_alarm_start.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:22:43", "wall": 1793748163.6648252, "time": "07:22:43", "detail": {"ts_ms": 23317053, "complete": true}, "thumb": "20261104_072243_thumb_4.png", "id": 4}
+{"kind": "NORMAL", "ts": "2026-11-04T07:22:46", "wall": 1793748166.7454143, "time": "07:22:46", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23320139}, "thumb": "20261104_072246_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 4}
+{"kind": "alarm_end", "ts": "2026-11-04T07:22:46", "wall": 1793748166.7691078, "time": "07:22:46", "detail": {"f": 36376, "person": 0, "p": -66}, "thumb": "20261104_072246_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:23:01", "wall": 1793748181.9357316, "time": "07:23:01", "detail": {"f": 36394}, "thumb": "20261104_072301_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:23:34", "wall": 1793748214.9896872, "time": "07:23:34", "detail": {"f": 36444}, "thumb": "20261104_072334_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:23:35", "wall": 1793748215.9567342, "time": "07:23:35", "detail": {"x": 48, "y": 48, "conf": 60, "obs": 0, "ts_ms": 23369351}, "thumb": "20261104_072335_INTRUDE.png", "x": 48, "y": 48, "conf": 60, "obs": 0, "id": 5}
+{"kind": "alarm_start", "ts": "2026-11-04T07:23:35", "wall": 1793748215.981503, "time": "07:23:35", "detail": {"f": 36445, "person": 0, "p": -2}, "thumb": "20261104_072335_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:23:39", "wall": 1793748219.036291, "time": "07:23:39", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23372430}, "thumb": "20261104_072339_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 5}
+{"kind": "alarm_end", "ts": "2026-11-04T07:23:39", "wall": 1793748219.0525782, "time": "07:23:39", "detail": {"f": 36449, "person": 0, "p": -78}, "thumb": "20261104_072339_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:23:42", "wall": 1793748222.8473697, "time": "07:23:42", "detail": {"ts_ms": 23376240, "complete": true}, "thumb": "20261104_072342_thumb_5.png", "id": 5}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:23:57", "wall": 1793748237.9947748, "time": "07:23:57", "detail": {"f": 36472}, "thumb": "20261104_072357_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:24:41", "wall": 1793748281.2721844, "time": "07:24:41", "detail": {"f": 36538}, "thumb": "20261104_072441_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:24:41", "wall": 1793748281.8757694, "time": "07:24:41", "detail": {"x": 47, "y": 47, "conf": 100, "obs": 0, "ts_ms": 23435271}, "thumb": "20261104_072441_INTRUDE.png", "x": 47, "y": 47, "conf": 100, "obs": 0, "id": 6}
+{"kind": "alarm_start", "ts": "2026-11-04T07:24:41", "wall": 1793748281.895144, "time": "07:24:41", "detail": {"f": 36538, "person": 0, "p": 122}, "thumb": "20261104_072441_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:24:50", "wall": 1793748290.6012435, "time": "07:24:50", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23443997}, "thumb": "20261104_072450_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 6}
+{"kind": "THUMB", "ts": "2026-11-04T07:24:50", "wall": 1793748290.6048937, "time": "07:24:50", "detail": {"ts_ms": 23443997, "complete": true}, "thumb": "20261104_072450_thumb_6.png", "id": 6}
+{"kind": "alarm_end", "ts": "2026-11-04T07:24:50", "wall": 1793748290.6140952, "time": "07:24:50", "detail": {"f": 36547, "person": 0, "p": -75}, "thumb": "20261104_072450_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:25:05", "wall": 1793748305.5891676, "time": "07:25:05", "detail": {"f": 36565}, "thumb": "20261104_072505_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:25:07", "wall": 1793748307.9090104, "time": "07:25:07", "detail": {"f": 36569}, "thumb": "20261104_072507_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:25:36", "wall": 1793748336.80247, "time": "07:25:36", "detail": {"f": 36608}, "thumb": "20261104_072536_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:25:43", "wall": 1793748343.218063, "time": "07:25:43", "detail": {"f": 36618}, "thumb": "20261104_072543_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:25:55", "wall": 1793748355.4304807, "time": "07:25:55", "detail": {"x": 64, "y": 62, "conf": 60, "obs": 0, "ts_ms": 23508827}, "thumb": "20261104_072555_INTRUDE.png", "x": 64, "y": 62, "conf": 60, "obs": 0, "id": 7}
+{"kind": "alarm_start", "ts": "2026-11-04T07:25:55", "wall": 1793748355.4567473, "time": "07:25:55", "detail": {"f": 36636, "person": 0, "p": -95}, "thumb": "20261104_072555_alarm_start.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:25:59", "wall": 1793748359.771818, "time": "07:25:59", "detail": {"x": 53, "y": 63, "conf": 2, "obs": 1, "ts_ms": 23513168}, "thumb": "20261104_072559_TREND.png", "x": 53, "y": 63, "conf": 2, "obs": 1, "id": 7}
+{"kind": "THUMB", "ts": "2026-11-04T07:26:03", "wall": 1793748363.6202345, "time": "07:26:03", "detail": {"ts_ms": 23517015, "complete": true}, "thumb": "20261104_072603_thumb_7.png", "id": 7}
+{"kind": "NORMAL", "ts": "2026-11-04T07:26:05", "wall": 1793748365.043874, "time": "07:26:05", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23518441}, "thumb": "20261104_072605_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 7}
+{"kind": "alarm_end", "ts": "2026-11-04T07:26:05", "wall": 1793748365.0562491, "time": "07:26:05", "detail": {"f": 36647, "person": 0, "p": -72}, "thumb": "20261104_072605_alarm_end.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:26:13", "wall": 1793748373.5889795, "time": "07:26:13", "detail": {"x": 63, "y": 63, "conf": 60, "obs": 1, "ts_ms": 23526986}, "thumb": "20261104_072613_INTRUDE.png", "x": 63, "y": 63, "conf": 60, "obs": 1, "id": 8}
+{"kind": "alarm_start", "ts": "2026-11-04T07:26:13", "wall": 1793748373.6153932, "time": "07:26:13", "detail": {"f": 36659, "person": 0, "p": -112}, "thumb": "20261104_072613_alarm_start.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:26:16", "wall": 1793748376.243675, "time": "07:26:16", "detail": {"x": 55, "y": 76, "conf": 4, "obs": 1, "ts_ms": 23529641}, "thumb": "20261104_072616_TREND.png", "x": 55, "y": 76, "conf": 4, "obs": 1, "id": 8}
+{"kind": "TREND", "ts": "2026-11-04T07:26:16", "wall": 1793748376.561962, "time": "07:26:16", "detail": {"x": 60, "y": 70, "conf": 4, "obs": 1, "ts_ms": 23529960}, "thumb": "20261104_072616_TREND.png", "x": 60, "y": 70, "conf": 4, "obs": 1, "id": 8}
+{"kind": "THUMB", "ts": "2026-11-04T07:26:21", "wall": 1793748381.8063173, "time": "07:26:21", "detail": {"ts_ms": 23535202, "complete": true}, "thumb": "20261104_072621_thumb_8.png", "id": 8}
+{"kind": "NORMAL", "ts": "2026-11-04T07:26:22", "wall": 1793748382.5035741, "time": "07:26:22", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23535901}, "thumb": "20261104_072622_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 8}
+{"kind": "alarm_end", "ts": "2026-11-04T07:26:22", "wall": 1793748382.527239, "time": "07:26:22", "detail": {"f": 36669, "person": 0, "p": -21}, "thumb": "20261104_072622_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:26:58", "wall": 1793748418.7637062, "time": "07:26:58", "detail": {"f": 36716}, "thumb": "20261104_072658_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:27:24", "wall": 1793748444.3944743, "time": "07:27:24", "detail": {"f": 36756}, "thumb": "20261104_072724_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:27:44", "wall": 1793748464.6316745, "time": "07:27:44", "detail": {"f": 36780}, "thumb": "20261104_072744_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:27:52", "wall": 1793748472.694906, "time": "07:27:52", "detail": {"f": 36793}, "thumb": "20261104_072752_lowpwr_exit.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:27:56", "wall": 1793748476.310721, "time": "07:27:56", "detail": {"x": 66, "y": 49, "conf": 1, "obs": 1, "ts_ms": 23629710}, "thumb": "20261104_072756_TREND.png", "x": 66, "y": 49, "conf": 1, "obs": 1, "id": 8}
+{"kind": "TREND", "ts": "2026-11-04T07:27:57", "wall": 1793748477.652127, "time": "07:27:57", "detail": {"x": 64, "y": 44, "conf": 3, "obs": 1, "ts_ms": 23631051}, "thumb": "20261104_072757_TREND.png", "x": 64, "y": 44, "conf": 3, "obs": 1, "id": 8}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:28:00", "wall": 1793748480.4784636, "time": "07:28:00", "detail": {"x": 69, "y": 47, "conf": 60, "obs": 1, "ts_ms": 23633878}, "thumb": "20261104_072800_INTRUDE.png", "x": 69, "y": 47, "conf": 60, "obs": 1, "id": 9}
+{"kind": "alarm_start", "ts": "2026-11-04T07:28:00", "wall": 1793748480.5021453, "time": "07:28:00", "detail": {"f": 36800, "person": 0, "p": 65}, "thumb": "20261104_072800_alarm_start.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:28:01", "wall": 1793748481.7489946, "time": "07:28:01", "detail": {"x": 36, "y": 47, "conf": 1, "obs": 1, "ts_ms": 23635148}, "thumb": "20261104_072801_TREND.png", "x": 36, "y": 47, "conf": 1, "obs": 1, "id": 9}
+{"kind": "TREND", "ts": "2026-11-04T07:28:03", "wall": 1793748483.4035363, "time": "07:28:03", "detail": {"x": 45, "y": 48, "conf": 1, "obs": 1, "ts_ms": 23636803}, "thumb": "20261104_072803_TREND.png", "x": 45, "y": 48, "conf": 1, "obs": 1, "id": 9}
+{"kind": "TREND", "ts": "2026-11-04T07:28:06", "wall": 1793748486.027226, "time": "07:28:06", "detail": {"x": 71, "y": 48, "conf": 1, "obs": 1, "ts_ms": 23639427}, "thumb": "20261104_072806_TREND.png", "x": 71, "y": 48, "conf": 1, "obs": 1, "id": 9}
+{"kind": "THUMB", "ts": "2026-11-04T07:28:07", "wall": 1793748487.9039128, "time": "07:28:07", "detail": {"ts_ms": 23641301, "complete": true}, "thumb": "20261104_072807_thumb_9.png", "id": 9}
+{"kind": "TREND", "ts": "2026-11-04T07:28:09", "wall": 1793748489.193429, "time": "07:28:09", "detail": {"x": 18, "y": 53, "conf": 1, "obs": 1, "ts_ms": 23642593}, "thumb": "20261104_072809_TREND.png", "x": 18, "y": 53, "conf": 1, "obs": 1, "id": 9}
+{"kind": "TREND", "ts": "2026-11-04T07:28:09", "wall": 1793748489.8148131, "time": "07:28:09", "detail": {"x": 38, "y": 50, "conf": 1, "obs": 1, "ts_ms": 23643215}, "thumb": "20261104_072809_TREND.png", "x": 38, "y": 50, "conf": 1, "obs": 1, "id": 9}
+{"kind": "TREND", "ts": "2026-11-04T07:28:11", "wall": 1793748491.8258243, "time": "07:28:11", "detail": {"x": 49, "y": 47, "conf": 1, "obs": 1, "ts_ms": 23645225}, "thumb": "20261104_072811_TREND.png", "x": 49, "y": 47, "conf": 1, "obs": 1, "id": 9}
+{"kind": "TREND", "ts": "2026-11-04T07:28:15", "wall": 1793748495.766996, "time": "07:28:15", "detail": {"x": 57, "y": 46, "conf": 1, "obs": 1, "ts_ms": 23649167}, "thumb": "20261104_072815_TREND.png", "x": 57, "y": 46, "conf": 1, "obs": 1, "id": 9}
+{"kind": "NORMAL", "ts": "2026-11-04T07:28:36", "wall": 1793748516.0615394, "time": "07:28:36", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23669459}, "thumb": "20261104_072836_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 9}
+{"kind": "alarm_end", "ts": "2026-11-04T07:28:36", "wall": 1793748516.0833278, "time": "07:28:36", "detail": {"f": 36840, "person": 0, "p": -107}, "thumb": "20261104_072836_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:28:47", "wall": 1793748527.8262892, "time": "07:28:47", "detail": {"f": 36856}, "thumb": "20261104_072847_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:29:45", "wall": 1793748585.9173985, "time": "07:29:45", "detail": {"f": 36945}, "thumb": "20261104_072945_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:29:47", "wall": 1793748587.6161544, "time": "07:29:47", "detail": {"x": 88, "y": 61, "conf": 100, "obs": 1, "ts_ms": 23741017}, "thumb": "20261104_072947_INTRUDE.png", "x": 88, "y": 61, "conf": 100, "obs": 1, "id": 10}
+{"kind": "alarm_start", "ts": "2026-11-04T07:29:47", "wall": 1793748587.6451235, "time": "07:29:47", "detail": {"f": 36947, "person": 0, "p": 25}, "thumb": "20261104_072947_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:29:49", "wall": 1793748589.8351984, "time": "07:29:49", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23743237}, "thumb": "20261104_072949_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 10}
+{"kind": "alarm_end", "ts": "2026-11-04T07:29:49", "wall": 1793748589.8543963, "time": "07:29:49", "detail": {"f": 36950, "person": 0, "p": -98}, "thumb": "20261104_072949_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:29:54", "wall": 1793748594.2758346, "time": "07:29:54", "detail": {"ts_ms": 23747675, "complete": true}, "thumb": "20261104_072954_thumb_10.png", "id": 10}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:30:04", "wall": 1793748604.1539192, "time": "07:30:04", "detail": {"x": 83, "y": 85, "conf": 60, "obs": 1, "ts_ms": 23757556}, "thumb": "20261104_073004_INTRUDE.png", "x": 83, "y": 85, "conf": 60, "obs": 1, "id": 11}
+{"kind": "alarm_start", "ts": "2026-11-04T07:30:04", "wall": 1793748604.1716557, "time": "07:30:04", "detail": {"f": 36967, "person": 0, "p": -74}, "thumb": "20261104_073004_alarm_start.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:30:06", "wall": 1793748606.0512724, "time": "07:30:06", "detail": {"x": 90, "y": 57, "conf": 3, "obs": 2, "ts_ms": 23759453}, "thumb": "20261104_073006_TREND.png", "x": 90, "y": 57, "conf": 3, "obs": 2, "id": 11}
+{"kind": "TREND", "ts": "2026-11-04T07:30:08", "wall": 1793748608.8980992, "time": "07:30:08", "detail": {"x": 90, "y": 57, "conf": 3, "obs": 1, "ts_ms": 23762299}, "thumb": "20261104_073008_TREND.png", "x": 90, "y": 57, "conf": 3, "obs": 1, "id": 11}
+{"kind": "NORMAL", "ts": "2026-11-04T07:30:10", "wall": 1793748610.1291072, "time": "07:30:10", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23763531}, "thumb": "20261104_073010_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 11}
+{"kind": "alarm_end", "ts": "2026-11-04T07:30:10", "wall": 1793748610.139227, "time": "07:30:10", "detail": {"f": 36975, "person": 0, "p": -108}, "thumb": "20261104_073010_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:30:10", "wall": 1793748610.8477447, "time": "07:30:10", "detail": {"ts_ms": 23764247, "complete": true}, "thumb": "20261104_073010_thumb_11.png", "id": 11}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:30:31", "wall": 1793748631.0705779, "time": "07:30:31", "detail": {"f": 37000}, "thumb": "20261104_073031_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:30:52", "wall": 1793748652.28486, "time": "07:30:52", "detail": {"f": 37033}, "thumb": "20261104_073052_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:30:53", "wall": 1793748653.224656, "time": "07:30:53", "detail": {"x": 87, "y": 87, "conf": 60, "obs": 1, "ts_ms": 23806627}, "thumb": "20261104_073053_INTRUDE.png", "x": 87, "y": 87, "conf": 60, "obs": 1, "id": 12}
+{"kind": "alarm_start", "ts": "2026-11-04T07:30:53", "wall": 1793748653.244961, "time": "07:30:53", "detail": {"f": 37034, "person": 0, "p": 111}, "thumb": "20261104_073053_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:30:55", "wall": 1793748655.3943539, "time": "07:30:55", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23808794}, "thumb": "20261104_073055_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 12}
+{"kind": "alarm_end", "ts": "2026-11-04T07:30:55", "wall": 1793748655.4048793, "time": "07:30:55", "detail": {"f": 37037, "person": 0, "p": -112}, "thumb": "20261104_073055_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:31:01", "wall": 1793748661.351556, "time": "07:31:01", "detail": {"ts_ms": 23814751, "complete": true}, "thumb": "20261104_073101_thumb_12.png", "id": 12}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:31:08", "wall": 1793748668.875517, "time": "07:31:08", "detail": {"f": 37054}, "thumb": "20261104_073108_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:31:13", "wall": 1793748673.7072687, "time": "07:31:13", "detail": {"f": 37062}, "thumb": "20261104_073113_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:31:28", "wall": 1793748688.523122, "time": "07:31:28", "detail": {"f": 37083}, "thumb": "20261104_073128_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:31:53", "wall": 1793748713.5756269, "time": "07:31:53", "detail": {"f": 37122}, "thumb": "20261104_073153_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:32:09", "wall": 1793748729.0143661, "time": "07:32:09", "detail": {"f": 37146}, "thumb": "20261104_073209_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:32:19", "wall": 1793748739.285746, "time": "07:32:19", "detail": {"f": 37162}, "thumb": "20261104_073219_lowpwr_exit.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:32:35", "wall": 1793748755.7317917, "time": "07:32:35", "detail": {"f": 37183}, "thumb": "20261104_073235_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:33:03", "wall": 1793748783.3616915, "time": "07:33:03", "detail": {"f": 37226}, "thumb": "20261104_073303_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:33:05", "wall": 1793748785.12066, "time": "07:33:05", "detail": {"x": 80, "y": 53, "conf": 100, "obs": 2, "ts_ms": 23938526}, "thumb": "20261104_073305_INTRUDE.png", "x": 80, "y": 53, "conf": 100, "obs": 2, "id": 13}
+{"kind": "alarm_start", "ts": "2026-11-04T07:33:05", "wall": 1793748785.1375308, "time": "07:33:05", "detail": {"f": 37228, "person": 0, "p": 80}, "thumb": "20261104_073305_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:33:07", "wall": 1793748787.2957568, "time": "07:33:07", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23940701}, "thumb": "20261104_073307_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 13}
+{"kind": "alarm_end", "ts": "2026-11-04T07:33:07", "wall": 1793748787.3131332, "time": "07:33:07", "detail": {"f": 37231, "person": 0, "p": -101}, "thumb": "20261104_073307_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:33:11", "wall": 1793748791.5540452, "time": "07:33:11", "detail": {"ts_ms": 23944957, "complete": true}, "thumb": "20261104_073311_thumb_13.png", "id": 13}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:33:17", "wall": 1793748797.6422822, "time": "07:33:17", "detail": {"x": 44, "y": 47, "conf": 60, "obs": 0, "ts_ms": 23951048}, "thumb": "20261104_073317_INTRUDE.png", "x": 44, "y": 47, "conf": 60, "obs": 0, "id": 14}
+{"kind": "alarm_start", "ts": "2026-11-04T07:33:17", "wall": 1793748797.6643348, "time": "07:33:17", "detail": {"f": 37243, "person": 0, "p": 116}, "thumb": "20261104_073317_alarm_start.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:33:25", "wall": 1793748805.1147504, "time": "07:33:25", "detail": {"ts_ms": 23958518, "complete": true}, "thumb": "20261104_073325_thumb_14.png", "id": 14}
+{"kind": "NORMAL", "ts": "2026-11-04T07:33:33", "wall": 1793748813.2126918, "time": "07:33:33", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 23966616}, "thumb": "20261104_073333_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 14}
+{"kind": "alarm_end", "ts": "2026-11-04T07:33:33", "wall": 1793748813.2311704, "time": "07:33:33", "detail": {"f": 37260, "person": 0, "p": -100}, "thumb": "20261104_073333_alarm_end.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:34:15", "wall": 1793748855.6600118, "time": "07:34:15", "detail": {"x": 48, "y": 48, "conf": 60, "obs": 0, "ts_ms": 24009066}, "thumb": "20261104_073415_INTRUDE.png", "x": 48, "y": 48, "conf": 60, "obs": 0, "id": 15}
+{"kind": "alarm_start", "ts": "2026-11-04T07:34:15", "wall": 1793748855.6752856, "time": "07:34:15", "detail": {"f": 37309, "person": 0, "p": -21}, "thumb": "20261104_073415_alarm_start.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:34:23", "wall": 1793748863.0591547, "time": "07:34:23", "detail": {"ts_ms": 24016464, "complete": true}, "thumb": "20261104_073423_thumb_15.png", "id": 15}
+{"kind": "TREND", "ts": "2026-11-04T07:34:48", "wall": 1793748888.7620382, "time": "07:34:48", "detail": {"x": 17, "y": 52, "conf": 1, "obs": 2, "ts_ms": 24042169}, "thumb": "20261104_073448_TREND.png", "x": 17, "y": 52, "conf": 1, "obs": 2, "id": 15}
+{"kind": "TREND", "ts": "2026-11-04T07:34:50", "wall": 1793748890.1256502, "time": "07:34:50", "detail": {"x": 41, "y": 63, "conf": 1, "obs": 2, "ts_ms": 24043533}, "thumb": "20261104_073450_TREND.png", "x": 41, "y": 63, "conf": 1, "obs": 2, "id": 15}
+{"kind": "TREND", "ts": "2026-11-04T07:34:51", "wall": 1793748891.8772564, "time": "07:34:51", "detail": {"x": 55, "y": 46, "conf": 1, "obs": 1, "ts_ms": 24045284}, "thumb": "20261104_073451_TREND.png", "x": 55, "y": 46, "conf": 1, "obs": 1, "id": 15}
+{"kind": "NORMAL", "ts": "2026-11-04T07:35:04", "wall": 1793748904.2246184, "time": "07:35:04", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 24057629}, "thumb": "20261104_073504_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 15}
+{"kind": "alarm_end", "ts": "2026-11-04T07:35:04", "wall": 1793748904.2475326, "time": "07:35:04", "detail": {"f": 37363, "person": 0, "p": -112}, "thumb": "20261104_073504_alarm_end.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:35:06", "wall": 1793748906.977089, "time": "07:35:06", "detail": {"x": 47, "y": 28, "conf": 2, "obs": 1, "ts_ms": 24060385}, "thumb": "20261104_073506_TREND.png", "x": 47, "y": 28, "conf": 2, "obs": 1, "id": 15}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:35:07", "wall": 1793748907.332596, "time": "07:35:07", "detail": {"x": 47, "y": 29, "conf": 60, "obs": 2, "ts_ms": 24060740}, "thumb": "20261104_073507_INTRUDE.png", "x": 47, "y": 29, "conf": 60, "obs": 2, "id": 16}
+{"kind": "alarm_start", "ts": "2026-11-04T07:35:07", "wall": 1793748907.3511147, "time": "07:35:07", "detail": {"f": 37367, "person": 0, "p": -44}, "thumb": "20261104_073507_alarm_start.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:35:08", "wall": 1793748908.591482, "time": "07:35:08", "detail": {"x": 40, "y": 24, "conf": 1, "obs": 1, "ts_ms": 24061999}, "thumb": "20261104_073508_TREND.png", "x": 40, "y": 24, "conf": 1, "obs": 1, "id": 16}
+{"kind": "TREND", "ts": "2026-11-04T07:35:09", "wall": 1793748909.3981807, "time": "07:35:09", "detail": {"x": 61, "y": 47, "conf": 1, "obs": 1, "ts_ms": 24062806}, "thumb": "20261104_073509_TREND.png", "x": 61, "y": 47, "conf": 1, "obs": 1, "id": 16}
+{"kind": "THUMB", "ts": "2026-11-04T07:35:14", "wall": 1793748914.676674, "time": "07:35:14", "detail": {"ts_ms": 24068082, "complete": true}, "thumb": "20261104_073514_thumb_16.png", "id": 16}
+{"kind": "TREND", "ts": "2026-11-04T07:35:34", "wall": 1793748934.5905678, "time": "07:35:34", "detail": {"x": 47, "y": 47, "conf": 1, "obs": 1, "ts_ms": 24087998}, "thumb": "20261104_073534_TREND.png", "x": 47, "y": 47, "conf": 1, "obs": 1, "id": 16}
+{"kind": "TREND", "ts": "2026-11-04T07:36:43", "wall": 1793749003.962764, "time": "07:36:43", "detail": {"x": 49, "y": 48, "conf": 1, "obs": 1, "ts_ms": 24157372}, "thumb": "20261104_073643_TREND.png", "x": 49, "y": 48, "conf": 1, "obs": 1, "id": 16}
+{"kind": "TREND", "ts": "2026-11-04T07:36:59", "wall": 1793749019.1340854, "time": "07:36:59", "detail": {"x": 34, "y": 62, "conf": 1, "obs": 1, "ts_ms": 24172544}, "thumb": "20261104_073659_TREND.png", "x": 34, "y": 62, "conf": 1, "obs": 1, "id": 16}
+{"kind": "TREND", "ts": "2026-11-04T07:37:04", "wall": 1793749024.4288158, "time": "07:37:04", "detail": {"x": 45, "y": 58, "conf": 1, "obs": 1, "ts_ms": 24177839}, "thumb": "20261104_073704_TREND.png", "x": 45, "y": 58, "conf": 1, "obs": 1, "id": 16}
+{"kind": "TREND", "ts": "2026-11-04T07:37:18", "wall": 1793749038.3039355, "time": "07:37:18", "detail": {"x": 32, "y": 63, "conf": 2, "obs": 1, "ts_ms": 24191714}, "thumb": "20261104_073718_TREND.png", "x": 32, "y": 63, "conf": 2, "obs": 1, "id": 16}
+{"kind": "NORMAL", "ts": "2026-11-04T07:37:56", "wall": 1793749076.2376802, "time": "07:37:56", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 24229648}, "thumb": "20261104_073756_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 16}
+{"kind": "alarm_end", "ts": "2026-11-04T07:37:56", "wall": 1793749076.2488706, "time": "07:37:56", "detail": {"f": 37559, "person": 0, "p": -77}, "thumb": "20261104_073756_alarm_end.png"}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:38:14", "wall": 1793749094.5672061, "time": "07:38:14", "detail": {"f": 37581}, "thumb": "20261104_073814_lowpwr_enter.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:38:18", "wall": 1793749098.0872993, "time": "07:38:18", "detail": {"f": 37587}, "thumb": "20261104_073818_lowpwr_exit.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:38:18", "wall": 1793749098.727379, "time": "07:38:18", "detail": {"x": 58, "y": 45, "conf": 60, "obs": 1, "ts_ms": 24252138}, "thumb": "20261104_073818_INTRUDE.png", "x": 58, "y": 45, "conf": 60, "obs": 1, "id": 17}
+{"kind": "alarm_start", "ts": "2026-11-04T07:38:18", "wall": 1793749098.7429724, "time": "07:38:18", "detail": {"f": 37587, "person": 0, "p": 58}, "thumb": "20261104_073818_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:38:21", "wall": 1793749101.5391927, "time": "07:38:21", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 24254950}, "thumb": "20261104_073821_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 17}
+{"kind": "alarm_end", "ts": "2026-11-04T07:38:21", "wall": 1793749101.5586126, "time": "07:38:21", "detail": {"f": 37591, "person": 0, "p": -99}, "thumb": "20261104_073821_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:38:24", "wall": 1793749104.9866874, "time": "07:38:24", "detail": {"ts_ms": 24258396, "complete": true}, "thumb": "20261104_073824_thumb_17.png", "id": 17}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:38:26", "wall": 1793749106.3967757, "time": "07:38:26", "detail": {"x": 84, "y": 49, "conf": 60, "obs": 0, "ts_ms": 24259808}, "thumb": "20261104_073826_INTRUDE.png", "x": 84, "y": 49, "conf": 60, "obs": 0, "id": 18}
+{"kind": "alarm_start", "ts": "2026-11-04T07:38:26", "wall": 1793749106.4221578, "time": "07:38:26", "detail": {"f": 37598, "person": 0, "p": -104}, "thumb": "20261104_073826_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:38:30", "wall": 1793749110.1826909, "time": "07:38:30", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 24263594}, "thumb": "20261104_073830_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 18}
+{"kind": "alarm_end", "ts": "2026-11-04T07:38:30", "wall": 1793749110.1981273, "time": "07:38:30", "detail": {"f": 37601, "person": 0, "p": -104}, "thumb": "20261104_073830_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:38:34", "wall": 1793749114.3265316, "time": "07:38:34", "detail": {"ts_ms": 24267736, "complete": true}, "thumb": "20261104_073834_thumb_18.png", "id": 18}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:38:39", "wall": 1793749119.185743, "time": "07:38:39", "detail": {"x": 22, "y": 66, "conf": 60, "obs": 1, "ts_ms": 24272597}, "thumb": "20261104_073839_INTRUDE.png", "x": 22, "y": 66, "conf": 60, "obs": 1, "id": 19}
+{"kind": "alarm_start", "ts": "2026-11-04T07:38:39", "wall": 1793749119.2049956, "time": "07:38:39", "detail": {"f": 37614, "person": 0, "p": -19}, "thumb": "20261104_073839_alarm_start.png"}
+{"kind": "NORMAL", "ts": "2026-11-04T07:38:41", "wall": 1793749121.2705436, "time": "07:38:41", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 24274680}, "thumb": "20261104_073841_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 19}
+{"kind": "alarm_end", "ts": "2026-11-04T07:38:41", "wall": 1793749121.2846491, "time": "07:38:41", "detail": {"f": 37617, "person": 0, "p": -97}, "thumb": "20261104_073841_alarm_end.png"}
+{"kind": "THUMB", "ts": "2026-11-04T07:38:47", "wall": 1793749127.1403124, "time": "07:38:47", "detail": {"ts_ms": 24280550, "complete": true}, "thumb": "20261104_073847_thumb_19.png", "id": 19}
+{"kind": "lowpwr_enter", "ts": "2026-11-04T07:38:55", "wall": 1793749135.155835, "time": "07:38:55", "detail": {"f": 37635}, "thumb": "20261104_073855_lowpwr_enter.png"}
+{"kind": "INTRUDE", "ts": "2026-11-04T07:39:06", "wall": 1793749146.9071145, "time": "07:39:06", "detail": {"x": 48, "y": 48, "conf": 60, "obs": 0, "ts_ms": 24300319}, "thumb": "20261104_073906_INTRUDE.png", "x": 48, "y": 48, "conf": 60, "obs": 0, "id": 20}
+{"kind": "alarm_start", "ts": "2026-11-04T07:39:06", "wall": 1793749146.9308836, "time": "07:39:06", "detail": {"f": 37653, "person": 0, "p": 109}, "thumb": "20261104_073906_alarm_start.png"}
+{"kind": "lowpwr_exit", "ts": "2026-11-04T07:39:06", "wall": 1793749146.9788108, "time": "07:39:06", "detail": {"f": 37654}, "thumb": "20261104_073906_lowpwr_exit.png"}
+{"kind": "TREND", "ts": "2026-11-04T07:39:08", "wall": 1793749148.5721207, "time": "07:39:08", "detail": {"x": 26, "y": 44, "conf": 2, "obs": 1, "ts_ms": 24301984}, "thumb": "20261104_073908_TREND.png", "x": 26, "y": 44, "conf": 2, "obs": 1, "id": 20}
+{"kind": "THUMB", "ts": "2026-11-04T07:39:15", "wall": 1793749155.1045563, "time": "07:39:15", "detail": {"ts_ms": 24308515, "complete": true}, "thumb": "20261104_073915_thumb_20.png", "id": 20}
+{"kind": "TREND", "ts": "2026-11-04T07:39:16", "wall": 1793749156.1923053, "time": "07:39:16", "detail": {"x": 33, "y": 17, "conf": 3, "obs": 0, "ts_ms": 24309605}, "thumb": "20261104_073916_TREND.png", "x": 33, "y": 17, "conf": 3, "obs": 0, "id": 20}
+{"kind": "NORMAL", "ts": "2026-11-04T07:39:24", "wall": 1793749164.1741662, "time": "07:39:24", "detail": {"x": 48, "y": 48, "conf": 0, "obs": 0, "ts_ms": 24317584}, "thumb": "20261104_073924_NORMAL.png", "x": 48, "y": 48, "conf": 0, "obs": 0, "id": 20}
+{"kind": "alarm_end", "ts": "2026-11-04T07:39:24", "wall": 1793749164.1932392, "time": "07:39:24", "detail": {"f": 37675, "person": 0, "p": -70}, "thumb": "20261104_073924_alarm_end.png"}

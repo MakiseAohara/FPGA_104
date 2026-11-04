@@ -1,0 +1,3 @@
+tcp_window_api.c
+D:\FPGA\fps04\evidence\preview_fps_20261104\../v30_mot/net_core_impl.h(49): warning C4244: “=”: 从“uint16_t”转换到“uint8_t”，可能丢失数据
+  正在创建库 tcp_window_2_nopair.lib 和对象 tcp_window_2_nopair.exp

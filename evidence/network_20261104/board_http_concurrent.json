@@ -1,0 +1,47 @@
+[
+  {
+    "path": "/api/state",
+    "status": 200,
+    "bytes": 315,
+    "seconds": 0.02,
+    "passed": true,
+    "frame": 74
+  },
+  {
+    "path": "/frame.png?t=1793725038062966400",
+    "status": 200,
+    "bytes": 9380,
+    "seconds": 1.324,
+    "passed": true
+  },
+  {
+    "path": "/api/state",
+    "status": 200,
+    "bytes": 315,
+    "seconds": 3.02,
+    "passed": true,
+    "frame": 74
+  },
+  {
+    "path": "/frame.png?t=1793725039388520500",
+    "status": 200,
+    "bytes": 9380,
+    "seconds": 1.319,
+    "passed": true
+  },
+  {
+    "path": "/api/state",
+    "status": 200,
+    "bytes": 315,
+    "seconds": 1.091,
+    "passed": true,
+    "frame": 74
+  },
+  {
+    "path": "/frame.png?t=1793725042409224100",
+    "status": 200,
+    "bytes": 9380,
+    "seconds": 3.354,
+    "passed": true
+  }
+]

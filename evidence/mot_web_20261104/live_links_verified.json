@@ -1,0 +1,78 @@
+{
+  "manual_person_test": false,
+  "checks": [
+    "pc: shared HTML bytes match a671d072ff92c201cf1e4d9f02c9a2daa6dc73a7bc80957fa036462303bcfbcc",
+    "pc: three aligned state/PNG pairs, count, aspect and complete pixels passed",
+    "board: shared HTML bytes match a671d072ff92c201cf1e4d9f02c9a2daa6dc73a7bc80957fa036462303bcfbcc",
+    "board: three aligned state/PNG pairs, count, aspect and complete pixels passed"
+  ],
+  "samples": [
+    {
+      "endpoint": "pc",
+      "frame_id": 45,
+      "people_count": 0,
+      "png_bytes": 9380,
+      "size": [
+        96,
+        96
+      ],
+      "attempt": 3
+    },
+    {
+      "endpoint": "pc",
+      "frame_id": 45,
+      "people_count": 0,
+      "png_bytes": 9380,
+      "size": [
+        96,
+        96
+      ],
+      "attempt": 1
+    },
+    {
+      "endpoint": "pc",
+      "frame_id": 45,
+      "people_count": 0,
+      "png_bytes": 9380,
+      "size": [
+        96,
+        96
+      ],
+      "attempt": 1
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 69,
+      "people_count": 0,
+      "png_bytes": 9380,
+      "size": [
+        96,
+        96
+      ],
+      "attempt": 2
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 71,
+      "people_count": 0,
+      "png_bytes": 9380,
+      "size": [
+        96,
+        96
+      ],
+      "attempt": 1
+    },
+    {
+      "endpoint": "board",
+      "frame_id": 73,
+      "people_count": 0,
+      "png_bytes": 9380,
+      "size": [
+        96,
+        96
+      ],
+      "attempt": 1
+    }
+  ],
+  "passed": true
+}

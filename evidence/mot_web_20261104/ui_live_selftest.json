@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "manual_person_test": false,
+  "pages": [
+    {
+      "name": "pc",
+      "url": "http://169.254.47.62:8090/",
+      "people_count": "0",
+      "aligned": true,
+      "aspect": "16:9",
+      "no_js_errors": true
+    },
+    {
+      "name": "board",
+      "url": "http://169.254.47.63/",
+      "people_count": "0",
+      "aligned": true,
+      "aspect": "16:9",
+      "no_js_errors": true
+    }
+  ]
+}

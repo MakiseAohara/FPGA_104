@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 #  flash_vendor.ps1 —— 烧录【厂商预编译】位流（指挥官指令 #20）
 #
 #  与 tools\flash_mmt.ps1 的差异（逐条说明，供审查）：
@@ -23,15 +23,23 @@
 param(
     [Parameter(Mandatory=$true)][string]$Bit,
     [Parameter(Mandatory=$true)][string]$Sha256,
+    [Parameter(Mandatory=$true)][string]$EfinityHome,
+    [string]$LogRoot = (Join-Path $PSScriptRoot '..\_logs\vendor_flash'),
     [string]$Board = 'Generic Board Profile Using FT4232H',
     # 成功判据里必须逐字出现的器件 ID（Ti60F225 板实测值）
     [string]$ExpectDeviceId = '0x10660A79',
+    # Default preserves the handoff setting. Select .20 only after checking the
+    # installed bus/port pair; FTDI documents .20 as the successor to .4.
+    [ValidateSet('2.12.36.4','2.12.36.20')]
+    [string]$ExpectedDriverVersion = '2.12.36.4',
+    # Optional explicit JTAG interface when Efinity enumerates multiple targets.
+    [string]$UsbUrl = '',
     [switch]$Force
 )
 
 $ErrorActionPreference = 'Stop'
 $fail = New-Object System.Collections.ArrayList
-$logDir = 'D:\FPGA\mmt\out\evidence\vendor_flash_logs'
+$logDir = $LogRoot
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 
 Write-Host "=== 厂商位流烧录前置检查 ==="
@@ -67,20 +75,31 @@ Write-Host ""
 Write-Host "--- ③ FTDI 驱动版本 ---"
 if (-not $Force) {
     try {
+        $presentIds = @(Get-PnpDevice -PresentOnly -ErrorAction Stop |
+            Where-Object { $_.InstanceId -match 'VID_0403|^FTDIBUS' } |
+            Select-Object -ExpandProperty InstanceId)
         $drv = Get-CimInstance Win32_PnPSignedDriver -ErrorAction Stop |
-               Where-Object { $_.DeviceName -match 'FTDI|USB Serial|FT4232' -or $_.DriverProviderName -match 'FTDI' } |
+               Where-Object { $_.DriverProviderName -match 'FTDI' -and $_.DeviceID -in $presentIds } |
                Select-Object DeviceName, DriverVersion
         if (-not $drv) {
             Write-Host "      (未枚举到 FTDI 驱动；板子没插？)" -ForegroundColor Yellow
             $fail.Add("未枚举到 FTDI 设备 ⇒ 板子可能没插")
         } else {
             $drv | Format-Table -AutoSize | Out-String | Write-Host
-            $vers = $drv.DriverVersion | Sort-Object -Unique
+            $vers = @($drv.DriverVersion | Sort-Object -Unique)
             if ($vers.Count -gt 1) { $fail.Add("FTDI 驱动版本不一致：$($vers -join ' / ') ⇒ 可能蓝屏，先统一") }
-            elseif ($vers[0] -ne '2.12.36.4') { Write-Host "      注意：版本 $($vers[0])，已知可用 2.12.36.4（仅提示）" -ForegroundColor Yellow }
-            else { Write-Host "  OK       FTDI 驱动统一且为已知可用版本 $($vers[0])" -ForegroundColor Green }
+            elseif ($vers[0] -ne $ExpectedDriverVersion) { $fail.Add("FTDI 驱动版本为 $($vers[0])，与选定的 $ExpectedDriverVersion 不同") }
+            else { Write-Host "  OK       FTDI 驱动统一且匹配选定版本 $($vers[0])" -ForegroundColor Green }
+            foreach ($driverFile in @('ftdibus.sys','ftser2k.sys')) {
+                $driverPath = Join-Path $env:SystemRoot "System32\drivers\$driverFile"
+                $fileVersion = (Get-Item -LiteralPath $driverPath -ErrorAction Stop).VersionInfo.FileVersion.Trim()
+                Write-Host "  $driverFile : $fileVersion"
+                if ($fileVersion -ne $ExpectedDriverVersion) {
+                    $fail.Add("$driverFile 文件版本 $fileVersion 与选定的 $ExpectedDriverVersion 不同")
+                }
+            }
         }
-    } catch { Write-Host "      (驱动枚举失败：$($_.Exception.Message))" -ForegroundColor Yellow }
+    } catch { $fail.Add("驱动枚举失败：$($_.Exception.Message)") }
 }
 
 # ---------- ④ FTDI/JTAG 占用预检（只检查 + 提示，绝不自动杀进程）----------
@@ -108,7 +127,7 @@ if ($fail.Count -gt 0) {
 Write-Host "=== 前置检查全部通过：只做 JTAG 临时加载，不写 SPI 闪存 ===" -ForegroundColor Green
 
 # ---------- 环境 ----------
-$efi = 'D:/Efinity/2026.1'
+$efi = (Resolve-Path -LiteralPath $EfinityHome).Path -replace '\\','/'
 $env:EFINITY_HOME                = $efi
 $env:EFINITY_USER_DIR_INI        = ($env:LOCALAPPDATA -replace '\\','/') + '/efinity/user_dir.ini'
 $env:EFINITY_USER_DIR            = ($env:LOCALAPPDATA -replace '\\','/') + '/efinity'
@@ -134,7 +153,9 @@ $prevEap = $ErrorActionPreference
 $ErrorActionPreference = 'Continue'
 $nativeExit = $null
 try {
-    $out = & $py $prog $Bit -m jtag -b $Board 2>&1
+    $programArgs = @($prog, $Bit, '-m', 'jtag', '-b', $Board)
+    if ($UsbUrl) { $programArgs += @('-u', $UsbUrl) }
+    $out = & $py @programArgs 2>&1
     $nativeExit = $LASTEXITCODE
 } catch {
     $out = @("EXCEPTION: $($_.Exception.Message)")
@@ -155,6 +176,7 @@ $out | Out-File $log -Encoding UTF8
   "sha256 : $h",
   "mode   : jtag (JTAG 临时加载，未写 SPI 闪存)",
   "board  : $Board",
+  "usb    : $UsbUrl",
   "expect : Device ID read from JTAG: $ExpectDeviceId + finished with JTAG programming",
   "nativeExit: $nativeExit",
   "ts     : $ts"

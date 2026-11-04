@@ -1,0 +1,24 @@
+D:\v30_build\out_previewfps04_fw2\tinyml_pdti8.elf  :
+section                size     addr
+.init                   112     4096
+.text                291816     4208
+.init_array              76   296024
+.fini_array               4   296100
+.data                146498   296104
+.bss                 479056   442608
+.stack              2097152   921664
+.debug_info         2740261        0
+.debug_abbrev         99850        0
+.debug_aranges         5400        0
+.debug_line          880836        0
+.debug_str           771563        0
+.debug_line_str       17071        0
+.comment                102        0
+.riscv.attributes        67        0
+.debug_loclists      709995        0
+.debug_rnglists      111983        0
+.debug_frame          20312        0
+.debug_macro          25669        0
+Total               8397823
+
+

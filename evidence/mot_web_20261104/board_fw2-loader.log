@@ -1,0 +1,1157 @@
+HOST_OPEN COM15
+MMT_AI f=37695 p=-95 th=0 vote=2/3 person=0
+
+MMT_OSD f=37695 chk=00081099 p=-95 a=95 v=0 osd=0 ci=503511 ms=206 b0m=57 raw=a1
+
+MMT_PP crop=0 norm=0 stretch=1 gain_x100=100 mean_sensor=22 mean_in=57 mean_out=57 lo=17 hi=41
+
+MMT_DEC t=24332460 f=37695 score=63 mean=63 slope=0 con=0 trend=0 evt=0 alarm_req=0 conf=0 motion=0 irhot=0 area=4 rtl_conf=24 rtl_alarm=0 cand=0 rel=3 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_LP f=37695 lowpwr=0 fw_lp=0 paused=0 camfps=60 inf_hz=1 ddr_ar_s=219213 tml_ar_s=0 infer=1055 sht_upd=2168 ir_upd=29297 sht=234 rh=652 body=241 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_RXDBG t=24332520 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24332588 fn=455 off=0 rn=507 w0=01350a00 w1=4dc8c0fe
+
+MMT_MOT f=37695 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24332656 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_MOT f=37695 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_MOT f=37696 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24333140 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_AI f=37696 p=-84 th=0 vote=2/3 person=0
+
+MMT_GE ctrl=39976961 status=-64494 rx=-64494
+
+MMT_OSD f=37696 chk=0007f9ef p=-84 a=84 v=0 osd=0 ci=503511 ms=206 b0m=56 raw=ac
+
+MMT_PP crop=0 norm=0 stretch=1 gain_x100=100 mean_sensor=22 mean_in=56 mean_out=56 lo=17 hi=41
+
+MMT_DEC t=24333157 f=37696 score=60 mean=60 slope=0 con=0 trend=0 evt=0 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=3 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_LP f=37696 lowpwr=0 fw_lp=0 paused=0 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1056 sht_upd=2168 ir_upd=29298 sht=234 rh=652 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_MOT f=37696 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_MOT f=37696 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24333546 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_MOT f=37697 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_AI f=37697 p=-87 th=0 vote=2/3 person=0
+
+MMT_OSD f=37697 chk=0007fc6e p=-87 a=87 v=0 osd=0 ci=503511 ms=207 b0m=56 raw=a9
+
+MMT_PP crop=0 norm=0 stretch=1 gain_x100=100 mean_sensor=22 mean_in=56 mean_out=56 lo=17 hi=41
+
+MMT_DEC t=24333847 f=37697 score=65 mean=65 slope=0 con=0 trend=0 evt=0 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=25 rtl_alarm=0 cand=0 rel=3 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_LP f=37697 lowpwr=0 fw_lp=0 paused=0 camfps=59 inf_hz=1 ddr_ar_s=220095 tml_ar_s=0 infer=1057 sht_upd=2168 ir_upd=29299 sht=234 rh=652 body=243 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_RXDBG t=24333881 fn=455 off=0 rn=507 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24333889 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_MOT f=37697 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_MOT f=37697 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_MOT f=37698 nd=0 nt=0 conf=0 area=0 raw=151 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24334320 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_AI f=37698 p=-107 th=0 vote=2/3 person=0
+
+MMT_OSD f=37698 chk=0007b367 p=-107 a=107 v=0 osd=0 ci=503511 ms=206 b0m=54 raw=95
+
+MMT_PP crop=0 norm=0 stretch=1 gain_x100=100 mean_sensor=22 mean_in=54 mean_out=54 lo=17 hi=42
+
+MMT_DEC t=24334536 f=37698 score=61 mean=61 slope=0 con=0 trend=0 evt=0 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=3 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_LP f=37698 lowpwr=0 fw_lp=0 paused=0 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29300 sht=234 rh=652 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_RXDBG t=24334585 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24334591 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_MOT f=37698 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_MOT f=37698 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_LP_ENTER f=37699 cnt=22 ms=24334923 fw_lp=0 rtl_lp=1
+
+MMT_LP f=37699 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=1 ddr_ar_s=221413 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29300 sht=234 rh=652 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24334933 f=37699 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37699 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24335066 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24335120 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=40697857 status=-65536 rx=-65536
+
+MMT_LP f=37700 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29301 sht=234 rh=652 body=249 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24335573 f=37700 score=69 mean=69 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37700 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_THUMB_GEO fw=1920 fh=1080 bx=0 by=0 bw=1920 bh=1080 full=1
+
+MMT_RXDBG t=24335707 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24335713 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24336195 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37701 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=169663 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29302 sht=234 rh=652 body=250 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24336209 f=37701 score=69 mean=69 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37701 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24336457 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24336585 fn=455 off=0 rn=507 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24336595 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37702 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29303 sht=234 rh=652 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24336844 f=37702 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37702 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24336976 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24337130 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37703 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102151 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29304 sht=234 rh=652 body=235 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24337480 f=37703 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=4 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37703 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24337612 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24337618 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24337624 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24337932 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=41615361 status=-65536 rx=-65536
+
+MMT_LP f=37704 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29305 sht=234 rh=652 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24338119 f=37704 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=3 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37704 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24338581 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24338587 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37705 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101489 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29305 sht=234 rh=652 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24338754 f=37705 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37705 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24338901 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37706 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29306 sht=234 rh=652 body=244 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24339390 f=37706 score=65 mean=65 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37706 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24339522 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24339580 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24339586 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24339932 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37707 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101746 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29307 sht=234 rh=652 body=253 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24340026 f=37707 score=71 mean=71 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=27 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37707 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24340584 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24340590 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=42532865 status=-65536 rx=-65536
+
+MMT_LP f=37708 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29308 sht=234 rh=652 body=235 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24340665 f=37708 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37708 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24341133 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37709 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101800 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29309 sht=234 rh=652 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24341301 f=37709 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37709 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24341585 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24341591 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24341903 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_FIXED ms=24341942 ok=1 vts=1500 exp20=47824 half_lines=2989 gc=143 gf=63 fixed=1
+
+MMT_LP f=37710 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29309 sht=234 rh=652 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24341954 f=37710 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37710 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24342135 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24342583 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37711 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=100334 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29310 sht=234 rh=652 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24342593 f=37711 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37711 nd=0 nt=0 conf=0 area=0 raw=143 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24342728 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24343042 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=43253761 status=-65536 rx=-65536
+
+MMT_LP f=37712 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29311 sht=234 rh=652 body=246 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24343233 f=37712 score=67 mean=67 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37712 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24343581 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24343587 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24343717 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37713 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101239 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29312 sht=234 rh=652 body=321 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24343869 f=37713 score=101 mean=101 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=39 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37713 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24344103 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37714 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2168 ir_upd=29313 sht=234 rh=652 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24344504 f=37714 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37714 nd=0 nt=0 conf=0 area=0 raw=151 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24344638 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24344644 fn=455 off=0 rn=507 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24344828 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24344906 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24345120 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37715 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101771 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29314 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24345139 f=37715 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37715 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24345584 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24345590 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=44171265 status=-65536 rx=-65536
+
+MMT_LP f=37716 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29314 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24345779 f=37716 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37716 nd=0 nt=0 conf=0 area=0 raw=145 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24345913 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24346119 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37717 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101812 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29315 sht=234 rh=651 body=250 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24346415 f=37717 score=69 mean=69 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37717 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24346583 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24346589 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24346889 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37718 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29316 sht=234 rh=651 body=251 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24347050 f=37718 score=70 mean=70 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=5 rtl_conf=27 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37718 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24347490 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24347584 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24347590 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37719 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101808 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29317 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24347686 f=37719 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37719 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24347906 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=44892161 status=-65536 rx=-65536
+
+MMT_LP f=37720 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29317 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24348325 f=37720 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37720 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_THUMB_GEO fw=1920 fh=1080 bx=0 by=0 bw=1920 bh=1080 full=1
+
+MMT_RXDBG t=24348457 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24348587 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24348593 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24348905 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37721 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101458 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29318 sht=234 rh=651 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24348961 f=37721 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37721 nd=0 nt=0 conf=0 area=0 raw=150 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24349521 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24349587 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37722 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29319 sht=234 rh=651 body=242 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24349596 f=37722 score=64 mean=64 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37722 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24349729 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24349921 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37723 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=102024 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29320 sht=234 rh=651 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24350233 f=37723 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37723 nd=0 nt=0 conf=0 area=0 raw=144 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24350585 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24350591 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=45809665 status=-65536 rx=-65536
+
+MMT_LP f=37724 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29321 sht=234 rh=651 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24350872 f=37724 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37724 nd=0 nt=0 conf=0 area=0 raw=144 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24351004 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37725 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101426 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29322 sht=234 rh=651 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24351507 f=37725 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37725 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24351640 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24351646 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24351652 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24352058 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37726 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29323 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24352143 f=37726 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37726 nd=0 nt=0 conf=0 area=0 raw=145 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24352583 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24352589 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37727 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101774 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29324 sht=234 rh=651 body=252 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24352779 f=37727 score=70 mean=70 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=27 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37727 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24352911 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=46530561 status=-65536 rx=-65536
+
+MMT_LP f=37728 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29325 sht=234 rh=651 body=240 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24353418 f=37728 score=63 mean=63 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37728 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24353550 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24353584 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24353590 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24353980 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37729 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101439 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29326 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24354054 f=37729 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=7 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37729 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24354582 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24354588 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37730 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29327 sht=234 rh=651 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24354689 f=37730 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37730 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24354889 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24355197 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37731 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=102145 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29328 sht=234 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24355325 f=37731 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37731 nd=0 nt=0 conf=0 area=0 raw=148 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24355585 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24355591 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24355905 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=47448065 status=-65536 rx=-65536
+
+MMT_LP f=37732 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2169 ir_upd=29329 sht=234 rh=651 body=246 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24355964 f=37732 score=67 mean=67 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37732 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24356212 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24356582 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24356588 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37733 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101494 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29330 sht=235 rh=651 body=244 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24356600 f=37733 score=65 mean=65 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=7 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37733 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24356890 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37734 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29331 sht=235 rh=651 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24357235 f=37734 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=7 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37734 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24357489 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24357585 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24357591 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37735 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101807 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29331 sht=235 rh=651 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24357870 f=37735 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37735 nd=0 nt=0 conf=0 area=0 raw=146 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24358002 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=48168961 status=-65536 rx=-65536
+
+MMT_LP f=37736 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29332 sht=235 rh=651 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24358509 f=37736 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37736 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24358641 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24358647 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24358653 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24358967 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37737 lowpwr=1 fw_lp=1 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101479 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29333 sht=235 rh=651 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24359145 f=37737 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37737 nd=0 nt=0 conf=0 area=0 raw=147 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24359567 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24359589 fn=455 off=0 rn=507 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24359723 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37738 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29333 sht=235 rh=651 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24359780 f=37738 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37738 nd=0 nt=0 conf=0 area=0 raw=145 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24360076 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37739 lowpwr=1 fw_lp=1 paused=1 camfps=59 inf_hz=0 ddr_ar_s=102173 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29334 sht=235 rh=651 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24360416 f=37739 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=8 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37739 nd=0 nt=0 conf=0 area=0 raw=149 pre=0 pre_eta=-1 obs=0
+
+MMT_RXDBG t=24360550 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24360588 fn=455 off=0 rn=507 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24360722 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24360984 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_FIXED ms=24361057 ok=1 vts=1500 exp20=47824 half_lines=2989 gc=143 gf=63 fixed=1
+
+MMT_GE ctrl=49086465 status=-65536 rx=-65536
+
+MMT_LP f=37740 lowpwr=1 fw_lp=1 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=1058 sht_upd=2170 ir_upd=29335 sht=235 rh=651 body=250 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=24361073 f=37740 score=69 mean=69 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=26
+
+MMT_MOT f=37740 nd=0 nt=0 conf=0 area=0 raw=150 pre=0 pre_eta=-1 obs=0
+
+MMT_THUMB_GEO fw=1920 fh=1080 bx=0 by=0 bw=1920 bh=1080 full=1
+
+MMT_RXDBG t=24361588 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=24361594 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_BOOT ONCHIP_UART DDR3_WAIT
+MMT_DDR_CAL_PASS
+MMT_DDR_PASS 256_SCATTERED_WORDS BUS aw=00000100 ar=00000100 state=00000000
+MMT_LOADER_READY
+UPLOAD 427850 B crc32=3DD411D5
+MMT_LOAD_ACCEPT
+  0% (0 blocks)
+  11% (800 blocks)
+  23% (1600 blocks)
+  35% (2400 blocks)
+  47% (3200 blocks)
+  59% (4000 blocks)
+  71% (4800 blocks)
+  83% (5600 blocks)
+  95% (6400 blocks)
+UPLOAD_DONE
+MMT_LOAD_CRC 3DD411D5
+MMT_LOAD_PASS DDR_CRC
+LOAD_PASS_CONFIRMED
+MMT_LIVE_BOOT v29.2 CROP=0 NORM=0 STRETCH=1 AE=0 LPCAM=0 FW_DEC=1 LOWPOWER=1
+
+MMT_CFG v28 CROP_MODE=0 NORM_ON=0 STRETCH_ON=1 AUTOEXP_ON=0 LP_CAMFPS_ON=0 LP_VTS_MULT=3 FW_DECISION_ON=1 LOWPOWER_ON=1 INPUT_SUB128=1 AI_P_TH=0 AI_VOTE=2/3 AREA=[200,20000] DEC_CAND=4
+
+MMT_MOT_CFG ver=v30.6 on=1 pre=1 diff=14 min_area=60 max_area=9000 iou_pm=200 horizon=2 max_trk=2 roi=[0,0,95,95]
+
+MMT_FUSION IR_WIN=10 IR_NEED=1 IR_OFF_WIN=8 AI_P_STRONG=60 AI_P_OFF=-40 THUMB_EVERY=1 IR_SOLO_ON=1 IR_SOLO_N=6
+
+MMT_LIVE_MODEL in_bytes=9216 in_type=9
+
+Core 0 Hardware Settings:
+  Accelerator Active: 1
+  UUID: 0x4923687a
+  AXI DW: 128
+  AXI_DB_W: 16
+  Cache Enabled: 1
+  Cache Depth: 512
+  Conv Depthw Mode: 1
+  Conv Depthw Lite Parallel: 4
+  Add Mode: 0
+  FC Mode: 0
+  Mul Mode: 0
+  LR Mode: 0
+  Min-Max Mode: 0
+  Reshape Mode: 0
+MMT_LIVE_HW_READY uuid=0x4923687a
+
+MMT_CAM_VTS ok=1 vts=0x0x5dc rom_vts=0 fallback=1
+
+MMT_CAM 320e=00000005 320f=000000dc 3e00=00000001 3e01=000000bb 3e02=000000f0 3e03=00000000 3e08=00000080 3e09=0000002a exp=0x0000bbf0 gain=0x0000802a
+
+MMT_BRIGHT_ID id=52587
+
+MMT_BRIGHT_BEFORE ms=107702 ok=1 vts=1500 exp20=113648 half_lines=7103 gc=128 gf=42 fixed=0
+
+MMT_BRIGHT_LOCKED ms=107757 ok=1 vts=1500 exp20=47824 half_lines=2989 gc=129 gf=42 fixed=1
+
+MMT_WB_INIT r=344 g=280 b=368 cal=0
+
+MMT_CAM_PRESET name=DAY vts=1500 exp20=47824 gc=129 gf=42 mean_sensor=16
+
+MMT_APB27 0 0 0 -34012126 1431655901
+
+MMT_FIXED ms=107810 ok=1 vts=1500 exp20=47824 half_lines=2989 gc=129 gf=42 fixed=1
+
+MMT_RXDBG t=107810 fn=136 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_LP_ENTER f=0 cnt=1 ms=107812 fw_lp=0 rtl_lp=1
+
+MMT_GE ctrl=131073 status=-34012142 rx=-34012142
+
+MMT_LP f=0 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=0 ir_upd=0 sht=235 rh=649 body=245 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=107835 f=0 score=66 mean=66 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=0 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=1 t=107922 dt=200 step_ms=200 algorithm=timed_v1
+
+MMT_THUMB_GEO fw=1920 fh=1080 bx=0 by=0 bw=1920 bh=1080 full=1
+
+MMT_RXDBG t=107961 fn=92 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_LP f=1 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=0 ir_upd=1 sht=235 rh=649 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=108458 f=1 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=1 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=2 t=108546 dt=624 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=672->939 gc=0x00000081 gf=0x0000003a mean=15 target=100
+
+MMT_LP f=2 lowpwr=1 fw_lp=0 paused=1 camfps=72 inf_hz=0 ddr_ar_s=78663 tml_ar_s=0 infer=0 sht_upd=0 ir_upd=1 sht=235 rh=649 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=109142 f=2 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=2 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=3 t=109229 dt=683 step_ms=200 algorithm=timed_v1
+
+MMT_LP f=3 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=0 ir_upd=1 sht=235 rh=649 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=109780 f=3 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=3 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=4 t=109868 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_GE ctrl=458753 status=-34013184 rx=-34013184
+
+MMT_LP f=4 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=101847 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=1 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=110424 f=4 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=4 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=5 t=110512 dt=644 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=939->1313 gc=0x00000083 gf=0x00000029 mean=16 target=100
+
+MMT_RXDBG t=110878 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=5 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=2 sht=235 rh=648 body=236 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=111107 f=5 score=60 mean=60 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=5 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=6 t=111195 dt=683 step_ms=200 algorithm=timed_v1
+
+MMT_LP f=6 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=98269 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=3 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=111747 f=6 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=6 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=7 t=111834 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=111890 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=7 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=4 sht=235 rh=648 body=247 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=112385 f=7 score=67 mean=67 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=7 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=8 t=112473 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=1313->1836 gc=0x00000083 gf=0x00000039 mean=16 target=100
+
+MMT_RXDBG t=112848 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=112856 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=1245185 status=-458752 rx=-458752
+
+MMT_LP f=8 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=98938 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=5 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=113072 f=8 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=8 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=9 t=113159 dt=686 step_ms=200 algorithm=timed_v1
+
+MMT_LP f=9 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=6 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=113710 f=9 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=9 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=10 t=113797 dt=638 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=113847 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=113853 fn=455 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=114017 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=10 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102296 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=7 sht=235 rh=648 body=247 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=114349 f=10 score=67 mean=67 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=10 nd=0 nt=0 conf=0 area=0 raw=0 pre=0 pre_eta=-1 obs=0 seq=11 t=114436 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=1836->2567 gc=0x00000087 gf=0x00000028 mean=16 target=100
+
+MMT_RXDBG t=114848 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=114856 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=11 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=8 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=115032 f=11 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=5 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=11 nd=0 nt=0 conf=0 area=0 raw=9 pre=0 pre_eta=-1 obs=0 seq=12 t=115119 dt=683 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=115169 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=1966081 status=-458752 rx=-458752
+
+MMT_LP f=12 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=99719 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=9 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=115675 f=12 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=12 nd=0 nt=0 conf=0 area=0 raw=9 pre=0 pre_eta=-1 obs=0 seq=13 t=115763 dt=644 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=115851 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=115859 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=13 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=9 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=116315 f=13 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=13 nd=0 nt=0 conf=0 area=0 raw=9 pre=0 pre_eta=-1 obs=0 seq=14 t=116402 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=2567->3589 gc=0x00000087 gf=0x00000038 mean=17 target=100
+
+MMT_RXDBG t=116496 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=116854 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=116862 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=14 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=98799 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=10 sht=235 rh=648 body=245 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=116998 f=14 score=66 mean=66 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=5 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=14 nd=0 nt=0 conf=0 area=0 raw=9 pre=0 pre_eta=-1 obs=0 seq=15 t=117085 dt=683 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=117390 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=15 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=10 sht=235 rh=648 body=245 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=117638 f=15 score=66 mean=66 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=15 nd=0 nt=0 conf=0 area=0 raw=9 pre=0 pre_eta=-1 obs=0 seq=16 t=117725 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=117855 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=117863 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=2883585 status=-458752 rx=-458752
+
+MMT_LP f=16 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102606 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=11 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=118281 f=16 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=16 nd=0 nt=0 conf=0 area=0 raw=9 pre=0 pre_eta=-1 obs=0 seq=17 t=118369 dt=644 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=3589->5018 gc=0x0000008f gf=0x00000027 mean=18 target=100
+
+MMT_RXDBG t=118462 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=118856 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=118864 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=17 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=12 sht=235 rh=648 body=242 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=118964 f=17 score=64 mean=64 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=17 nd=0 nt=0 conf=0 area=0 raw=29 pre=0 pre_eta=-1 obs=0 seq=18 t=119051 dt=682 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=119373 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=18 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=99521 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=13 sht=235 rh=648 body=245 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=119603 f=18 score=66 mean=66 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=18 nd=0 nt=0 conf=0 area=0 raw=15 pre=0 pre_eta=-1 obs=0 seq=19 t=119690 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=119853 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=119861 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=19 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=14 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=120242 f=19 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=19 nd=0 nt=0 conf=0 area=0 raw=14 pre=0 pre_eta=-1 obs=0 seq=20 t=120329 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=5018->7017 gc=0x0000008f gf=0x00000036 mean=19 target=100
+
+MMT_RXDBG t=120423 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=120855 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=120863 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=3801089 status=-458752 rx=-458752
+
+MMT_LP f=20 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=99302 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=15 sht=235 rh=648 body=247 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=120929 f=20 score=67 mean=67 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=26 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=20 nd=0 nt=0 conf=0 area=0 raw=123 pre=0 pre_eta=-1 obs=0 seq=21 t=121016 dt=687 step_ms=200 algorithm=timed_v1
+
+MMT_THUMB_GEO fw=1920 fh=1080 bx=0 by=0 bw=1920 bh=1080 full=1
+
+MMT_RXDBG t=121221 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=21 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=16 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=121569 f=21 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=21 nd=0 nt=0 conf=0 area=0 raw=119 pre=0 pre_eta=-1 obs=0 seq=22 t=121656 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=121856 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=121864 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=122178 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=22 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102554 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=16 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=122208 f=22 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=22 nd=0 nt=0 conf=0 area=0 raw=118 pre=0 pre_eta=-1 obs=0 seq=23 t=122295 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_GAIN g=7017->8176 gc=0x0000008f gf=0x0000003f mean=21 target=100
+
+MMT_RXDBG t=122778 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=122862 fn=455 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=23 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=17 sht=235 rh=648 body=240 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=122892 f=23 score=63 mean=63 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=23 nd=0 nt=0 conf=0 area=0 raw=128 pre=0 pre_eta=-1 obs=0 seq=24 t=122979 dt=684 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=123030 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=123380 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=4521985 status=-458752 rx=-458752
+
+MMT_LP f=24 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=100050 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=18 sht=235 rh=648 body=239 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=123536 f=24 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=24 nd=0 nt=0 conf=0 area=0 raw=136 pre=0 pre_eta=-1 obs=0 seq=25 t=123624 dt=645 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=123860 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=123868 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=25 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=19 sht=235 rh=648 body=241 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=124176 f=25 score=63 mean=63 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=25 nd=0 nt=0 conf=0 area=0 raw=134 pre=0 pre_eta=-1 obs=0 seq=26 t=124263 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=124316 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=26 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=102649 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=20 sht=235 rh=648 body=239 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=124816 f=26 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=3 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=26 nd=0 nt=0 conf=0 area=0 raw=131 pre=0 pre_eta=-1 obs=0 seq=27 t=124903 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=124954 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=124962 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=125182 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=27 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=21 sht=235 rh=648 body=245 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=125456 f=27 score=66 mean=66 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=27 nd=0 nt=0 conf=0 area=0 raw=127 pre=0 pre_eta=-1 obs=0 seq=28 t=125543 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=125860 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=125868 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=125998 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=5439489 status=-458752 rx=-458752
+
+MMT_LP f=28 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102954 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=22 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=126100 f=28 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=28 nd=0 nt=0 conf=0 area=0 raw=125 pre=0 pre_eta=-1 obs=0 seq=29 t=126188 dt=645 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=126384 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=29 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=23 sht=235 rh=648 body=240 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=126739 f=29 score=63 mean=63 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=29 nd=0 nt=0 conf=0 area=0 raw=127 pre=0 pre_eta=-1 obs=0 seq=30 t=126826 dt=638 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=126881 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=126889 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=127279 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_FIXED ms=127386 ok=1 vts=1500 exp20=47824 half_lines=2989 gc=143 gf=63 fixed=1
+
+MMT_LP f=30 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=101827 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=24 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=127397 f=30 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=30 nd=0 nt=0 conf=0 area=0 raw=128 pre=0 pre_eta=-1 obs=0 seq=31 t=127484 dt=658 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=127837 fn=224 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_RXDBG t=127853 fn=455 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=127859 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=31 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=25 sht=235 rh=648 body=241 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=128037 f=31 score=63 mean=63 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=31 nd=0 nt=0 conf=0 area=0 raw=129 pre=0 pre_eta=-1 obs=0 seq=32 t=128124 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=128187 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=6160385 status=-458752 rx=-458752
+
+MMT_LP f=32 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102990 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=26 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=128681 f=32 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=32 nd=0 nt=0 conf=0 area=0 raw=136 pre=0 pre_eta=-1 obs=0 seq=33 t=128768 dt=644 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=128849 fn=224 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_RXDBG t=128855 fn=455 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=128863 fn=224 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_RXDBG t=128909 fn=183 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=128915 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=129173 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=33 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=27 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=129321 f=33 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=33 nd=0 nt=0 conf=0 area=0 raw=128 pre=0 pre_eta=-1 obs=0 seq=34 t=129408 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=129817 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=129851 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=129857 fn=455 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=129879 fn=224 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_RXDBG t=129929 fn=191 off=0 rn=178 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=34 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=103281 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=28 sht=235 rh=648 body=242 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=129961 f=34 score=64 mean=64 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=25 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=34 nd=0 nt=0 conf=0 area=0 raw=132 pre=0 pre_eta=-1 obs=0 seq=35 t=130049 dt=641 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=130101 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=130187 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=35 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=29 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=130601 f=35 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=35 nd=0 nt=0 conf=0 area=0 raw=129 pre=0 pre_eta=-1 obs=0 seq=36 t=130688 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=130787 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=130851 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=130859 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=130897 fn=224 off=0 rn=0 w0=555555dd w1=55555555
+
+MMT_RXDBG t=131157 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=7471105 status=-458752 rx=-458752
+
+MMT_LP f=36 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=103357 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=30 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=131245 f=36 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=36 nd=0 nt=0 conf=0 area=0 raw=127 pre=0 pre_eta=-1 obs=0 seq=37 t=131333 dt=645 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=131757 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=131853 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=131861 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=37 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=30 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=131885 f=37 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=37 nd=0 nt=0 conf=0 area=0 raw=126 pre=0 pre_eta=-1 obs=0 seq=38 t=131972 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=132171 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=38 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=103279 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=30 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=132525 f=38 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=38 nd=0 nt=0 conf=0 area=0 raw=131 pre=0 pre_eta=-1 obs=0 seq=39 t=132612 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=132773 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=132853 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=132861 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=39 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=31 sht=235 rh=648 body=259 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=133164 f=39 score=75 mean=75 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=29 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=39 nd=0 nt=0 conf=0 area=0 raw=131 pre=0 pre_eta=-1 obs=0 seq=40 t=133251 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=133304 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=133774 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=8192001 status=-458752 rx=-458752
+
+MMT_LP f=40 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=103035 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=32 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=133808 f=40 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=40 nd=0 nt=0 conf=0 area=0 raw=129 pre=0 pre_eta=-1 obs=0 seq=41 t=133896 dt=645 step_ms=200 algorithm=timed_v1
+
+MMT_THUMB_GEO fw=1920 fh=1080 bx=0 by=0 bw=1920 bh=1080 full=1
+
+MMT_RXDBG t=133948 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=133956 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=134390 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=41 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=33 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=134448 f=41 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=41 nd=0 nt=0 conf=0 area=0 raw=129 pre=0 pre_eta=-1 obs=0 seq=42 t=134535 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=134854 fn=71 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=134862 fn=63 off=0 rn=54 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=134976 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=42 lowpwr=1 fw_lp=0 paused=1 camfps=59 inf_hz=0 ddr_ar_s=102654 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=34 sht=235 rh=648 body=238 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=135088 f=42 score=62 mean=62 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=1 rtl_conf=24 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=42 nd=0 nt=0 conf=0 area=0 raw=135 pre=0 pre_eta=-1 obs=0 seq=43 t=135175 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=135228 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=43 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=35 sht=235 rh=648 body=237 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=135728 f=43 score=61 mean=61 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=23 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=43 nd=0 nt=0 conf=0 area=0 raw=132 pre=0 pre_eta=-1 obs=0 seq=44 t=135815 dt=640 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=135868 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=135874 fn=455 off=0 rn=938 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=136188 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_GE ctrl=9109505 status=-458752 rx=-458752
+
+MMT_LP f=44 lowpwr=1 fw_lp=0 paused=1 camfps=60 inf_hz=0 ddr_ar_s=102945 tml_ar_s=0 infer=0 sht_upd=1 ir_upd=36 sht=235 rh=648 body=253 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=136372 f=44 score=71 mean=71 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=6 rtl_conf=27 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=44 nd=0 nt=0 conf=0 area=0 raw=133 pre=0 pre_eta=-1 obs=0 seq=45 t=136460 dt=645 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=136510 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=136804 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=136854 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_RXDBG t=136862 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+
+MMT_LP f=45 lowpwr=1 fw_lp=0 paused=1 camfps=0 inf_hz=0 ddr_ar_s=0 tml_ar_s=0 infer=0 sht_upd=2 ir_upd=37 sht=235 rh=647 body=255 vts=0x000005dc vts_ok=1 fallback=1
+
+MMT_DEC t=137012 f=45 score=72 mean=72 slope=0 con=0 trend=0 evt=4 alarm_req=0 conf=0 motion=0 irhot=0 area=0 rtl_conf=28 rtl_alarm=0 cand=0 rel=0 person=0 ir_cnt=0 act=0 hotsrc=0
+
+MMT_MOT f=45 nd=0 nt=0 conf=0 area=0 raw=129 pre=0 pre_eta=-1 obs=0 seq=46 t=137099 dt=639 step_ms=200 algorithm=timed_v1
+
+MMT_RXDBG t=137188 fn=63 off=0 rn=0 w0=01350a00 w1=4dc8c0fe
+CAPTURE_DONE bytes= 60429

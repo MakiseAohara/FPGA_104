@@ -13,7 +13,7 @@ r"""build_v30.py — 从仓库源码重建 v30（多目标跟踪 + 行为预测�
 import argparse, hashlib, json, shutil, subprocess, sys, zlib
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent
+HERE = Path(__file__).absolute().parent
 ROOT = HERE.parents[1]
 ap = argparse.ArgumentParser()
 ap.add_argument('--project', type=Path, required=True)
@@ -33,8 +33,14 @@ for h in ('preprocess_core.h', 'ae_core.h', 'cam_ctrl_core.h', 'input_contract.h
     src_h = HERE / h
     if not src_h.exists():
         src_h = HERE.parent / 'v29_fw' / h
-    if src_h.exists():
-        shutil.copy2(src_h, stage / h)
+    if not src_h.exists():
+        src_h = ROOT / 'submission/firmware/v29_2' / h
+    if not src_h.exists():
+        raise FileNotFoundError('Required firmware header: '+h)
+    shutil.copy2(src_h, stage / h)
+shutil.copy2(HERE / 'mot_web_state.h',stage / 'mot_web_state.h')
+shutil.copy2(HERE / 'preview_packet.h',stage / 'preview_packet.h')
+if (HERE/'frame_layout.h').exists():shutil.copy2(HERE/'frame_layout.h',stage/'frame_layout.h')
 entry = stage / ('main_live30_day.cc' if not a.night else 'main_live30_night.cc')
 entry.write_text('#define CAM_PRESET DAY\n#include "main_live30.cc"\n' if not a.night
                  else '#include "main_live30.cc"\n', encoding='ascii')

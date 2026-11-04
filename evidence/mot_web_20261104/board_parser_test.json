@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "legacy timing unknown, not f-derived",
+    "repeated f separated by MOT boundary",
+    "immutable histories capped at 12 observations",
+    "coasting is not observation",
+    "empty and missing reports clear displayed tracks",
+    "boot reset",
+    "explicit 200 ms canonical velocity unit",
+    "actual dt timestamps",
+    "duplicate/out-of-order sequence rejection",
+    "mixed-step isolation",
+    "PREWARN and LP_EXIT evidence",
+    "32-bit wrap",
+    "malformed line rejection"
+  ]
+}

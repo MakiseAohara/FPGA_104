@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "packet_bytes": 9332,
+  "checks": [
+    "C firmware packet decoded by PC protocol",
+    "all 9216 pixels lossless, including grayscale 0..255",
+    "state and image capture IDs match",
+    "Python encode/decode contract",
+    "truncation, format, version and capture mismatch rejected",
+    "one upstream HTTP request per image",
+    "legacy PNG endpoint retained",
+    "stale mirror never claims fresh capture",
+    "failed transfer preserves complete last snapshot"
+  ]
+}
